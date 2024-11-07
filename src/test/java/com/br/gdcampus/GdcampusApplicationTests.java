@@ -8,6 +8,11 @@ class GdcampusApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
+	@Test
+	void contextLoads2() {
+		
+	}
 }
