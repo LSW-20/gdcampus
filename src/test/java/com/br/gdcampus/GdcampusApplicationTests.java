@@ -12,7 +12,7 @@ class GdcampusApplicationTests {
 	}
 
 	@Test
-	void contextLoads2() {
+	void contextLo12313123ads2() {
 		
 	}
 }
