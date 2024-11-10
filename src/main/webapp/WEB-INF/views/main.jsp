@@ -3,41 +3,58 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-    
-<!DOCTYPE html>
+
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>구디캠퍼스 메인</title>
 </head>
-<body>
 
-  <div class="container p-3">
 
-    <!-- Header, Nav start -->
+<body data-topbar="dark" data-sidebar="dark">
+<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
+<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
+
+
+
+	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+	<div id="layout-wrapper">
+
+
+    <!-- header 시작 -->
 		<jsp:include page="/WEB-INF/views/common/header.jsp" />
-    <!-- Header, Nav end -->
+    <!-- header 끝 -->
 
 
-    <!-- Section start -->
-    <section class="row m-3" style="min-height: 500px">
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
 
-      <div class="container border p-5 m-4 rounded">
-        <h2 class="m-4">구디캠퍼스 프로젝트</h2>
-        
-      	<p>메인페이지가 잘 뜨는지 확인용입니다</p>
-      
-      </div>
+		
+		
+		<!-- main-content 시작 -->
+		<div class="main-content">
+				<div class="page-content">
+						<div class="container-fluid">
 
-    </section>
-    <!-- Section end -->
-     
+								<br><br> <h2>구디캠퍼스</h2> <br><br>
 
-    <!-- Footer start -->
-		<jsp:include page="/WEB-INF/views/common/footer.jsp" />
-    <!-- Footer end -->
+								<h5>메인페이지입니다.</h5> <br>
 
-  </div>
-  
+						</div>
+				</div>
+		</div>            
+		<!-- main-content 끝 -->
+
+
+
+
+	</div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+
+
+
 </body>
 </html>
