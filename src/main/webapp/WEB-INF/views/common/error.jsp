@@ -4,39 +4,55 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     
-<!DOCTYPE html>
+    
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>구디캠퍼스 에러페이지</title>
 </head>
-<body>
 
-    <div class="container p-3">
 
-        <!-- Header, Nav start -->
-        <jsp:include page="/WEB-INF/views/common/header.jsp" />
-        <!-- Header, Nav end -->
-    
-        <!-- Section start -->
-        <section class="row m-3" style="min-height: 500px">
-    
-          <div class="container border p-5 m-4 rounded">
-            <div align="center">	
-                <img src="https://cdn2.iconfinder.com/data/icons/oops-404-error/64/208_balloon-bubble-chat-conversation-sorry-speech-512.png" width="300">
-                <br><br>
-                <h1 style="font-weight:bold">에러메세지</h1>
-            </div>
-          </div>
-    
-        </section>
-        <!-- Section end -->
-    
-        <!-- Footer start -->
-        <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-        <!-- Footer end -->
-    
-    </div>
+<body data-topbar="dark" data-sidebar="dark">
+<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
+<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
+
+
+
+	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+	<div id="layout-wrapper">
+
+
+    <!-- header 시작 -->
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+    <!-- header 끝 -->
+
+
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
+
+		
+		
+		<!-- main-content 시작 -->
+		<div class="main-content">
+				<div class="page-content">
+						<div class="container-fluid">
+
+								<br><br> <h2>구디캠퍼스</h2> <br><br>
+
+								<h5>에러페이지입니다.</h5> <br>
+
+						</div>
+				</div>
+		</div>            
+		<!-- main-content 끝 -->
+
+
+
+	</div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 
 
 </body>
