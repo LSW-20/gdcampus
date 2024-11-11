@@ -44,6 +44,7 @@
 						
 	
 								
+								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
 
@@ -99,8 +100,10 @@
 								<!-- 공통 메뉴 끝 -->			
 								
 								
+								
+								
+								<c:if test="${not empty loginUser.stDeptNo }">
 								<br>
-												
 								
 								<!-- 교수 메뉴 시작 -->
 								<li class="menu-title">교수</li>
@@ -128,9 +131,10 @@
 												<li><a href="#"></a></li>
 										</ul>
 								</li>
-								<!-- 교수 메뉴 끝 -->										
+								<!-- 교수 메뉴 끝 -->			
+								</c:if>
 								
-								
+								<c:if test="${loginUser.deptNo eq 1 }">
 								<br>
 								
 								
@@ -150,7 +154,7 @@
 								</li>
 
 								<!-- 인사팀 메뉴 끝 -->												
-								
+								</c:if>
 								
 								<br>
 								
@@ -182,7 +186,6 @@
 										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
-								
 								
 								<br>
 								
