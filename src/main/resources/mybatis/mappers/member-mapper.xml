@@ -12,11 +12,24 @@
 		<result column="address" property="address"/>
 		<result column="profile_url" property="profileURL"/>
 		<result column="user_status" property="status"/>
+
+		<result column="st_dept_no" property="stDeptNo"/>
+		<result column="RANK_NO" property="rankNo"/>
+		<result column="DEPT_NO" property="deptNo"/>
+		<result column="CREATE_DATE" property="createDt"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="MODIFY_DATE" property="modifyDt"/>
+		<result column="NAME_URL" property="nameURL"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="HIRE_DATE" property="hireDt"/>
+		<result column="LEAVE_DATE" property="leaveDt"/>
+		<result column="HOLI_DATE_TOTAL" property="holiDt"/>
+		
 	</resultMap>
 	
 	<!-- 로그인 -->
 	<select id="selectMember" resultMap="memberResultMap">
-		select
+	select
 				   user_no
 				 , user_id
 				 , user_pwd
@@ -27,8 +40,22 @@
 				 , address
 				 , profile_url
 				 , user_status
-			from t_user
+                 , t1.st_dept_no
+                 , t1.RANK_NO
+                 , t1.DEPT_NO
+                 , t1.CREATE_DATE
+                 , t1.CREATE_USER
+                 , t1.MODIFY_DATE
+                 , UPDATE_USER
+                 , NAME_URL
+                 , HIRE_DATE
+                 , LEAVE_DATE
+                 , HOLI_DATE_TOTAL
+			from t_user t1
+            left join t_st_dept t2 on t1.st_dept_no = t2.st_dept_no
+            left join t_rank t3 on t1.rank_no = t3.rank_no
+            left join t_dept t4 on t1.dept_no = t4.dept_no
 		 where user_status = 'Y'
-		   and user_id = #{userId}
+		   and user_id = 'user001'
 	</select>
 </mapper>
