@@ -16,8 +16,9 @@
         }
         .purchase-form {
             width: 1000px;
-            height: 845px;
-            margin: 180px auto;
+            height: 1000px;
+            margin-top: 35px;
+            margin-left: 280px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -77,7 +78,7 @@
 				    color: #ff0000;
 				}        
         .title {
-            font-size: 24px;
+            font-size: 35px;
             text-align: center;
             margin-bottom: 20px;
             font-weight: bold;
