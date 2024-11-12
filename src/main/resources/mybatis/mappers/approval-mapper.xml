@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ApprovalMapper">
+
+	<resultMap id="approvalResultMap" type="ApprovalDto">
+		<result column="APPR_NO" property="apprNo"/>
+		<result column="APPR_USER" property="apprUser"/>
+		<result column="DEPT_NO" property="deptNo"/>
+		<result column="APPR_TYPE" property="apprType"/>
+		<result column="APPR_DATE" property="apprDate"/>
+		<result column="APPR_TITLE" property="apprTitle"/>
+		<result column="APPR_CONTENT" property="apprContent"/>
+		<result column="APPR_STATUS" property="apprStatus"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+	</resultMap>
+	
+	<resultMap id="apprRefResultMap" type="ApprRefDto">
+		<result column="REF_NO" property="refNo"/>
+		<result column="APPR_NO" property="apprNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="REF_TYPE" property="refType"/>
+		<result column="READ_YN" property="readYn"/>
+		<result column="READ_DATE" property="readDate"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="CREATEOR" property="creator"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="MODIFY_USER" property="modifyUser"/>
+	</resultMap>
+	
+  <select id="selectApprTodoList" resultMap="approvalResultMap">
+		SELECT A.APPR_NO AS APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_TYPE
+		     , APPR_DATE
+		     , APPR_TITLE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , LINE_NO
+		     , L.USER_NO AS USER_NO
+		     , LINE_ORDER
+		     , LINE_STATUS
+		     , LINE_DATE
+		     , LINE_REASON
+		  FROM T_APPROVAL A
+		  JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE APPR_STATUS IN(0,1)       <!-- 진행중 -->
+		   AND LINE_ORDER = #{lineOrder} <!-- 현재결재순서 -->
+		   AND L.USER_NO = #{userNo} 		 <!-- LOGINUSER -->  	
+  </select>
+  
+  <select id="selectApprUpcomingList" resultMap="approvalResultMap">
+		SELECT A.APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_TYPE
+		     , APPR_DATE
+		     , APPR_TITLE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , LINE_NO
+		     , L.USER_NO
+		     , LINE_ORDER
+		     , LINE_STATUS
+		     , LINE_DATE
+		     , LINE_REASON
+		  FROM T_APPROVAL A
+		  JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE APPR_STATUS IN(0,1)     					 <!-- 대기/진행중 -->
+		   AND LINE_ORDER &lt; #{lineOrder}      <!-- 현재결재순서 -->
+		   AND L.USER_NO = #{userNo} 						 <!-- LOGINUSER   -->	
+  </select>
+  
+  <select id="selectMyDocList" resultMap="approvalResultMap">
+		SELECT 
+		       APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_DATE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , UPDATE_USER
+		  FROM T_APPROVAL
+		 WHERE APPR_USER = #{apprUser}	
+  </select>
+  
+  <select id="selectMyApprovedList" resultMap="approvalResultMap">
+		SELECT 
+		       A.APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_TYPE
+		     , APPR_DATE
+		     , APPR_TITLE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , LINE_NO
+		     , L.USER_NO
+		     , LINE_ORDER
+		     , LINE_STATUS
+		     , LINE_DATE
+		     , LINE_REASON
+		  FROM T_APPROVAL A
+		  LEFT JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE USER_NO = #{userNo}  <!-- LOGINUSER -->
+		   AND APPR_STATUS IN(2,3)  	
+  </select>
+  
+  <select id="selectApprViewerList" resultMap="apprRefResultMap">
+		SELECT 
+		       REF_NO
+		     , R.APPR_NO
+		     , USER_NO
+		     , REF_TYPE
+		     , READ_YN
+		     , READ_DATE
+		  FROM T_APPR_REF R
+		  JOIN T_APPROVAL A
+		    ON R.APPR_NO = A.APPR_NO
+		 WHERE USER_NO = #{userNo}    <!-- LOGINUSER -->
+		   AND APPR_STATUS IN(0,1)  <!-- 대기/진행 상태 -->
+  </select>
+  
+
+</mapper>
