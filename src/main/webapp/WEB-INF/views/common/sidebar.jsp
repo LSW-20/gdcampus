@@ -90,7 +90,7 @@
 								</li>
 
 								<li>
-										<a href="${contextPath}/chat/chat.do" class=" waves-effect">
+										<a href="${contextPath}/chat/roomList" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="message-square"></i>
 												<span class="badge badge-pill badge-success float-right">New</span>
 												<span class="menu-item">메신저</span>

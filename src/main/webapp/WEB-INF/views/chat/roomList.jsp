@@ -9,36 +9,6 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>구디캠퍼스 메인</title>
-	
-<style>
-    .chat{width:400px; margin:auto; padding:10px; border:1px solid lightgray;}
-    .chat-area{height:500px; overflow: auto;}
-
-     .chat-message{margin:10px 0px;}
-     .chat-message.mine{display: flex; justify-content:flex-end;}
-     
-    .chat-message .send-message{
-       padding: 5px 7px;
-       border-radius: 10px;
-       max-width: 190px;
-       font-size:0.9em;
-       white-space: pre-line;
-    }
-    .chat-message.other .send-message{background: lightgray;}
-    .chat-message.mine .send-message{background: #FFE08C;}
- 
-    .chat-user {
-       text-align:center;
-       border-radius:10px;  
-       background: lightgray;
-       opacity: 0.5;
-       margin: 20px 0px;
-       color: black;
-       line-height: 30px;
-    }
- </style>	
-	
 </head>
 
 
