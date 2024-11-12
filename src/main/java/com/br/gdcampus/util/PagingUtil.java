@@ -2,6 +2,8 @@ package com.br.gdcampus.util;
 
 import org.springframework.stereotype.Component;
 
+import com.br.gdcampus.dto.PageInfoDto;
+
 @Component
 public class PagingUtil {
 	public PageInfoDto getPageInfoDto(int listCount, int currentPage,int pageLimit, int boardLimit) {
