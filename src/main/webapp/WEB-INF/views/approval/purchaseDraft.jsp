@@ -6,6 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <title>구매품의서</title>
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    
     <style type="text/css">
         body {
             font-family: 'Malgun Gothic', sans-serif;
@@ -212,7 +215,7 @@
     </table>
 
     <div class="editor-section">
-        <textarea rows="10" style="width: 100%;" placeholder="구매사유를 입력하세요." name="apprTitle"></textarea>
+        <textarea rows="10" id="summernote" style="width: 100%;" name="apprContent"></textarea>
     </div>
 
     <script>
@@ -267,5 +270,20 @@
   <!-- main-content 끝 -->
   </div>
   <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+    <!-- Summernote JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+		
+    <script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            width: 900,
+            height:300,        	
+          placeholder: '기안 내용'
+        });
+      });
+    </script>   
 </body>
 </html>
