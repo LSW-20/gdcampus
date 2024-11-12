@@ -31,15 +31,12 @@
 	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
 	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
 	    WHERE 1 = 1  
-	    <!-- dept 조건 -->
 	    <if test="dept != 'all'">
 	        AND DEPT_NAME = #{dept}
 	    </if>
-	    <!-- rank 조건 -->
 	    <if test="rank != 'all'">
 	        AND RANK_NAME = #{rank}
 	    </if>
-	    <!-- keyword 조건 -->
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
@@ -109,7 +106,7 @@
 	</insert>
 	
 	<!-- 행정직원 상세조회 -->
-	<select id="">
+	<select id="" resultMap="userResultMap">
 	SELECT USER_NO
 	     , USER_NAME
 	     , EMAIL
@@ -124,4 +121,134 @@
       JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
      WHERE USER_NO = #{userNo}
 	</select>
+	
+	<!-- 행정직원 수정 -->
+	<update id="">
+		UPDATE T_USER
+		   SET USER_NAME = #{userName}
+		     , DEPT_NO = #{deptNo}
+		     , RANK_NO = #{rankNo}
+		     , EMAIL = #{email}
+		     , GENDER = #{gender}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , UPDATE_USER = #{updateUser}
+		 WHERE USER_NO = #{userNo}
+	</update>
+	
+	
+	<!-- 교수파트 -->
+	<!-- 교수 목록조회 -->
+	<select id="" resultType="_int">
+		SELECT count(*) as count
+	  	  FROM T_USER U
+	      JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
+	 	 WHERE 1 = 1 
+	 	 <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+
+	</select>
+	<select id="" resultMap="userResultMap">
+	    SELECT USER_NO
+	         , USER_NAME
+	         , ST_DEPT_NO
+	         , USER_STATUS
+	    FROM T_USER U
+	    JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
+	    WHERE 1 = 1  
+	 	 <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	     ORDER BY U.RANK_NO DESC
+	</select>
+	
+	<!-- 교수 추가 -->
+	<insert id="">
+		INSERT 
+		  INTO T_USER 
+		            (
+		             USER_NO
+		            ,ST_DEPT_NO
+		            ,CREATE_DATE
+		            ,CREATE_USER
+		            ,USER_STATUS
+		            ,USER_ID
+		            ,USER_PWD
+		            ,USER_NAME
+		            ,EMAIL
+		            ,GENDER
+		            ,PROFILE_URL
+		            ,NAME_URL
+		            ,HIRE_DATE
+		            ) 
+		VALUES 
+		     (
+		      'C'||LPAD(SEQ_C_UNO.NEXTVAL,4,0)
+		      ,#{stDeptNo}
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		      ,#{createUser}
+		      ,'Y'
+		      ,'C'||LPAD(SEQ_C_UNO.NEXTVAL,4,0)
+		      ,'$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+		      ,#{userName}
+		      ,#{email}
+		      ,#{gender}
+		      ,'/upload/profile/default.jpg'
+		      ,'/upload/name/default.jpg'
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		     )
+	</insert>
+	
+	<!-- 교수 상세조회 -->
+	<select id="" resultMap="userResultMap">
+	SELECT USER_NO
+	     , USER_NAME
+	     , EMAIL
+	     , ST_DEPT_NO
+	     , GENDER
+	     , USER_ID
+	     , HIRE_DATE
+	     , LEAVE_DATE
+      FROM T_USER U
+      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+     WHERE USER_NO = #{userNo}
+	</select>
+	
+	<!-- 교수 수정 -->
+	<update id="">
+		UPDATE T_USER
+		   SET USER_NAME = #{userName}
+		     , ST_DEPT_NO = #{stDeptNo}
+		     , EMAIL = #{email}
+		     , GENDER = #{gender}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , UPDATE_USER = #{updateUser}
+		 WHERE USER_NO = #{userNo}
+	</update>
+	
+	<!-- 공통파트 -->
+	<!-- 비밀번호 초기화 -->
+	<update id="">
+		UPDATE T_USER
+  		   SET  USER_PWD = '$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+     		  , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+     		  , UPDATE_USER = #{updateUser}
+		  WHERE USER_NO = #{userNo}
+	</update>
+	<!-- 퇴직 처리 -->
+	<update id="">
+		UPDATE T_USER
+	       SET LEAVE_DATE = to_date(SYSDATE,'RR/MM/DD')
+	     , USER_STATUS = 'N'
+	     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+	     , UPDATE_USER = #{updateUser}
+	 WHERE USER_NO = #{userNo}
+	</update>
 </mapper>
