@@ -3,7 +3,125 @@
 <mapper namespace="userMapper">
 
 	<resultMap id="userResultMap" type="UserDto">
-		<result column="user_no" property="userNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="ST_DEPT_NO" property="stDeptNo"/>
+		<result column="RANK_NO" property="rankNo"/>
+		<result column="DEPT_NO" property="deptNo"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="USER_STATUS" property="userStatus"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_PWD" property="userPwd"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="EMAIL" property="email"/>
+		<result column="GENDER" property="gender"/>
+		<result column="PHONE" property="phone"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="PROFILE_URL" property="profileURL"/>
+		<result column="NAME_URL" property="nameURL"/>
+		<result column="HIRE_DATE" property="hireDate"/>
+		<result column="LEAVE_DATE" property="leaveDate"/>
+		<result column="HOLI_DATE_TOTAL" property="holyDateTotal"/>
 	</resultMap>
-
+	
+	<!-- 행정직원 목록조회 -->
+	<select id="" resultType="_int">
+	    SELECT count(*) as count
+	    FROM T_USER U
+	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	    WHERE 1 = 1  
+	    <!-- dept 조건 -->
+	    <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <!-- rank 조건 -->
+	    <if test="rank != 'all'">
+	        AND RANK_NAME = #{rank}
+	    </if>
+	    <!-- keyword 조건 -->
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="" resultMap="userResultMap">
+	    SELECT USER_NO
+	         , USER_NAME
+	         , DEPT_NAME
+	         , RANK_NAME
+	         , USER_STATUS
+	    FROM T_USER U
+	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	    WHERE 1 = 1  
+	    <!-- dept 조건 -->
+	    <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <!-- rank 조건 -->
+	    <if test="rank != 'all'">
+	        AND RANK_NAME = #{rank}
+	    </if>
+	    <!-- keyword 조건 -->
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	     ORDER BY U.RANK_NO DESC
+	</select>
+	
+	<!-- 행정직원 추가 -->
+	<insert id="">
+		INSERT 
+		  INTO T_USER 
+		            (
+		             USER_NO
+		            ,RANK_NO
+		            ,DEPT_NO
+		            ,CREATE_DATE
+		            ,CREATE_USER
+		            ,USER_STATUS
+		            ,USER_ID
+		            ,USER_PWD
+		            ,USER_NAME
+		            ,EMAIL
+		            ,GENDER
+		            ,PROFILE_URL
+		            ,NAME_URL
+		            ,HIRE_DATE
+		            ) 
+		VALUES 
+		     (
+		      'B'||LPAD(SEQ_B_UNO.NEXTVAL,4,0)
+		      ,#{rankNo}
+		      ,#{deptNo}
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		      ,#{createUser}
+		      ,'Y'
+		      ,'B'||LPAD(SEQ_B_UNO.NEXTVAL,4,0)
+		      ,'$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+		      ,#{userName}
+		      ,#{email}
+		      ,#{gender}
+		      ,'/upload/profile/default.jpg'
+		      ,'/upload/name/default.jpg'
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		     )
+	</insert>
+	
+	<!-- 행정직원 상세조회 -->
+	<select id="">
+	SELECT USER_NO
+	     , USER_NAME
+	     , EMAIL
+	     , DEPT_NAME
+	     , RANK_NAME
+	     , GENDER
+	     , USER_ID
+	     , HIRE_DATE
+	     , LEAVE_DATE
+      FROM T_USER U
+      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+     WHERE USER_NO = #{userNo}
+	</select>
 </mapper>
