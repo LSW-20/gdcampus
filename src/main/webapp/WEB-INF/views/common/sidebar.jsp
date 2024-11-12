@@ -11,7 +11,7 @@
 
 		<!-- LOGO -->
 		<div class="navbar-brand-box">
-				<a href="index.html" class="logo logo-dark">
+				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-dark">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-dark-sm.png" alt="" height="22">
 						</span>
@@ -20,7 +20,7 @@
 						</span>
 				</a>
 
-				<a href="index2.html" class="logo logo-light">
+				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-light">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-light-sm.png" alt="" height="22">
 						</span>
@@ -90,7 +90,7 @@
 								</li>
 
 								<li>
-										<a href="#" class=" waves-effect">
+										<a href="${contextPath}/chat/chat.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="message-square"></i>
 												<span class="badge badge-pill badge-success float-right">New</span>
 												<span class="menu-item">메신저</span>
