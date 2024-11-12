@@ -7,196 +7,265 @@
     <meta charset="UTF-8">
     <title>구매품의서</title>
     <style type="text/css">
-        #divCustomWrapper {
-            word-break: break-all;
-            font-family: malgun gothic, dotum, arial, tahoma;
-            font-size: 9pt;
-            width: 800px !important;
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 0;
         }
-        #divCustomWrapper * {
-            max-width: 800px !important;
+        .purchase-form {
+            width: 1000px;
+            height: 845px;
+            margin: 180px auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        #divCustomWrapper #titleSection {
-            text-align: center;
-            font-size: 25px;
-            font-weight: bold;
-            margin-bottom: 10px !important;
-            margin-top: 20px !important;
+        
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
-        #divCustomWrapper .detailSection {
-            border-collapse: collapse;
-            table-layout: fixed;
+        
+        .form-info {
+            width: 30%;
+        }
+        
+        .approval-line {
+            width: 60%;
+        }
+        
+        table {
             width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        #divCustomWrapper td {
-            border: 1px solid black;
-            padding: 3px;
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
-        .subjectColumn {
-            background: rgb(221, 221, 221);
+        
+        th {
+            background-color: #f5f5f5;
+        }
+        
+        .stamp {
+            width: 50px;
+            height: 50px;
+            margin: 5px auto;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
             font-weight: bold;
-            text-align: center;
         }
-        .detailColumn {
+				/* 미결재 상태의 스타일 */
+				.approval-stamp.pending {
+				    border-color: #ccc;
+				    color: #ccc;
+				}
+				
+				/* 반려 상태의 스타일 */
+				.approval-stamp.rejected {
+				    border-color: #ff0000;
+				    color: #ff0000;
+				}        
+        .title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .content-area {
+            min-height: 300px;
             text-align: left;
-        }
-        .centerCol {
-            text-align: center;
-        }
-        .rightCol {
-            text-align: right;
-        }
-        .areaCol {
-            height: 120px;
             vertical-align: top;
+            padding: 20px;
         }
-        .sum_cur {
+        .appr-title
+        {
+          width: 600px;
+        }    
+        
+        /* 품의서 별도 style */
+        .btn-section {
             text-align: right;
+            margin: 10px 0;
         }
+        .btn {
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        .total-row {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }    
+        .editor-section {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .toolbar {
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin-bottom: 5px;
+        }            
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function addRow() {
-                var table = document.getElementById('dynamic_table1');
-                var newRow = table.querySelector('.copyRow1').cloneNode(true);
-                newRow.classList.remove('copyRow1');
-                newRow.classList.add('copiedRow');
-                newRow.querySelectorAll('input').forEach(function(input) {
-                    input.value = '';
-                });
-                table.appendChild(newRow);
-                updateRowNumbers();
-            }
-
-            function deleteRow() {
-                var table = document.getElementById('dynamic_table1');
-                var rows = table.querySelectorAll('.copiedRow');
-                if (rows.length > 0) {
-                    table.removeChild(rows[rows.length - 1]);
-                }
-                updateRowNumbers();
-            }
-
-            function updateRowNumbers() {
-                var rows = document.querySelectorAll('#dynamic_table1 .copiedRow, #dynamic_table1 .copyRow1');
-                rows.forEach(function(row, index) {
-                    row.querySelector('td').textContent = index + 1;
-                });
-            }
-
-            document.getElementById('plus1').addEventListener('click', addRow);
-            document.getElementById('minus1').addEventListener('click', deleteRow);
-        });
-    </script>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
-    <!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
-    <div id="layout-wrapper">
-        <!-- header 시작 -->
-        <jsp:include page="/WEB-INF/views/common/header.jsp" />
-        <!-- header 끝 -->
+  <!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+  <div id="layout-wrapper">
+      <!-- header 시작 -->
+      <jsp:include page="/WEB-INF/views/common/header.jsp" />
+      <!-- header 끝 -->
 
-        <!-- sidebar 시작 -->
-        <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-        <!-- sidebar 끝 -->
-
-        <!-- main-content 시작 -->
-        <div class="main-content">
-            <div class="page-content">
-                <div class="container-fluid">
-                    <div id="divCustomWrapper">
-                        <!-- Title Section -->
-                        <div id="titleSection">구매품의서</div>
-
-                        <!-- Draft Section -->
-                        <div class="partition" id="draftSection">
-                            <div class="inaRowRight">
-                                <span class="comp_wrap">
-                                    <span class="sign_type1_inline">
-                                        <span class="sign_tit_wrap"><strong>기안</strong></span>
-                                        <span class="sign_member_wrap"><span class="sign_member">&nbsp;</span></span>
-                                    </span>
-                                </span>
-                                <span class="comp_wrap">
-                                    <span class="sign_type1_inline">
-                                        <span class="sign_tit_wrap"><strong>승인</strong></span>
-                                        <span class="sign_member_wrap"><span class="sign_member">&nbsp;</span></span>
-                                        <span class="sign_member_wrap"><span class="sign_member">&nbsp;</span></span>
-                                        <span class="sign_member_wrap"><span class="sign_member">&nbsp;</span></span>
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Detail Section -->
-                        <div class="viewModeHiddenPart td_button">
-                            <a class="button" id="plus1">추가</a>
-                            <a class="button" id="minus1">삭제</a>
-                        </div>                        
-                        <table id="dynamic_table1" class="detailSection">
-                            <tr>
-                                <td colspan="2" class="subjectColumn">담당 부서</td>
-                                <td class="detailColumn">기안부서</td>
-                                <td rowspan="3" class="subjectColumn">납품자</td>
-                                <td colspan="3" class="detailColumn"><input type="text" /></td>
-                                <td class="subjectColumn">작성 일자</td>
-                                <td colspan="2" class="detailColumn">기안일</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="subjectColumn">프로젝트 번호</td>
-                                <td class="detailColumn"><input type="text" /></td>
-                                <td class="detailColumn centerCol">TEL:</td>
-                                <td colspan="2" class="detailColumn"><input type="text" /></td>
-                                <td class="subjectColumn">인도장소</td>
-                                <td colspan="2" class="detailColumn"><input type="text" /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="subjectColumn">사용 목적</td>
-                                <td class="detailColumn"><input type="text" /></td>
-                                <td class="detailColumn centerCol">FAX:</td>
-                                <td colspan="2" class="detailColumn"><input type="text" /></td>
-                                <td class="subjectColumn">희망 납기 일자</td>
-                                <td colspan="2" class="detailColumn"><input type="text" class="ipt_editor_date" /></td>
-                            </tr>
-                            <tr>
-                                <td class="subjectColumn">품번</td>
-                                <td colspan="2" class="subjectColumn">품명</td>
-                                <td class="subjectColumn">규격</td>
-                                <td class="subjectColumn">단위</td>
-                                <td class="subjectColumn">수량</td>
-                                <td class="subjectColumn">단가</td>
-                                <td class="subjectColumn">금액</td>
-                                <td class="subjectColumn">비고</td>
-                            </tr>
-                            <tr class="copyRow1">
-                                <td class="detailColumn">1</td>
-                                <td colspan="2" class="detailColumn"><input type="text" /></td>
-                                <td class="detailColumn"><input type="text" /></td>
-                                <td class="detailColumn"><input type="text" /></td>
-                                <td class="detailColumn amount"><input type="text" /></td>
-                                <td class="detailColumn price"><input type="text" /></td>
-                                <td class="detailColumn cur">&nbsp;</td>
-                                <td class="detailColumn"><input type="text" /></td>
-                            </tr>
-                            <tr class="subjectColumn">
-                                <td colspan="7">합계</td>
-                                <td class="sum_cur"></td>
-                            </tr>
-                            <tr class="subjectColumn">
-                                <td colspan="10">구매사유 (구체적 작성)</td>
-                            </tr>
-                            <tr>
-                                <td colspan="10" class="areaCol"><textarea></textarea></td>
-                            </tr>
-                        </table>
-
-                    </div>
-                </div>
+      <!-- sidebar 시작 -->
+      <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+      <!-- sidebar 끝 -->
+      <!-- main-content 시작 -->
+		<div class="purchase-form">
+		<!-- 결재 공통부분 start -->
+    <div class="title">구매품의서</div>        
+        <div class="form-header">
+            <div class="form-info">
+                <table>
+                    <tr>
+                        <th width="30%">기안자</th>
+                        <td>apprName</td>
+                    </tr>
+                    <tr>
+                        <th>소속</th>
+                        <td>deptName</td>
+                    </tr>
+                    <tr>
+                        <th>기안일</th>
+                        <td>apprDate</td>
+                    </tr>
+                    <tr>
+                        <th>문서번호</th>
+                        <td>apprNo</td>
+                    </tr>
+                </table>
             </div>
-        </div>
-
-        <!-- main-content 끝 -->
+            
+            <div class="approval-line">
+                <table>
+                    <tr>
+                        <th width="50%">신청</th>
+                        <th width="50%">대표이사</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stamp">승인</div>
+                            loginUser
+                        </td>
+                        <td>
+                            <div class="stamp">승인</div>
+                            userNo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>lineDate</td>
+                        <td>lineDate</td>
+                    </tr>
+                </table>
+            </div>
+        </div>				
+				<!-- 결재 공통부분 end -->
+    <div class="btn-section">
+        <button class="btn" onclick="addRow()">추가</button>
+        <button class="btn" onclick="deleteRow()">삭제</button>
     </div>
-    <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+
+    <table id="purchaseTable" border="1">
+        <thead>
+            <tr>
+                <th>품번</th>
+                <th>품명</th>
+                <th>단위</th>
+                <th>수량</th>
+                <th>단가</th>
+                <th>금액</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr>
+                <td>1</td>
+                <td><input type="text" style="width: 90%;"></td>
+                <td><input type="text" style="width: 90%;"></td>
+                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)"></td>
+                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)"></td>
+                <td class="amount">0</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="5">합계</td>
+                <td id="totalAmount">0</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="editor-section">
+        <textarea rows="10" style="width: 100%;" placeholder="구매사유를 입력하세요." name="apprTitle"></textarea>
+    </div>
+
+    <script>
+        function addRow() {
+            const tbody = document.getElementById('tableBody');
+            const rowCount = tbody.getElementsByTagName('tr').length;
+            const newRow = tbody.insertRow();
+            
+            newRow.innerHTML = `
+                <td>${rowCount + 1}</td>
+                <td><input type="text" style="width: 90%;"></td>
+                <td><input type="text" style="width: 90%;"></td>
+                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)"></td>
+                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)"></td>
+                <td class="amount">0</td>
+            `;
+        }
+
+        function deleteRow() {
+            const tbody = document.getElementById('tableBody');
+            if (tbody.rows.length > 1) {
+                tbody.deleteRow(-1);
+            }
+            calculateTotal();
+        }
+
+        function calculateAmount(input) {
+            const row = input.parentElement.parentElement;
+            const quantity = parseInt(row.cells[3].getElementsByTagName('input')[0].value) || 0;
+            const price = parseInt(row.cells[4].getElementsByTagName('input')[0].value) || 0;
+            const amount = quantity * price;
+            row.cells[5].textContent = amount;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const amounts = document.getElementsByClassName('amount');
+            let total = 0;
+            for (let i = 0; i < amounts.length; i++) {
+                total += parseInt(amounts[i].textContent) || 0;
+            }
+            document.getElementById('totalAmount').textContent = total;
+        }
+    </script>				
+				
+				
+		</div>
+				
+				
+
+
+  <!-- main-content 끝 -->
+  </div>
+  <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 </body>
 </html>
