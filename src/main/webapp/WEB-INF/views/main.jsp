@@ -72,7 +72,7 @@
                                     <p class="text-muted">구디아카데미 로그인</p>
                                 </div>
                                 <div class="p-2 mt-4">
-                                <form action="${contextPath}/member/signin.do" method="post">
+                                <form action="${contextPath}/user/signin.do" method="post">
         
                                         <div class="form-group">
                                             <label for="userId">UserID</label>

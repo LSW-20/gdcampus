@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!-- sidebar 시작 -->
 <div class="vertical-menu">
@@ -156,6 +156,8 @@
 								<!-- 인사팀 메뉴 끝 -->												
 								</c:if>
 								
+								
+								<c:if test="${loginUser.deptNo eq 2 }">
 								<br>
 								
 								
@@ -186,6 +188,7 @@
 										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
+								</c:if>
 								
 								<br>
 								
@@ -271,6 +274,7 @@
 								<br>
 																
 								
+								<c:if test="${loginUser.userNo != null && fn:contains(loginUser.userNo, 'A')}">
 								<!-- 관리자 메뉴 시작 -->
 								<li class="menu-title">관리자</li>
 
@@ -315,6 +319,8 @@
 										</ul>
 								</li>
 								<!-- 관리자 메뉴 끝 -->		
+								</c:if>
+
 
 
 								<br>
