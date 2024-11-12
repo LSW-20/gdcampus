@@ -6,6 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <title>업무 기안</title>
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Malgun Gothic', sans-serif;
@@ -14,7 +17,8 @@
         .approval-form {
             width: 1000px;
             height: 845px;
-            margin: 180px auto;
+            margin-top: 35px;
+            margin-left: 280px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -73,12 +77,12 @@
 				    border-color: #ff0000;
 				    color: #ff0000;
 				}        
-        .title {
-            font-size: 24px;
+         .title {
+            font-size: 35px;
             text-align: center;
             margin-bottom: 20px;
             font-weight: bold;
-        }
+        } 
         
         .content-area {
             min-height: 300px;
@@ -92,19 +96,19 @@
         }
         /* simpleDraft별도 */
         textarea {
-        	height: 300px;
-        	width: 720px;
+/*         	height: 300px;
+        	width: 500px; */
         }        
     </style>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
-	<!-- header 시작 -->
+<%-- 	<!-- header 시작 -->
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<!-- header 끝 -->
 	
 	<!-- sidebar 시작 -->
 	<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-	<!-- sidebar 끝 -->
+	<!-- sidebar 끝 --> --%>
 
     <div class="approval-form">
     <div class="title">업무 기안</div>        
@@ -168,7 +172,7 @@
             </tr>
             <tr>
                 <td colspan="4" class="content-area">
-                    <textarea></textarea>
+                    <textarea id="summernote" name="apprContent"></textarea>
                 </td>
             </tr>
         </table>
@@ -177,5 +181,20 @@
             <span style="color: #666;">첨부파일 0개 (0.0Byte)</span>
         </div>
     </div>
+    <!-- Summernote JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+		
+    <script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            width: 900,
+            height:300,        	
+          placeholder: '기안 내용'
+        });
+      });
+    </script>     
 </body>
 </html>
