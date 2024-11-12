@@ -7,146 +7,175 @@
     <meta charset="UTF-8">
     <title>업무 기안</title>
     <style>
-        .container {
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 0;
+        }
+        .approval-form {
+            width: 1000px;
+            height: 845px;
+            margin: 180px auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            margin-bottom: 20px;
         }
-        .form-table {
+        
+        .form-info {
             width: 30%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
         }
-        .force-dept-table {
-            width: 65%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+        
+        .approval-line {
+            width: 60%;
         }
-        .force-dept-table td, .force-dept-table th {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-        }        
-        .form-table td, .form-table th {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-        }
-        .force-dept-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .form-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }        
-        .title {
-            text-align: center;
-            font-size: 24px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        .editor-section {
-            width: 80%;
-            display: flex;
-            height: 300px;
-            border: 1px solid #000;
-            margin-bottom: 20px;
-        }
-        .editor-section textarea {
+        
+        table {
             width: 100%;
-            height: 100%;
-            border: none;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .signature-table {
-            width: 30%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        .signature-table td, .signature-table th {
-            border: 1px solid #000;
-            padding: 10px;
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: center;
         }
-        .signature-table th {
-            background-color: #f2f2f2;
+        
+        th {
+            background-color: #f5f5f5;
+        }
+        
+        .stamp {
+            width: 50px;
+            height: 50px;
+            margin: 5px auto;
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
             font-weight: bold;
         }
+				/* 미결재 상태의 스타일 */
+				.approval-stamp.pending {
+				    border-color: #ccc;
+				    color: #ccc;
+				}
+				
+				/* 반려 상태의 스타일 */
+				.approval-stamp.rejected {
+				    border-color: #ff0000;
+				    color: #ff0000;
+				}        
+        .title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .content-area {
+            min-height: 300px;
+            text-align: left;
+            vertical-align: top;
+            padding: 20px;
+        }
+        .appr-title
+        {
+          width: 600px;
+        }
+        /* simpleDraft별도 */
+        textarea {
+        	height: 300px;
+        	width: 720px;
+        }        
     </style>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
-    <!-- header 시작 -->
-    <jsp:include page="/WEB-INF/views/common/header.jsp" />
-    <!-- header 끝 -->
+	<!-- header 시작 -->
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<!-- header 끝 -->
+	
+	<!-- sidebar 시작 -->
+	<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+	<!-- sidebar 끝 -->
 
-    <!-- sidebar 시작 -->
-    <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-    <!-- sidebar 끝 -->
-
-    <div class="title">업무 기안</div>
-    <form>
-        <div class="container">
-            <table class="form-table">
-                <tr>
-                    <th>기안자</th>
-                    <td>홍길동</td>
-
-                </tr>
-                <tr>
-                    <th>기안부서</th>
-                    <td>총무부</td>
-
-                </tr>
-                <tr>
-                    <th>기안일</th>
-                    <td>2024-11-06(수)</td>                
-                </tr>
-                <tr>
-                    <th>문서번호</th>
-                    <td>12345</td>                
-                </tr>
-            </table>
-            <table class="signature-table">
-                <tr>
-                    <th>부회장</th>
-                    <th>부회장</th>
-                </tr>
-                <tr>
-                    <td>신청</td>
-                    <td>승인</td>
-                </tr>
-                <tr>
-                    <td>김회장</td>
-                    <td>김회장</td>
-                </tr>
-            </table>         
+    <div class="approval-form">
+    <div class="title">업무 기안</div>        
+        <div class="form-header">
+            <div class="form-info">
+                <table>
+                    <tr>
+                        <th width="30%">기안자</th>
+                        <td>apprName</td>
+                    </tr>
+                    <tr>
+                        <th>소속</th>
+                        <td>deptName</td>
+                    </tr>
+                    <tr>
+                        <th>기안일</th>
+                        <td>apprDate</td>
+                    </tr>
+                    <tr>
+                        <th>문서번호</th>
+                        <td>apprNo</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="approval-line">
+                <table>
+                    <tr>
+                        <th width="50%">신청</th>
+                        <th width="50%">대표이사</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stamp">승인</div>
+                            loginUser
+                        </td>
+                        <td>
+                            <div class="stamp">승인</div>
+                            userNo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>lineDate</td>
+                        <td>lineDate</td>
+                    </tr>
+                </table>
+            </div>
         </div>
+
+
+        <table>
+            <tr>
+                <th width="20%">시행일자</th>
+                <td width="30%"><input type="date" name="enforceDate"></td>
+                <th width="20%">협조부서</th>
+                <td width="30%"><input type="text" name="coopDept"></td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td colspan="3"><input type="text" class="appr-title" name="apprTitle"></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="content-area">
+                    <textarea></textarea>
+                </td>
+            </tr>
+        </table>
         
-				<div align="center">
-		        <table class="force-dept-table">
-		            <tr>
-		                <th>시행일자</th>
-		                <td><input type="date" name="startDate" /></td>
-		                <th>협조부서</th>
-		                <td><input type="text" name="cooperationDept" /></td>
-		            </tr>
-		            <tr>
-		                <th>제목</th>
-		                <td colspan="3"><input type="text" style="width: 100%;" name="title" /></td>
-		            </tr>
-		        </table>   				
-				</div>
-
-
-        <div class="editor-section">
-            <textarea name="editorContent"></textarea>
+        <div style="margin-top: 20px;">
+            <span style="color: #666;">첨부파일 0개 (0.0Byte)</span>
         </div>
-    </form>
-
-    <div>파일첨부</div>
-    <div style="border: 1px dashed #000; padding: 10px; text-align: center;">
-        이 곳에 파일을 드래그 하세요. 또는 파일선택
     </div>
 </body>
 </html>
