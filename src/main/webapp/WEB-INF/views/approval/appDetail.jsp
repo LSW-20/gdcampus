@@ -9,6 +9,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	학원컴 깃 연결 후 테스트
+	노트북 연결 후 브랜치 테스트
 </body>
 </html>
