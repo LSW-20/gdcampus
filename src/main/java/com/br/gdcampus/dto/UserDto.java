@@ -30,5 +30,7 @@ public class UserDto {
 	private String address;
 	private String profileURL;
 	private String nameURL;
+	private String hireDate;
+	private String leaveDate;
 	private int  holyDateTotal;
 }
