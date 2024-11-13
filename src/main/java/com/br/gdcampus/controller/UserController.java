@@ -69,7 +69,6 @@ public class UserController {
 	@GetMapping(value="/listContent.do", produces="application/json")
 	public Map<String,Object> staffListContent(@RequestParam(value="page", defaultValue="1") int currentPage
 			,String dept, String rank, String keyword) {
-		log.debug("currentPage : {} , dept : {} , rank : {} , keyword : {} ",currentPage, dept, rank, keyword);
 		
 		Map<String, Object> res = new HashMap<>();
 		Map<String,String> search = new HashMap<>();
@@ -77,14 +76,10 @@ public class UserController {
 		search.put("dept", dept);
 		search.put("rank", rank);
 		search.put("keyword", keyword);
-		//
+		
 		int listCount = userService.selectStaffListCount(search);
-		log.debug("listCount : {} ", listCount);
-		
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
-		
 		List<UserDto> list = userService.selectStaffList(search, pi);
-		log.debug("list : {} ", list);
 		
 		res.put("userList", list);
 		res.put("pi", pi);
