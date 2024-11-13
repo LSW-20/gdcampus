@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class User2ServiceInpl implements User2Service {
+public class UserServiceInpl implements UserService {
 	
 	private final User2Dao userDao;
 
