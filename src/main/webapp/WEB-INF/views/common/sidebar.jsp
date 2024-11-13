@@ -297,6 +297,16 @@
 												<li><a href="#">직급 조회, 추가, 수정, 삭제</a></li>
 										</ul>
 								</li>
+								
+									<li>
+										<a href="javascript: void(0);" class="has-arrow waves-effect">
+												<i class="icon nav-icon" data-feather="briefcase"></i>
+												<span class="menu-item">게시판 관리</span>
+										</a>
+										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="#">게시판 조회, 추가, 수정, 삭제</a></li>
+										</ul>
+								</li>
 
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
