@@ -38,6 +38,7 @@ public interface ApprovalService {
 	List<ApprRefDto> selectApprViewerList(PageInfoDto pi, String userNo);
 	
 	//결재대기문서상세
+	ApprovalDto selectMyApprovedDetail(String userNo, String apprNo);
 	
 	//결재예정문서 상세
 	
