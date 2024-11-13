@@ -69,7 +69,7 @@
 								<div class="search-box ml-2">
 									<div class="position-relative">
 										<a href="#" class="btn btn-danger waves-effect waves-light">
-										<i class="uil-minus mr-2"></i> 사원 삭제</a>
+										<i class="uil-minus mr-2"></i> 퇴사처리</a>
 									</div>
 								</div>
 
@@ -187,59 +187,59 @@
 		<!-- main-content 끝 -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-	$(document).ready(function() {
-	    listDo(); 
-
-	 // 부서가 변하는 경우
-	    $('#dept').on('change', function() {
-	        listDo(); 
-	    });
-	 // 직급이 변하는 경우
-	    $('#rank').on('change', function() {
-	        listDo(); 
-	    });
-	 // 검색어가 변하는 경우
-	    $('#search').on('keyup', function() {
-	        listDo(); 
-	    });
-	 // 페이지가 변하는 경우??
-	    $('#someButton').on('click', function() {
-	        listDo(); 
-	    });
-	});
-    
-    function listDo(){
-        $.ajax({
-            url: '${contextPath}/user/listContent.do', 
-            data: 
-            {
-				dept: $("#dept").val(),
-				rank: $('#rank').val(),
-				keyword:$('#search').val(),
-				pi: 1
-				
-				},
-            type: 'GET',
-            dataType: 'json', // 응답 데이터 타입
-            success: function(response) {
-                // Map에서 Pi 객체와 UserDto 리스트 추출
-                var pi = response.pi;          // Pi 객체
-                var userList = response.userList; // List<UserDto>
-                
-                console.log("pi:"+ pi);
-                console.log("userList:"+ userList);
-
-                // 페이지 다시 그려줘야됨
-                $('#output').html(
-                    
-                );
-            },
-            error: function(error) {
-                alert('AJAX 요청 실패: ' + error);
-            }
-        });    	
-    }
-</script>
+		$(document).ready(function() {
+		    listDo(); 
+	
+		 // 부서가 변하는 경우
+		    $('#dept').on('change', function() {
+		        listDo(); 
+		    });
+		 // 직급이 변하는 경우
+		    $('#rank').on('change', function() {
+		        listDo(); 
+		    });
+		 // 검색어가 변하는 경우
+		    $('#search').on('keyup', function() {
+		        listDo(); 
+		    });
+		 // 페이지가 변하는 경우??
+		    $('#').on('click', function() {
+		        listDo(); 
+		    });
+		});
+	    
+	    function listDo(){
+	        $.ajax({
+	            url: '${contextPath}/user/listContent.do', 
+	            data: 
+	            {
+					dept: $("#dept").val(),
+					rank: $('#rank').val(),
+					keyword:$('#search').val(),
+					pi: 1
+					
+					},
+	            type: 'GET',
+	            dataType: 'json', // 응답 데이터 타입
+	            success: function(response) {
+	
+	                var pi = response.pi;          // Pi 객체
+	                var userList = response.userList; // List<UserDto>
+	                
+	                console.log("pi:"+ pi);
+	                console.log("userList:"+ userList);
+	
+	                // 페이지 다시 그려줘야됨
+	                $('#output').html(
+	                    
+	                );
+	            },
+	            error: function(error) {
+	                alert('AJAX 요청 실패: ' + error);
+	            }
+	        });    	
+	    }
+	</script>
 
 
 
