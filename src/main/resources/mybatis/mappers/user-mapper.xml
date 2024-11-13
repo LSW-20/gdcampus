@@ -304,15 +304,22 @@
 	</select>
 	<!-- 회원정보 수정 -->
 	
-	<select id="updateUser" resultMap="userResultMap">
+	<update id="updateUser">
 	update T_USER
-		 set
-		 		 user_name = #{userName}
+		 set user_name = #{userName}
 		 	 , phone = #{phone}
 		 	 , email = #{email}
 		 	 , address = #{address}
 		 	 , gender = #{gender}
-	 where 
-	 			 user_id = #{userId}
-	 </select>			
+	 where user_id = #{userId}
+	 </update>			
+	 
+	 <!-- 회원 프로필 이미지 수정 -->
+	<update id="updateProfileImg">
+		update
+					 T_USER
+			 set
+			 		 profile_url = #{profileURL}
+		 where user_id = #{userId}
+	</update>
 </mapper>

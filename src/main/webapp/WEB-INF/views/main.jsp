@@ -94,7 +94,7 @@
                                             <button class="btn btn-primary btn-block waves-effect waves-light" type="submit"><i class="icon-xs icon mr-1" data-feather="log-in"></i> Log In</button>
                                         </div>
                                         <div class="mt-4 text-center">
-                                            <p class="mb-0"><a href="auth-register.html" class="font-weight-medium text-primary">아이디 찾기</a>/ <a href="auth-register.html" class="font-weight-medium text-primary">비밀번호 찾기</a> </p>
+                                            <p class="mb-0"><a href="${contextPath }/user/idSearch.do" class="font-weight-medium text-primary">아이디 찾기</a>/ <a href="${contextPath }/user/pwdSearch.do" class="font-weight-medium text-primary">비밀번호 찾기</a> </p>
                                         </div>
             
                                         

@@ -85,8 +85,13 @@
                                         </div>
                                         <div class="text-center mt-3 mb-4">
                                             <div class="avatar-xl rounded-circle p-2 border border-soft-primary mx-auto">
-                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="img-fluid rounded-circle">
-                                            </div>
+																						    <!-- 원형으로 표시할 이미지 -->
+																						    <img id="profileImg" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/users/avatar-4.jpg' />"
+																						         onclick="$('#profileImgFile').click();"
+																						         style="border-radius: 50%; width: 100%; height: 100%; object-fit: cover;">
+																						    <!-- 파일 업로드 input -->
+																						    <input type="file" class="file" id="profileImgFile" style="display:none;" accept="image/*">
+																						</div>
                                             <h5 class="mt-4 mb-2">${loginUser.userName }</h5>
                                             <p class="text-muted">
 	                                            <i class="icon-xs mr-1 icon" data-feather="monitor"></i> 
@@ -286,7 +291,7 @@
 
         <script src="assets/js/app.js"></script>
         
-<script>
+		<script>
     // 수정 전 초기 값 저장
     var initialValues = {};
 
@@ -367,8 +372,36 @@
 				    };
 				}
     }
-</script>
+		</script>
+		<script>
+       	$(document).ready(function(){
+       		$("#profileImgFile").on("change",function(evt){
+       			const files = evt.target.files;//FileList{File,File}
+       			
+       			//선택된 파일이 있을 경우
+       			if(files.length != 0){//비동기식으로 파일 전송 업로드 + DB기록
+       				let formData = new FormData();
+       				formData.append("uploadFile",files[0]);
+       				$.ajax({
+       					url: '${contextPath}/user/updateProfile.do',
+       					type: 'post',
+       					data: formData,
+       					processData: false,//문자열변경 전달 default값 설정 해제를 위해
+       					contentType: false,//두개 false해두기
+       					success: function(resData){
+       						if(resData == "SUCCESS"){
+       							location.reload();
+       						}else {
+       							alert("프로필 이미지 변경 실패");
+       						}
+       					}
+       				})
+       			}
+       			
+       		})
+       	})
+       </script>
 
-
+<script src="${ contextPath }/resources/js/fileValidate.js"></script>
     </body>
 </html>

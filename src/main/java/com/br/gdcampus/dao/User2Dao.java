@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
-public class UserDao {
+public class User2Dao {
 
 	private final SqlSessionTemplate sqlSession;
 	
@@ -30,4 +30,12 @@ public class UserDao {
 	public int updateUser(UserDto m) {
 		return sqlSession.update("userMapper.updateUser",m);
 	}
+	
+	/**
+	 * 회원프로필수정
+	 */
+	public int updateProfileImg(UserDto m) {
+		return sqlSession.update("userMapper.updateProfileImg",m);
+	}
+	
 }

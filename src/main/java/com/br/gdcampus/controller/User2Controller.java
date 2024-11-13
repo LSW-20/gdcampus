@@ -1,17 +1,21 @@
 package com.br.gdcampus.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.UserDto;
-import com.br.gdcampus.service.UserService;
+import com.br.gdcampus.service.User2Service;
 import com.br.gdcampus.util.FileUtil;
 import com.br.gdcampus.util.PagingUtil;
 
@@ -28,9 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Controller
-public class UserController {
+public class User2Controller {
 	
-	private final UserService userService;
+	private final User2Service userService;
 	private final BCryptPasswordEncoder bcryptPwdEncoder;
 	private final FileUtil fileUtil;
 	private final PagingUtil pagingUtil;
@@ -88,5 +92,52 @@ public class UserController {
 			rdAttributes.addFlashAttribute("alertMsg", "회원 정보 수정 실패");
 		}
 		return "redirect:/user/profile/profile.do";
+	}
+	
+	//프로필이미지 수정
+	@ResponseBody
+	@PostMapping("/updateProfile.do")//jsp(script)와 키값 동일하게 uploadFile
+	public String modifyProfile(MultipartFile uploadFile
+			, HttpSession session) {
+		//현재 로그인 한 회원 정보
+		UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+		
+		System.out.println(loginUser);
+		
+		//기존 프로필은 url주소 이제 필요x
+		//삭제 위해 뽑아온다
+		String originalProfileURL = loginUser.getProfileURL();
+		
+//		FileUtil클래스에 업로드 관련 클래스 만들어놨음,전역필드에 추가
+		//변경 요청한 프로필 파일 업로드
+		Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
+		
+		//현재 로그인 한 회원 객체에 새로 저장된 프로필 이미지에 대한 수정된 url주소 
+		//를 ProfileURL에 담음
+		loginUser.setProfileURL(map.get("filePath")+"/"+map.get("filesystemName"));
+		
+		//DB에 기록을 위한Service호출
+		int result = userService.updateProfileImg(loginUser);
+		
+		if(result > 0) {
+			//성공시 기존 프로필 존재 했을 경우 파일 삭제
+			if(originalProfileURL != null) {
+				new File(originalProfileURL).delete();
+			}
+			return "SUCCESS";
+		}else {
+			//DB기록 실패시 변경요청시 전달 된 프로필url파일 삭제
+			new File(loginUser.getProfileURL()).delete();
+			//바꾼 url주소 원복
+			loginUser.setProfileURL(originalProfileURL);
+			return "FAIL";
+		}
+		
+	}//modifyProfile
+	
+	//아이디찾기
+	@GetMapping("/idSearch.do")
+	public void idSearch() {
+		
 	}
 }
