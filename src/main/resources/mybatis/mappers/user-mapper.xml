@@ -21,7 +21,7 @@
 		<result column="CREATE_USER" property="createUser"/>
 		<result column="NAME_URL" property="nameURL"/>
 		<result column="UPDATE_USER" property="updateUser"/>
-		<result column="HOLI_DATE_TOTAL" property="holiDt"/>
+		<result column="HOLI_DATE_TOTAL" property="holyDateTotal"/>
 		<result column="HIRE_DATE" property="hireDate"/>
 		<result column="LEAVE_DATE" property="leaveDate"/>
 	</resultMap>
