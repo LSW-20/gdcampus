@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.UserService;
@@ -60,11 +61,32 @@ public class UserController {
 			    response.sendRedirect(request.getContextPath() + "/main2.do");  // 서버 측에서 리디렉션
 			//기존에 머물던 페이지 요청
 			//out.println("location.href='" +request.getHeader("referer")+ "';");
+			    System.out.println(loginUser);
 		}else {//로그인 실패
 			//alert창, 페이지 유지
 			 out.println("<script>alert('로그인에 실패하였습니다. 아이디 및 비밀번호를 다시 확인 해 주세요.');</script>");
 			    out.println("<script>history.back();</script>");
 		}
 		
+	}
+	
+	//프로필이동
+	@GetMapping("/profile/profile.do")
+	public void profile() {}
+	
+	//프로필수정
+	@PostMapping("/profile/modify.do")
+	public String profileModify(UserDto m
+			, RedirectAttributes rdAttributes
+			, HttpSession session) {
+		int result = userService.updateUser(m);
+		if(result > 0) {
+			//DB에서 조회해서 세션에 갱신 된 회원 객체 덮어쓰는 과정 필요
+			session.setAttribute("loginUser", userService.selectUser(m));
+			rdAttributes.addFlashAttribute("alertMsg", "회원 정보가 수정 되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg", "회원 정보 수정 실패");
+		}
+		return "redirect:/user/profile/profile.do";
 	}
 }

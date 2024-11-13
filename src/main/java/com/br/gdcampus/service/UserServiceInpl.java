@@ -145,6 +145,14 @@ public class UserServiceInpl implements UserService {
 	public UserDto selectUser(UserDto m) {
 		return userDao.selectUser(m);
 	}
+
+	@Override
+	/**
+	 * 회원정보수정 메소드
+	 */
+	public int updateUser(UserDto m) {
+		return userDao.updateUser(m);
+	}
 	
 	
 

@@ -45,4 +45,6 @@ public interface UserService {
 	
 	//로그인
 	UserDto selectUser(UserDto m);
+	//회원정보수정(프로필)
+	int updateUser(UserDto m); 
 }
