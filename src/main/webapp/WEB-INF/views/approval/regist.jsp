@@ -36,7 +36,7 @@
     </div>
     
      
-    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp" />
-
+<%--     <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp" />
+ --%>		<jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
 </body>
 </html>
