@@ -10,7 +10,7 @@ import com.br.gdcampus.dto.UserDto;
 /**
  * 인사팀 회원관리 서비스(김하늘)
  */
-public interface UserService {
+public interface User2Service {
 	// 행정직원 목록조회 + 이름으로 키워드 검색 + 부서/직급별 조회
 	int selectStaffListCount(Map<String,String> search);
 	List<UserDto> selectStaffList(Map<String,String> search, PageInfoDto pi);
@@ -45,4 +45,8 @@ public interface UserService {
 	
 	//로그인
 	UserDto selectUser(UserDto m);
+	//회원정보수정
+	int updateUser(UserDto m); 
+	//회원프로필수정
+	int updateProfileImg(UserDto m);
 }

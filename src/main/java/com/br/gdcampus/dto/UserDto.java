@@ -1,5 +1,7 @@
 package com.br.gdcampus.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,4 +35,7 @@ public class UserDto {
 	private String hireDate;
 	private String leaveDate;
 	private int  holyDateTotal;
+
+	private List<DeptDto> deptList;
+	private List<RankDto> rankList;
 }

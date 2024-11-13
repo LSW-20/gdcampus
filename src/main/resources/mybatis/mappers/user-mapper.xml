@@ -24,7 +24,23 @@
 		<result column="HOLI_DATE_TOTAL" property="holyDateTotal"/>
 		<result column="HIRE_DATE" property="hireDate"/>
 		<result column="LEAVE_DATE" property="leaveDate"/>
-	</resultMap>
+		
+		 <!-- 부서, 직급 컬렉션 매핑 -->
+    <collection ofType="DeptDto" property="deptList" resultMap="deptList"/>
+    <collection ofType="RankDto" property="rankList" resultMap="rankList"/>
+</resultMap>
+
+<!-- 부서 매핑 -->
+<resultMap id="deptList" type="DeptDto">
+    <result column="dept_no" property="deptNo"/>
+    <result column="dn" property="deptName"/>
+</resultMap>
+
+<!-- 직급 매핑 -->
+<resultMap id="rankList" type="RankDto">
+    <result column="rank_no" property="rankNo"/>
+    <result column="rn" property="rankName"/>
+</resultMap>
 	
 	<!-- 행정직원 목록조회 -->
 	<select id="a" resultType="_int">
@@ -277,6 +293,8 @@
                  , HIRE_DATE
                  , LEAVE_DATE
                  , HOLI_DATE_TOTAL
+                 , t4.dept_name as dn
+                 , t3.rank_name as rn
 			from t_user t1
             left join t_st_dept t2 on t1.st_dept_no = t2.st_dept_no
             left join t_rank t3 on t1.rank_no = t3.rank_no
@@ -284,4 +302,24 @@
 		 where user_status = 'Y'
 		   and user_id = #{userId}
 	</select>
+	<!-- 회원정보 수정 -->
+	
+	<update id="updateUser">
+	update T_USER
+		 set user_name = #{userName}
+		 	 , phone = #{phone}
+		 	 , email = #{email}
+		 	 , address = #{address}
+		 	 , gender = #{gender}
+	 where user_id = #{userId}
+	 </update>			
+	 
+	 <!-- 회원 프로필 이미지 수정 -->
+	<update id="updateProfileImg">
+		update
+					 T_USER
+			 set
+			 		 profile_url = #{profileURL}
+		 where user_id = #{userId}
+	</update>
 </mapper>
