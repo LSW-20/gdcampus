@@ -12,8 +12,6 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.br.gdcampus.dto.MemberDto;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Component // serlvet-context.xml에 빈 등록 구문 대체
@@ -31,7 +29,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
     /**
      * 웹소켓에 클라이언트가 연결되었을 때 처리할 내용 정의
      * @param session - 현재 웹소켓과 연결된 클라이언트 객체 (채팅방에 접속된 클라이언트)
-     */
+     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         // URL 쿼리에서 roomId 가져오기
@@ -57,14 +55,14 @@ public class ChatEchoHandler extends TextWebSocketHandler {
             }
         }
     }
-
+    */
     
     
     /**
      * 웹소켓으로 데이터(텍스트 등)가 전송되었을 경우 처리할 내용 정의
      * @param session - 현재 웹소켓으로 데이터를 전송한 클라이언트 객체
      * @param message - 전송된 데이터에 대한 정보를 가진 객체
-     */
+    
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String roomId = session.getUri().getQuery().split("roomId=")[1]; // roomId를 URI에서 가져옴
@@ -77,13 +75,13 @@ public class ChatEchoHandler extends TextWebSocketHandler {
             sss.sendMessage(new TextMessage(msg));
         }
     }
-    
+    */
     
 
     /**
      * 웹소켓 연결이 끊겼을 때 처리할 내용 정의
      * @param session - 웹소켓 연결이 끊긴 클라이언트의 정보
-     */
+     
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String roomId = session.getUri().getQuery().split("roomId=")[1];
@@ -93,7 +91,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         chatRooms.get(roomId).remove(session);
         log.debug("User {} has disconnected from room {}", userId, roomId);
     }
-    
+    */
     
 
     /**

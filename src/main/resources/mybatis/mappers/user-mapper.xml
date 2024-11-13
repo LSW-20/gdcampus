@@ -284,4 +284,28 @@
 		 where user_status = 'Y'
 		   and user_id = #{userId}
 	</select>
+	
+	
+	<!-- (상우) 회원(교수)의 소속학과 번호로 소속학과 이름 조회 -->
+	<select id="selectStDeptName" resultType="string">
+		select DEPT_NAME
+		  from T_ST_DEPT
+		 where ST_DEPT_NO = #{stDeptNo}
+	</select>
+	
+	<!-- (상우) 부서번호로 부서명 조회 -->
+	<select id="selectDeptName" resultType="string">
+		select DEPT_NAME
+		  from T_DEPT
+		 where DEPT_NO = #{deptNo}
+	</select>
+	
+	<!-- (상우) 직급번호로 직급명 조회 -->
+	<select id="selectRankName" resultType="string">
+		select RANK_NAME
+		  from T_RANK
+		 where RANK_NO = #{rankNo}
+	</select>
+	
+	
 </mapper>

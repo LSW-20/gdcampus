@@ -45,4 +45,12 @@ public interface UserService {
 	
 	//로그인
 	UserDto selectUser(UserDto m);
+	
+	// 소속학과 이름 조회 - 상우
+	String selectStDeptName(String stDeptNo);
+	// 부서명 조회 - 상우
+	String selectDeptName(String deptNo);
+	// 직금명 조회 - 상우
+	String selectRankName(String rankNo);
+	
 }
