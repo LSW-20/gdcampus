@@ -17,9 +17,9 @@ import lombok.ToString;
 @Builder
 public class RankDto {
 	private String rankNo;
-	private Date createDt;
+	private String createDt;
 	private String createUser;
-	private Date modifyDt;
+	private String modifyDt;
 	private String modifyUser;
 	private String rankName;
 }

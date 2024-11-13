@@ -13,18 +13,13 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class CategoryDto {
+public class DeptDto {
 
-	private String categoryNo;
-	private String categoryName;
-	
-	private int rankNo;
+
 	private String deptNo;
-	private String stDeptNo;
-	
-	private String rankName;
 	private String deptName;
-	
+	private String createDate;
 	private String createUser;
+	private String modifyDate;
 	private String modifyUser;
 }
