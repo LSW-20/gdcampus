@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,6 +34,8 @@ public class UserController {
 	private final FileUtil fileUtil;
 	private final PagingUtil pagingUtil;
 	
+	@GetMapping("/staff/list.do")
+	public void todoPage() {}
 	
 	//로그인(메인)
 	@PostMapping("/signin.do")
