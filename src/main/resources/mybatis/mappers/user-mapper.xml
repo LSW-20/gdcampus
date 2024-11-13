@@ -26,42 +26,48 @@
 		<result column="LEAVE_DATE" property="leaveDate"/>
 	</resultMap>
 	
+	<resultMap id="categoryResultMap" type="CategoryDto">
+		<result column="RANK_NO" property="rankNo"/>
+    	<result column="DEPT_NO" property="deptNo"/>
+    	<result column="ST_DEPT_NO" property="stDeptNo"/>
+    	<result column="RANK_NAME" property="rankName"/>
+    	<result column="DEPT_NAME" property="deptName"/>
+	</resultMap>
+	
+	
 	<!-- 행정직원 목록조회 -->
-	<select id="a" resultType="_int">
+	<select id="selectStaffListCount" resultType="_int">
 	    SELECT count(*) as count
 	    FROM T_USER U
 	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
 	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
 	    WHERE 1 = 1  
 	    <if test="dept != 'all'">
-	        AND DEPT_NAME = #{dept}
+	        AND D.DEPT_NO = #{dept}
 	    </if>
 	    <if test="rank != 'all'">
-	        AND RANK_NAME = #{rank}
+	        AND R.RANK_NO = #{rank}
 	    </if>
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
 	</select>
-	<select id="s" resultMap="userResultMap">
+	<select id="selectStaffList" resultMap="userResultMap">
 	    SELECT USER_NO
 	         , USER_NAME
-	         , DEPT_NAME
-	         , RANK_NAME
+	         , DEPT_NAME as DEPT_NO
+	         , RANK_NAME as RANK_NO
 	         , USER_STATUS
 	    FROM T_USER U
 	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
 	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
 	    WHERE 1 = 1  
-	    <!-- dept 조건 -->
 	    <if test="dept != 'all'">
-	        AND DEPT_NAME = #{dept}
+	        AND D.DEPT_NO = #{dept}
 	    </if>
-	    <!-- rank 조건 -->
 	    <if test="rank != 'all'">
-	        AND RANK_NAME = #{rank}
+	        AND R.RANK_NO = #{rank}
 	    </if>
-	    <!-- keyword 조건 -->
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
@@ -253,6 +259,11 @@
 	     , UPDATE_USER = #{updateUser}
 	 WHERE USER_NO = #{userNo}
 	</update>
+	<!-- 카테고리 조회 -->
+	<select id="selectCategory" resultMap="categoryResultMap">
+		SELECT * FROM ${category}
+	</select>
+	
 	<!-- 로그인 -->
 	<select id="selectUser" resultMap="userResultMap">
 	select

@@ -2,13 +2,21 @@ package com.br.gdcampus.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.br.gdcampus.dto.CategoryDto;
+import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.UserService;
 import com.br.gdcampus.util.FileUtil;
@@ -34,8 +42,54 @@ public class UserController {
 	private final FileUtil fileUtil;
 	private final PagingUtil pagingUtil;
 	
+	/**
+	 * 인사팀 행정직원 리스트 조회 요청
+	 */
 	@GetMapping("/staff/list.do")
-	public void todoPage() {}
+	public void staffList(Model model) {
+		
+		List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
+		List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+		
+		Map<String, Object> map = new HashMap<>();
+	    map.put("deptList", deptList);
+	    map.put("rankList", rankList);
+	    
+	    model.addAllAttributes(map);
+	}
+	
+	/**인사팀 행정직원 리스트(테이블 안 내용) 조회 요청
+	 * @param currentPage 
+	 * @param dept 부서번호
+	 * @param rank 직급번호
+	 * @param keyword 검색어
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(value="/listContent.do", produces="application/json")
+	public Map<String,Object> staffListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+			,String dept, String rank, String keyword) {
+		log.debug("currentPage : {} , dept : {} , rank : {} , keyword : {} ",currentPage, dept, rank, keyword);
+		
+		Map<String, Object> res = new HashMap<>();
+		Map<String,String> search = new HashMap<>();
+		
+		search.put("dept", dept);
+		search.put("rank", rank);
+		search.put("keyword", keyword);
+		//
+		int listCount = userService.selectStaffListCount(search);
+		log.debug("listCount : {} ", listCount);
+		
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		
+		List<UserDto> list = userService.selectStaffList(search, pi);
+		log.debug("list : {} ", list);
+		
+		res.put("userList", list);
+		res.put("pi", pi);
+		return res;
+	}
 	
 	//로그인(메인)
 	@PostMapping("/signin.do")
