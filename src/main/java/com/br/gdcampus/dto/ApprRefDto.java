@@ -22,7 +22,7 @@ public class ApprRefDto {
 	private String readYn;
 	private Date readDate;
 	private Date createDate;
-	private String creator;//CREATEOR
+	private String creator;
 	private Date modifyDate;
 	private String modifyUser;
 }

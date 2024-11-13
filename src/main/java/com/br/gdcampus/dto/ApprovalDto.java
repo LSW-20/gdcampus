@@ -22,6 +22,7 @@ public class ApprovalDto {
 	private Date apprDate;
 	private String apprTitle;
 	private String apprContent;
+	private int currOrder;
 	private String apprStatus;
 	private Date createDate;
 	private String createUser;
