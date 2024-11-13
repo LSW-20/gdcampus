@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.br.gdcampus.dto.MemberDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.UserService;
 import com.br.gdcampus.util.FileUtil;
