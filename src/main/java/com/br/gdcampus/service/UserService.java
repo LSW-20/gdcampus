@@ -43,4 +43,6 @@ public interface UserService {
 	//학과 카테고리 조회
 	Category selectStDept();
 	
+	//로그인
+	UserDto selectUser(UserDto m);
 }

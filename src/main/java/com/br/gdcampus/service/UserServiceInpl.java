@@ -138,4 +138,14 @@ public class UserServiceInpl implements UserService {
 		return null;
 	}
 
+	@Override
+	/**
+	 * 로그인 메소드
+	 */
+	public UserDto selectUser(UserDto m) {
+		return userDao.selectUser(m);
+	}
+	
+	
+
 }
