@@ -1,11 +1,11 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
-import java.util.Locale.Category;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dao.User2Dao;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
@@ -23,7 +23,7 @@ public class User2ServiceInpl implements User2Service {
 	 */
 	@Override
 	public int selectStaffListCount(Map<String, String> search) {
-		return 0;
+		return userDao.selectStaffListCount(search);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class User2ServiceInpl implements User2Service {
 	 */
 	@Override
 	public List<UserDto> selectStaffList(Map<String, String> search, PageInfoDto pi) {
-		return null;
+		return userDao.selectStaffList(search, pi);
 	}
 
 	/**
@@ -124,19 +124,10 @@ public class User2ServiceInpl implements User2Service {
 	 * 아예 따로 빼두고 재활용
 	 */
 	@Override
-	public Category selectDept() {
-		return null;
+	public List<CategoryDto> selectCategory(String category) {
+		return userDao.selectCategory(category);
 	}
 
-	@Override
-	public Category selectRank() {
-		return null;
-	}
-
-	@Override
-	public Category selectStDept() {
-		return null;
-	}
 
 	@Override
 	/**

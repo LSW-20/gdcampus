@@ -17,6 +17,14 @@ public class CategoryDto {
 
 	private String categoryNo;
 	private String categoryName;
+	
+	private int rankNo;
+	private String deptNo;
+	private String stDeptNo;
+	
+	private String rankName;
+	private String deptName;
+	
 	private String createUser;
 	private String modifyUser;
 }
