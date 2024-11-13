@@ -1,5 +1,5 @@
 package com.br.gdcampus.service;
 
-public class ASDF {
+public interface ChatService {
 
 }

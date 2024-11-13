@@ -4,14 +4,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!-- sidebar 시작 -->
 <div class="vertical-menu">
 
 		<!-- LOGO -->
 		<div class="navbar-brand-box">
-				<a href="index.html" class="logo logo-dark">
+				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-dark">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-dark-sm.png" alt="" height="22">
 						</span>
@@ -20,7 +20,7 @@
 						</span>
 				</a>
 
-				<a href="index2.html" class="logo logo-light">
+				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-light">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-light-sm.png" alt="" height="22">
 						</span>
@@ -43,6 +43,7 @@
 						<ul class="metismenu list-unstyled" id="side-menu">
 						
 	
+								
 								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
@@ -90,7 +91,7 @@
 								</li>
 
 								<li>
-										<a href="#" class=" waves-effect">
+										<a href="${contextPath}/chat/chat.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="message-square"></i>
 												<span class="badge badge-pill badge-success float-right">New</span>
 												<span class="menu-item">메신저</span>
@@ -99,8 +100,10 @@
 								<!-- 공통 메뉴 끝 -->			
 								
 								
+								
+								
+								<c:if test="${not empty loginUser.stDeptNo }">
 								<br>
-												
 								
 								<!-- 교수 메뉴 시작 -->
 								<li class="menu-title">교수</li>
@@ -128,9 +131,10 @@
 												<li><a href="#"></a></li>
 										</ul>
 								</li>
-								<!-- 교수 메뉴 끝 -->										
+								<!-- 교수 메뉴 끝 -->			
+								</c:if>
 								
-								
+								<c:if test="${loginUser.deptNo eq 1 }">
 								<br>
 								
 								
@@ -150,8 +154,10 @@
 								</li>
 
 								<!-- 인사팀 메뉴 끝 -->												
+								</c:if>
 								
 								
+								<c:if test="${loginUser.deptNo eq 2 }">
 								<br>
 								
 								
@@ -182,7 +188,7 @@
 										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
-								
+								</c:if>
 								
 								<br>
 								
@@ -268,6 +274,7 @@
 								<br>
 																
 								
+								<c:if test="${loginUser.userNo != null && fn:contains(loginUser.userNo, 'A')}">
 								<!-- 관리자 메뉴 시작 -->
 								<li class="menu-title">관리자</li>
 
@@ -322,6 +329,8 @@
 										</ul>
 								</li>
 								<!-- 관리자 메뉴 끝 -->		
+								</c:if>
+
 
 
 								<br>

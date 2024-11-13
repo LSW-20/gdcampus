@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userMapper">
+
+	
+	<resultMap id="userResultMap" type="UserDto">
+		<result column="user_no" property="userNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="user_pwd" property="userPwd"/>
+		<result column="user_name" property="userName"/>
+		<result column="email" property="email"/>
+		<result column="gender" property="gender"/>
+		<result column="phone" property="phone"/>
+		<result column="address" property="address"/>
+		<result column="profile_url" property="profileURL"/>
+		<result column="user_status" property="userStatus"/>
+
+		<result column="st_dept_no" property="stDeptNo"/>
+		<result column="RANK_NO" property="rankNo"/>
+		<result column="DEPT_NO" property="deptNo"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="NAME_URL" property="nameURL"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="HOLI_DATE_TOTAL" property="holyDateTotal"/>
+		<result column="HIRE_DATE" property="hireDate"/>
+		<result column="LEAVE_DATE" property="leaveDate"/>
+	</resultMap>
+	
+	<!-- 행정직원 목록조회 -->
+	<select id="a" resultType="_int">
+	    SELECT count(*) as count
+	    FROM T_USER U
+	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	    WHERE 1 = 1  
+	    <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <if test="rank != 'all'">
+	        AND RANK_NAME = #{rank}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="s" resultMap="userResultMap">
+	    SELECT USER_NO
+	         , USER_NAME
+	         , DEPT_NAME
+	         , RANK_NAME
+	         , USER_STATUS
+	    FROM T_USER U
+	    JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+	    JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	    WHERE 1 = 1  
+	    <!-- dept 조건 -->
+	    <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <!-- rank 조건 -->
+	    <if test="rank != 'all'">
+	        AND RANK_NAME = #{rank}
+	    </if>
+	    <!-- keyword 조건 -->
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	     ORDER BY U.RANK_NO DESC
+	</select>
+	
+	<!-- 행정직원 추가 -->
+	<insert id="d">
+		INSERT 
+		  INTO T_USER 
+		            (
+		             USER_NO
+		            ,RANK_NO
+		            ,DEPT_NO
+		            ,CREATE_DATE
+		            ,CREATE_USER
+		            ,USER_STATUS
+		            ,USER_ID
+		            ,USER_PWD
+		            ,USER_NAME
+		            ,EMAIL
+		            ,GENDER
+		            ,PROFILE_URL
+		            ,NAME_URL
+		            ,HIRE_DATE
+		            ) 
+		VALUES 
+		     (
+		      'B'||LPAD(SEQ_B_UNO.NEXTVAL,4,0)
+		      ,#{rankNo}
+		      ,#{deptNo}
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		      ,#{createUser}
+		      ,'Y'
+		      ,'B'||LPAD(SEQ_B_UNO.NEXTVAL,4,0)
+		      ,'$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+		      ,#{userName}
+		      ,#{email}
+		      ,#{gender}
+		      ,'/upload/profile/default.jpg'
+		      ,'/upload/name/default.jpg'
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		     )
+	</insert>
+	
+	<!-- 행정직원 상세조회 -->
+	<select id="f" resultMap="userResultMap">
+	SELECT USER_NO
+	     , USER_NAME
+	     , EMAIL
+	     , DEPT_NAME
+	     , RANK_NAME
+	     , GENDER
+	     , USER_ID
+	     , HIRE_DATE
+	     , LEAVE_DATE
+      FROM T_USER U
+      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+     WHERE USER_NO = #{userNo}
+	</select>
+	
+	<!-- 행정직원 수정 -->
+	<update id="g">
+		UPDATE T_USER
+		   SET USER_NAME = #{userName}
+		     , DEPT_NO = #{deptNo}
+		     , RANK_NO = #{rankNo}
+		     , EMAIL = #{email}
+		     , GENDER = #{gender}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , UPDATE_USER = #{updateUser}
+		 WHERE USER_NO = #{userNo}
+	</update>
+	
+	
+	<!-- 교수파트 -->
+	<!-- 교수 목록조회 -->
+	<select id="h" resultType="_int">
+		SELECT count(*) as count
+	  	  FROM T_USER U
+	      JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
+	 	 WHERE 1 = 1 
+	 	 <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+
+	</select>
+	<select id="j" resultMap="userResultMap">
+	    SELECT USER_NO
+	         , USER_NAME
+	         , ST_DEPT_NO
+	         , USER_STATUS
+	    FROM T_USER U
+	    JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
+	    WHERE 1 = 1  
+	 	 <if test="dept != 'all'">
+	        AND DEPT_NAME = #{dept}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND USER_NAME LIKE '%' || #{keyword} || '%'
+	    </if>
+	     ORDER BY U.RANK_NO DESC
+	</select>
+	
+	<!-- 교수 추가 -->
+	<insert id="k">
+		INSERT 
+		  INTO T_USER 
+		            (
+		             USER_NO
+		            ,ST_DEPT_NO
+		            ,CREATE_DATE
+		            ,CREATE_USER
+		            ,USER_STATUS
+		            ,USER_ID
+		            ,USER_PWD
+		            ,USER_NAME
+		            ,EMAIL
+		            ,GENDER
+		            ,PROFILE_URL
+		            ,NAME_URL
+		            ,HIRE_DATE
+		            ) 
+		VALUES 
+		     (
+		      'C'||LPAD(SEQ_C_UNO.NEXTVAL,4,0)
+		      ,#{stDeptNo}
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		      ,#{createUser}
+		      ,'Y'
+		      ,'C'||LPAD(SEQ_C_UNO.NEXTVAL,4,0)
+		      ,'$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+		      ,#{userName}
+		      ,#{email}
+		      ,#{gender}
+		      ,'/upload/profile/default.jpg'
+		      ,'/upload/name/default.jpg'
+		      ,to_date(SYSDATE,'RR/MM/DD')
+		     )
+	</insert>
+	
+	<!-- 교수 상세조회 -->
+	<select id="l" resultMap="userResultMap">
+	SELECT USER_NO
+	     , USER_NAME
+	     , EMAIL
+	     , ST_DEPT_NO
+	     , GENDER
+	     , USER_ID
+	     , HIRE_DATE
+	     , LEAVE_DATE
+      FROM T_USER U
+      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+     WHERE USER_NO = #{userNo}
+	</select>
+	
+	<!-- 교수 수정 -->
+	<update id="q">
+		UPDATE T_USER
+		   SET USER_NAME = #{userName}
+		     , ST_DEPT_NO = #{stDeptNo}
+		     , EMAIL = #{email}
+		     , GENDER = #{gender}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , UPDATE_USER = #{updateUser}
+		 WHERE USER_NO = #{userNo}
+	</update>
+	
+	<!-- 공통파트 -->
+	<!-- 비밀번호 초기화 -->
+	<update id="w">
+		UPDATE T_USER
+  		   SET  USER_PWD = '$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
+     		  , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+     		  , UPDATE_USER = #{updateUser}
+		  WHERE USER_NO = #{userNo}
+	</update>
+	<!-- 퇴직 처리 -->
+	<update id="e">
+		UPDATE T_USER
+	       SET LEAVE_DATE = to_date(SYSDATE,'RR/MM/DD')
+	     , USER_STATUS = 'N'
+	     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+	     , UPDATE_USER = #{updateUser}
+	 WHERE USER_NO = #{userNo}
+	</update>
+	<!-- 로그인 -->
+	<select id="selectUser" resultMap="userResultMap">
+	select
+				   user_no
+				 , user_id
+				 , user_pwd
+				 , user_name
+				 , email
+				 , gender
+				 , phone
+				 , address
+				 , profile_url
+				 , user_status
+                 , t1.st_dept_no
+                 , t1.RANK_NO
+                 , t1.DEPT_NO
+                 , t1.CREATE_DATE
+                 , t1.CREATE_USER
+                 , t1.MODIFY_DATE
+                 , UPDATE_USER
+                 , NAME_URL
+                 , HIRE_DATE
+                 , LEAVE_DATE
+                 , HOLI_DATE_TOTAL
+			from t_user t1
+            left join t_st_dept t2 on t1.st_dept_no = t2.st_dept_no
+            left join t_rank t3 on t1.rank_no = t3.rank_no
+            left join t_dept t4 on t1.dept_no = t4.dept_no
+		 where user_status = 'Y'
+		   and user_id = #{userId}
+	</select>
+</mapper>
