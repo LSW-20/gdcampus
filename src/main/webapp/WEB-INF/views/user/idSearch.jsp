@@ -91,7 +91,7 @@
                                         </div>
                                     </form>
                                         <div class="mt-4 text-center">
-                                            <p class="text-muted mb-0">Already have an account ? <a href="auth-login.html" class="font-weight-medium text-primary"> Login</a></p>
+                                            <p class="text-muted mb-0">Already have an account ? <a href="${contextPath }/" class="font-weight-medium text-primary"> Login</a></p>
                                         </div>
             
                                         

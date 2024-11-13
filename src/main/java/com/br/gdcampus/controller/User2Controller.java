@@ -140,4 +140,10 @@ public class User2Controller {
 	public void idSearch() {
 		
 	}
+	
+	//비번찾기
+		@GetMapping("/pwdSearch.do")
+		public void pwdSearch() {
+			
+		}
 }
