@@ -166,7 +166,7 @@
 											          	</li>
 											          </c:forEach>
 											   
-   							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.maxPage == 1 ? 'disabled' : ''}">
+   							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
 											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage+1}">Next</a>
 											          </li>
 											      </ul>
