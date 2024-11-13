@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!-- sidebar 시작 -->
 <div class="vertical-menu">
@@ -43,6 +43,7 @@
 						<ul class="metismenu list-unstyled" id="side-menu">
 						
 	
+								
 								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
@@ -99,8 +100,10 @@
 								<!-- 공통 메뉴 끝 -->			
 								
 								
+								
+								
+								<c:if test="${not empty loginUser.stDeptNo }">
 								<br>
-												
 								
 								<!-- 교수 메뉴 시작 -->
 								<li class="menu-title">교수</li>
@@ -128,9 +131,10 @@
 												<li><a href="#"></a></li>
 										</ul>
 								</li>
-								<!-- 교수 메뉴 끝 -->										
+								<!-- 교수 메뉴 끝 -->			
+								</c:if>
 								
-								
+								<c:if test="${loginUser.deptNo eq 1 }">
 								<br>
 								
 								
@@ -150,8 +154,10 @@
 								</li>
 
 								<!-- 인사팀 메뉴 끝 -->												
+								</c:if>
 								
 								
+								<c:if test="${loginUser.deptNo eq 2 }">
 								<br>
 								
 								
@@ -182,7 +188,7 @@
 										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
-								
+								</c:if>
 								
 								<br>
 								
@@ -268,6 +274,7 @@
 								<br>
 																
 								
+								<c:if test="${loginUser.userNo != null && fn:contains(loginUser.userNo, 'A')}">
 								<!-- 관리자 메뉴 시작 -->
 								<li class="menu-title">관리자</li>
 
@@ -312,6 +319,8 @@
 										</ul>
 								</li>
 								<!-- 관리자 메뉴 끝 -->		
+								</c:if>
+
 
 
 								<br>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale.Category;
 import java.util.Map;
 
+import com.br.gdcampus.dto.MemberDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 
@@ -43,4 +44,6 @@ public interface UserService {
 	//학과 카테고리 조회
 	Category selectStDept();
 	
+	//로그인
+	UserDto selectUser(UserDto m);
 }

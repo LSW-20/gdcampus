@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.UserDao;
+import com.br.gdcampus.dto.MemberDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 
@@ -137,5 +138,15 @@ public class UserServiceInpl implements UserService {
 	public Category selectStDept() {
 		return null;
 	}
+
+	@Override
+	/**
+	 * 로그인 메소드
+	 */
+	public UserDto selectUser(UserDto m) {
+		return userDao.selectUser(m);
+	}
+	
+	
 
 }
