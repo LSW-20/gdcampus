@@ -1,7 +1,6 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.br.gdcampus.dto.ApprRefDto;
 import com.br.gdcampus.dto.ApprovalDto;
@@ -14,20 +13,18 @@ public interface ApprovalService {
 	//결재홈 목록 조회
 	int selectApprHomeListCount();//?count다 따로 둬야하나
 	
-	//결재대기문서함 목록 조회 apprStatus==1 && lineOrder==나 join
+	//결재대기문서함 목록 조회 apprStatus==1 && lineOrder==currOrder join
 	int selectApprTodoListCount();
-	List<ApprovalDto> selectApprTodoList(PageInfoDto pi, Map<String, Object> apprStatus);
+	List<ApprovalDto> selectApprTodoList(PageInfoDto pi, String userNo);
 	//?DTO가 너무 많이 나뉘어져 있음 - Dto 하나로 합쳐버려?Map처리해서 버텨?
 	
 	//결재예정문서 조회  apprStatus==1 && linOrder<나 join
 	int selectApprUpcomingListCount();
-	List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi, Map<String, Object> apprStatus);
+	List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi,  String userNo);
 	
 	//기안문서함 조회	apprUser == loginUser
 	int selectMyDocListCount();
 	List<ApprovalDto> selectMyDocList(PageInfoDto pi, String apprUser);
-	
-	
 	
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
 	int selectMyApprovedListCount();
@@ -38,15 +35,16 @@ public interface ApprovalService {
 	List<ApprRefDto> selectApprViewerList(PageInfoDto pi, String userNo);
 	
 	//결재대기문서상세
-	ApprovalDto selectMyApprovedDetail(String userNo, String apprNo);
+	ApprovalDto selectApprTodoDetail(String userNo, String apprNo);
 	
 	//결재예정문서 상세
-	
+	ApprovalDto selectApprUpcomingDetail(String userNo, String apprNo);
 	
 	//기안문서상세
+	ApprovalDto selectMyDocDetail(String userNo, String apprNo);
 	
 	//결재문서 상세
-	
+	ApprovalDto selectMyApprovedDetail(String userNo, String apprNo);
 	
 	
 	//결재 승인
@@ -61,6 +59,8 @@ public interface ApprovalService {
 	
 	//결재선 조회
 	
+	//결재자 순서 업데이트
 
+	//양식생성
 	
 }
