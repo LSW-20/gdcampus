@@ -1,5 +1,5 @@
 package com.br.gdcampus.dao;
 
-public class ASDF {
+public class NoticeDao {
 
 }

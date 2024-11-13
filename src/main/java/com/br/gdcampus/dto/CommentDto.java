@@ -1,5 +1,5 @@
 package com.br.gdcampus.dto;
 
-public class ASDF {
+public class CommentDto {
 
 }
