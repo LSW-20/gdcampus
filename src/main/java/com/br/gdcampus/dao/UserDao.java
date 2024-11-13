@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
-public class User2Dao {
+public class UserDao {
 
 	private final SqlSessionTemplate sqlSession;
 //--------------------------------------인사팀 시작----------------------------------------------	
