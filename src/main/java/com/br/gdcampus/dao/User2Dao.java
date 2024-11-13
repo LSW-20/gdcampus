@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
-public class UserDao {
+public class User2Dao {
 
 	private final SqlSessionTemplate sqlSession;
 //--------------------------------------인사팀 시작----------------------------------------------	
@@ -34,7 +34,29 @@ public class UserDao {
 
 //--------------------------------------인사팀 끝----------------------------------------------
 	
+	/**
+	 * 로그인
+	 * @param m
+	 * @return
+	 */
 	public UserDto selectUser(UserDto m) {
 		return sqlSession.selectOne("userMapper.selectUser",m);
 	}
+	
+	/**
+	 * 회원정보수정
+	 * @param m
+	 * @return
+	 */
+	public int updateUser(UserDto m) {
+		return sqlSession.update("userMapper.updateUser",m);
+	}
+	
+	/**
+	 * 회원프로필수정
+	 */
+	public int updateProfileImg(UserDto m) {
+		return sqlSession.update("userMapper.updateProfileImg",m);
+	}
+	
 }

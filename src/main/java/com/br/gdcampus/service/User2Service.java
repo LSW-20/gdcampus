@@ -41,4 +41,8 @@ public interface UserService {
 //------------------------------인사팀 끝--------------------------------------	
 	//로그인
 	UserDto selectUser(UserDto m);
+	//회원정보수정
+	int updateUser(UserDto m); 
+	//회원프로필수정
+	int updateProfileImg(UserDto m);
 }
