@@ -44,6 +44,7 @@
 		<result column="MODIFY_USER" property="modifyUser"/>
 	</resultMap>
 	
+	<!-- 결재대기문서함 -->
   <select id="selectApprTodoList" resultMap="approvalResultMap">
 		SELECT A.APPR_NO AS APPR_NO
 		     , APPR_USER
@@ -67,6 +68,7 @@
 		   AND L.USER_NO = #{userNo} 		 <!-- LOGINUSER -->  	
   </select>
   
+  <!-- 결재예정문서 -->
   <select id="selectApprUpcomingList" resultMap="approvalResultMap">
 		SELECT A.APPR_NO
 		     , APPR_USER
@@ -90,6 +92,7 @@
 		   AND L.USER_NO = #{userNo} 						 <!-- LOGINUSER   -->	
   </select>
   
+  <!-- 기안문서함 -->
   <select id="selectMyDocList" resultMap="approvalResultMap">
 		SELECT 
 		       APPR_NO
@@ -105,6 +108,7 @@
 		 WHERE APPR_USER = #{apprUser}	
   </select>
   
+  <!-- 결재문서함 -->
   <select id="selectMyApprovedList" resultMap="approvalResultMap">
 		SELECT 
 		       A.APPR_NO
@@ -128,6 +132,7 @@
 		   AND APPR_STATUS IN(2,3)  	
   </select>
   
+  <!-- 참조/열람대기문서 -->
   <select id="selectApprViewerList" resultMap="apprRefResultMap">
 		SELECT 
 		       REF_NO
@@ -143,7 +148,8 @@
 		   AND APPR_STATUS IN(0,1)  <!-- 대기/진행 상태 -->
   </select>
   
-  <select id="selectMyApprovedDetail" resultType="ApprovalDto">
+  <!-- 결재대기문서상세 -->
+  <select id="selectMyApprovedDetail" resultType="approvalResultMap">
 		SELECT 
 		       A.APPR_NO AS APPR_NO
 		     , APPR_USER
