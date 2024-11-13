@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.UserDao;
-import com.br.gdcampus.dto.MemberDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 
