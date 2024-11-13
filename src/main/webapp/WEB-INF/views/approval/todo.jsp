@@ -89,6 +89,10 @@
             text-decoration: underline;
             color: #4B49AC;
         }
+        
+        #paging_area {
+        	margin-top: 500px;
+        }
     </style>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
@@ -107,7 +111,9 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">결재 대기 문서</h2>
-                    
+							        <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist.do">결재작성</a>
+								     
+							      <br>                    
                     <c:choose>
                         <c:when test="${empty apprList}">
                             <div class="no-data">
@@ -151,7 +157,7 @@
                             <!-- 페이징 처리 -->
 											      <ul id="paging_area" class="pagination d-flex justify-content-center">
 											          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Previous</a>
+											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Prev</a>
 											          </li>
 											          
 											          <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
@@ -160,7 +166,7 @@
 											          	</li>
 											          </c:forEach>
 											   
-											          <li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
+   							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.maxPage == 1 ? 'disabled' : ''}">
 											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage+1}">Next</a>
 											          </li>
 											      </ul>
