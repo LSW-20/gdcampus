@@ -82,10 +82,13 @@
 							<div class="col-md-2">
 								<div class="mb-3">
 									<div class="select">
-										<select class="custom-select" name="dept">
+										<select class="custom-select" name="dept" id="dept">
 											<option value="all">전체</option>
-											<option value="1">인사팀</option>
-											<option value="2">가발령</option>
+											<c:forEach var="category" items="${deptList}">
+                								<option value="${category.deptNo}">
+                    								${category.deptName}
+                								</option>
+            								</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -93,10 +96,13 @@
 							<div class="col-md-2">
 								<div class="mb-3">
 									<div class="select">
-										<select class="custom-select" name="rank">
+										<select class="custom-select" name="rank" id="rank">
 											<option value="all">전체</option>
-											<option value="1">부장</option>
-											<option value="2">사원</option>
+											<c:forEach var="category" items="${rankList}">
+                								<option value="${category.rankNo}">
+                    								${category.rankName}
+                								</option>
+            								</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -106,7 +112,7 @@
 								<div class="form-inline float-md-right mb-3">
 									<div class="search-box ml-2">
 										<div class="position-relative">
-											<input type="text"
+											<input type="text" id="search"
 												class="form-control rounded bg-light border-0"
 												placeholder="사원명"> <i
 												class="mdi mdi-magnify search-icon"></i>
@@ -136,7 +142,7 @@
 										<th scope="col">상태</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="output">
 									<tr>
 										<th scope="row">
 											<div class="custom-control custom-checkbox">
@@ -179,52 +185,61 @@
 			</div>
 		</div>
 		<!-- main-content 끝 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-	
-	$('#serchBtn').click(function() {
-	    const keyword = $('#keyword').val();
-	    console.log(keyword);
-	    
+	$(document).ready(function() {
+	    listDo(); 
+
+	 // 부서가 변하는 경우
+	    $('#dept').on('change', function() {
+	        listDo(); 
+	    });
+	 // 직급이 변하는 경우
+	    $('#rank').on('change', function() {
+	        listDo(); 
+	    });
+	 // 검색어가 변하는 경우
+	    $('#search').on('keyup', function() {
+	        listDo(); 
+	    });
+	 // 페이지가 변하는 경우??
+	    $('#someButton').on('click', function() {
+	        listDo(); 
+	    });
 	});
+    
+    function listDo(){
+        $.ajax({
+            url: '${contextPath}/user/listContent.do', 
+            data: 
+            {
+				dept: $("#dept").val(),
+				rank: $('#rank').val(),
+				keyword:$('#search').val(),
+				pi: 1
+				
+				},
+            type: 'GET',
+            dataType: 'json', // 응답 데이터 타입
+            success: function(response) {
+                // Map에서 Pi 객체와 UserDto 리스트 추출
+                var pi = response.pi;          // Pi 객체
+                var userList = response.userList; // List<UserDto>
+                
+                console.log("pi:"+ pi);
+                console.log("userList:"+ userList);
 
-	$(document).ready(function () {
-		$(':checkbox').click(function (evt) {
-			if($(':checkbox:checked').length >= 1){
-		        $('#delBtn').css('display', '');
-		    }else{
-		    	 $('#delBtn').css('display', 'none');
-		    }
-	      })
-	      
-	   $('#delBtn').click(function(evt){
-		   const count = $(':checkbox:checked').length;
-			if(confirm( count+'명의 회원을 탈퇴처리 하시겠습니까?')){
-				let arr = [];
-				$(":checkbox:checked").each(function(){
-					arr.push($(this).val());
-				});		
-				$.ajax({
-					url:'${contextPath}/deleteUser.us',
-					method: 'POST',
-					data:{delUser:JSON.stringify(arr)},
-					success: function(res){
-						alert(res+"명의 회원이 성공적으로 탈퇴 처리되었습니다.");
-						location.reload(); 
-					},
-					error: function(){
-						alert("탈퇴처리에 실패하였습니다.");
-					}
-				})
-			}
-	   })
-	  
-	  document.getElementById("addBtn").addEventListener("click", () => {
-      	location.href = "${contextPath}/add.us";
-      })
-	})
-	
-	</script>
-
+                // 페이지 다시 그려줘야됨
+                $('#output').html(
+                    
+                );
+            },
+            error: function(error) {
+                alert('AJAX 요청 실패: ' + error);
+            }
+        });    	
+    }
+</script>
 
 
 
