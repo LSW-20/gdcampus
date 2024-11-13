@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ApprovalMapper">
+<mapper namespace="approvalMapper">
 
 	<resultMap id="approvalResultMap" type="ApprovalDto">
 		<result column="APPR_NO" property="apprNo"/>
@@ -10,6 +10,7 @@
 		<result column="APPR_DATE" property="apprDate"/>
 		<result column="APPR_TITLE" property="apprTitle"/>
 		<result column="APPR_CONTENT" property="apprContent"/>
+		<result column="CURR_ORDER" property="currOrder"/>
 		<result column="APPR_STATUS" property="apprStatus"/>
 		<result column="CREATE_DATE" property="createDate"/>
 		<result column="CREATE_USER" property="createUser"/>
@@ -25,7 +26,7 @@
 		<result column="READ_YN" property="readYn"/>
 		<result column="READ_DATE" property="readDate"/>
 		<result column="CREATE_DATE" property="createDate"/>
-		<result column="CREATEOR" property="creator"/>
+		<result column="CREATOR" property="creator"/>
 		<result column="MODIFY_DATE" property="modifyDate"/>
 		<result column="MODIFY_USER" property="modifyUser"/>
 	</resultMap>
@@ -44,33 +45,47 @@
 		<result column="MODIFY_USER" property="modifyUser"/>
 	</resultMap>
 	
+	<!-- 결재대기문서함페이징 -->
+	<select id="selectApprTodoListCount" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM T_APPROVAL A
+		  LEFT JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE APPR_STATUS = 1					<!-- 진행중 -->
+		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
+		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->  	
+	</select>
+	
 	<!-- 결재대기문서함 -->
   <select id="selectApprTodoList" resultMap="approvalResultMap">
-		SELECT A.APPR_NO AS APPR_NO
+		SELECT
+		       A.APPR_NO as APPR_USER
 		     , APPR_USER
 		     , DEPT_NO
 		     , APPR_TYPE
 		     , APPR_DATE
 		     , APPR_TITLE
 		     , APPR_CONTENT
+		     , CURR_ORDER
+		     , LINE_ORDER
 		     , APPR_STATUS
 		     , LINE_NO
-		     , L.USER_NO AS USER_NO
-		     , LINE_ORDER
+		     , USER_NO 
 		     , LINE_STATUS
 		     , LINE_DATE
 		     , LINE_REASON
 		  FROM T_APPROVAL A
-		  JOIN T_APPR_LINE L
+		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE APPR_STATUS IN(0,1)       <!-- 진행중 -->
-		   AND LINE_ORDER = #{lineOrder} <!-- 현재결재순서 -->
-		   AND L.USER_NO = #{userNo} 		 <!-- LOGINUSER -->  	
+		 WHERE APPR_STATUS = 1					<!-- 진행중 -->
+		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
+		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->  
   </select>
   
   <!-- 결재예정문서 -->
   <select id="selectApprUpcomingList" resultMap="approvalResultMap">
-		SELECT A.APPR_NO
+		SELECT A.APPR_NO as APPR_NO
 		     , APPR_USER
 		     , DEPT_NO
 		     , APPR_TYPE
@@ -78,6 +93,7 @@
 		     , APPR_TITLE
 		     , APPR_CONTENT
 		     , APPR_STATUS
+		     , CURR_ORDER
 		     , LINE_NO
 		     , L.USER_NO
 		     , LINE_ORDER
@@ -87,9 +103,9 @@
 		  FROM T_APPROVAL A
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE APPR_STATUS IN(0,1)     					 <!-- 대기/진행중 -->
-		   AND LINE_ORDER &lt; #{lineOrder}      <!-- 현재결재순서 -->
+		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
 		   AND L.USER_NO = #{userNo} 						 <!-- LOGINUSER   -->	
+		   AND CURR_ORDER &lt; LINE_ORDER      <!-- 현재결재순서 -->
   </select>
   
   <!-- 기안문서함 -->
@@ -111,7 +127,7 @@
   <!-- 결재문서함 -->
   <select id="selectMyApprovedList" resultMap="approvalResultMap">
 		SELECT 
-		       A.APPR_NO
+		       A.APPR_NO as APPR_NO
 		     , APPR_USER
 		     , DEPT_NO
 		     , APPR_TYPE
@@ -120,7 +136,7 @@
 		     , APPR_CONTENT
 		     , APPR_STATUS
 		     , LINE_NO
-		     , L.USER_NO
+		     , USER_NO 
 		     , LINE_ORDER
 		     , LINE_STATUS
 		     , LINE_DATE
@@ -132,7 +148,7 @@
 		   AND APPR_STATUS IN(2,3)  	
   </select>
   
-  <!-- 참조/열람대기문서 -->
+  <!-- 참조/열람대기문서함 -->
   <select id="selectApprViewerList" resultMap="apprRefResultMap">
 		SELECT 
 		       REF_NO
@@ -149,7 +165,7 @@
   </select>
   
   <!-- 결재대기문서상세 -->
-  <select id="selectMyApprovedDetail" resultType="approvalResultMap">
+  <select id="selectApprTodoDetail" resultMap="approvalResultMap">
 		SELECT 
 		       A.APPR_NO AS APPR_NO
 		     , APPR_USER
@@ -168,9 +184,77 @@
 		  FROM T_APPROVAL A
 		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE USER_NO = #{userNo}    <!-- LOGINUSER -->
+		 WHERE USER_NO = #{userNo}    <!-- LOGINUSER 가져오거나 INTERCEPTOR추가하거나-->
 		   AND APPR_STATUS IN(2,3)    <!-- 승인,반려 -->
 		   AND A.APPR_NO = #{apprNo}  <!-- 상세로 불러올 문서번호 요청 -->  
   </select>
+  
+  <!-- 결재예정문서 상세 -->
+  <select id="selectApprUpcomingDetail" resultMap="approvalResultMap">
+		SELECT A.APPR_NO as APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_TYPE
+		     , APPR_DATE
+		     , APPR_TITLE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , CURR_ORDER
+		     , LINE_NO
+		     , L.USER_NO
+		     , LINE_ORDER
+		     , LINE_STATUS
+		     , LINE_DATE
+		     , LINE_REASON
+		  FROM T_APPROVAL A
+		  JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
+		   AND L.USER_NO = 'B0013'      <!-- LOGINUSER -->
+		   AND CURR_ORDER &lt; LINE_ORDER   <!-- 현재결재순서  -->   
+		   AND A.APPR_NO = #{apprNo}   <!--  문서번호  -->   
+  </select>
 
+
+	<!-- 기안문서상세 -->
+	<select id="selectMyDocDetail" resultMap="approvalResultMap">
+		SELECT 
+		       APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_DATE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , CREATE_DATE
+		     , MODIFY_DATE
+		     , UPDATE_USER
+		  FROM T_APPROVAL
+		 WHERE APPR_USER = #{apprUser}	
+  	   AND APPR_NO = #{apprNo}
+	</select>	
+	
+	<!-- 결재문서 상세 -->
+	<select id="selectMyApprovedDetail" resultMap="approvalResultMap">
+		SELECT 
+		       A.APPR_NO as APPR_NO
+		     , APPR_USER
+		     , DEPT_NO
+		     , APPR_TYPE
+		     , APPR_DATE
+		     , APPR_TITLE
+		     , APPR_CONTENT
+		     , APPR_STATUS
+		     , LINE_NO
+		     , USER_NO 
+		     , LINE_ORDER
+		     , LINE_STATUS
+		     , LINE_DATE
+		     , LINE_REASON
+		  FROM T_APPROVAL A
+		  LEFT JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE USER_NO = #{userNo}  <!-- LOGINUSER -->
+		   AND APPR_STATUS IN(2,3)
+		   AND A.APPR_NO = #{apprNo}	
+	</select>	
 </mapper>
