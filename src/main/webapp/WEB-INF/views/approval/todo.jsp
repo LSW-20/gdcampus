@@ -109,7 +109,7 @@
                     <h2 class="page-title">결재 대기 문서</h2>
                     
                     <c:choose>
-                        <c:when test="${empty approvalList}">
+                        <c:when test="${empty apprList}">
                             <div class="no-data">
                                 결재 예정 문서가 없습니다.
                             </div>
@@ -121,12 +121,12 @@
                                         <th>기안일</th>
                                         <th>결재양식</th>
                                         <th>제목</th>
-                                        <th>첨부</th>
+                                      <!--   <th>첨부</th> -->
                                         <th>기안자</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${approvalList}" var="appr">
+                                    <c:forEach items="${apprList}" var="appr">
                                         <tr>
                                             <td>
                                                 <fmt:formatDate value="${appr.apprDate}" pattern="yyyy-MM-dd"/>
@@ -137,11 +137,11 @@
                                                     ${appr.apprTitle}
                                                 </a>
                                             </td>
-                                            <td>
+                <%--                             <td>
                                                 <c:if test="${not empty appr.attach}">
                                                     <img src="${contextPath}/images/attach-icon.png" class="attach-icon" alt="첨부파일"/>
                                                 </c:if>
-                                            </td>
+                                            </td> --%>
                                             <td>${appr.apprUser}</td>
                                         </tr>
                                     </c:forEach>
