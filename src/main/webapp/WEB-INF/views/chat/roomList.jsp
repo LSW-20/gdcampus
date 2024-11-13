@@ -9,36 +9,6 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>구디캠퍼스 메인</title>
-	
-<style>
-    .chat{width:400px; margin:auto; padding:10px; border:1px solid lightgray;}
-    .chat-area{height:500px; overflow: auto;}
-
-     .chat-message{margin:10px 0px;}
-     .chat-message.mine{display: flex; justify-content:flex-end;}
-     
-    .chat-message .send-message{
-       padding: 5px 7px;
-       border-radius: 10px;
-       max-width: 190px;
-       font-size:0.9em;
-       white-space: pre-line;
-    }
-    .chat-message.other .send-message{background: lightgray;}
-    .chat-message.mine .send-message{background: #FFE08C;}
- 
-    .chat-user {
-       text-align:center;
-       border-radius:10px;  
-       background: lightgray;
-       opacity: 0.5;
-       margin: 20px 0px;
-       color: black;
-       line-height: 30px;
-    }
- </style>	
-	
 </head>
 
 
@@ -67,6 +37,12 @@
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
+                
+              <c:if test="${ not empty alertMsg }">
+				        <script>
+				          alert("${alertMsg}");
+				        </script>
+				   		</c:if>
 
 							<br><br>
 
@@ -82,8 +58,8 @@
                                    <img src="${contextPath}/images/users/avatar-4.jpg" class="avatar-sm rounded-circle" alt="">
                                </div>
                                <div class="media-body">
-                                   <h5 class="font-size-16 mt-0 mb-1"><a href="#" class="text-dark">임상우<i class="mdi mdi-circle text-success align-middle font-size-10 ml-1"></i></a></h5>
-																	 <p class="text-muted mb-0">인사팀 사원</p>
+                                   <h5 class="font-size-16 mt-0 mb-1"><a href="#" class="text-dark">${loginUser.userName}<i class="mdi mdi-circle text-success align-middle font-size-10 ml-1"></i></a></h5>
+																	 <p class="text-muted mb-0">${description}</p>
 																	 <%-- 사번이 A시작이면 관리자, B시작이면 부서명 + 직급명, C시작이면 소속학과 + 교수 --%>
                                </div>
                            </div>
@@ -96,99 +72,85 @@
                                <div class="p-4 border-top">
                                    <div>
                                        <div class="float-right">
-                                           <a href="" class="text-primary"><i class="mdi mdi-plus"></i>그룹 채팅방 생성</a>
+                                           <a href="#" class="text-primary" data-toggle="modal" data-target="#GroupChat"><i class="mdi mdi-plus"></i>그룹 채팅방 생성</a>
                                        </div>
                                        <h5 class="font-size-16 mb-3"><i class="uil uil-users-alt mr-1"></i>그룹 채팅</h5>
 
                                        <ul class="list-unstyled chat-list group-list">
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media align-items-center">
-                                                       <div class="avatar-xs mr-3">
-                                                           <span class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                               G
-                                                           </span>
-                                                       </div>
-                                                       
-                                                       <div class="media-body">
-                                                           <h5 class="font-size-14 mb-0">1번 채팅방</h5>
-                                                       </div>
-                                                   </div>
-                                               </a>
-                                           </li>
-                                           <li class="active">
-                                               <a href="#">
-                                                   <div class="media align-items-center">
-                                                       <div class="avatar-xs mr-3">
-                                                           <span class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                               G
-                                                           </span>
-                                                       </div>
-                                                       
-                                                       <div class="media-body">
-                                                           <h5 class="font-size-14 mb-0">2번 채팅방</h5>
-                                                       </div>
-                                                   </div>
-                                               </a>
-                                           </li>
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media align-items-center">
-                                                       <div class="avatar-xs mr-3">
-                                                           <span class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                               G
-                                                           </span>
-                                                       </div>
-                                                       
-                                                       <div class="media-body">
-                                                           <h5 class="font-size-14 mb-0">3번 채팅방</h5>
-                                                       </div>
-                                                   </div>
-                                               </a>
-                                           </li>
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media align-items-center">
-                                                       <div class="avatar-xs mr-3">
-                                                           <span class="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                               G
-                                                           </span>
-                                                       </div>
-                                                       
-                                                       <div class="media-body">
-                                                           <h5 class="font-size-14 mb-0">4번 채팅방</h5>
-                                                       </div>
-                                                   </div>
-                                               </a>
-                                           </li>
+                                       
+                                       
+                                          <c:forEach var="map" items="${list2}">
+                                          		<c:if test="${map['count'] ne 2}">
+                                          		
+																									<li>
+																									    <a href="#">
+																									        <div class="media align-items-center">
+																									            <div class="avatar-xs mr-3">
+																									                <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+																									                    G
+																									                </span>
+																									            </div>
+																									            
+																									            <div class="media-body">
+																									                <h5 class="font-size-14 mb-0">${map['chatRoomDto'].roomName}</h5>
+																									            </div>
+																									        </div>
+																									    </a>
+																									</li>
+
+																							</c:if>
+																					</c:forEach>
+                                       
+
                                        </ul>
                                    </div>
                                </div>
+                               
+                               
 
                                <div class="p-4 border-top">
                                    <div>
                                        <div class="float-right">
-                                           <a href="" class="text-primary"><i class="mdi mdi-plus"></i>1:1 채팅방 생성</a>
+                                           <a href="#" class="text-primary" data-toggle="modal" data-target="#OneToOneChat"><i class="mdi mdi-plus"></i>1:1 채팅방 생성</a>
                                        </div>
                                        <h5 class="font-size-16 mb-3"><i class="uil uil-user mr-1"></i>1:1 채팅</h5>
 
                                        <ul class="list-unstyled chat-list">
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media">
-                                                       
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/users/avatar-1.jpg" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
-                                                       
-                                                       <div class="media-body overflow-hidden">
-                                                           <h5 class="text-truncate font-size-14 mb-1">James Clark</h5>
-                                                           <p class="text-truncate mb-0">Hey! there I'm available</p>
-                                                       </div>
-                                                       <div class="font-size-11">02 min</div>
-                                                   </div>
-                                               </a>
-                                           </li>
+                                       
+                                       
+                                       
+                                       
+                                       
+                                          <c:forEach var="map" items="${list2}">
+                                          		<c:if test="${map['count'] eq 2}">
+
+			                                           <li>
+			                                               <a href="#">
+			                                                   <div class="media">
+			                                                       
+			                                                       <div class="user-img online align-self-center mr-3">
+			                                                           <img src="${contextPath}/images/users/avatar-1.jpg" class="rounded-circle avatar-xs" alt="">
+			                                                       </div>
+			                                                       
+			                                                       <div class="media-body overflow-hidden">
+			                                                           <h5 class="text-truncate font-size-14 mb-1">${map['counterpart']}</h5>
+			                                                           <p class="text-truncate mb-0">Hey! there I'm available</p>
+			                                                       </div>
+			                                                       <div class="font-size-11">02 min</div>
+			                                                   </div>
+			                                               </a>
+			                                           </li>
+
+																							</c:if>
+																					</c:forEach>                                       
+                                       
+                                       
+                                     
+                                       
+                                       
+                                       
+
+                                           
                                            <li class="unread">
                                                <a href="#">
                                                    <div class="media">
@@ -207,53 +169,8 @@
                                                    </div>
                                                </a>
                                            </li>
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media">
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/users/avatar-3.jpg" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
-                                                       
-                                                       <div class="media-body overflow-hidden">
-                                                           <h5 class="text-truncate font-size-14 mb-1">Helen Pitts</h5>
-                                                           <p class="text-truncate mb-0">This theme is awesome!</p>
-                                                       </div>
-                                                       <div class="font-size-11">22 min</div>
-                                                   </div>
-                                               </a>
-                                           </li>
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media">
-                                                       
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/users/avatar-4.jpg" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
-                                                       
-                                                       <div class="media-body overflow-hidden">
-                                                           <h5 class="text-truncate font-size-14 mb-1">Annie Holder</h5>
-                                                           <p class="text-truncate mb-0">Nice to meet you</p>
-                                                       </div>
-                                                       <div class="font-size-11">01 Hr</div>
-                                                   </div>
-                                               </a>
-                                           </li>
-                                           <li>
-                                               <a href="#">
-                                                   <div class="media">
-                                                       
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
-                                                       
-                                                       <div class="media-body overflow-hidden">
-                                                           <h5 class="text-truncate font-size-14 mb-1">Vernon Smith</h5>
-                                                           <p class="text-truncate mb-0">Wow that's great</p>
-                                                       </div>
-                                                       <div class="font-size-11">04 Hrs</div>
-                                                   </div>
-                                               </a>
-                                           </li>
+
+
 
                                            
                                        </ul>
@@ -709,6 +626,42 @@
                
                
                
+							<!-- 그룹 채팅방 생성 modal -->
+							<div class="modal fade" id="GroupChat">
+							    <div class="modal-dialog modal-sm">
+							        <div class="modal-content">
+							        
+								        <!-- Modal Header -->
+								        <div class="modal-header">
+								            <h4 class="modal-title">그룹 채팅방 생성</h4>
+								            <button type="button" class="close" data-dismiss="modal">&times;</button> 
+								        </div>
+								
+								        <form action="${contextPath}/chat/makeGroupChat" method="post">
+								            <!-- Modal Body -->
+								            <div class="modal-body">
+								            		<label for="title" class="mr-sm-2">방 제목 :</label>
+								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="title" name="title" required> <br>
+								                <label for="userId1" class="mr-sm-2">ID1 :</label>
+								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId1" name="userId1" required> <br>
+								                <label for="userId2" class="mr-sm-2">ID2 :</label>
+								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId2" name="userId2" required> <br>
+								            </div>
+								            
+								            <!-- Modal footer -->
+								            <div class="modal-footer">
+								                <button type="submit" class="btn btn-primary">생성</button>
+								                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+								            </div>
+								        </form>
+							        
+							        </div>
+							    </div>
+							</div>
+               
+               
+ 
+               
                
                 
             </div> 
@@ -718,9 +671,9 @@
 
 
 
-
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+
 
 
 

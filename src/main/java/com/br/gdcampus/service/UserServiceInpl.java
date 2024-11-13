@@ -137,6 +137,38 @@ public class UserServiceInpl implements UserService {
 		return userDao.selectUser(m);
 	}
 
+	
+	/**
+	 * 회원(교수)의 소속학과 번호로 소소학과 이름 조회 
+	 * author : 상우
+	 * @param stDeptNo 소속학과 번호
+	 * @return 소속학과 이름
+	 */
+	@Override
+	public String selectStDeptName(String stDeptNo) {
+		return userDao.selectStDeptName(stDeptNo);
+	}
+
+	/**
+	 * 부서번호로 부서명 조회
+	 * author : 상우
+	 * @param deptNo 부서번호
+	 * @return 부서명
+	 */
+	@Override
+	public String selectDeptName(String deptNo) {
+		return userDao.selectDeptName(deptNo);
+	}
+
+	/**
+	 * 직급번호로 직급명 조회
+	 * author : 상우
+	 * @param rankNo 직급번호
+	 * @return 직급명
+	 */
+	@Override
+	public String selectRankName(String rankNo) {
+		return userDao.selectRankName(rankNo);
 	@Override
 	/**
 	 * 회원정보수정 메소드
