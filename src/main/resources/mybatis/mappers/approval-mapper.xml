@@ -275,4 +275,66 @@
 		   AND APPR_STATUS IN(2,3)
 		   AND A.APPR_NO = #{apprNo}	
 	</select>	
+
+	<!-- 진행중 기안문서 최근 5개 가져오기 -->
+	<select id="getRecentInProgressDocs" resultMap="approvalResultMap">
+		WITH MY_DOC_LIST AS(
+		SELECT
+		       A.APPR_NO 
+		     , A.APPR_USER 
+		     , A.APPR_TYPE 
+		     , A.APPR_DATE 
+		     , A.APPR_TITLE
+		     , A.CURR_ORDER 
+		     , A.APPR_STATUS
+		  FROM T_APPROVAL A
+		 WHERE A.APPR_STATUS = 1
+		   AND A.APPR_USER = #{userNo}
+		 ORDER 
+		    BY A.APPR_DATE DESC  
+		)
+		SELECT 
+		       APPR_NO 
+		     , APPR_USER 
+		     , APPR_TYPE 
+		     , APPR_DATE 
+		     , APPR_TITLE 
+		     , CURR_ORDER 
+		     , APPR_STATUS 
+		  FROM MY_DOC_LIST A
+		 <![CDATA[
+		 WHERE ROWNUM <= 5
+		 ]]>
+	</select>
+	
+	<select id="getRecentCompletedDocs" resultMap="approvalResultMap">
+		WITH MY_DOC_LIST AS(
+		SELECT
+		       A.APPR_NO 
+		     , A.APPR_USER 
+		     , A.APPR_TYPE 
+		     , A.APPR_DATE 
+		     , A.APPR_TITLE
+		     , A.CURR_ORDER 
+		     , A.APPR_STATUS
+		  FROM T_APPROVAL A
+		 WHERE A.APPR_STATUS IN(2,3)
+		   AND A.APPR_USER = #{userNo}
+		 ORDER 
+		    BY A.APPR_DATE DESC  
+		)
+		SELECT 
+		       APPR_NO 
+		     , APPR_USER 
+		     , APPR_TYPE 
+		     , APPR_DATE 
+		     , APPR_TITLE 
+		     , CURR_ORDER 
+		     , APPR_STATUS 
+		  FROM MY_DOC_LIST A
+		 <![CDATA[
+		 WHERE ROWNUM <= 5
+		 ]]>	
+	</select>
+	
 </mapper>

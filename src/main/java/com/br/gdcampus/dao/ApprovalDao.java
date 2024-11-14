@@ -61,6 +61,14 @@ public class ApprovalDao {
 		
 		return sqlSession.selectList("approvalMapper.selectMyDocList",params,rowBounds);
 	}
+
+	public List<ApprovalDto> getRecentInProgressDocs(String userNo) {
+		return sqlSession.selectList("approvalMapper.getRecentInProgressDocs",userNo);
+	}
+
+	public List<ApprovalDto> getRecentCompletedDocs(String userNo) {
+		return sqlSession.selectList("approvalMapper.getRecentCompletedDocs",userNo);
+	}
 	
 	
 

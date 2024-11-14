@@ -46,6 +46,12 @@ public interface ApprovalService {
 	
 	//결재문서 상세
 	ApprovalDto selectMyApprovedDetail(String userNo, String apprNo);
+
+	//기안문서>진행중 최근 5개
+	List<ApprovalDto> getRecentInProgressDocs(String userNo);
+
+	//기안문서>환료 최근 5개
+	List<ApprovalDto> getRecentCompletedDocs(String userNo);
 	
 	
 	//결재 승인
