@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * 게시글 DTO 클래스
+ * 게시글 / 공지사항 관련 dto 
  * 
  * @author 박한나
  */
@@ -23,7 +23,7 @@ import java.util.Date;
 @Builder
 public class PostDto {
 
-    private String postNo;          // 게시글 번호
+    private String postNo;           // 게시글 번호
     private int boardTypeNo;         // 게시판 유형 번호
     private int userNo;              // 사용자 번호
     private String postTitle;        // 게시글 제목

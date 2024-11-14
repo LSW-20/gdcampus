@@ -1,11 +1,12 @@
 package com.br.gdcampus.dto;
 
+/**
+ * 공지사항관련 dto
+ * @author 박한나
+ * 
+ */
 public class NoticeDto {
 	
-	// 공지사항 목록 조회
-	
-	
-	// 공지사항 상단고정 
 	
 	
 	
