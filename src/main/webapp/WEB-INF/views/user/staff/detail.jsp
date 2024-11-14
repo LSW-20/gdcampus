@@ -54,16 +54,16 @@
 
 				<div class="col-lg-12">
 					<div class="mt-4">
-						<h5 class="font-size-14 mb-4">
-							<i class="mdi mdi-arrow-right text-primary mr-1"></i> Form groups
+						<h5 class=" mb-4">
+							<i class="mdi mdi-arrow-right text-primary mr-1"></i> 상세정보
 						</h5>
 						<form action="${contextPath}/user/staff/update.do" method="post">
 						<input type="hidden" name="userNo" value="${user.userNo}">
-
-							<div class="row">
+						<br><hr>	
+							<div class="row mt-5">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="formrow-firstname-input">아이디</label> 
+										<label for="formrow-firstname-input">아이디</label> <span style="font-size: 10px">(수정불가)</span>
 										<input type="text" class="form-control" id="userId" name="userId" value="${user.userId }" readonly>
 									</div>
 								</div>
@@ -87,13 +87,13 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="formrow-email-input">이메일</label> 
+										<label for="email">이메일</label> 
 										<input type="email" class="form-control" id="email" name="email" value="${user.email}">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="formrow-password-input">사원명</label> 
+										<label for="userName">사원명</label> 
 										<input type="text" class="form-control" id="userName" name="userName" value="${user.userName }">
 									</div>
 								</div>
@@ -102,6 +102,7 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
+										<label>부서</label>
 										<select class="custom-select" name="deptNo" id="deptNo">
 											<c:forEach var="category" items="${deptList}">
                 								<option value="${category.deptNo}" ${category.deptNo == user.deptNo ? 'selected' : ''}>
@@ -113,6 +114,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
+										<label>직급</label>
 										<select class="custom-select" name="rankNo" id="rankNo">
 											<c:forEach var="category" items="${rankList}">
                 								<option value="${category.rankNo}" ${category.rankNo == user.rankNo ? 'selected' : ''}>
@@ -123,7 +125,7 @@
 									</div>
 								</div>
 							</div>
-							
+							<br><hr>
 							<div class="row">
 								<div class="col-md-6">
 									입사일 : ${user.hireDate}
@@ -132,7 +134,7 @@
 									퇴사일 : ${user.leaveDate}
 								</div>
 							</div>
-									
+							<hr><br>		
 							<div class="mt-4 row d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary w-md mr-3">저장</button>
 								<button type="button" class="btn btn-primary w-md mr-3">목록</button>
