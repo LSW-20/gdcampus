@@ -56,6 +56,8 @@ public interface UserService {
 	List<String> selectDeptList();
 	// 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회 - 상우
 	List<UserDto> selectChatUserList(String dept);
+	// 사번으로 이름찾기 - 상우
+	String selectUserNameByUserNo(String userNo);
 	
 	//회원정보수정
 	int updateUser(UserDto m); 
@@ -71,4 +73,5 @@ public interface UserService {
 	UserDto pwdSearch(String email,String userId);
 	//비번수정
 	int pwdUpdate(UserDto m);
+	
 }

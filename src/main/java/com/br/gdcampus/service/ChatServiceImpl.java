@@ -20,13 +20,13 @@ public class ChatServiceImpl implements ChatService {
 
 	
 	/**
-	 * 채팅방 전체 리스트 조회
+	 * 로그인한 유저가 속한 채팅방 리스트 조회
 	 * author : 임상우
 	 * return 채팅방 dto 객체 list.
 	 */
 	@Override
-	public List<ChatRoomDto> selectChatRoomList() {
-		return chatDao.selectChatRoomList();
+	public List<ChatRoomDto> selectChatRoomList(String userNo) {
+		return chatDao.selectChatRoomList(userNo);
 	}
 	
 

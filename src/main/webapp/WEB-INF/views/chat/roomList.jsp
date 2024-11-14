@@ -86,7 +86,7 @@
 																									            </div>
 																									            
 																									            <div class="media-body">
-																									                <h5 class="font-size-14 mb-0">${map['chatRoomDto'].roomName}</h5>
+																									                <h5 class="font-size-14 mb-0">${map['chatRoomDto'].roomName} &nbsp;&nbsp;(${map['count']}명)  </h5>
 																									            </div>
 																									        </div>
 																									    </a>
@@ -127,7 +127,9 @@
 			                                                       </div>
 			                                                       
 			                                                       <div class="media-body overflow-hidden">
-			                                                           <h5 class="text-truncate font-size-14 mb-1">${map['counterpart']}</h5>
+			                                                           <h5 class="text-truncate font-size-14 mb-1">
+			                                                           	 ${map['counterpartName']} (${map['counterpartNo']})
+			                                                           </h5>
 			                                                           <p class="text-truncate mb-0">Hey! there I'm available</p>
 			                                                       </div>
 			                                                       <div class="font-size-11">02 min</div>
@@ -636,7 +638,7 @@
 								            <div class="modal-body">
 								            		<br>
 								            		<label for="title" class="mr-sm-2"><div style="font-weight: bold;">채팅방 제목 :</div></label>
-								                <input type="text" class="mb-2 mr-sm-2" placeholder="필수 입력" id="title" name="title" required> <br><br><br>
+								                <input type="text" class="mb-2 mr-sm-2" placeholder="필수 입력(최대 글자수 13자)" id="title" name="title" maxlength="13" required> <br><br><br>
 
 																<div style="text-align: center; font-weight: bold;">
 																	&lt;&lt;초대 인원 선택 (최소 1명 이상)&gt;&gt; <br><br>
@@ -732,8 +734,6 @@
 								            <!-- Modal Body -->
 								            <div class="modal-body">
 								            		<br>
-								            		<label for="title" class="mr-sm-2"><div style="font-weight: bold;">채팅방 제목 :</div></label>
-								                <input type="text" class="mb-2 mr-sm-2" placeholder="필수 입력" id="title" name="title" required> <br><br><br>
 
 																<div style="text-align: center; font-weight: bold;">
 																	&lt;&lt;초대 인원 선택 (1명)&gt;&gt; <br><br>

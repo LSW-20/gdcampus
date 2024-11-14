@@ -32,6 +32,10 @@
 				 , CREATE_USER
 			   , STATUS
 			from T_CHAT_ROOM    
+ 	   where ROOM_NO IN ( SELECT ROOM_NO 
+                    		  FROM T_USER_CHAT_ROOM
+                  			 WHERE USER_NO = #{userNo}
+											)
 	</select>
 
 
@@ -40,7 +44,7 @@
 		select 
 					 COUNT(*)
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = ${chatRoomNo} 
+		 where ROOM_NO = #{chatRoomNo} 
 		   and JOIN_YN = 'Y'
 	</select>
 	
@@ -53,7 +57,7 @@
 				 , JOIN_TIME
 				 , JOIN_YN
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = ${chatRoomNo} 	 
+		 where ROOM_NO = #{chatRoomNo} 	 
 		   and JOIN_YN = 'Y'
 	</select>
 	

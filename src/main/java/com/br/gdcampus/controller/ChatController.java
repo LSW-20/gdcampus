@@ -65,8 +65,8 @@ public class ChatController {
 		
 		
 		
-		// 2. 채팅방 전체 리스트 조회하기.
-		List<ChatRoomDto> list = chatService.selectChatRoomList(); // 전체 채팅방 DTO가 list로 담김.
+		// 2. 로그인한 유저가 속한 채팅방 리스트 조회하기.
+		List<ChatRoomDto> list = chatService.selectChatRoomList(userNo); // 로그인한 유저가 속한 채팅방 DTO가 list로 담김.
 		
 		List<Map<String, Object>> list2 = new ArrayList<>(); // 응답 페이지로 넘길 list.
 		
@@ -74,12 +74,15 @@ public class ChatController {
 		for(ChatRoomDto c : list) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("chatRoomDto", c);
-			map.put("count", chatService.selectChatRoomPeopleCount(c.getRoomNo()) ); // 3. 채팅방 번호로 채팅방 인원수 구하기.
-			
+			map.put("count", chatService.selectChatRoomPeopleCount(c.getRoomNo()) ); // 3. 각 채팅방 마다 채팅방 번호로 채팅방 인원수 구하기.
+
 			List<UserChatRoomDto> list40 = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. (1대1 채팅방에 상대 보여줌)
+
 			for(UserChatRoomDto u : list40) {
-				if(u.getUserNo() != userNo) {
-					map.put("counterpart", u.getUserNo());
+				if(!u.getUserNo().equals(userNo)) {
+					map.put("counterpartNo", u.getUserNo()); // 상대방 사번이 "counterpart"라는 key값에 계속 덮어씌워지긴 하는데 1:1 채팅방에선 어차피 1개의 값만 담겨서 괜찮다.
+					map.put("counterpartName", userService.selectUserNameByUserNo(u.getUserNo()) );
+					System.out.println("235235325r : " + userService.selectUserNameByUserNo(u.getUserNo()));
 				}
 			}
 					
@@ -91,7 +94,7 @@ public class ChatController {
 		
 		
 		
-		// 3. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
+		// 5. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
 
 		
 		// (1) 관리자 유저의 사번, 이름 담기
@@ -161,13 +164,12 @@ public class ChatController {
 	 * author : 상우
 	 */
 	@PostMapping("/makeOneToOneChat")
-	public String makeOneToOneChat(HttpSession session, String title, String selectedUser, RedirectAttributes ra) {
+	public String makeOneToOneChat(HttpSession session, String selectedUser, RedirectAttributes ra) {
 
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("createUser", userNo);
-		map.put("title", title);
 		map.put("selectedUser", selectedUser);
 		map.put("type", "O");
 
