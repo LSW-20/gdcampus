@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-center">
-                            <a href="index.html" class="mb-5 d-block auth-logo">
+                            <a href="#" class="mb-5 d-block auth-logo">
                                 <img src="assets/images/logo-dark.png" alt="" height="22" class="logo logo-dark">
                                 <img src="assets/images/logo-light.png" alt="" height="22" class="logo logo-light">
                             </a>
@@ -60,8 +60,7 @@
                            
                             <div class="card-body p-4"> 
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Register Account</h5>
-                                    <p class="text-muted">Get your free Drezon account now.</p>
+                                    <h5 class="text-primary"><b>아이디 찾기</b></h5>
                                 </div>
                                 <div class="p-2 mt-4">
    <form id="emailForm">
@@ -80,18 +79,20 @@
 </form>
 
                                     
-                                    <form action="">
+                                    <form action="${contextPath }/user/selectId" onsubmit="return addHiddenFields()" method="post">
                                         <div class="form-group">
                                             <label for="userpassword">인증번호</label>
-                                            <input type="password" class="form-control" id="userpassword" placeholder="인증번호 6자리 입력" readonly>        
+                                            <input type="text" class="form-control" id="userpassword" placeholder="인증번호 6자리 입력" name="certNo" id="certNo" readonly>        
                                         </div>
                     
                                         <div class="mt-3 text-right">
                                             <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">확 인</button>
                                         </div>
+																		    <input type="hidden" id="hiddenEmail" name="email">
+																		    <input type="hidden" id="hiddenUserName" name="userName">
                                     </form>
                                         <div class="mt-4 text-center">
-                                            <p class="text-muted mb-0">Already have an account ? <a href="auth-login.html" class="font-weight-medium text-primary"> Login</a></p>
+                                            <p class="text-muted mb-0">Already have an account ? <a href="${contextPath }/" class="font-weight-medium text-primary"> Login</a></p>
                                         </div>
             
                                         
@@ -123,41 +124,66 @@
         <script src="${contextPath }/js/app.js"></script>
 
 			<script>
-			    $(document).ready(function() {
-			        // 인증번호 발송 버튼 클릭 이벤트
-			        $('#sendEmailButton').on('click', function(event) {
-			            event.preventDefault(); // form 제출 기본 동작 차단
-			
-			            var email = $('#email').val();
-			            var userName = $('#userName').val();
+			var verificationCode = null;
 
-			            document.getElementById("userpassword").removeAttribute("readonly");
-			            
-			            // 이메일 주소와 사용자 이름이 비어 있는지 확인
-			            if (!email || !userName) {
-			                alert('이메일 주소와 사용자 이름을 입력해주세요.');
-			                return;
+			$(document).ready(function() {
+			    // 인증번호 발송 버튼 클릭 이벤트
+			    $('#sendEmailButton').on('click', function(event) {
+			        event.preventDefault(); // form 제출 기본 동작 차단
+
+			        var email = $('#email').val();
+			        var userName = $('#userName').val();
+
+			        document.getElementById("userpassword").removeAttribute("readonly");
+
+			        // 이메일 주소와 사용자 이름이 비어 있는지 확인
+			        if (!email || !userName) {
+			            alert('이메일 주소와 사용자 이름을 입력해주세요.');
+			            return;
+			        }
+
+			        // Ajax 요청으로 이메일 인증 요청 보내기
+			        $.ajax({
+			            type: 'POST',
+			            url: '${contextPath}/mailSend',  // 서버에서 정의한 URL
+			            data: {
+			                email: email,
+			                userName: userName
+			            },
+			            success: function(response) {
+			                alert('인증번호가 발송되었습니다.');
+			                // 서버 응답에서 인증번호를 받아와서 사용
+			                verificationCode = response.verificationCode;
+			                console.log("Received verification code:", verificationCode);
+			            },
+			            error: function(xhr, status, error) {
+			                alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
 			            }
-			
-			            // Ajax 요청으로 이메일 인증 요청 보내기
-			            $.ajax({
-			                type: 'POST',
-			                url: '${contextPath}/mailSend',  // 서버에서 정의한 URL
-			                data: {
-			                    email: email,
-			                    userName: userName
-			                },
-			                success: function(response) {
-			                    alert('인증번호가 발송되었습니다.');
-			                    // 성공적으로 인증번호를 발송했을 때 추가 로직을 처리할 수 있습니다.
-			                },
-			                error: function(xhr, status, error) {
-			                    alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
-			                }
-			            });
 			        });
 			    });
+			});
+
+			// 인증번호 입력 후, hidden 필드 값 설정 및 인증번호 비교
+			function addHiddenFields() {
+			    if (!verificationCode) {
+			        alert("인증번호 발송을 먼저 해주세요.");
+			        return false; // 인증번호가 발송되지 않았다면 폼을 제출하지 않음
+			    }
+
+			    // 첫 번째 폼에서 이메일과 이름을 가져와 숨은 필드에 설정
+			    document.getElementById('hiddenEmail').value = document.getElementById('email').value;
+			    document.getElementById('hiddenUserName').value = document.getElementById('userName').value;
+			    
+			    // 입력한 인증번호와 서버에서 받은 verificationCode를 비교
+			    var inputCode = document.getElementById('certNo').value;
+
+			    if (inputCode.toString() === verificationCode.toString()) {
+			        return true; // 인증번호가 일치하면 폼 제출
+			    } else {
+			        alert("인증번호가 일치하지 않습니다. 다시 시도해주세요.");
+			        return false; // 인증번호가 일치하지 않으면 폼 제출을 막음
+			    }
+			}
 			</script>
-				
     </body>
 </html>

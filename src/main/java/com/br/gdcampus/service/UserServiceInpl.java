@@ -185,6 +185,30 @@ public class UserServiceInpl implements UserService {
 	public int updateProfileImg(UserDto m) {
 		return userDao.updateProfileImg(m);
 	}
+
+	/**
+	 * 아이디찾기
+	 */
+	@Override
+	public UserDto idSearch(String email, String userName) {
+		return userDao.idSearch(email,userName);
+	}
+
+	/**
+	 * 비밀번호찾기
+	 */
+	@Override
+	public UserDto pwdSearch(String email, String userId) {
+		return userDao.pwdSearch(email,userId);
+	}
+
+	/**
+	 * 비밀번호수정
+	 */
+	@Override
+	public int pwdUpdate(UserDto m) {
+		return userDao.pwdUpdate(m);
+	}
 	
 	
 

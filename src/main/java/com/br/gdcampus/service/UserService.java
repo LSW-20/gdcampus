@@ -53,4 +53,10 @@ public interface UserService {
 	int updateUser(UserDto m); 
 	//회원프로필수정
 	int updateProfileImg(UserDto m);
+	//아이디찾기
+	UserDto idSearch(String email,String userName);
+	//비번찾기
+	UserDto pwdSearch(String email,String userId);
+	//비번수정
+	int pwdUpdate(UserDto m);
 }
