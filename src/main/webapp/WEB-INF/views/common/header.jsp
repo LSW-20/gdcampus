@@ -21,7 +21,7 @@
 
 
 <!-- jQuery should be loaded first -->
-<script src="${contextPath}/libs/jquery/jquery.min.js" defer></script>
+<script src="${contextPath}/libs/jquery/jquery.min.js" ></script>
 
 <!-- Other JS libraries -->
 <script src="${contextPath}/libs/bootstrap/js/bootstrap.bundle.min.js" defer></script>
