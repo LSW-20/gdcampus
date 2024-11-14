@@ -6,6 +6,7 @@
 	<resultMap id="chatRoomResultMap" type="ChatRoomDto">
 		<result column="ROOM_NO" property="roomNo"/>
 		<result column="ROOM_NAME" property="roomName"/>
+		<result column="ROOM_TYPE" property="roomType"/>
 		<result column="CREATE_DATETIME" property="createDateTime"/>
 		<result column="CREATE_USER" property="createUser"/>
 		<result column="STATUS" property="status"/>				
@@ -26,6 +27,7 @@
 		select 
 					 ROOM_NO
 		     , ROOM_NAME
+		     , ROOM_TYPE
 				 , CREATE_DATETIME
 				 , CREATE_USER
 			   , STATUS
@@ -56,13 +58,14 @@
 	</select>
 	
 	
-	<!-- (상우) 그룹 채팅방 생성 -->
-	<insert id="makeGroupChat">
+	<!-- (상우) 채팅방 생성 -->
+	<insert id="makeChatRoom">
 		insert
 		  into T_CHAT_ROOM
 		  (
 			  ROOM_NO
 			,	ROOM_NAME
+			, ROOM_TYPE
 			,	CREATE_DATETIME
 			,	CREATE_USER
 			,	STATUS
@@ -71,13 +74,33 @@
 		 (
 		 	 SEQ_CHNO.NEXTVAL
 		 , #{title}
+		 , #{type}
 		 , SYSDATE
 		 , #{createUser}
 		 , 'Y' 
 		 ) 
 	</insert>
 	
+	<!-- (상우) 채팅방 생성 후 초대인원들 매핑테이블에 담기 -->
+	<insert id="insertChatMapping">
+		insert
+		  into T_USER_CHAT_ROOM
+		  (
+			  USER_NO
+      , ROOM_NO
+      , JOIN_TIME
+      , JOIN_YN
+		  )
+		 values 
+		 (
+		 	 #{userNo}
+		 , SEQ_CHNO.CURRVAL
+		 , SYSDATE
+		 , 'Y' 
+		 ) 
+	</insert>
 	
 
 
+	
 </mapper>

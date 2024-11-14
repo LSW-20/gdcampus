@@ -37,12 +37,6 @@
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
-                
-              <c:if test="${ not empty alertMsg }">
-				        <script>
-				          alert("${alertMsg}");
-				        </script>
-				   		</c:if>
 
 							<br><br>
 
@@ -80,7 +74,7 @@
                                        
                                        
                                           <c:forEach var="map" items="${list2}">
-                                          		<c:if test="${map['count'] ne 2}">
+                                          		<c:if test="${map['chatRoomDto'].roomType eq 'G'}">
                                           		
 																									<li>
 																									    <a href="#">
@@ -122,7 +116,7 @@
                                        
                                        
                                           <c:forEach var="map" items="${list2}">
-                                          		<c:if test="${map['count'] eq 2}">
+                                          		<c:if test="${map['chatRoomDto'].roomType eq 'O'}">                                          		
 
 			                                           <li>
 			                                               <a href="#">
@@ -637,15 +631,67 @@
 								            <button type="button" class="close" data-dismiss="modal">&times;</button> 
 								        </div>
 								
-								        <form action="${contextPath}/chat/makeGroupChat" method="post">
+								        <form action="${contextPath}/chat/makeGroupChat" method="post" onsubmit="return validateSelection()">
 								            <!-- Modal Body -->
 								            <div class="modal-body">
-								            		<label for="title" class="mr-sm-2">방 제목 :</label>
-								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="title" name="title" required> <br>
-								                <label for="userId1" class="mr-sm-2">ID1 :</label>
-								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId1" name="userId1" required> <br>
-								                <label for="userId2" class="mr-sm-2">ID2 :</label>
-								                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId2" name="userId2" required> <br>
+								            		<br>
+								            		<label for="title" class="mr-sm-2"><div style="font-weight: bold;">채팅방 제목 :</div></label>
+								                <input type="text" class="mb-2 mr-sm-2" placeholder="필수 입력" id="title" name="title" required> <br><br><br>
+
+																<div style="text-align: center; font-weight: bold;">
+																	&lt;&lt;초대 인원 선택 (최소 1명 이상)&gt;&gt; <br><br>
+																</div>
+																
+																관리자 <br>
+																<table>
+				                          <c:forEach var="userDto" items="${adminList}">
+				                            <c:if test="${userDto.userNo != loginUser.userNo}">
+					                          	<tr>
+																				<td><input type="checkbox" name="selectedUsers" value="${userDto.userNo}"></td>
+					                          		<td>${userDto.userNo}</td>
+																	    	<td>${userDto.userName}</td>
+																	    </tr>		
+																	  </c:if>    	                          	
+				                          </c:forEach>
+																</table>
+																<br>
+																
+																
+																교수 <br>
+																<table>
+				                          <c:forEach var="userDto" items="${professorList}">
+				                            <c:if test="${userDto.userNo != loginUser.userNo}">
+					                          	<tr>
+																				<td><input type="checkbox" name="selectedUsers" value="${userDto.userNo}"></td>					                          	
+					                          		<td>${userDto.userNo}</td>
+																	    	<td>${userDto.userName}</td>
+																	    	<td>${userDto.deptName}</td>
+																	    </tr>		
+																	  </c:if>    	                          	
+				                          </c:forEach>
+																</table>
+																<br>
+																
+			                          
+			                          <c:forEach var="dept" items="${deptList}">
+			                          	부서 : ${dept} <br>
+			                          	<table>
+			                          		
+			                          		<c:forEach var="userDto" items="${deptMap[dept]}">
+				                          		<c:if test="${userDto.userNo != loginUser.userNo}">
+						                          	<tr>
+																					<td><input type="checkbox" name="selectedUsers" value="${userDto.userNo}"></td>					                          	
+						                          		<td>${userDto.userNo}</td>
+																		    	<td>${userDto.userName}</td>
+																		    	<td>${userDto.rankName}</td>
+																		    </tr>
+																		  </c:if>  
+																    </c:forEach>
+			                          		
+			                          	</table>
+			                          	<br>
+			                          </c:forEach>                    
+
 								            </div>
 								            
 								            <!-- Modal footer -->
@@ -658,9 +704,103 @@
 							        </div>
 							    </div>
 							</div>
-               
-               
+              <script> <!-- 그룹 채팅방 생성 modal 0명 선택 방지. -->
+					    function validateSelection() {
+					        const checkboxes = document.querySelectorAll('input[name="selectedUsers"]:checked');
+					        if (checkboxes.length === 0) {
+					            alert("최소 한 명 이상의 사용자를 선택해야 합니다.");
+					            return false; // 폼 제출 방지
+					        }
+					        return true; // 폼 제출 허용
+					    }
+							</script>
+							
  
+ 
+							<!-- 1대1 채팅방 생성 modal -->
+							<div class="modal fade" id="OneToOneChat">
+							    <div class="modal-dialog modal-sm">
+							        <div class="modal-content">
+							        
+								        <!-- Modal Header -->
+								        <div class="modal-header">
+								            <h4 class="modal-title">1대1 채팅방 생성</h4>
+								            <button type="button" class="close" data-dismiss="modal">&times;</button> 
+								        </div>
+								
+								        <form action="${contextPath}/chat/makeOneToOneChat" method="post">
+								            <!-- Modal Body -->
+								            <div class="modal-body">
+								            		<br>
+								            		<label for="title" class="mr-sm-2"><div style="font-weight: bold;">채팅방 제목 :</div></label>
+								                <input type="text" class="mb-2 mr-sm-2" placeholder="필수 입력" id="title" name="title" required> <br><br><br>
+
+																<div style="text-align: center; font-weight: bold;">
+																	&lt;&lt;초대 인원 선택 (1명)&gt;&gt; <br><br>
+																</div>
+																
+																관리자 <br>
+																<table>
+				                          <c:forEach var="userDto" items="${adminList}">
+				                            <c:if test="${userDto.userNo != loginUser.userNo}">				                          
+					                          	<tr>
+					                          		<td><input type="radio" name="selectedUser" value="${userDto.userNo}" required></td>
+					                          		<td>${userDto.userNo}</td>
+																	    	<td>${userDto.userName}</td>
+																	    </tr>		
+																	  </c:if>    	                          	
+				                          </c:forEach>
+																</table>
+																<br>
+																
+																
+																교수 <br>
+																<table>
+				                          <c:forEach var="userDto" items="${professorList}">
+				                            <c:if test="${userDto.userNo != loginUser.userNo}">				                          
+					                          	<tr>
+					                          		<td><input type="radio" name="selectedUser" value="${userDto.userNo}" required></td>	                          	
+					                          		<td>${userDto.userNo}</td>
+																	    	<td>${userDto.userName}</td>
+																	    	<td>${userDto.deptName}</td>
+																	    </tr>		
+																	  </c:if>    	                          	
+				                          </c:forEach>
+																</table>
+																<br>
+																
+			                          
+			                          <c:forEach var="dept" items="${deptList}">
+			                          	부서 : ${dept} <br>
+			                          	<table>
+			                          		
+			                          		<c:forEach var="userDto" items="${deptMap[dept]}">
+				                          		<c:if test="${userDto.userNo != loginUser.userNo}">
+						                          	<tr>
+						                          		<td><input type="radio" name="selectedUser" value="${userDto.userNo}" required></td>				                          	
+						                          		<td>${userDto.userNo}</td>
+																		    	<td>${userDto.userName}</td>
+																		    	<td>${userDto.rankName}</td>
+																		    </tr>
+																		  </c:if>  
+																    </c:forEach>
+			                          		
+			                          	</table>
+			                          	<br>
+			                          </c:forEach>
+
+								            </div>
+								            
+								            <!-- Modal footer -->
+								            <div class="modal-footer">
+								                <button type="submit" class="btn btn-primary">생성</button>
+								                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+								            </div>
+								        </form>
+							        
+							        </div>
+							    </div>
+							</div>
                
                
                 

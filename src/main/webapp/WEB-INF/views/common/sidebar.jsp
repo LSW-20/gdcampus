@@ -209,7 +209,7 @@
 								</li>
 								
 								<li>
-										<a href="${contextPath}/approval/todo.do" class="has-arrow waves-effect">
+										<a href="${contextPath}/approval/todo" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="columns"></i>
 												<span class="menu-item">결재 대기 문서함</span>
 										</a>
@@ -256,6 +256,15 @@
 										</ul>
 								</li>
 								
+								<li>
+										<a href="${contextPath}/approval/myDoc" class="has-arrow waves-effect">
+												<i class="icon nav-icon" data-feather="file-text"></i>
+												<span class="menu-item">기안문서함</span>
+										</a>
+										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="#"></a></li>
+										</ul>
+								</li>								
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="edit-3"></i>

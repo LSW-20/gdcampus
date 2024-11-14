@@ -39,7 +39,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public UserDto selectStaff(String userNo) {
-		return null;
+		return userDao.selectStaff(userNo);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int insertStaff(UserDto user) {
-		return 0;
+		return userDao.insertStaff(user);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int updateStaff(UserDto user) {
-		return 0;
+		return userDao.updateStaff(user);
 	}
 
 	/**
@@ -110,13 +110,11 @@ public class UserServiceInpl implements UserService {
 	}
 
 	/**
-	 * 교수 사원 비밀번호 초기화 메소드
-	 * @param loginUserNo - 수정자 사번
-	 * @param userNo - 비밀번호 초기화 할 사원의 사번
+	 * 비밀번호 초기화 메소드
 	 */
 	@Override
-	public int PwdReset(String loginUserNo, String userNo) {
-		return 0;
+	public int PwdReset(UserDto user) {
+		return userDao.PwdReset(user);
 	}
 
 	/**
@@ -170,6 +168,50 @@ public class UserServiceInpl implements UserService {
 	public String selectRankName(String rankNo) {
 		return userDao.selectRankName(rankNo);
 	}
+	
+	/**
+	 * 관리자 유저의 사번, 이름 조회
+	 * author : 상우
+	 * @return 관리자 유저의 사번, 이름
+	 */
+	@Override
+	public List<UserDto> selectAdminList() {
+		return userDao.selectAdminList();
+	}
+	
+	/** 
+	 * 교수 유저의 사번, 이름, 학과명 담기
+	 * author : 상우
+	 * @return 교수 유저의 사번, 이름, 학과명
+	 */
+	@Override
+	public List<UserDto> selectProfessorList() {
+		return userDao.selectProfessorList();
+	}
+	
+	
+	/**
+	 * 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회
+	 * author : 상우
+	 * @return 각 부서별 유저의 사번, 이름, 부서(직책), 직급
+	 */
+	@Override
+	public List<UserDto> selectChatUserList(String dept) {
+		return userDao.selectChatUserList(dept);
+	}
+	
+	/**
+	 * 부서 카테고리 조회
+	 * author : 상우
+	 * @return 부서 카테고리들
+	 */
+	@Override
+	public List<String> selectDeptList() {
+		return userDao.selectDeptList();
+	}
+
+	
+
 	@Override
 	/**
 	 * 회원정보수정 메소드
@@ -184,6 +226,36 @@ public class UserServiceInpl implements UserService {
 	@Override
 	public int updateProfileImg(UserDto m) {
 		return userDao.updateProfileImg(m);
+	}
+
+
+
+
+
+
+
+	/**
+	 * 아이디찾기
+	 */
+	@Override
+	public UserDto idSearch(String email, String userName) {
+		return userDao.idSearch(email,userName);
+	}
+
+	/**
+	 * 비밀번호찾기
+	 */
+	@Override
+	public UserDto pwdSearch(String email, String userId) {
+		return userDao.pwdSearch(email,userId);
+	}
+
+	/**
+	 * 비밀번호수정
+	 */
+	@Override
+	public int pwdUpdate(UserDto m) {
+		return userDao.pwdUpdate(m);
 	}
 	
 	

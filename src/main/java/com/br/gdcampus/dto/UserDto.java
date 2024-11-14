@@ -38,4 +38,7 @@ public class UserDto {
 
 	private List<DeptDto> deptList;
 	private List<RankDto> rankList;
+	
+	private String deptName; // 부서명 or 학과명 담기
+	private String rankName;
 }

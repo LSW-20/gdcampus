@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-center">
-                            <a href="index.html" class="mb-5 d-block auth-logo">
+                            <a href="#" class="mb-5 d-block auth-logo">
                                 <img src="assets/images/logo-dark.png" alt="" height="22" class="logo logo-dark">
                                 <img src="assets/images/logo-light.png" alt="" height="22" class="logo logo-light">
                             </a>
@@ -60,36 +60,27 @@
                            
                             <div class="card-body p-4"> 
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Register Account</h5>
-                                    <p class="text-muted">Get your free Drezon account now.</p>
+                                    <h5 class="text-primary"><b>비밀번호 변경</b></h5>
                                 </div>
                                 <div class="p-2 mt-4">
-   <form id="emailForm">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter username">
-    </div>
-
-    <label for="useremail" class="me-2">Email</label>
-    <div class="form-group d-flex align-items-center">
-        <input type="email" class="form-control me-2" id="email" name="email" placeholder="Enter email">
-        <button type="button" id="sendEmailButton" class="btn btn-secondary waves-effect waves-light" style="height: 38px; width:180px;">
-            인증번호 발송
-        </button>
-    </div>
-</form>
+   <form id="pwdChangeForm" method="POST" action="/user/pwdUpdate">
+		    <div class="form-group">
+		        <label for="userPwd">New Password</label>
+		        <input type="password" class="form-control" id="userPwd" name="newPwd" placeholder="Enter new Password" required>
+		    </div>
+		
+		    <label for="pwdCheck" class="me-2">Re-Enter Password</label>
+		    <div class="form-group d-flex align-items-center">
+		        <input type="password" class="form-control me-2" id="pwdCheck" name="pwdCheck" placeholder="Re-enter password" required>
+		    </div>
+		    
+		    <div class="mt-3 text-right">
+		        <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">확 인</button>
+		    </div>
+		</form>
 
                                     
-                                    <form action="">
-                                        <div class="form-group">
-                                            <label for="userpassword">인증번호</label>
-                                            <input type="password" class="form-control" id="userpassword" placeholder="인증번호 6자리 입력" readonly>        
-                                        </div>
-                    
-                                        <div class="mt-3 text-right">
-                                            <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">확 인</button>
-                                        </div>
-                                    </form>
+                                   
                                         <div class="mt-4 text-center">
                                             <p class="text-muted mb-0">Already have an account ? <a href="${contextPath }/" class="font-weight-medium text-primary"> Login</a></p>
                                         </div>
@@ -123,41 +114,19 @@
         <script src="${contextPath }/js/app.js"></script>
 
 			<script>
-			    $(document).ready(function() {
-			        // 인증번호 발송 버튼 클릭 이벤트
-			        $('#sendEmailButton').on('click', function(event) {
-			            event.preventDefault(); // form 제출 기본 동작 차단
+			    // 폼 제출 시 비밀번호 확인을 수행하는 JavaScript
+			    document.getElementById("pwdChangeForm").addEventListener("submit", function(event) {
+			        // 비밀번호와 비밀번호 재입력 값 가져오기
+			        var password = document.getElementById("userPwd").value; // ID에 맞춰 수정
+			        var confirmPassword = document.getElementById("pwdCheck").value;
 			
-			            var email = $('#email').val();
-			            var userName = $('#userName').val();
-
-			            document.getElementById("userpassword").removeAttribute("readonly");
-			            
-			            // 이메일 주소와 사용자 이름이 비어 있는지 확인
-			            if (!email || !userName) {
-			                alert('이메일 주소와 사용자 이름을 입력해주세요.');
-			                return;
-			            }
-			
-			            // Ajax 요청으로 이메일 인증 요청 보내기
-			            $.ajax({
-			                type: 'POST',
-			                url: '${contextPath}/mailSend',  // 서버에서 정의한 URL
-			                data: {
-			                    email: email,
-			                    userName: userName
-			                },
-			                success: function(response) {
-			                    alert('인증번호가 발송되었습니다.');
-			                    // 성공적으로 인증번호를 발송했을 때 추가 로직을 처리할 수 있습니다.
-			                },
-			                error: function(xhr, status, error) {
-			                    alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
-			                }
-			            });
-			        });
+			        // 두 비밀번호가 일치하는지 확인
+			        if (password !== confirmPassword) {
+			            // 비밀번호가 일치하지 않으면 경고 메시지 출력하고 폼 제출을 막음
+			            alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+			            event.preventDefault(); // 폼 제출 막기
+			        }
 			    });
 			</script>
-				
     </body>
 </html>
