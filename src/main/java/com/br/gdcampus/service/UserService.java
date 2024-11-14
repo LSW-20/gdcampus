@@ -46,13 +46,25 @@ public interface UserService {
 	String selectStDeptName(String stDeptNo);
 	// 부서명 조회 - 상우
 	String selectDeptName(String deptNo);
-	// 직금명 조회 - 상우
+	// 직급명 조회 - 상우
 	String selectRankName(String rankNo);
+	// 관리자 유저의 사번, 이름 담기 - 상우
+	List<UserDto> selectAdminList();
+	// 교수 유저의 사번, 이름, 학과명 담기 - 상우
+	List<UserDto> selectProfessorList();
+	// 부서 카테고리 조회 - 상우
+	List<String> selectDeptList();
+	// 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회 - 상우
+	List<UserDto> selectChatUserList(String dept);
 	
 	//회원정보수정
 	int updateUser(UserDto m); 
 	//회원프로필수정
 	int updateProfileImg(UserDto m);
+
+
+
+	
 	//아이디찾기
 	UserDto idSearch(String email,String userName);
 	//비번찾기

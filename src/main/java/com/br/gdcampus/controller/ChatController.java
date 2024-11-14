@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.ChatRoomDto;
 import com.br.gdcampus.dto.UserChatRoomDto;
@@ -36,6 +38,7 @@ public class ChatController {
 	@GetMapping("/roomList")
 	public void chatRoomPage(HttpSession session, Model model) {
 		
+		
 		// 1. 로그인한 회원의 사번 type에 따라 이름 아래 설명 출력.
 		// 사번이 A시작이면 그냥 "관리자", C시작이면 소속학과 + "교수", B시작이면 직책 + 직급
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
@@ -61,6 +64,7 @@ public class ChatController {
 		}
 		
 		
+		
 		// 2. 채팅방 전체 리스트 조회하기.
 		List<ChatRoomDto> list = chatService.selectChatRoomList(); // 전체 채팅방 DTO가 list로 담김.
 		
@@ -72,7 +76,7 @@ public class ChatController {
 			map.put("chatRoomDto", c);
 			map.put("count", chatService.selectChatRoomPeopleCount(c.getRoomNo()) ); // 3. 채팅방 번호로 채팅방 인원수 구하기.
 			
-			List<UserChatRoomDto> list40 = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. 
+			List<UserChatRoomDto> list40 = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. (1대1 채팅방에 상대 보여줌)
 			for(UserChatRoomDto u : list40) {
 				if(u.getUserNo() != userNo) {
 					map.put("counterpart", u.getUserNo());
@@ -83,32 +87,102 @@ public class ChatController {
 		}
 		
 		model.addAttribute("list2", list2);
+		
+		
+		
+		
+		// 3. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
+
+		
+		// (1) 관리자 유저의 사번, 이름 담기
+		List<UserDto> adminList = userService.selectAdminList();
+		
+		// (2) 교수 유저의 사번, 이름, 학과명 담기
+		List<UserDto> professorList = userService.selectProfessorList();
+
+		
+		// (3) 부서 카테고리 조회
+		List<String> deptList = userService.selectDeptList();
+		
+		
+		// (4) 각 부서별 유저의 사번, 이름, 부서, 직급 담기
+		
+		Map<String, List<UserDto>> deptMap = new HashMap<>(); // key=부서명, value=그 부서의 유저들의 사번, 이름, 부서, 직급이 담긴 UserDto 객체.
+		
+		for(String dept : deptList) {
+			List<UserDto> chatUserList = userService.selectChatUserList(dept);
+			deptMap.put(dept, chatUserList);
+		}
+		
+		
+
+		model.addAttribute("adminList", adminList);
+		model.addAttribute("professorList", professorList);		
+		model.addAttribute("deptList", deptList);		
+		model.addAttribute("deptMap", deptMap);
+		
+
 	}  
 	
 	
 	
 	/**
-	 * 그룹채팅방 생성
+	 * 그룹 채팅방 생성
 	 * author : 상우
 	 */
 	@PostMapping("/makeGroupChat")
-	public String makeGroupChat(HttpSession session, String title, String userId1, String userId2) {
+	public String makeGroupChat(HttpSession session, String title, @RequestParam("selectedUsers")  List<String> selectedUsers, RedirectAttributes ra) {
+		//  컬렉션 타입(List, Set 등)을 받을 때는 @RequestParam을 명시하는 것이 권장됩니다. 이때 @RequestParam을 명시하지 않으면 Spring이 파라미터 바인딩을 제대로 처리하지 못할 수 있습니다.
 
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
 		
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("createUser", userNo);
 		map.put("title", title);
-		map.put("invite1", userId1);
-		map.put("invite2", userId2);
+		map.put("selectedUsers", selectedUsers);
+		map.put("type", "G");
+
 		
 		int result = chatService.makeGroupChat(map);
 		
-
-		return "redirect:/chat/roomList";
+		if(result > 0) {
+			ra.addFlashAttribute("alertMsg", "성공적으로 그룹 채팅방이 생성되었습니다.");
+			return "redirect:/chat/roomList";
+		}else {
+			ra.addFlashAttribute("alertMsg", "그룹 채팅방 생성에 실패하였습니다.");
+			return "redirect:/";
+		}
 		
 	}
 	
+	
+	/**
+	 * 1대1 채팅방 생성
+	 * author : 상우
+	 */
+	@PostMapping("/makeOneToOneChat")
+	public String makeOneToOneChat(HttpSession session, String title, String selectedUser, RedirectAttributes ra) {
+
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("createUser", userNo);
+		map.put("title", title);
+		map.put("selectedUser", selectedUser);
+		map.put("type", "O");
+
+		
+		int result = chatService.makeOneToOneChat(map);
+		
+		if(result > 0) {
+			ra.addFlashAttribute("alertMsg", "성공적으로 1대1 채팅방이 생성되었습니다.");
+			return "redirect:/chat/roomList";
+		}else {
+			ra.addFlashAttribute("alertMsg", "1대1 채팅방 생성에 실패하였습니다.");
+			return "redirect:/";
+		}
+		
+	}	
 	
 	/*
     @PostMapping("/update.do")

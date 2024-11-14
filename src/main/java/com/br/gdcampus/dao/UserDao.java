@@ -110,6 +110,45 @@ public class UserDao {
 	}
 	
 	/**
+	 * 관리자 유저의 사번, 이름 조회
+	 * author : 상우
+	 * @return 관리자 유저의 사번, 이름
+	 */
+	public List<UserDto> selectAdminList() {
+		return sqlSession.selectList("userMapper.selectAdminList");
+	}
+	
+	/** 
+	 * 교수 유저의 사번, 이름, 학과명 담기
+	 * author : 상우
+	 * @return 교수 유저의 사번, 이름, 학과명
+	 */
+	public List<UserDto> selectProfessorList() {
+		return sqlSession.selectList("userMapper.selectProfessorList");
+	}
+
+	/**
+	 * 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회
+	 * author : 상우
+	 * @return 각 부서별 유저의 사번, 이름, 부서(직책), 직급 
+	 */
+	public List<UserDto> selectChatUserList(String dept) {
+		return sqlSession.selectList("userMapper.selectChatUserList", dept);
+	}
+
+	/**
+	 * 부서 카테고리 조회
+	 * author : 상우
+	 * @return 부서 카테고리들
+	 */
+	public List<String> selectDeptList() {
+		return sqlSession.selectList("userMapper.selectDeptList");
+	}
+
+
+
+
+	
 	 * 아이디찾기
 	 * author : 정언
 	 * @param email name
