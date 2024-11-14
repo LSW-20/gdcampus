@@ -46,51 +46,142 @@ public class UserController {
 	private final BCryptPasswordEncoder bcryptPwdEncoder;
 	private final FileUtil fileUtil;
 	private final PagingUtil pagingUtil;
-	
-	/**
-	 * 인사팀 행정직원 리스트 조회 요청
-	 */
-	@GetMapping("/staff/list.do")
-	public void staffList(Model model) {
+
+	//------------------------------인사팀 시작--------------------------------------	
+		/**
+		 * 인사팀 행정직원 리스트 조회 요청
+		 */
+		@GetMapping("/staff/list.do")
+		public void staffList(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
+			List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("rankList", rankList);
+		    
+		    model.addAllAttributes(map);
+		}
 		
-		List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
-		List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+		/**인사팀 행정직원 리스트(테이블 안 내용) 조회 요청
+		 * @param currentPage 
+		 * @param dept 부서번호
+		 * @param rank 직급번호
+		 * @param keyword 검색어
+		 * @return
+		 */
+		@ResponseBody
+		@GetMapping(value="/staff/listContent.do", produces="application/json")
+		public Map<String,Object> staffListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+				,String dept, String rank, String keyword) {
+			
+			Map<String, Object> res = new HashMap<>();
+			Map<String,String> search = new HashMap<>();
+			
+			search.put("dept", dept);
+			search.put("rank", rank);
+			search.put("keyword", keyword);
+			
+			int listCount = userService.selectStaffListCount(search);
+			PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+			List<UserDto> list = userService.selectStaffList(search, pi);
+			
+			res.put("userList", list);
+			res.put("pi", pi);
+			return res;
+		}
 		
-		Map<String, Object> map = new HashMap<>();
-	    map.put("deptList", deptList);
-	    map.put("rankList", rankList);
-	    
-	    model.addAllAttributes(map);
-	}
-	
-	/**인사팀 행정직원 리스트(테이블 안 내용) 조회 요청
-	 * @param currentPage 
-	 * @param dept 부서번호
-	 * @param rank 직급번호
-	 * @param keyword 검색어
-	 * @return
-	 */
-	@ResponseBody
-	@GetMapping(value="/listContent.do", produces="application/json")
-	public Map<String,Object> staffListContent(@RequestParam(value="page", defaultValue="1") int currentPage
-			,String dept, String rank, String keyword) {
+		/**인사팀 행정직원 상세페이지 요청
+		 * @param userNo 조회할 사원의 사번
+		 * @param model
+		 */
+		@GetMapping("/staff/detail.do") 
+		public void detail(String userNo, Model model) {
+			
+			UserDto user =  userService.selectStaff(userNo);
+			List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
+			List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("rankList", rankList);
+		    map.put("user", user);
+		    
+		    log.debug("user : {}",user);
+		    
+		    model.addAllAttributes(map);
+		}
 		
-		Map<String, Object> res = new HashMap<>();
-		Map<String,String> search = new HashMap<>();
+		/**인사팀 행정직원 정보 수정
+		 * @param user 수정할 직원
+		 * @param rdAttributes 
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/staff/update.do")
+		public String updateStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("updateUser : {}", user);
+			int result = userService.updateStaff(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/staff/detail.do?userNo=" + user.getUserNo();
+		}
 		
-		search.put("dept", dept);
-		search.put("rank", rank);
-		search.put("keyword", keyword);
+		/**
+		 * 인사팀 행정직원 추가페이지
+		 */
+		@GetMapping("/staff/addForm.do")
+		public void staffAddForm(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
+			List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("rankList", rankList);
+		    
+		    model.addAllAttributes(map);
+		}
 		
-		int listCount = userService.selectStaffListCount(search);
-		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
-		List<UserDto> list = userService.selectStaffList(search, pi);
+		/**인사팀 행정직원 추가 요청
+		 * @param user 추가할 직원
+		 * @param rdAttributes
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/staff/insert.do")
+		public String insertStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("insertUser : {}", user);
+			int result = userService.insertStaff(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 추가되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","신규회원 생성에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/staff/list.do";
+		}
 		
-		res.put("userList", list);
-		res.put("pi", pi);
-		return res;
-	}
-	
+		@ResponseBody
+		@PostMapping("/resetPwd.do")
+		public String replyInsert(UserDto user, HttpSession session) {
+			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("resetUser : {}", user);
+
+			int result = userService.PwdReset(user);
+			return result > 0 ? "SUCCESS" : "FAIL";
+		}
+	//------------------------------인사팀 끝--------------------------------------
+		
 	//로그인(메인)
 	@PostMapping("/signin.do")
 	public void signin(UserDto m

@@ -1,6 +1,8 @@
 package com.br.gdcampus.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +26,20 @@ public class ApprovalController {
 	private final ApprovalService apprService;
 	private final PagingUtil pagingUtil;
 	
-	//결재대기함 list 단순 페이지요청
+	/**
+	 * 결재 대기함 list 페이지요청
+	 * @author 보겸
+	 * @param currentPage 페이징에 필요
+	 * @param model		  변수->jsp
+	 * @param session	  userNo 가져올때 필요
+	 */
 	@GetMapping("/todo.do")
-	public void todoPage(@RequestParam(value="page",defaultValue="1") int currentPage
-							, Model model
-							, HttpSession session) {
+	public void todoPage(@RequestParam(value="page",defaultValue="1") int currentPage, Model model, HttpSession session) {
 		int listCount = apprService.selectApprTodoListCount();
+		
+		//Session에서 userNo가져오기
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		List<ApprovalDto> apprList = apprService.selectApprTodoList(pi, userNo);
 		
@@ -50,7 +59,27 @@ public class ApprovalController {
 	@GetMapping("/regist.do")
 	public void registPage() {}
 	
-
+	//기안문서함
+	@GetMapping("/myDoc")
+	public void myDocPage(@RequestParam(value="page",defaultValue="1") int currentPage, @RequestParam(value="status", required=false) String status
+						, Model model, HttpSession session) {
+		
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("userNo", userNo);
+		params.put("status", status);
+		
+		int listCount = apprService.selectMyDocListCount(params);
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		
+		List<ApprovalDto> apprList = apprService.selectMyDocList(pi, params);
+		
+		model.addAttribute("pi",pi);
+		model.addAttribute("apprList",apprList);
+		model.addAttribute("currentStatus",status);
+		
+	}
 	
 	
 }
