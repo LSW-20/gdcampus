@@ -26,14 +26,17 @@ public class UserDao {
 	public int selectStaffListCount(Map<String, String> search) {
 		return sqlSession.selectOne("userMapper.selectStaffListCount",search);
 	}
-	
+		
 	public List<UserDto> selectStaffList(Map<String, String> search, PageInfoDto pi) {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
 		return sqlSession.selectList("userMapper.selectStaffList",search,rowBounds);
 	}
-
-//--------------------------------------인사팀 끝----------------------------------------------
-	
+		
+	public UserDto selectStaff(String userNo) {
+		return sqlSession.selectOne("userMapper.selectStaff",userNo);
+	}
+	//--------------------------------------인사팀 끝----------------------------------------------
+			
 	/**
 	 * 로그인
 	 * @param m

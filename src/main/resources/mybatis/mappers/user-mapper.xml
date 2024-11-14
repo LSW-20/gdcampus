@@ -130,19 +130,17 @@
 	</insert>
 	
 	<!-- 행정직원 상세조회 -->
-	<select id="f" resultMap="userResultMap">
+	<select id="selectStaff" resultMap="userResultMap">
 	SELECT USER_NO
 	     , USER_NAME
 	     , EMAIL
-	     , DEPT_NAME
-	     , RANK_NAME
+	     , DEPT_NO
+	     , RANK_NO || '' AS RANK_NO
 	     , GENDER
 	     , USER_ID
-	     , HIRE_DATE
-	     , LEAVE_DATE
-      FROM T_USER U
-      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
-      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	     , to_char(HIRE_DATE,'YY/MM/DD') as "HIRE_DATE"
+	     , to_char(LEAVE_DATE,'YY/MM/DD') as "LEAVE_DATE"
+      FROM T_USER 
      WHERE USER_NO = #{userNo}
 	</select>
 	

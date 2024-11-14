@@ -21,7 +21,7 @@ public interface UserService {
 	int insertStaff(UserDto user);
 	//행정직원 수정
 	int updateStaff(UserDto user);
-	
+		
 	//교수 목록조회 + 이름으로 키워드 검색 + 부서/직급별 조회
 	int selectProfListCount(Map<String,String> search);
 	List<UserDto> selectProfList(Map<String,String> search, PageInfoDto pi);
@@ -31,7 +31,7 @@ public interface UserService {
 	int insertProf(UserDto user);
 	//교수 수정
 	int updateProf(UserDto user);
-	
+		
 	//직원 퇴사처리
 	int deleteUser(String loginUserNo, String userNo);
 	//비밀번호 초기화
