@@ -35,6 +35,10 @@ public class UserDao {
 	public UserDto selectStaff(String userNo) {
 		return sqlSession.selectOne("userMapper.selectStaff",userNo);
 	}
+	
+	public int updateStaff(UserDto user) {
+		return sqlSession.update("userMapper.updateStaff",user);
+	}
 	//--------------------------------------인사팀 끝----------------------------------------------
 			
 	/**

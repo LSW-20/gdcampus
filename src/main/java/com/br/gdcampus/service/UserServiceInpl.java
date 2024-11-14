@@ -55,7 +55,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int updateStaff(UserDto user) {
-		return 0;
+		return userDao.updateStaff(user);
 	}
 
 	/**

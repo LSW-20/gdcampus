@@ -113,7 +113,6 @@ public class UserController {
 		
 		@PostMapping("/staff/update.do")
 		public String updateStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
-			log.debug("실행은 됨");
 			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
 			log.debug("updateUser : {}", user);
 			int result = userService.updateStaff(user);

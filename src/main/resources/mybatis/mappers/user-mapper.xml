@@ -145,7 +145,7 @@
 	</select>
 	
 	<!-- 행정직원 수정 -->
-	<update id="g">
+	<update id="updateStaff">
 		UPDATE T_USER
 		   SET USER_NAME = #{userName}
 		     , DEPT_NO = #{deptNo}
