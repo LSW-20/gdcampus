@@ -25,6 +25,9 @@
 		<result column="HIRE_DATE" property="hireDate"/>
 		<result column="LEAVE_DATE" property="leaveDate"/>
 		
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="RANK_NAME" property="rankName"/>
+		
 		 <!-- 부서, 직급 컬렉션 매핑 -->
     <collection ofType="DeptDto" property="deptList" resultMap="deptList"/>
     <collection ofType="RankDto" property="rankList" resultMap="rankList"/>
@@ -316,24 +319,67 @@
 	
 	
 	<!-- (상우) 회원(교수)의 소속학과 번호로 소속학과 이름 조회 -->
-	<select id="selectStDeptName" resultType="string">
+	<select id="selectStDeptName" resultType="String">
 		select DEPT_NAME
 		  from T_ST_DEPT
 		 where ST_DEPT_NO = #{stDeptNo}
 	</select>
-	
+	  
 	<!-- (상우) 부서번호로 부서명 조회 -->
-	<select id="selectDeptName" resultType="string">
+	<select id="selectDeptName" resultType="String">
 		select DEPT_NAME
 		  from T_DEPT
-		 where DEPT_NO = #{deptNo}
+     where DEPT_NO = #{deptNo}
 	</select>
 	
 	<!-- (상우) 직급번호로 직급명 조회 -->
-	<select id="selectRankName" resultType="string">
+	<select id="selectRankName" resultType="String">
 		select RANK_NAME
 		  from T_RANK
 		 where RANK_NO = #{rankNo}
+	</select>
+	
+	<!-- (상우) 관리자 유저의 사번, 이름 조회 -->
+	<select id="selectAdminList" resultMap="userResultMap">
+		select 
+					 USER_NO
+				 , USER_NAME
+			from T_USER
+		 where USER_NO LIKE 'A%'	
+		   and USER_STATUS = 'Y'	 	 
+	</select>
+	
+	<!-- (상우) 교수 유저의 사번, 이름, 학과명 조회 -->
+	<select id="selectProfessorList" resultMap="userResultMap">
+		select 
+					 USER_NO
+				 , USER_NAME
+				 , DEPT_NAME
+			from T_USER
+			JOIN T_ST_DEPT USING (ST_DEPT_NO)
+		 where USER_NO LIKE 'C%'		 	 		   
+		   and USER_STATUS = 'Y'
+	</select>	
+	
+	<!-- (상우) 부서 카테고리 조회 -->
+	<select id="selectDeptList" resultType="String">
+		select DEPT_NAME
+		  from T_DEPT
+	</select>
+	
+	
+	<!-- (상우) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회 -->
+	<select id="selectChatUserList" resultMap="userResultMap">
+		select 
+					 USER_NO
+				 , USER_NAME
+				 , DEPT_NAME
+				 , RANK_NAME
+		  from T_USER
+		  JOIN T_DEPT USING (DEPT_NO)
+		  JOIN T_RANK USING (RANK_NO)
+		 where DEPT_NAME = #{dept}
+		   and USER_STATUS='Y'
 	</select>
 	
 	

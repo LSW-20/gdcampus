@@ -170,6 +170,50 @@ public class UserServiceInpl implements UserService {
 	public String selectRankName(String rankNo) {
 		return userDao.selectRankName(rankNo);
 	}
+	
+	/**
+	 * 관리자 유저의 사번, 이름 조회
+	 * author : 상우
+	 * @return 관리자 유저의 사번, 이름
+	 */
+	@Override
+	public List<UserDto> selectAdminList() {
+		return userDao.selectAdminList();
+	}
+	
+	/** 
+	 * 교수 유저의 사번, 이름, 학과명 담기
+	 * author : 상우
+	 * @return 교수 유저의 사번, 이름, 학과명
+	 */
+	@Override
+	public List<UserDto> selectProfessorList() {
+		return userDao.selectProfessorList();
+	}
+	
+	
+	/**
+	 * 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회
+	 * author : 상우
+	 * @return 각 부서별 유저의 사번, 이름, 부서(직책), 직급
+	 */
+	@Override
+	public List<UserDto> selectChatUserList(String dept) {
+		return userDao.selectChatUserList(dept);
+	}
+	
+	/**
+	 * 부서 카테고리 조회
+	 * author : 상우
+	 * @return 부서 카테고리들
+	 */
+	@Override
+	public List<String> selectDeptList() {
+		return userDao.selectDeptList();
+	}
+
+	
+
 	@Override
 	/**
 	 * 회원정보수정 메소드
@@ -185,6 +229,13 @@ public class UserServiceInpl implements UserService {
 	public int updateProfileImg(UserDto m) {
 		return userDao.updateProfileImg(m);
 	}
+
+
+
+
+
+
+
 	
 	
 

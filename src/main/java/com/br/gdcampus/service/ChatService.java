@@ -18,7 +18,10 @@ public interface ChatService {
 	List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo);
 
 	// 그룹 채팅방 생성 - 상우
-	int makeGroupChat(Map<String, String> map);
+	int makeGroupChat(Map<String, Object> map);
+
+	// 1대1 채팅방 생성 - 상우
+	int makeOneToOneChat(Map<String, Object> map);
     
     // 채팅방 과거 메세지 조회 - 상우
     // List<MessageDto> selectChatMessage(String chatRoomNo);
