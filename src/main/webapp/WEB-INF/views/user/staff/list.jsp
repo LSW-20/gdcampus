@@ -60,7 +60,7 @@
 							<div class="form-inline float-md-right mb-3">
 								<div class="search-box ml-2">
 									<div class="position-relative">
-										<a href="#" class="btn btn-success waves-effect waves-light"><i
+										<a href="${contextPath}/user/staff/addForm.do" class="btn btn-success waves-effect waves-light"><i
 											class="mdi mdi-plus mr-2"></i> 사원 추가</a>
 
 									</div>
@@ -210,7 +210,7 @@
 	    
 	    function listDo(){
 	        $.ajax({
-	            url: '${contextPath}/user/listContent.do', 
+	            url: '${contextPath}/user/staff/listContent.do', 
 	            data: 
 	            {
 					dept: $("#dept").val(),
