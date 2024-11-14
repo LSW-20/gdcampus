@@ -61,8 +61,52 @@ public class ChatServiceImpl implements ChatService {
 	 * return 성공시 1 , 실패시 0
 	 */
 	@Override
-	public int makeGroupChat(Map<String, String> map) {
-		return chatDao.makeGroupChat(map);
+	public int makeGroupChat(Map<String, Object> map) {
+		
+		int result = chatDao.makeChatRoom(map);
+		
+		if(result > 0) {
+			
+			String createUser = (String) map.get("createUser");
+			chatDao.insertChatMapping(createUser); // 매핑 테이블에 방장 추가
+			
+			
+			List<String> selectedUsers = (List<String>) map.get("selectedUsers");
+			
+			for( String userNo : selectedUsers ) {
+				result = chatDao.insertChatMapping(userNo); // 매핑 테이블에 초대인원들 추가
+			}
+			
+		}
+		
+		return result;
+		
+	}
+
+	/**
+	 * 1대1 채팅방 생성
+	 * author : 임상우
+	 * @param map 방장, 방제목, 초대인원이 담겨있음
+	 * return 성공시 1 , 실패시 0
+	 */	
+	@Override
+	public int makeOneToOneChat(Map<String, Object> map) {
+		
+		int result = chatDao.makeChatRoom(map);
+		
+		if(result > 0) {
+			
+			String createUser = (String) map.get("createUser");
+			chatDao.insertChatMapping(createUser); // 매핑 테이블에 방장 추가
+			
+			
+			String userNo = (String) map.get("selectedUser");
+			
+			result = chatDao.insertChatMapping(userNo); // 매핑 테이블에 초대인원 추가
+			
+		}
+		
+		return result;
 	}
 	
 	

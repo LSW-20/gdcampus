@@ -19,6 +19,7 @@ public class ChatRoomDto {
 
 	private String roomNo;
 	private String roomName;
+	private String roomType;
 	private Date createDateTime;
 	private String createUser;
 	private String status;
