@@ -357,4 +357,26 @@
 			 		 profile_url = #{profileURL}
 		 where user_id = #{userId}
 	</update>
+
+	<!-- id찾기 이메일 -->	
+	<select id="idSearch" resultMap="userResultMap">
+	  select *
+	  	from t_user
+	   where email = #{email}
+	     and user_name = #{userName}
+	</select>
+	<!-- pwd찾기 이메일 -->
+	<select id="pwdSearch" resultMap="userResultMap">
+		select *
+		  from t_user
+		 where email= #{email}
+		   and user_id = #{userId}
+	</select>
+	<!-- 비밀번호 변경 -->
+	<update id="pwdUpdate">
+		update t_user
+			 set user_pwd = #{userPwd}
+		 where user_id = #{userId}
+	</update>
+	
 </mapper>
