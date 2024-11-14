@@ -1,6 +1,7 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,13 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selectMyDocListCount() {
-		return 0;
+	public int selectMyDocListCount(Map<String, Object> params) {
+		return apprDao.selectMyDocListCount(params);
 	}
 
 	@Override
-	public List<ApprovalDto> selectMyDocList(PageInfoDto pi, String apprUser) {
-		return null;
+	public List<ApprovalDto> selectMyDocList(PageInfoDto pi,  Map<String, Object> params) {
+		return apprDao.selectMyDocList(pi, params);
 	}
 
 	@Override

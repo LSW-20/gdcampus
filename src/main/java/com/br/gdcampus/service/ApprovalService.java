@@ -1,6 +1,7 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.br.gdcampus.dto.ApprRefDto;
 import com.br.gdcampus.dto.ApprovalDto;
@@ -22,9 +23,9 @@ public interface ApprovalService {
 	int selectApprUpcomingListCount();
 	List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi,  String userNo);
 	
-	//기안문서함 조회	apprUser == loginUser
-	int selectMyDocListCount();
-	List<ApprovalDto> selectMyDocList(PageInfoDto pi, String apprUser);
+	//기안문서함 조회	apprUser(== userNo), apprStatus
+	int selectMyDocListCount(Map<String, Object> params);
+	List<ApprovalDto> selectMyDocList(PageInfoDto pi,  Map<String, Object> params);
 	
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
 	int selectMyApprovedListCount();
