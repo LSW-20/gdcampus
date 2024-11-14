@@ -111,6 +111,12 @@ public class UserController {
 		    model.addAllAttributes(map);
 		}
 		
+		/**인사팀 행정직원 정보 수정
+		 * @param user 수정할 직원
+		 * @param rdAttributes 
+		 * @param session
+		 * @return
+		 */
 		@PostMapping("/staff/update.do")
 		public String updateStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
 			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
@@ -124,6 +130,37 @@ public class UserController {
 			}
 			
 			return "redirect:/user/staff/detail.do?userNo=" + user.getUserNo();
+		}
+		
+		/**
+		 * 인사팀 행정직원 추가페이지
+		 */
+		@GetMapping("/staff/addForm.do")
+		public void staffAddForm(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_DEPT");
+			List<CategoryDto> rankList =  userService.selectCategory("T_RANK");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("rankList", rankList);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		@PostMapping("/staff/insert.do")
+		public String insertStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("insertUser : {}", user);
+			int result = userService.insertStaff(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 추가되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","신규회원 생성에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/staff/list.do";
 		}
 	//------------------------------인사팀 끝--------------------------------------
 		

@@ -91,7 +91,7 @@
 	</select>
 	
 	<!-- 행정직원 추가 -->
-	<insert id="d">
+	<insert id="insertStaff">
 		INSERT 
 		  INTO T_USER 
 		            (

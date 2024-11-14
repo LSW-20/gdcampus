@@ -39,6 +39,10 @@ public class UserDao {
 	public int updateStaff(UserDto user) {
 		return sqlSession.update("userMapper.updateStaff",user);
 	}
+	
+	public int insertStaff(UserDto user) {
+		return sqlSession.insert("userMapper.insertStaff",user);
+	}
 	//--------------------------------------인사팀 끝----------------------------------------------
 			
 	/**
