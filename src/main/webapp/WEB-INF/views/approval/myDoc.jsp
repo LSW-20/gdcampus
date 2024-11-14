@@ -143,11 +143,11 @@
                     <h2 class="page-title">기안 문서함</h2>
                     
                     <div class="tab-menu">
-                        <button class="active" onclick="filterByStatus('all')">전체</button>
-                        <button onclick="filterByStatus('0')">대기</button>
-                        <button onclick="filterByStatus('1')">진행</button>
-                        <button onclick="filterByStatus('2')">승인</button>
-                        <button onclick="filterByStatus('3')">반려</button>
+                        <button class="${ empty param.status ? 'active' : '' }" data-status="all">전체</button>
+                        <button class="${param.status eq '0' ? 'active' : ''}" data-status="0">대기</button>
+                        <button class="${param.status eq '1' ? 'active' : ''}" data-status="1">진행</button>
+                        <button class="${param.status eq '2' ? 'active' : ''}" data-status="2">승인</button>
+                        <button class="${param.status eq '3' ? 'active' : ''}" data-status="3">반려</button>
                     </div>
                     
                     <table class="approval-table">
@@ -204,17 +204,17 @@
                     
 								      <ul id="paging_area" class="pagination d-flex justify-content-center">
 								          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-								          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Prev</a>
+								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage-1}">Prev</a>
 								          </li>
 								          
 								          <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
 								          	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
-								          		<a class="page-link" href="${ contextPath }/board/list.do?page=${p}">${ p }</a>
+								          		<a class="page-link" href="${ contextPath }/approval/myDoc?page=${p}">${ p }</a>
 								          	</li>
 								          </c:forEach>
 								   
 							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
-								          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage+1}">Next</a>
+								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage+1}">Next</a>
 								          </li>
 								      </ul>
                     
@@ -224,9 +224,22 @@
     </div>
 
     <script>
-        function filterByStatus(status) {
-            location.href = '${contextPath}/approval/myDoc?status=' + status;
-        }
+    	//tab메뉴 클릭 이벤트 처리
+    	document.querySelectorAll('.tab-menu button').forEach(button =>{
+    		button.addEventListener('click', function(){
+    			//모든 버튼 active제거
+    			document.querySelectorAll('.tab-menu button').forEach(btn =>{
+    				btn.classList.remove('active');
+    			});
+    			
+    			//클릭퇸버튼에 active추가
+    			this.classList.add('active');
+    			
+    			//해당문서목록요청
+    			const status = this.dataset.status;
+    			location.href = '${contextPath}/approval/myDoc'+(status === 'all' ? '' : '?status='+status);
+    		});
+    	});
     </script>
 </body>
 </html>

@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class ApprovalController {
+	
 	private final ApprovalService apprService;
 	private final PagingUtil pagingUtil;
 	
@@ -33,7 +34,7 @@ public class ApprovalController {
 	 * @param model		  변수->jsp
 	 * @param session	  userNo 가져올때 필요
 	 */
-	@GetMapping("/todo.do")
+	@GetMapping("/todo")
 	public void todoPage(@RequestParam(value="page",defaultValue="1") int currentPage, Model model, HttpSession session) {
 		int listCount = apprService.selectApprTodoListCount();
 		
@@ -48,22 +49,31 @@ public class ApprovalController {
 	}
 	
 	//기안서페이지 단순 페이지요청
-	@GetMapping("/simpleDraft.do")
+	@GetMapping("/simpleDraft")
 	public void simpleDraftPage() {}
 	
 	//품의서 단순 페이지요청
-	@GetMapping("/purchaseDraft.do")
+	@GetMapping("/purchaseDraft")
 	public void purchaseDraftPage() {}
 	
 	//작성페이지 요청
-	@GetMapping("/regist.do")
+	@GetMapping("/regist")
 	public void registPage() {}
 	
 	//기안문서함
+	/**
+	 * 내가작성한 문서=기안문서함
+	 * @author 보겸
+	 * @param currentPage 현재페이지
+	 * @param status	  apprStatus
+	 * @param model		  변수->jsp
+	 * @param session	  loginUser
+	 */
 	@GetMapping("/myDoc")
 	public void myDocPage(@RequestParam(value="page",defaultValue="1") int currentPage, @RequestParam(value="status", required=false) String status
 						, Model model, HttpSession session) {
 		
+		//Session에서 userNo가져오기
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
 		
 		Map<String, Object> params = new HashMap<>();

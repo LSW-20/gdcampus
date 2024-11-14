@@ -157,17 +157,17 @@
                             <!-- 페이징 처리 -->
 											      <ul id="paging_area" class="pagination d-flex justify-content-center">
 											          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Prev</a>
+											          	<a class="page-link" href="${ contextPath }/approval/todo?page=${pi.currentPage-1}">Prev</a>
 											          </li>
 											          
 											          <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
 											          	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
-											          		<a class="page-link" href="${ contextPath }/board/list.do?page=${p}">${ p }</a>
+											          		<a class="page-link" href="${ contextPath }/approval/todo?page=${p}">${ p }</a>
 											          	</li>
 											          </c:forEach>
 											   
    							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
-											          	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage+1}">Next</a>
+											          	<a class="page-link" href="${ contextPath }/approval/todo?page=${pi.currentPage+1}">Next</a>
 											          </li>
 											      </ul>
                         </c:otherwise>
