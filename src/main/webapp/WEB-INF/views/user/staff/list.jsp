@@ -210,7 +210,7 @@
 	    
 	    function listDo(){
 	        $.ajax({
-	            url: '${contextPath}/user/listContent.do', 
+	            url: '${contextPath}/user/staff/listContent.do', 
 	            data: 
 	            {
 					dept: $("#dept").val(),
