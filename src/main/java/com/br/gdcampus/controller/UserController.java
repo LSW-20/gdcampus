@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import com.br.gdcampus.service.UserService;
 import com.br.gdcampus.util.FileUtil;
 import com.br.gdcampus.util.PagingUtil;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -273,15 +275,97 @@ public class UserController {
 		
 	}//modifyProfile
 	
-	//아이디찾기
-	@GetMapping("/idSearch.do")
+	//아이디찾기이동(이메일인증페이지)
+	@GetMapping("/profile/idSearch.do")
 	public void idSearch() {
 		
 	}
 	
-	//비번찾기
-		@GetMapping("/pwdSearch.do")
-		public void pwdSearch() {
-			
+	//비번찾기이동(이메일인증페이지)
+	@GetMapping("/profile/pwdSearch.do")
+	public void pwdSearch() {
+		
+	}
+		
+	//인증번호 입력(아이디)
+	@PostMapping("/selectId")
+	public void idResult(@RequestParam String email, @RequestParam String userName
+			 , HttpServletResponse response
+			 , HttpSession session
+			 , HttpServletRequest request) throws IOException, ServletException {
+		//받은 name email로 맞는 회원 찾기
+		
+	    
+	    UserDto user = userService.idSearch(email,userName);
+		
+		//script문을 응답데이터로 돌려줘서 흐름 제어
+	    request.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+	    PrintWriter out = response.getWriter();
+	
+		if(user != null) {
+			 session.setAttribute("ID", user.getUserId());
+			 request.getRequestDispatcher("/WEB-INF/views/user/profile/idResult.jsp").forward(request, response);
+		}else {
+			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
+			    out.println("<script>history.back();</script>");
 		}
+
+	}
+	
+	//인증번호 입력(비밀번호)
+	@PostMapping("/selectPwd")
+	public void changePwd(@RequestParam String email, @RequestParam String userId
+			 , HttpServletResponse response
+			 , HttpSession session
+			 , HttpServletRequest request) throws IOException, ServletException {
+	    // userId와 email로 사용자 조회
+	    UserDto user = userService.pwdSearch(email, userId);
+
+	    request.setCharacterEncoding("UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
+	    response.setCharacterEncoding("UTF-8");
+	    PrintWriter out = response.getWriter();
+	    
+	    System.out.println(email);
+	    System.out.println(userId);
+	    System.out.println(user);
+	    
+	    if (user != null) {
+	    	session.setAttribute("user", user);
+			 request.getRequestDispatcher("/WEB-INF/views/user/profile/pwdChange.jsp").forward(request, response);
+		}else {
+			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
+			    out.println("<script>history.back();</script>");
+		}
+	    
+	}
+	
+	//비밀번호 변경
+	@PostMapping("/pwdUpdate")
+	public String pwdUpdate(@RequestParam String newPwd, HttpServletResponse response, 
+	                        HttpSession session, HttpServletRequest request) throws IOException {
+		PrintWriter out = response.getWriter();
+		
+	    // 로그인한 사용자 정보 가져오기 (세션에서)
+	    UserDto user = (UserDto) session.getAttribute("user");
+	    
+	    if (user == null) {
+	        return "redirect:/error";  // 사용자 세션이 없으면 에러 페이지로 리디렉션
+	    }
+
+	    // 새 비밀번호를 설정
+	    user.setUserPwd(newPwd); // 새 비밀번호로 설정
+
+	    // 비밀번호 업데이트 처리
+	    userService.pwdUpdate(user);
+	    
+	    // 세션 초기화 (로그아웃 처리)
+	    out.println("<script>alert('비밀번호 변경완료');</script>");
+	    session.invalidate();
+
+	    return "redirect:/";  // 비밀번호 변경 후 홈으로 리디렉션
+	}
+	
 }

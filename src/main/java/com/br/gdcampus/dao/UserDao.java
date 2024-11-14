@@ -1,5 +1,6 @@
 package com.br.gdcampus.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,4 +109,39 @@ public class UserDao {
 		return sqlSession.selectOne("userMapper.selectRankName", rankNo);
 	}
 	
+	/**
+	 * 아이디찾기
+	 * author : 정언
+	 * @param email name
+	 * @return userId
+	 */
+	public UserDto idSearch(String email,String userName) {
+		Map<String, String> params = new HashMap<>();
+	    params.put("email", email);
+	    params.put("userName", userName);
+		return sqlSession.selectOne("userMapper.idSearch",params);
+	}
+	
+	/**
+	 * 비밀번호찾기
+	 * author : 정언
+	 * @param email Id
+	 * @return 
+	 */
+	public UserDto pwdSearch(String email, String userId) {
+		Map<String, String> params = new HashMap<>();
+	    params.put("email", email);
+	    params.put("userId", userId);
+		return sqlSession.selectOne("userMapper.pwdSearch",params);
+	}
+
+	/**
+	 * 비밀번호수정
+	 * author : 정언
+	 * @param userpwd id
+	 * @return 
+	 */
+	public int pwdUpdate(UserDto m) {
+		return sqlSession.update("userMapper.pwdUpdate",m);
+	}
 }
