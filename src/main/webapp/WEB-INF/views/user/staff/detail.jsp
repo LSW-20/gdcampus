@@ -57,6 +57,11 @@
 						<h5 class=" mb-4">
 							<i class="mdi mdi-arrow-right text-primary mr-1"></i> 상세정보
 						</h5>
+						
+						<div class="mt-4 row d-flex justify-content-end">
+							<button type="button" class="btn btn-primary w-md" onclick="fn_resetPwd()">비밀번호 초기화</button>
+						</div>
+						
 						<form action="${contextPath}/user/staff/update.do" method="post">
 						<input type="hidden" name="userNo" value="${user.userNo}">
 						<br><hr>	
@@ -138,8 +143,6 @@
 							<div class="mt-4 row d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary w-md mr-3">저장</button>
 								<button type="button" class="btn btn-primary w-md mr-3">목록</button>
-								<button type="button" class="btn btn-primary w-md">비밀번호
-									초기화</button>
 							</div>
 						</form>
 					</div>
@@ -148,7 +151,25 @@
 			</div>
 		</div>
 		<!-- main-content 끝 -->
-
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+		function fn_resetPwd(){
+  			$.ajax({
+  				url: '${contextPath}/user/resetPwd.do',
+  				type: 'post',
+  				data: {
+  					userNo: '${user.userNo}'
+  				},
+  				success: function(res){
+  					if(res == "SUCCESS"){
+  						alert("사원의 비밀번호가 정상적으로 초기화되었습니다.");
+  					}else{
+  						alert("비밀번호 초기화에 실패하였습니다.");
+  					}
+  				}
+  			})
+  		}
+		</script>
 
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
