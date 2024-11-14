@@ -110,13 +110,11 @@ public class UserServiceInpl implements UserService {
 	}
 
 	/**
-	 * 교수 사원 비밀번호 초기화 메소드
-	 * @param loginUserNo - 수정자 사번
-	 * @param userNo - 비밀번호 초기화 할 사원의 사번
+	 * 비밀번호 초기화 메소드
 	 */
 	@Override
-	public int PwdReset(String loginUserNo, String userNo) {
-		return 0;
+	public int PwdReset(UserDto user) {
+		return userDao.PwdReset(user);
 	}
 
 	/**

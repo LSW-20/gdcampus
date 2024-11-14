@@ -35,7 +35,7 @@ public interface UserService {
 	//직원 퇴사처리
 	int deleteUser(String loginUserNo, String userNo);
 	//비밀번호 초기화
-	int PwdReset(String loginUserNo, String userNo);
+	int PwdReset(UserDto user);
 	//카테고리 조회
 	List<CategoryDto> selectCategory(String category);
 //------------------------------인사팀 끝--------------------------------------	

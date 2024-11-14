@@ -43,6 +43,11 @@ public class UserDao {
 	public int insertStaff(UserDto user) {
 		return sqlSession.insert("userMapper.insertStaff",user);
 	}
+	
+	public int PwdReset(UserDto user) {
+		return sqlSession.update("userMapper.PwdReset",user);
+	}
+	
 	//--------------------------------------인사팀 끝----------------------------------------------
 			
 	/**

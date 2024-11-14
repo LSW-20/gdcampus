@@ -148,6 +148,12 @@ public class UserController {
 		    model.addAllAttributes(map);
 		}
 		
+		/**인사팀 행정직원 추가 요청
+		 * @param user 추가할 직원
+		 * @param rdAttributes
+		 * @param session
+		 * @return
+		 */
 		@PostMapping("/staff/insert.do")
 		public String insertStaff(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
 			user.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
@@ -161,6 +167,16 @@ public class UserController {
 			}
 			
 			return "redirect:/user/staff/list.do";
+		}
+		
+		@ResponseBody
+		@PostMapping("/resetPwd.do")
+		public String replyInsert(UserDto user, HttpSession session) {
+			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("resetUser : {}", user);
+
+			int result = userService.PwdReset(user);
+			return result > 0 ? "SUCCESS" : "FAIL";
 		}
 	//------------------------------인사팀 끝--------------------------------------
 		

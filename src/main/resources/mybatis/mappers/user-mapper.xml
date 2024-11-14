@@ -257,7 +257,7 @@
 	
 	<!-- 공통파트 -->
 	<!-- 비밀번호 초기화 -->
-	<update id="w">
+	<update id="PwdReset">
 		UPDATE T_USER
   		   SET  USER_PWD = '$2a$10$FeOQj9CqpFVdw12KlDYyKeVFP/lWTbuKRDCGAFWB/0TOk112NKsqm'
      		  , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
