@@ -39,7 +39,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public UserDto selectStaff(String userNo) {
-		return userDao.selectStaff(userNo);
+		return null;
 	}
 
 	/**

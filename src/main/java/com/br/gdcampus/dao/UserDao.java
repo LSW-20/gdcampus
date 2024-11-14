@@ -31,10 +31,7 @@ public class UserDao {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
 		return sqlSession.selectList("userMapper.selectStaffList",search,rowBounds);
 	}
-	
-	public UserDto selectStaff(String userNo) {
-		return sqlSession.selectOne("userMapper.selectStaff",userNo);
-	}
+
 //--------------------------------------인사팀 끝----------------------------------------------
 	
 	/**
@@ -94,6 +91,5 @@ public class UserDao {
 	public String selectRankName(String rankNo) {
 		return sqlSession.selectOne("userMapper.selectRankName", rankNo);
 	}
-
 	
 }
