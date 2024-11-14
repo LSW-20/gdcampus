@@ -21,7 +21,7 @@ public interface UserService {
 	int insertStaff(UserDto user);
 	//행정직원 수정
 	int updateStaff(UserDto user);
-	
+		
 	//교수 목록조회 + 이름으로 키워드 검색 + 부서/직급별 조회
 	int selectProfListCount(Map<String,String> search);
 	List<UserDto> selectProfList(Map<String,String> search, PageInfoDto pi);
@@ -31,11 +31,11 @@ public interface UserService {
 	int insertProf(UserDto user);
 	//교수 수정
 	int updateProf(UserDto user);
-	
+		
 	//직원 퇴사처리
 	int deleteUser(String loginUserNo, String userNo);
 	//비밀번호 초기화
-	int PwdReset(String loginUserNo, String userNo);
+	int PwdReset(UserDto user);
 	//카테고리 조회
 	List<CategoryDto> selectCategory(String category);
 //------------------------------인사팀 끝--------------------------------------	
@@ -65,4 +65,10 @@ public interface UserService {
 
 
 	
+	//아이디찾기
+	UserDto idSearch(String email,String userName);
+	//비번찾기
+	UserDto pwdSearch(String email,String userId);
+	//비번수정
+	int pwdUpdate(UserDto m);
 }

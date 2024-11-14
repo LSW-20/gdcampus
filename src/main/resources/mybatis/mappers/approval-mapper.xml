@@ -108,20 +108,38 @@
 		   AND CURR_ORDER &lt; LINE_ORDER      <!-- 현재결재순서 -->
   </select>
   
+  <!-- 기안문서함페이징 -->
+  <select id="selectMyDocListCount" parameterType="map" resultType="_int">
+  	SELECT
+  				 COUNT(APPR_NO)
+  		FROM T_APPROVAL
+  	 WHERE APPR_USER = #{userNo}
+  	 <if test="status != null and status !=''">
+  	 		AND APPR_STATUS = #{status}
+  	 </if>
+  </select>
+  
   <!-- 기안문서함 -->
   <select id="selectMyDocList" resultMap="approvalResultMap">
 		SELECT 
 		       APPR_NO
 		     , APPR_USER
+		     , APPR_TYPE
+		     , APPR_TITLE
 		     , DEPT_NO
 		     , APPR_DATE
-		     , APPR_CONTENT
 		     , APPR_STATUS
 		     , CREATE_DATE
 		     , MODIFY_DATE
 		     , UPDATE_USER
+		     <!-- , (SELECT COUNT(*) FROM T_ATTACHMENT WHERE APPR_NO = A.APPR_NO) AS ATTACH_COUNT -->
 		  FROM T_APPROVAL
-		 WHERE APPR_USER = #{apprUser}	
+		 WHERE APPR_USER = #{userNo}	
+		 <if test="status != null and status !=''">
+		 		AND APPR_STATUS = #{status}
+		 </if>
+		 ORDER
+		    BY APPR_DATE DESC
   </select>
   
   <!-- 결재문서함 -->
