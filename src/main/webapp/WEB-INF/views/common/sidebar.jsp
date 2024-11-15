@@ -147,8 +147,8 @@
 												<span class="menu-item">인사 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">사원 정보 조회, 추가, 수정, 삭제</a></li>
-												<li><a href="#">교수 정보 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="${contextPath}/user/staff/list.do">사원 관리</a></li>
+												<li><a href="#">교수 관리</a></li>
 												<li><a href="#"></a></li>
 										</ul>
 								</li>
