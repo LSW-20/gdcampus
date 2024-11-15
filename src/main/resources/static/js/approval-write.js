@@ -18,26 +18,10 @@ window.closeModal = function() {
 function initOrgTree() {
     $('#orgTree').jstree({
         'core': {
-            'data': [
-                { 
-                    "id": "dept1",
-                    "text": "인사부",
-                    "type": "department",
-                    "children": [
-                        { "id": "user1", "text": "김인사", "type": "user" },
-                        { "id": "user2", "text": "이인사", "type": "user" }
-                    ]
-                },
-                {
-                    "id": "dept2",
-                    "text": "총무부",
-                    "type": "department",
-                    "children": [
-                        { "id": "user3", "text": "박총무", "type": "user" },
-                        { "id": "user4", "text": "최총무", "type": "user" }
-                    ]
-                }
-            ],
+            'data': {
+                'url': `${contextPath}/tree/org`,
+                'dataType': 'json'
+            },
             'themes': {
                 'responsive': false
             }
@@ -53,7 +37,13 @@ function initOrgTree() {
         'plugins': ['types']
     }).on('select_node.jstree', function(e, data) {
         if(data.node.type === 'user') {
-            addApprover(data.node.id, data.node.text);
+            const userData = data.node.original.data; // 사용자 상세 정보
+            addApprover(
+                data.node.id,
+                userData.userName,
+                userData.rankName,
+                userData.deptName
+            );
         }
     });
 }
