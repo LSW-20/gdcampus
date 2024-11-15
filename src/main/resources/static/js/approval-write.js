@@ -18,26 +18,10 @@ window.closeModal = function() {
 function initOrgTree() {
     $('#orgTree').jstree({
         'core': {
-            'data': [
-                { 
-                    "id": "dept1",
-                    "text": "인사부",
-                    "type": "department",
-                    "children": [
-                        { "id": "user1", "text": "김인사", "type": "user" },
-                        { "id": "user2", "text": "이인사", "type": "user" }
-                    ]
-                },
-                {
-                    "id": "dept2",
-                    "text": "총무부",
-                    "type": "department",
-                    "children": [
-                        { "id": "user3", "text": "박총무", "type": "user" },
-                        { "id": "user4", "text": "최총무", "type": "user" }
-                    ]
-                }
-            ],
+            'data': {
+                'url': `${contextPath}/tree/org`,
+                'dataType': 'json'
+            },
             'themes': {
                 'responsive': false
             }
