@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.br.gdcampus.dto.ApprovalDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -89,6 +90,44 @@ public class ApprovalController {
 		model.addAttribute("apprList",apprList);
 		model.addAttribute("currentStatus",status);
 		
+	}
+	
+	/**
+	 * 전자결재홈 페이지
+	 * @author 보겸
+	 * @param model
+	 * @param session
+	 */
+	@GetMapping("/home")
+	public void apprHomePage(Model model, HttpSession session) {
+	    String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+	    
+	    // 진행중인 문서 (최근 5개)
+	    List<ApprovalDto> inProgressDocs = apprService.getRecentInProgressDocs(userNo);
+	    
+	    // 완료된 문서 (최근 5개)
+	    List<ApprovalDto> completedDocs = apprService.getRecentCompletedDocs(userNo);
+	    
+	    model.addAttribute("inProgressDocs", inProgressDocs);
+	    model.addAttribute("completedDocs", completedDocs);		
+	}
+	
+	@GetMapping("/todo/list")
+	@ResponseBody
+	public Map<String, Object> getTodoDocs( @RequestParam(value="page", defaultValue="1") int currentPage,HttpSession session){
+		//결재대기문서 총개수
+		int listCount = apprService.selectApprTodoListCount();
+
+		//Session에서 userNo가져오기
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();	
+		
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 4, 4);
+		List<ApprovalDto> docs = apprService.selectApprTodoList(pi, userNo);	
+		
+		Map<String, Object> response = new HashMap<>();
+	    response.put("docs", docs);
+	    response.put("maxPage", pi.getMaxPage());
+	    return response;
 	}
 	
 	

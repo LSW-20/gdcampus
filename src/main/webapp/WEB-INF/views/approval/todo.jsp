@@ -111,7 +111,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">결재 대기 문서</h2>
-							        <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist.do">결재작성</a>
+							        <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist">결재작성</a>
 								     
 							      <br>                    
                     <c:choose>

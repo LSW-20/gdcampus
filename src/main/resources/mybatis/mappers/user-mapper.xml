@@ -380,6 +380,13 @@
 		   and USER_STATUS='Y'
 	</select>
 	
+	<!-- (상우) 사번으로 이름 찾기 -->
+	<select id="selectUserNameByUserNo" resultType="String">
+		select user_name
+		  from t_user
+		 where user_no = #{userNo} 
+	</select>
+	
 	
 	<!-- 회원정보 수정 -->
 	
