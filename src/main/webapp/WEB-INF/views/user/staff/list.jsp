@@ -143,20 +143,7 @@
 									</tr>
 								</thead>
 								<tbody id="output">
-									<tr>
-										<th scope="row">
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input"
-													id="contacusercheck1"> <label
-													class="custom-control-label" for="contacusercheck1"></label>
-											</div>
-										</th>
-										<td><a href="#" class="text-body">B0001</a></td>
-										<td>사원명</td>
-										<td>부서명</td>
-										<td>직책</td>
-										<td>상태</td>
-									</tr>
+									
 
 								</tbody>
 							</table>
@@ -165,21 +152,9 @@
 					<div class="row mt-4">
 						<div class="col-sm-12">
 
-							<div class="float-sm-center" id="paging_bar">
+							<div class="float-sm-center">
 								<ul id="paging_area" class="pagination d-flex justify-content-center">
-									<li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-								    	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage-1}">Prev</a>
-								    </li>
-								          
-								    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-								    	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
-								        	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${p}">${ p }</a>
-								        </li>
-								    </c:forEach>
-								   
-							 		<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
-								    	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage+1}">Next</a>
-								    </li>
+									
 								</ul>
 							</div>
 						</div>
@@ -192,23 +167,18 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 		$(document).ready(function() {
-		    listDo(); 
-	
-		 // 부서가 변하는 경우
-		    $('#dept').on('change', function() {
-		        listDo(); 
+			
+		    listDo(1);
+		    
+		    $('#dept, #rank, #search').on('change keyup', function() {
+		        listDo(1); 
 		    });
-		 // 직급이 변하는 경우
-		    $('#rank').on('change', function() {
-		        listDo(); 
-		    });
-		 // 검색어가 변하는 경우
-		    $('#search').on('keyup', function() {
-		        listDo(); 
-		    });
-		 // 페이지가 변하는 경우??
-		    $('#paging_bar').on('click', function() {
-		        listDo(); 
+
+		    // 페이징바를 선택한 경우
+		    $(document).on('click', '#paging_area a', function(e) {
+		        e.preventDefault();  
+		        var page = $(this).data('page'); 
+		        listDo(page); 
 		    });
 		});
 	    
@@ -220,7 +190,7 @@
 					dept: $("#dept").val(),
 					rank: $('#rank').val(),
 					keyword:$('#search').val(),
-					pi: 1
+					page: page
 					
 					},
 	            type: 'GET',
@@ -229,14 +199,56 @@
 	
 	                var pi = response.pi;          // Pi 객체
 	                var userList = response.userList; // List<UserDto>
+					var num=1;
 	                
-	                console.log("pi:"+ pi);
-	                console.log("userList:"+ userList);
+	                var tbody = '';
+
+	                // 각 사용자 데이터를 테이블에 추가
+	                userList.forEach(function(user) {
+	                	
+	                	var status = user.userStatus === 'Y' ? '재직' : '퇴직';
+
+	                	tbody += '<tr onclick="location.href = \'' + '${contextPath}' + '/user/staff/detail.do?userNo=' + user.userNo + '\';">'
+	                             +'<th scope="row">'
+	                             +   '<div class="custom-control custom-checkbox">'
+	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+' '+user.userNo+'">'
+	                             +       '<label class="custom-control-label" for="contacusercheck'+num+' '+user.userNo+'"></label>'
+	                             +   '</div>'
+	                             +'</th>'
+	                             +'<td>'+user.userNo+'</td>'
+	                             +'<td>'+user.userName+'</td>'
+	                             +'<td>'+user.deptNo+'</td>'
+	                             +'<td>'+user.rankNo+'</td>'                          
+	                             +'<td>'+status+'</td>'
+	                             +'</tr>'
+	                    ;
+	                	num++;
+	                });
 	
 	                // 페이지 다시 그려줘야됨
-	                $('#output').html(
-	                    
-	                );
+	                $('#output').html(tbody);
+	                
+	                // 페이징바도 처리	                
+	                var paging = '';
+					const previousDisabled = pi.currentPage == 1 ? 'disabled' : '';
+					paging += '<li class="page-item ' + previousDisabled + '">' 
+						   +    '<a class="page-link" href="#" data-page="' + (pi.currentPage - 1) + '"> Prev </a>'
+						   +  '</li>';
+
+					for (let p = pi.startPage; p <= pi.endPage; p++) {
+						const active = p === pi.currentPage ? 'active' : '';
+						paging+= '<li class="page-item ' + active + '">' 
+						      +    '<a class="page-link" href="#" data-page="' + p + '">' + p + '</a>' 
+						      +  '</li>';
+					}
+
+					const nextDisabled = pi.currentPage == pi.maxPage ? 'disabled' : '';
+					paging+= '<li class="page-item ' + nextDisabled + '">' 
+						  +    '<a class="page-link" href="#" data-page="' + (pi.currentPage + 1) + '"> Next </a>'
+						  +  '</li>';
+				
+	                $('#paging_area').html(paging);
+          
 	            },
 	            error: function(error) {
 	                alert('AJAX 요청 실패: ' + error);
@@ -249,8 +261,5 @@
 
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-paging_bar
-
-
 </body>
 </html>
