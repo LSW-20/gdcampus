@@ -195,12 +195,12 @@
 						</div>
 
 
+
 						<!-- 세번째 마이페이지 아이콘 -->
 						<div class="dropdown d-inline-block">
 								<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<img class="rounded-circle header-profile-user" src="${contextPath}/images/users/avatar-4.jpg"
-												alt="Header Avatar">
+										<img class="rounded-circle header-profile-user" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/users/avatar-4.jpg' />">
 								</button>
 								<div class="dropdown-menu dropdown-menu-right">
 										<!-- item-->
@@ -217,7 +217,6 @@
 		</div>
 </header>
 <!-- header 끝 -->
-
 
 
 

@@ -84,7 +84,6 @@
                                             <label for="userpassword">인증번호</label>
                                             <input type="text" class="form-control" id="userpassword" placeholder="인증번호 6자리 입력" name="certNo" id="certNo" readonly>        
                                         </div>
-                    
                                         <div class="mt-3 text-right">
                                             <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">확 인</button>
                                         </div>
