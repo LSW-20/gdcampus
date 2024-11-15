@@ -206,16 +206,16 @@
 	                // 각 사용자 데이터를 테이블에 추가
 	                userList.forEach(function(user) {
 	                	
-	                	var status = user.userStatus === 'Y' ? '재직' : '퇴직';
+	                	var status = user.userStatus === 'Y' ? '재직' : '퇴직';	             
 
-	                	tbody += '<tr onclick="location.href = \'' + '${contextPath}' + '/user/staff/detail.do?userNo=' + user.userNo + '\';">'
+	                	tbody += '<tr>'
 	                             +'<th scope="row">'
 	                             +   '<div class="custom-control custom-checkbox">'
-	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+' '+user.userNo+'">'
-	                             +       '<label class="custom-control-label" for="contacusercheck'+num+' '+user.userNo+'"></label>'
+	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+'">'
+	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
 	                             +   '</div>'
 	                             +'</th>'
-	                             +'<td>'+user.userNo+'</td>'
+	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/user/staff/detail.do?userNo=' + user.userNo + '\';">'+user.userNo+'</td>'
 	                             +'<td>'+user.userName+'</td>'
 	                             +'<td>'+user.deptNo+'</td>'
 	                             +'<td>'+user.rankNo+'</td>'                          
