@@ -103,7 +103,7 @@
         }
     </style>
 </head>
-<body>
+<body data-topbar="dark" data-sidebar="dark">
     <div id="layout-wrapper">
         <jsp:include page="/WEB-INF/views/common/header.jsp" />
         <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
@@ -184,7 +184,7 @@
         // 결재 대기 문서 로드
         function loadWaitingDocs(page) {
             $.ajax({
-                url: '${contextPath}/approval/todo',
+                url: '${contextPath}/approval/todo/list',
                 type: 'GET',
                 data: { page: page },
                 success: function(response) {
