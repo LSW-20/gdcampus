@@ -345,24 +345,28 @@ public class UserController {
 	//비밀번호 변경
 	@PostMapping("/pwdUpdate")
 	public String pwdUpdate(@RequestParam String newPwd, HttpServletResponse response, 
-	                        HttpSession session, HttpServletRequest request) throws IOException {
+	                        HttpSession session, HttpServletRequest request, RedirectAttributes rdAttributes) throws IOException {
 		PrintWriter out = response.getWriter();
 		
 	    // 로그인한 사용자 정보 가져오기 (세션에서)
 	    UserDto user = (UserDto) session.getAttribute("user");
 	    
-	    if (user == null) {
-	        return "redirect:/error";  // 사용자 세션이 없으면 에러 페이지로 리디렉션
-	    }
 
 	    // 새 비밀번호를 설정
-	    user.setUserPwd(newPwd); // 새 비밀번호로 설정
+	    user.setUserPwd(bcryptPwdEncoder.encode(newPwd));
+	    
 
 	    // 비밀번호 업데이트 처리
-	    userService.pwdUpdate(user);
+	    int result = userService.pwdUpdate(user);
+	    
+        if(result > 0) {
+    	  rdAttributes.addFlashAttribute("alertMsg","비밀번호 변경 성공");
+        }else {
+      	  rdAttributes.addFlashAttribute("alertMsg","비밀번호 변경 실패");
+        }
+	    
 	    
 	    // 세션 초기화 (로그아웃 처리)
-	    out.println("<script>alert('비밀번호 변경완료');</script>");
 	    session.invalidate();
 
 	    return "redirect:/";  // 비밀번호 변경 후 홈으로 리디렉션

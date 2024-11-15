@@ -11,7 +11,8 @@
 
 		<!-- LOGO -->
 		<div class="navbar-brand-box">
-				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-dark">
+		<!-- <a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-dark"> -->		
+				<a href="${contextPath}/main2.do" class="logo logo-dark">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-dark-sm.png" alt="" height="22">
 						</span>
@@ -20,7 +21,7 @@
 						</span>
 				</a>
 
-				<a href="${contextPath == '' ? '/' : contextPath}" class="logo logo-light">
+				<a href="${contextPath}/main2.do" class="logo logo-light">
 						<span class="logo-sm">
 								<img src="${contextPath}/images/logo-light-sm.png" alt="" height="22">
 						</span>
@@ -182,9 +183,7 @@
 												<span class="menu-item">학적 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">학생 정보 조회, 추가, 수정, 삭제</a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath }/student/student.do">학생 정보 조회, 추가, 수정, 삭제</a></li>
 										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				

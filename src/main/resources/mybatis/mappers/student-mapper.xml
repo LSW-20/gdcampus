@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="studentMapper">
+	<resultMap type="StudentDto" id="studentResultMap">
+		<result column="STU_NO" property="stuNo"/>
+		<result column="DEPARTMENT" property="dept"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="STU_NAME" property="stuName"/>
+		<result column="ENROLL_STATUS" property="status"/>
+		<result column="GRADE" property="grade"/>
+	</resultMap>
+	
+	<!-- 학생 조회 페이지-->
+	<select id="selectStu" resultMap="studentResultMap">
+		select *
+		  from t_student
+	</select>
+	
+	<!-- 학생 추가-->
+	<insert id="insertStu">
+    INSERT 
+      INTO T_STUDENT 
+					    (
+					        STU_NO,
+					        DEPARTMENT,
+					        CREATE_DATE,
+					        CREATE_USER,
+					        UPDATE_DATE,
+					        UPDATE_USER,
+					        STU_NAME,
+					        ENROLL_STATUS,
+					        GRADE
+					    )
+					    VALUES
+					    (
+					        SEQ_STU.NEXTVAL,
+					        #{department},
+					        SYSDATE,
+					        'test',
+					        null,  <!-- UPDATE_DATE -->
+					        null,  <!-- UPDATE_USER -->
+					        #{stuName},
+					        #{enrollStatus},
+					        #{grade}
+					    )
+	</insert>
+	
+	<!-- 학생 수정-->
+	<update id="updateStu">
+		update t_student
+		   set grade = #{grade}
+		     , DEPARTMENT = #{dept}
+		     , stu_Name = #{stuName}
+		     , enroll_status = #{status}
+		 where stu_no = #{stuNo}
+	</update>
+	
+	<!-- 학생 다수 수정-->
+	<update id="updateStus">
+    <foreach collection="studentList" item="student" separator=";">
+        update t_student
+           <set>
+                <if test="student.grade != null">
+                    grade = #{student.grade},
+                </if>
+                <if test="student.dept != null">
+                    department = #{student.dept},
+                </if>
+                <if test="student.stuName != null">
+                    stu_name = #{student.stuName},
+                </if>
+                <if test="student.status != null">
+                    enroll_status = #{student.status}
+                </if>
+           </set>
+         where stu_no = #{student.stuNo}
+    </foreach>
+	</update>
+	
+	<!-- 학생 삭제 delete-->
+	<delete id="deleteStu">
+		delete t_student
+		 where stu_no = #{stuNo}
+	</delete>
+</mapper>

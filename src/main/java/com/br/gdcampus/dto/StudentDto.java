@@ -1,6 +1,7 @@
 package com.br.gdcampus.dto;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +20,14 @@ public class StudentDto {
 	
 	private int stuNo;
 	private String dept;
-	private Date CreateDt;
+	private Date CreateDate;
 	private String CreateUser;
-	private Date updateDt;
+	private Date updateDate;
 	private String updateUser;
 	private String stuName;
 	private int status;
 	private int grade;
+	
+	//다수의 학생 객체
+	private ArrayList<StudentDto> studentList;
 }
