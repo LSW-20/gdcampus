@@ -76,7 +76,7 @@
 		  )
 		 values 
 		 (
-		 	 SEQ_CHNO.NEXTVAL
+		 	 LPAD(SEQ_CHNO.NEXTVAL, 4, '0')
 		 , #{title}
 		 , #{type}
 		 , SYSDATE
@@ -98,7 +98,7 @@
 		 values 
 		 (
 		 	 #{userNo}
-		 , SEQ_CHNO.CURRVAL
+		 , LPAD(SEQ_CHNO.CURRVAL, 4, '0')
 		 , SYSDATE
 		 , 'Y' 
 		 ) 

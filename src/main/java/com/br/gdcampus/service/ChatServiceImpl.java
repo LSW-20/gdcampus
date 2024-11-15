@@ -101,7 +101,6 @@ public class ChatServiceImpl implements ChatService {
 			
 			
 			String userNo = (String) map.get("selectedUser");
-			
 			result = chatDao.insertChatMapping(userNo); // 매핑 테이블에 초대인원 추가
 			
 		}

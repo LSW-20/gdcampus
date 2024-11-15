@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,14 @@ public class ChatController {
 	
 	private final ChatService chatService;
 	private final UserService userService;
+	private Logger logger = LoggerFactory.getLogger(ChatController.class);
+	
+	
+	
+    // 1) 요청시 전달값 처리 - 매개변수
+    // 2) 요청처리를 위한 서비스 호출
+    // 3) 응답
+	
 	
 
 	/**
@@ -39,9 +49,12 @@ public class ChatController {
 	public void chatRoomPage(HttpSession session, Model model) {
 		
 		
-		// 1. 로그인한 회원의 사번 type에 따라 이름 아래 설명 출력.
+		// 1. 로그인한 회원의 사번 첫글자에 따라서 설명을 출력한다.
 		// 사번이 A시작이면 그냥 "관리자", C시작이면 소속학과 + "교수", B시작이면 직책 + 직급
-		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();  
+		
+		//logger.debug("현재 로그인한 회원의 사번 : {}", userNo);
+		
 		
 		if(userNo.charAt(0) == 'A') {
 			
@@ -68,21 +81,19 @@ public class ChatController {
 		// 2. 로그인한 유저가 속한 채팅방 리스트 조회하기.
 		List<ChatRoomDto> list = chatService.selectChatRoomList(userNo); // 로그인한 유저가 속한 채팅방 DTO가 list로 담김.
 		
+		
 		List<Map<String, Object>> list2 = new ArrayList<>(); // 응답 페이지로 넘길 list.
-		
-		
 		for(ChatRoomDto c : list) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("chatRoomDto", c);
 			map.put("count", chatService.selectChatRoomPeopleCount(c.getRoomNo()) ); // 3. 각 채팅방 마다 채팅방 번호로 채팅방 인원수 구하기.
 
-			List<UserChatRoomDto> list40 = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. (1대1 채팅방에 상대 보여줌)
+			List<UserChatRoomDto> list40 = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. (1대1 채팅방에서 상대방을 보여주기 위해)
 
 			for(UserChatRoomDto u : list40) {
 				if(!u.getUserNo().equals(userNo)) {
 					map.put("counterpartNo", u.getUserNo()); // 상대방 사번이 "counterpart"라는 key값에 계속 덮어씌워지긴 하는데 1:1 채팅방에선 어차피 1개의 값만 담겨서 괜찮다.
 					map.put("counterpartName", userService.selectUserNameByUserNo(u.getUserNo()) );
-					System.out.println("235235325r : " + userService.selectUserNameByUserNo(u.getUserNo()));
 				}
 			}
 					
@@ -135,7 +146,7 @@ public class ChatController {
 	 */
 	@PostMapping("/makeGroupChat")
 	public String makeGroupChat(HttpSession session, String title, @RequestParam("selectedUsers")  List<String> selectedUsers, RedirectAttributes ra) {
-		//  컬렉션 타입(List, Set 등)을 받을 때는 @RequestParam을 명시하는 것이 권장됩니다. 이때 @RequestParam을 명시하지 않으면 Spring이 파라미터 바인딩을 제대로 처리하지 못할 수 있습니다.
+		// 컬렉션 타입(List, Set 등)을 받을 때는 @RequestParam을 명시하는 것이 권장됩니다. 이때 @RequestParam을 명시하지 않으면 Spring이 파라미터 바인딩을 제대로 처리하지 못할 수 있습니다.
 
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
 		
@@ -149,7 +160,7 @@ public class ChatController {
 		int result = chatService.makeGroupChat(map);
 		
 		if(result > 0) {
-			ra.addFlashAttribute("alertMsg", "성공적으로 그룹 채팅방이 생성되었습니다.");
+			ra.addFlashAttribute("alertMsg", "성공적으로 그룹 채팅방이 생성되었습니다.\\n왼쪽의 채팅방 목록에서 입장해 주십시오.");
 			return "redirect:/chat/roomList";
 		}else {
 			ra.addFlashAttribute("alertMsg", "그룹 채팅방 생성에 실패하였습니다.");
@@ -177,7 +188,7 @@ public class ChatController {
 		int result = chatService.makeOneToOneChat(map);
 		
 		if(result > 0) {
-			ra.addFlashAttribute("alertMsg", "성공적으로 1대1 채팅방이 생성되었습니다.");
+			ra.addFlashAttribute("alertMsg", "성공적으로 1대1 채팅방이 생성되었습니다. \\n왼쪽의 채팅방 목록에서 입장해 주십시오.");
 			return "redirect:/chat/roomList";
 		}else {
 			ra.addFlashAttribute("alertMsg", "1대1 채팅방 생성에 실패하였습니다.");
@@ -186,39 +197,8 @@ public class ChatController {
 		
 	}	
 	
-	/*
-    @PostMapping("/update.do")
-    public String noticeUpdate(MessageDto n, RedirectAttributes ra) { // 1) 요청시 전달값 처리 - 커맨드 객체
-       
-        // 2) 요청처리를 위한 서비스 호출
-        int result = chatService.updateNotice(n);
-       
-        // 3) 응답
-        if(result > 0) {
-        	
-            //model.addAttribute("alertMsg", "성공적으로 수정되었습니다.");
-            ra.addFlashAttribute("alertMsg", "성공적으로 수정되었습니다.");
-            
-               
-            // return "notice/detail"; 이건 포워딩이다.
 
-            return "redirect:/notice/detail.do?no=" + n.getNo();
-            // - detail.jsp를 보면 notice 객체에서 값을 뽑는데 notice객체를 우리가 넘기지 않았다.
-            // 포워딩을 하고 싶다면 model 객체를 만들어서 notice라는 key값으로 notice 객체가 담겨있어야 한다.
-            // - NoticeController의 noticeDetail 메소드를 보면 no만 넘기면 그 게시글을 조회해서 notice로 담아서 넘기는 메소드가 이미 정의되어 있다.
 
-            
 
-        }else {
-
-            // return "main"; 이렇게 하면 메인페이지가 뜨긴 하는데 url이 메인 페이지가 아니라 /update.do다.
-
-            // MvcController 가보면 이미 메인페이지로 이동하는 메소드가 정의되어 있음.
-            return "redirect:/";
-
-        }
-       
-    }
-    */
 	
 }
