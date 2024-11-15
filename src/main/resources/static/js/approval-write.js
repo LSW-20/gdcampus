@@ -37,7 +37,13 @@ function initOrgTree() {
         'plugins': ['types']
     }).on('select_node.jstree', function(e, data) {
         if(data.node.type === 'user') {
-            addApprover(data.node.id, data.node.text);
+            const userData = data.node.original.data; // 사용자 상세 정보
+            addApprover(
+                data.node.id,
+                userData.userName,
+                userData.rankName,
+                userData.deptName
+            );
         }
     });
 }

@@ -8,14 +8,14 @@ public interface TreeService {
     List<Map<String, Object>> getOrgTree();
     
     // 부서 목록 조회 (가발령 제외)
-    List<Map<String, Object>> getDepartments();
+    List<Map<String, Object>> selectDepartments();
     
     // 특정 부서의 사용자 목록 조회
-    List<Map<String, Object>> getDeptUsers(String deptNo);
+    List<Map<String, Object>> selectUsersByDept(String deptNo);
     
     // 특정 직급의 사용자 목록 조회
-    List<Map<String, Object>> getUsersByRank(int rankNo);
+    List<Map<String, Object>> selectUsersByRank(int rankNo);
     
     // 사용자 상세 정보 조회 (부서, 직급 포함)
-    Map<String, Object> getUserDetail(String userNo);
+    Map<String, Object> selectUserDetail(String userNo);
 }
