@@ -165,17 +165,21 @@
 					<div class="row mt-4">
 						<div class="col-sm-12">
 
-							<div class="float-sm-right">
-								<ul class="pagination mb-sm-0">
-									<li class="page-item disabled"><a href="#"
-										class="page-link"><i class="mdi mdi-chevron-left"></i></a></li>
-									<li class="page-item"><a href="#" class="page-link">1</a>
-									</li>
-									<li class="page-item active"><a href="#" class="page-link">2</a></li>
-									<li class="page-item"><a href="#" class="page-link">3</a>
-									</li>
-									<li class="page-item"><a href="#" class="page-link"><i
-											class="mdi mdi-chevron-right"></i></a></li>
+							<div class="float-sm-center" id="paging_bar">
+								<ul id="paging_area" class="pagination d-flex justify-content-center">
+									<li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
+								    	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage-1}">Prev</a>
+								    </li>
+								          
+								    <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+								    	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
+								        	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${p}">${ p }</a>
+								        </li>
+								    </c:forEach>
+								   
+							 		<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
+								    	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage+1}">Next</a>
+								    </li>
 								</ul>
 							</div>
 						</div>
@@ -203,12 +207,12 @@
 		        listDo(); 
 		    });
 		 // 페이지가 변하는 경우??
-		    $('#').on('click', function() {
+		    $('#paging_bar').on('click', function() {
 		        listDo(); 
 		    });
 		});
 	    
-	    function listDo(){
+	    function listDo(page){
 	        $.ajax({
 	            url: '${contextPath}/user/staff/listContent.do', 
 	            data: 
@@ -245,7 +249,7 @@
 
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-
+paging_bar
 
 
 </body>
