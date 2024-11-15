@@ -61,11 +61,125 @@
                             </div>
                         </div>
                         <!-- end page title -->
-
+                        
+												<!--학생추가 모달 창 -->
+												<form action="${contextPath }/student/insertStu" method="POST" id="studentForm">
+												<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+												    <div class="modal-dialog modal-dialog-centered">
+												        <div class="modal-content">
+												            <!-- 모달 헤더 -->
+												            <div class="modal-header">
+												                <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+												                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												                    <span aria-hidden="true">&times;</span>
+												                </button>
+												            </div>
+												            <!-- 모달 바디 -->
+												            <div class="modal-body">
+												                <!-- Select Fields 세로 정렬 -->
+												                <div class="form-group">
+												                    <label for="select1">학년</label>
+												                    <select class="form-control" id="grade" name="grade" required>
+												                        <option value="1">1</option>
+												                        <option value="2">2</option>
+												                        <option value="3">3</option>
+												                        <option value="4">4</option>
+												                    </select>
+												                </div>
+												                <div class="form-group">
+												                    <label for="select2">학과</label>
+												                    <select class="form-control" id="dept" name="dept" required>
+												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
+												                        <option value="전자공학과">전자공학과</option>
+												                    </select>
+												                </div>
+												                <div class="form-group">
+												                    <label for="select3">재적상태</label>
+												                    <select class="form-control" id="select3" name="status" required>
+												                        <option value="1">재학</option>
+												                        <option value="2">휴학</option>
+												                        <option value="3">졸업</option>
+												                        <option value="4">제적</option>
+												                    </select>
+												                </div>
+												                <!-- 텍스트 입력 필드 -->
+												                <div class="form-group">
+												                    <label for="inputText" >이름</label>
+												                    <input type="text" class="form-control" id="inputText" name="stuName" placeholder="Enter text here" required>
+												                </div>
+												            </div>
+												            <!-- 모달 푸터 -->
+												            <div class="modal-footer">
+												                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												                <button type="submit" class="btn btn-primary">Save</button>
+												            </div>
+												        </div>
+												    </div>
+												</div>
+												</form>
+												
+												<!-- 학생 수정 모달 -->
+												<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+												    <div class="modal-dialog modal-dialog-centered">
+												        <div class="modal-content">
+												            <!-- 모달 헤더 -->
+												            <div class="modal-header">
+												                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+												                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												                    <span aria-hidden="true">&times;</span>
+												                </button>
+												            </div>
+												            <!-- 모달 바디 -->
+												            <div class="modal-body">
+												                <!-- Select Fields 세로 정렬 -->
+												                <div class="form-group">
+												                    <label for="editGrade">학년</label>
+												                    <select class="form-control" id="editGrade" required>
+												                        <option value="1">1</option>
+												                        <option value="2">2</option>
+												                        <option value="3">3</option>
+												                        <option value="4">4</option>
+												                    </select>
+												                </div>
+												                <div class="form-group">
+												                    <label for="editDept">학과</label>
+												                    <select class="form-control" id="editDept" required>
+												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
+												                        <option value="전자공학과">전자공학과</option>
+												                    </select>
+												                </div>
+												                <div class="form-group">
+												                    <label for="editStatus">재적상태</label>
+												                    <select class="form-control" id="editStatus" required>
+												                        <option value="1">재학</option>
+												                        <option value="2">휴학</option>
+												                        <option value="3">졸업</option>
+												                        <option value="4">제적</option>
+												                    </select>
+												                </div>
+												                <!-- 텍스트 입력 필드 -->
+												                <div class="form-group">
+												                    <label for="editName">이름</label>
+												                    <input type="text" class="form-control" id="editName" placeholder="Enter name here" required>
+												                </div>
+												            </div>
+												            <!-- 모달 푸터 -->
+												            <div class="modal-footer">
+												                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												                <button type="button" class="btn btn-success waves-effect waves-light" id="saveEditBtn">Save</button>
+												            </div>
+												        </div>
+												    </div>
+												</div>
+												
+												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+                       
+                       <!-- 학생추가 -->
                         <div class="row">
                             <div class="col-md-4">
                                 <div>
-                                    <button type="button" class="btn btn-success waves-effect waves-light mb-3"><i class="mdi mdi-plus mr-1"></i> Add Student</button>
+                                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal" data-target="#addStudentModal"><i class="mdi mdi-plus mr-1"></i> Add Student</button>
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -96,33 +210,39 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr>
-                                                <td>
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="invoicecheck1">
-                                                        <label class="custom-control-label" for="invoicecheck1"></label>
-                                                    </div>
-                                                </td>
-                                                
-                                                <td>
-                                                    1
-                                                </td>
-                                                <td>전자공학</td>
-                                                
-                                                <td>
-                                                    박정언
-                                                </td>
-                                                <td>
-                                                    휴학
-                                                </td>
-                                                
-                                                
-                                                <td>
-                                                    <a href="javascript:void(0);" class="px-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="uil uil-pen font-size-18"></i></a>
-                                                    <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i class="uil uil-trash font-size-18"></i></a>
-                                                </td>
-                                            </tr>
                                             
+                                            <c:forEach var="s" items="${ stuList }">
+                                            			<tr>
+																								    <td>
+																								        <div class="custom-control custom-checkbox">
+																								            <input type="checkbox" class="custom-control-input" id="invoicecheck${s.stuNo}">
+																								            <label class="custom-control-label" for="invoicecheck${s.stuNo}"></label>
+																								        </div>
+																								    </td>
+																								    
+																								    <td>${ s.grade }</td>
+																								    <td>${ s.dept }</td>
+																								    <td>${ s.stuName }</td>
+																								    <td>
+																								        <c:choose>
+																								            <c:when test="${ s.status eq 1 }">재학</c:when>
+																								            <c:when test="${ s.status eq 2 }">휴학</c:when>
+																								            <c:when test="${ s.status eq 3 }">졸업</c:when>
+																								            <c:when test="${ s.status eq 4 }">제적</c:when>
+																								        </c:choose>
+																								    </td>
+																								    
+																								    <td>
+																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stu-no="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
+																						                <i class="uil uil-pen font-size-18"></i>
+																						            </a>
+																								        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+																								            <i class="uil uil-trash font-size-18"></i>
+																								        </a>
+																								    </td>
+																								</tr>
+
+																	          </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -228,5 +348,24 @@
         <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
 
         <script src="${contextPath}/js/app.js"></script>
+        
+        <script>
+        $(document).on('click', '.edit-btn', function() {
+            var stuNo = $(this).data('stu-no');
+            var grade = $(this).data('grade');
+            var dept = $(this).data('dept');
+            var name = $(this).data('name');
+            var status = $(this).data('status');
+
+            // 모달에 해당 데이터 채우기
+            $('#editGrade').val(grade);
+            $('#editDept').val(dept);
+            $('#editStatus').val(status);
+            $('#editName').val(name);
+            
+            // 추가적으로 stuNo를 저장하거나 수정 시 사용할 수 있습니다.
+            $('#saveEditBtn').data('stu-no', stuNo);
+        });
+        </script>
     </body>
 </html>
