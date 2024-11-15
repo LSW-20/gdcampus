@@ -43,6 +43,7 @@ public class ApprovalDao {
 
 	/**
 	 * 기안문서함페이징 count
+	 * @author 보겸
 	 * @param params : status(진행상태), userNo(loginUser)
 	 * @return 게시물 개수
 	 */
@@ -52,6 +53,7 @@ public class ApprovalDao {
 
 	/**
 	 * 기안문서함 리스트조회
+	 * @author 보겸
 	 * @param pi 페이징정보
 	 * @param params : status(진행상태), userNo(loginUser)
 	 * @return 게시물개수
@@ -60,6 +62,26 @@ public class ApprovalDao {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1)*pi.getBoardLimit(),pi.getBoardLimit());
 		
 		return sqlSession.selectList("approvalMapper.selectMyDocList",params,rowBounds);
+	}
+
+	/**
+	 * 기안문서함>진행중>최근순5게시물
+	 * @author 보겸
+	 * @param userNo
+	 * @return 진행중인 내가기안한문서 5개
+	 */
+	public List<ApprovalDto> getRecentInProgressDocs(String userNo) {
+		return sqlSession.selectList("approvalMapper.getRecentInProgressDocs",userNo);
+	}
+
+	/**
+	 * 기안문서함>승인/반려>최근순5개
+	 * @author 보겸
+	 * @param userNo
+	 * @return 완료된 내가기안한문서 5개
+	 */
+	public List<ApprovalDto> getRecentCompletedDocs(String userNo) {
+		return sqlSession.selectList("approvalMapper.getRecentCompletedDocs",userNo);
 	}
 	
 	

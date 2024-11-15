@@ -18,12 +18,12 @@ public class ChatDao {
 	private final SqlSessionTemplate sqlSession;
 	
 	/**
-	 * 채팅방 전체 리스트 조회
+	 * 로그인한 유저가 속한 채팅방 리스트 조회
 	 * author : 임상우
 	 * return 채팅방 dto 객체 list.
 	 */
-	public List<ChatRoomDto> selectChatRoomList() {
-		return sqlSession.selectList("chatMapper.selectChatRoomList");
+	public List<ChatRoomDto> selectChatRoomList(String userNo) {
+		return sqlSession.selectList("chatMapper.selectChatRoomList", userNo);
 	}
 
 	
