@@ -137,7 +137,7 @@
 							<hr>
 							<div class="mt-4 row d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary w-md mr-3">추가</button>
-								<button type="button" class="btn btn-primary w-md mr-3">취소</button>
+								<a class="btn btn-primary w-md mr-3" href="${contextPath }/user/staff/list.do">취소</a>
 							</div>
 						</form>
 					</div>
