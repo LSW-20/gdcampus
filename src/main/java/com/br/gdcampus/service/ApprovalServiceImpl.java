@@ -94,4 +94,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return null;
 	}
 
+	//기안문서>진행중>최근순5개
+	@Override
+	public List<ApprovalDto> getRecentInProgressDocs(String userNo) {
+		return apprDao.getRecentInProgressDocs(userNo);
+	}
+
+	//기안문서>완료>최근순5개
+	@Override
+	public List<ApprovalDto> getRecentCompletedDocs(String userNo) {
+		return apprDao.getRecentCompletedDocs(userNo);
+	}
+
 }

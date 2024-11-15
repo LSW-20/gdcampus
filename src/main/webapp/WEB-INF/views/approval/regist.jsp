@@ -43,23 +43,20 @@
             position: relative;
         }
         
-        .modal-body {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
-        }
+				.modal-body {
+				    display: flex;
+				    gap: 20px;
+				}
         
-        #orgTree {
-            flex: 1;
-            min-height: 300px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            overflow: auto;
-        }
+				#orgTree {
+				    height: 400px;
+				    overflow: auto;
+				}
         
-        #selectedApprovers {
-            flex: 1;
-        }
+				#orgTree, #selectedApprovers {
+				    flex: 1;
+				    min-width: 250px;
+				}
         
         #approversList {
             list-style: none;
@@ -94,27 +91,30 @@
         <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
     </div>
 
-    <!-- 결재선 모달 -->
-    <div id="approvalModal" class="modal">
-        <div class="modal-content">
-            <h3>결재선 지정</h3>
-            <div class="modal-body">
-                <div>
-                    <h5>조직도</h5>
-                    <div id="orgTree"></div>
-                </div>
-                <div id="selectedApprovers">
-                    <h5>선택된 결재자</h5>
-                    <ul id="approversList"></ul>
-                </div>
-            </div>
-            <div class="text-center">
-                <button type="button" class="btn btn-primary" onclick="ApprovalModal.save()">확인</button>
-                <button type="button" class="btn btn-secondary" onclick="ApprovalModal.hide()">취소</button>
-            </div>
-        </div>
-    </div>
-
+		<!-- 결재선 모달 -->
+		<div id="approvalModal" class="modal">
+		    <div class="modal-content">
+		        <h3>결재선 지정</h3>
+		        <div class="modal-body">
+		            <div>
+		                <h5>조직도</h5>
+		                <div id="orgTree"></div>
+		            </div>
+		            <div id="selectedApprovers">
+		                <h5>결재선</h5>
+		                <ul id="approversList"></ul>
+		            </div>
+		        </div>
+		        <div class="text-center mt-3">
+		            <button type="button" class="btn btn-primary" onclick="ApprovalModal.save()">확인</button>
+		            <button type="button" class="btn btn-secondary" onclick="ApprovalModal.hide()">취소</button>
+		        </div>
+		    </div>
+		</div>
+		
+		<!-- 결재선 선택 정보를 저장할 hidden input -->
+		<input type="hidden" id="approvalLine" name="approvalLine">
+		
     <!-- 문서 양식 -->
     <c:choose>
         <c:when test="${param.formType eq 'purchase'}">
@@ -140,26 +140,14 @@
             initTree: function() {
                 $('#orgTree').jstree({
                     'core': {
-                        'data': [
-                            { 
-                                "id": "dept1",
-                                "text": "인사부",
-                                "type": "department",
-                                "children": [
-                                    { "id": "user1", "text": "김인사", "type": "user" },
-                                    { "id": "user2", "text": "이인사", "type": "user" }
-                                ]
-                            },
-                            {
-                                "id": "dept2",
-                                "text": "총무부",
-                                "type": "department",
-                                "children": [
-                                    { "id": "user3", "text": "박총무", "type": "user" },
-                                    { "id": "user4", "text": "최총무", "type": "user" }
-                                ]
-                            }
-                        ]
+                        'data': {
+                            'url': `${contextPath}/tree/org`,  // URL 경로
+                            'dataType': 'json',
+                            'type': 'GET'
+                        },
+                        'themes': {
+                            'responsive': false
+                        }
                     },
                     'plugins': ['types'],
                     'types': {
@@ -173,7 +161,14 @@
             bindEvents: function() {
                 $('#orgTree').on('select_node.jstree', (e, data) => {
                     if(data.node.type === 'user') {
-                        this.addApprover(data.node);
+                        // 사용자 노드의 원본 데이터에서 필요한 정보 추출
+                        const userData = data.node.original; // 서버에서 받은 원본 데이터
+                        this.addApprover(
+                            userData.id,         // userNo
+                            userData.userName,   // 이름
+                            userData.rankName,   // 직급
+                            userData.deptName    // 부서
+                        );
                     }
                 });
             },
@@ -186,30 +181,43 @@
                 $('#approvalModal').hide();
             },
             
-            addApprover: function(node) {
-                const existingApprover = $(`#approversList li[data-user-id="${node.id}"]`);
-                if(existingApprover.length > 0) {
+            addApprover: function(userId, userName, rankName, deptName) {
+                // 이미 추가된 결재자인지 확인
+                if($(`#approversList li[data-user-id="${userId}"]`).length > 0) {
                     alert('이미 추가된 결재자입니다.');
+                    return;
+                }
+                
+                // 결재자 수 제한 (예: 4명)
+                if($('#approversList li').length >= 4) {
+                    alert('결재선은 최대 4명까지만 지정할 수 있습니다.');
                     return;
                 }
 
                 const approverHtml = `
-                    <li data-user-id="${node.id}">
-                        ${node.text}
-                        <button type="button" class="btn btn-sm btn-danger" onclick="$(this).parent().remove()">삭제</button>
+                    <li data-user-id="${userId}" data-rank="${rankName}" data-dept="${deptName}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>${deptName} ${userName} ${rankName}</span>
+                            <button type="button" class="btn btn-sm btn-danger" 
+                                onclick="ApprovalModal.removeApprover('${userId}')">삭제</button>
+                        </div>
                     </li>
                 `;
+                
                 $('#approversList').append(approverHtml);
             },
-            
+
+            removeApprover: function(userId) {
+                $(`#approversList li[data-user-id="${userId}"]`).remove();
+            },
+
             save: function() {
                 const approvers = [];
-                $('#approversList li').each(function() {
+                $('#approversList li').each(function(index) {
                     approvers.push({
-                        userId: $(this).data('user-id'),
-                        userName: $(this).contents().filter(function() {
-                            return this.nodeType === 3;
-                        }).text().trim()
+                        userNo: $(this).data('user-id'),
+                        userName: $(this).find('span').text(),
+                        lineOrder: index + 1  // 순서 정보 추가
                     });
                 });
 
@@ -218,7 +226,9 @@
                     return;
                 }
 
-                console.log('선택된 결재자들:', approvers);
+                // hidden input에 결재선 정보 저장
+                $('#approvalLine').val(JSON.stringify(approvers));
+                
                 this.hide();
             },
             
