@@ -126,8 +126,8 @@
 		      ,#{userName}
 		      ,#{email}
 		      ,#{gender}
-		      ,'/upload/profile/default.jpg'
-		      ,'/upload/name/default.jpg'
+		      ,'/upload/profile/default.png'
+		      ,'/upload/name/default.png'
 		      ,to_date(SYSDATE,'RR/MM/DD')
 		     )
 	</insert>
