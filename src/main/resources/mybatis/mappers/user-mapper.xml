@@ -126,8 +126,8 @@
 		      ,#{userName}
 		      ,#{email}
 		      ,#{gender}
-		      ,'/upload/profile/default.jpg'
-		      ,'/upload/name/default.jpg'
+		      ,'/upload/profile/default.png'
+		      ,'/upload/name/default.png'
 		      ,to_date(SYSDATE,'RR/MM/DD')
 		     )
 	</insert>
@@ -378,6 +378,13 @@
 		  JOIN T_RANK USING (RANK_NO)
 		 where DEPT_NAME = #{dept}
 		   and USER_STATUS='Y'
+	</select>
+	
+	<!-- (상우) 사번으로 이름 찾기 -->
+	<select id="selectUserNameByUserNo" resultType="String">
+		select user_name
+		  from t_user
+		 where user_no = #{userNo} 
 	</select>
 	
 	

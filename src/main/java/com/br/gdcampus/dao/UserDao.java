@@ -145,6 +145,15 @@ public class UserDao {
 		return sqlSession.selectList("userMapper.selectDeptList");
 	}
 
+	/**
+	 * 사번으로 이름 찾기
+	 * @param userNo
+	 * @return
+	 */
+	public String selectUserNameByUserNo(String userNo) {
+		return sqlSession.selectOne("userMapper.selectUserNameByUserNo", userNo);
+	}
+	
 
 
 
@@ -183,4 +192,6 @@ public class UserDao {
 	public int pwdUpdate(UserDto m) {
 		return sqlSession.update("userMapper.pwdUpdate",m);
 	}
+
+
 }

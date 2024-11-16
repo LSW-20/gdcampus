@@ -142,7 +142,7 @@
 							<hr><br>		
 							<div class="mt-4 row d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary w-md mr-3">저장</button>
-								<button type="button" class="btn btn-primary w-md mr-3">목록</button>
+								<a class="btn btn-primary w-md mr-3" href="${contextPath }/user/staff/list.do">목록</a>
 							</div>
 						</form>
 					</div>

@@ -8,8 +8,8 @@ import com.br.gdcampus.dto.UserChatRoomDto;
 
 public interface ChatService {
 
-    // 채팅방 전체 리스트 조회 - 상우
-	List<ChatRoomDto> selectChatRoomList();
+    // 로그인한 유저가 속한 채팅방 리스트 조회 - 상우
+	List<ChatRoomDto> selectChatRoomList(String userNo);
    
     // 채팅방 번호로 채팅방 인원수 조회 - 상우
     int selectChatRoomPeopleCount(String chatRoomNo);

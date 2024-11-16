@@ -209,6 +209,16 @@ public class UserServiceInpl implements UserService {
 	public List<String> selectDeptList() {
 		return userDao.selectDeptList();
 	}
+	
+	/**
+	 * 사번으로 이름 찾기
+	 * author : 상우
+	 * @return 이름
+	 */
+	@Override
+	public String selectUserNameByUserNo(String userNo) {
+		return userDao.selectUserNameByUserNo(userNo);
+	}
 
 	
 
@@ -257,6 +267,8 @@ public class UserServiceInpl implements UserService {
 	public int pwdUpdate(UserDto m) {
 		return userDao.pwdUpdate(m);
 	}
+
+
 	
 	
 
