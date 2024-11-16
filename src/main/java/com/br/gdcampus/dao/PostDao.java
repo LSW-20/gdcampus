@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
@@ -22,7 +23,7 @@ private final SqlSessionTemplate sqlSession;
 	}
 	
 	public List<PostDto> selectPostList(PageInfoDto pi){
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPostLimit() , pi.getPostLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPageLimit() , pi.getPageLimit());
 		return sqlSession.selectList("postMapper.selectPostList", null, rowBounds);
 	}
 	
@@ -31,7 +32,7 @@ private final SqlSessionTemplate sqlSession;
 	}
 	
 	public List<PostDto> selectSearchList(Map<String, String> search, PageInfoDto pi){
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPostLimit() , pi.getPostLimit());
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPageLimit() , pi.getPageLimit());
 		return sqlSession.selectList("postMapper.selectSearchList", search, rowBounds);
 	}
 	
@@ -39,9 +40,11 @@ private final SqlSessionTemplate sqlSession;
 		return sqlSession.insert("postMapper.insertPost", b);
 	}
 	
-	public int insertAttach(AttachDto at) {
-		return sqlSession.insert("postMapper.insertAttach", at);
-	}
+
+	 public int insertAttach(AttachDto at) { 
+		 return sqlSession.insert("postMapper.insertAttach", at); 
+	 }
+
 	
 	public PostDto selectPost(int postNo) {
 		return sqlSession.selectOne("postMapper.selectPost", postNo);

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper	namespace="boardMapper">
+<mapper	namespace="postMapper">
 
-	<resultMap id="boardResultMap" type="BoardDto">
-		<result column="board_no" property="boardNo" />
-		<result column="board_title" property="boardTitle" />
-		<result column="board_content" property="boardContent" />
-		<result column="user_id" property="boardWriter" />
+	<resultMap id="postResultMap" type="postDto">
+		<result column="post_no" property="postNo" />
+		<result column="post_title" property="postTitle" />
+		<result column="post_content" property="postContent" />
+		<result column="user_id" property="postWriter" />
 		<result column="count" property="count" />
 		<result column="regist_date" property="registDt" />
 		<result column="attach_count" property="attachCount" />
@@ -51,8 +51,8 @@
 	
 	<select id="selectPostList" resultMap="PostResultMap">
 		select
-		       b.board_no
-		     , board_title
+		       p.post_no
+		     , post_title
 		     , user_id
 		     , count
 		     , to_char(regist_date, 'YYYY-MM-DD') as "regist_date"
@@ -60,58 +60,58 @@
 		         select count(*)
 		           from attachment
 		          where ref_type = 'B'
-		            and ref_no = b.board_no
+		            and ref_no = p.post_no
 		       ) as "attach_count"
-		  from board b
-		  join member on (user_no = board_writer)
-		 where b.status = 'Y'
-		 order by board_no desc
+		  from post p
+		  join member on (user_no = post_writer)
+		 where p.status = 'Y'
+		 order by post_no desc
 	</select>
 
 	<select id="selectSearchListCount" resultType="_int">
 		select 
 					 count(*)
-			from board b
+			from post p
 			join member on (user_no = board_writer)
 		 where b.status = 'Y'
 		   and ${condition} like '%' || #{keyword} || '%'
 	</select>
 
-	<select id="selectSearchList" resultMap="boardResultMap">
+	<select id="selectSearchList" resultMap="postResultMap">
 		select
-		       b.board_no
-		     , board_title
+		       p.post_no
+		     , post_title
 		     , user_id
 		     , count
 		     , to_char(regist_date, 'YYYY-MM-DD') as "regist_date"
 		     , (
 		         select count(*)
 		           from attachment
-		          where ref_type = 'B'
-		            and ref_no = b.board_no
+		          where ref_type = 'p'
+		            and ref_no = p.post_no
 		       ) as "attach_count"
-		  from board b
-		  join member on (user_no = board_writer)
-		 where b.status = 'Y'
+		  from t_post p
+		  join member on (user_no = post_writer)
+		 where p.status = 'Y'
 		   and ${condition} like '%' || #{keyword} || '%'
-		 order by board_no desc
+		 order by post_no desc
 	</select>
 	
-	<insert id="insertBoard">
+	<insert id="insertPost">
 		insert
-		  into board
+		  into post
 		  (
-		    board_no
-		  , board_title
-		  , board_writer
-		  , board_content
+		    post_no
+		  , post_title
+		  , post_writer
+		  , post_content
 		  )
 		  values
 		  (
-		    seq_bno.nextval
-		  , #{boardTitle}
-		  , #{boardWriter}
-		  , #{boardContent}
+		    seq_pno.nextval
+		  , #{postTitle}
+		  , #{postWriter}
+		  , #{postContent}
 		  )
 	</insert>
 	

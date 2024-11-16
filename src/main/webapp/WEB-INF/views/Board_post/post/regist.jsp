@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,80 +9,54 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<div class="container p-3">
 
-						<!-- ============================================================== -->
-            <!-- 템플릿 복사해온것  -->
-            <!-- ============================================================== -->
-            <div class="main-content">
+      <!-- Header, Nav start -->
+      <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+      <!-- Header, Nav end -->
+  
+      <!-- Section start -->
+      <section class="row m-3" style="min-height: 500px">
+  
+        <div class="container border p-5 m-4 rounded">
+          <h2 class="m-4">게시글 등록</h2>
+          <br>
 
-                <div class="page-content">
-                    <div class="container-fluid">
+          <form id="enroll-form" method="post" action="${ contextPath }/board/insert.do" enctype="multipart/form-data">
+              <div class="form-group">
+                  <label for="title">제목 </label>
+                  <input type="text" class="form-control" id="title" name="boardTitle" required><br>
+                  
+                  <label for="writer">작성자 </label>
+                  <input type="text" class="form-control" id="writer" value="${ loginUser.userId }" readonly><br>
+                  
+                  <label for="upfile">첨부파일 </label>
+                  <input type="file" class="form-control-file border file" id="upfile" name="uploadFiles" multiple><br>
+                  
+                  <label for="userName">내용 </label>
+                  <textarea class="form-control" required name="boardContent" id="content" rows="10" style="resize:none;"></textarea><br>
+                  
+              </div>
+              <br>
+              <div align="center">
+                  <button type="submit" class="btn btn-primary">등록하기</button>
+                  <button type="reset" class="btn btn-danger">취소하기</button>
+              </div>
 
-                        <!-- start page title -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">Form editor</h4>
-
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Forms</a></li>
-                                            <li class="breadcrumb-item active">Form editor</li>
-                                        </ol>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end page title -->
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Ckeditor Classic editor</h4>
-                                        <p class="card-title-desc">Example of Ckeditor Classic editor</p>
-                                        <div id="classic-editor"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Summernote</h4>
-                                        <p class="card-title-desc">Super simple wysiwyg editor on bootstrap</p>
-        
-                                        <div id="summernote-editor" class="summernote">Hello Summernote</div>
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Summernote Air-mode</h4>
-                                        <p class="card-title-desc">Summernote editor air-mode example.</p>
-        
-                                        <div id="summernote-airmode-editor" class="summernote">
-                                            <h5>This is an Air-mode editable area.</h5>
-                                            <ul>
-                                              <li>Select a text to reveal the toolbar.</li>
-                                              <li>Edit rich document on-the-fly, so elastic!</li>
-                                            </ul>
-                                            <p>End of air-mode area</p>
-                                          
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-                    </div> <!-- container-fluid -->
-                </div>
-
+          </form>
+        </div>
+  
+      </section>
+      <!-- Section end -->
+  
+      <!-- Footer start -->
+      <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+      <!-- Footer end -->
+  
+  </div>
+  
+  
+  <script src="${ contextPath }/resources/js/fileValidate.js"></script>
+  
 </body>
 </html>
