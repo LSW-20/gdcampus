@@ -50,7 +50,7 @@
 	</resultMap>
 
 	<!-- 부서 목록 조회 -->
-	<select id="selectDepartments" resultType="map">
+	<select id="selectDepartments" resultMap="deptResultMap">
 		SELECT 
 			     DEPT_NO as DEPT_NO<!-- 이러면 안되나 -->
 			   , DEPT_NAME as DEPT_NAME
