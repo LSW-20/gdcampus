@@ -72,7 +72,7 @@
                                        <h5 class="font-size-16 mb-3"><i class="uil uil-users-alt mr-1"></i>그룹 채팅</h5>
 
                                        <ul class="list-unstyled chat-list group-list">
-                                       
+
                                        
                                           <c:forEach var="map" items="${list2}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'G'}">
@@ -186,7 +186,7 @@
                                                            <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
                                                        </div>
                                                <div class="media-body">
-                                                   <h5 class="font-size-16 mb-1 text-truncate"><a href="#" class="text-dark"><span id="room_no"></span></a></h5>
+                                                   <h5 class="font-size-16 mb-1 text-truncate"><a href="#" class="text-dark">RoomNo : <span id="room_no"></span></a></h5>
                                                    <p class="text-muted text-truncate mb-0"><i class="uil uil-users-alt mr-1"></i> <span id="room_count"></span> members </p>
                                                </div>
                                            </div>
@@ -208,7 +208,7 @@
                                                    </div>
                                                </li>
                                                <i data-feather="plus"></i> &nbsp;
-																							 <i data-feather="x"></i>
+																							 <i data-feather="x"  onclick="closeConversationList();"></i>
                                            </ul>
                                        </div>
                                    </div>
@@ -225,10 +225,10 @@
                                    
                                    <div class="row align-items-center pt-2 chat-input-box">
                                        <div class="col-xl-10 col-md-8 col-8 chat-inputbar">
-                                           <input type="text" class="form-control chat-input" placeholder="이곳에 메세지를 입력하세요.">
+                                           <input type="text" class="form-control chat-input"  id="chat-input" placeholder="이곳에 메세지를 입력하세요.">
                                        </div>
                                        <div class="col-xl-2 col-md-4 col-4">
-                                           <button type="submit" class="btn btn-block btn-primary">
+                                           <button type="button" class="btn btn-block btn-primary" onclick="sendMessage();">
                                            	 <span class="d-sm-inline-block d-none">Send</span> 
                                              <i class="uil uil-message ml-sm-1 ml-0"></i>
                                            </button>
@@ -242,26 +242,87 @@
                    <!-- 오른쪽 채팅방 영역 끝 -->	
 
                </div>
-               <!-- End d-lg-flex  -->							
+               <!-- End d-lg-flex  -->		
+               					
 							
 							
+							<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 							<script>
 							
-							// 채팅방을 로드하는 함수
+							let sock; // WebSocket 전역 변수로 선언
+							
+							let currentRoomNo = null; // 현재 활성화된 채팅방 번호를 저장할 변수
+							
+				      const $conversationList = $(".conversation-list"); // 메세지를 출력시키는 영역의 요소
+				       
+				       
+				      
+							// 메세지 전송시 실행될 함수
+							function sendMessage() {
+				    	  
+								sock.send($("#chat-input").val()); // 웹소켓 측으로 메세지를 전송 (ChatEchoHandler의 handleMessage 메소드 자동 실행)
+								$("#chat-input").val("");
+								
+							}
+							
+							
+							// 나에게 메세지가 왔을 때 실행될 함수
+							function onMessage() {
+							 
+							}
+							
+							
+							
+							// 웹소켓 연결이 성공적으로 이루어진 경우 실행될 함수
+							function onOpen() {
+							  console.log("웹소켓 연결 성공");
+							};
+							
+							// 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 실행될 함수
+							function onClose() {
+							  console.log('웹소켓과 연결 끊김');
+							}							
+							
+							// 웹소켓 통신 중 통신 중 오류가 발생한 경우 실행될 함수
+							function onError() {
+							  console.log('웹소켓 통신 중 오류 발생');
+							}							
+														
+							
+							
+							
+							// 왼쪽 채팅방 목록에서 특정 채팅방 클릭시 실행되는 함수.
 							function loadChatRoom(roomNo) {
 								
-							    $('#chatRoomContent').show();  // 오른쪽 영역이 보이게 함
-							    console.log("Room No: " + roomNo);  // roomNo 값 확인
-							    $('#room_no').html(roomNo);
-							    
-							    
-							    // AJAX 요청을 보내 해당 채팅방의 데이터를 가져옴
+						    if (sock) {
+						        sock.close(); // 기존 WebSocket 닫기
+						        console.log("기존 WebSocket 연결 종료: RoomNo =", currentRoomNo);
+						    }
+						    
+								
+								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
+								
+							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
+							  $('#room_no').html(roomNo);
+
+							  
+								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
+							  sock.onopen = onOpen; // 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
+							  sock.onclose = onClose; // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
+							  sock.onerror = onError; // 웹소켓 통신 중 통신 중 오류가 발생했을 때 실행될 함수를 지정.
+							  sock.onmessage = onMessage; // 웹소켓에서 해당 클라이언트로 메세지 발송시 자동으로 실행할 함수를 지정(매핑)하는 구문
+							  
+							  
+							  
+							    					    
+							    // AJAX 요청을 보내 해당 채팅방의 과거 메시지들을 가져와서 보여준다.
 							    $.ajax({
 							        url: '/chat/getChatRoomData',  // 서버에서 채팅방 데이터를 가져올 URL
 							        type: 'GET',
 							        data: { roomNo: roomNo },
+							        
 							        success: function(response) {
-
+							        	
 							            // 채팅방 정보 업데이트
 							            $('#room_no').text(response.roomName);
 							            $('#room_count').text(response.memberCount);
@@ -292,6 +353,21 @@
 							    });
 							}
 	
+							
+							
+							// x버튼 클릭시 오른쪽 채팅방 영역을 닫고, 세션 종료.
+							function closeConversationList() {
+								
+							    // 오른쪽 채팅방 영역 숨기기
+							    $('#chatRoomContent').hide(); 
+							    
+							    sock.close();
+							    
+							    console.log('채팅방이 닫혔습니다.');
+							}
+							
+							
+							
 							</script>
 							
 							
@@ -374,10 +450,7 @@
                                        <h5 class="font-size-16 mb-3"><i class="uil uil-user mr-1"></i>1:1 채팅</h5>
 
                                        <ul class="list-unstyled chat-list">
-                                       
-                                       
-                                       
-                                       
+                                                                        
                                        
                                           <c:forEach var="map" items="${list2}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'O'}">                                          		
@@ -405,12 +478,7 @@
 																					</c:forEach>                                       
                                        
                                        
-                                     
-                                       
-                                       
-                                       
-
-                                           
+                                    
                                            <li class="unread">
                                                <a href="#">
                                                    <div class="media">
@@ -483,6 +551,7 @@
                                        </div>
                                    </div>
                                </div>
+                               
 
                                <div class="card-body">
                                    <div data-simplebar style="max-height: 520px;">
@@ -493,164 +562,45 @@
                                                    <img src="${contextPath}/images/users/avatar-2.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
                                                    <div class="media-body">
                                                        <div class="conversation-text">
+                                                       
                                                            <div class="ctext-wrap">
                                                                <a href="#" class="user-name">James Clark</a>
                                                                <p>Good morning everyone !</p>
                                                            </div>
+                                                           
                                                            <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:01AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
+                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:01AM </p>
                                                            </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
+                                                           
                                                        </div>
                                                    </div>
                                                </div>
                                            </li>
-                                           
+  
+                                  
                                            <li class="clearfix odd">
                                                <div class="media">
                                                    <div class="media-body">
                                                        <div class="conversation-text">
+                                                       
                                                            <div class="ctext-wrap">
                                                                <p>Good morning everyone !</p>
                                                            </div>
+                                                           
                                                            <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:02AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
+                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:02AM </p>
                                                            </div>
+                                                           
                                                        </div>
                                                    </div>
                                                </div>
                                            </li>
-                                           
-                                           <li class="clearfix">
-                                               <div class="media">
-                                                   <img src="assets/images/users/avatar-1.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <a href="#" class="user-name">Marie White</a></h6>
-                                                               <p>Hello!</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:02AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix">
-                                               <div class="media">
-                                                   <img src="assets/images/users/avatar-3.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <a href="#" class="user-name">Helen Pitts</a></h6>
-                                                               <p>What about our next meeting?</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:03AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix">
-                                               <div class="media">
-                                                   <img src="assets/images/users/avatar-4.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <a href="#" class="user-name">Kimber Rivera</a></h6>
-                                                               <p>Next meeting tomorrow 10.00AM</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:04AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix odd">
-                                               <div class="media">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <p>Wow that's great</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:05AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix">
-                                               <div class="media">
-                                                   <img src="assets/images/users/avatar-3.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <a href="#" class="user-name">Rodney Perry</a></h6>
-                                                               <p>img-1.jpg & img-2.jpg images for a New Projects</p>
-                                                               <div class="mt-2">
-                                                                   <a href="#">
-                                                                       <img src="assets/images/small/img-1.jpg" alt="" class="rounded img-fluid">
-                                                                   </a>
-                                                                   <a href="#">
-                                                                       <img src="assets/images/small/img-2.jpg" alt="" class="rounded img-fluid">
-                                                                   </a>
-                                                               </div>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:06AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix odd">
-                                               <div class="media">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <p>It looks very nice.</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:06AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
-                                           
-                                           <li class="clearfix">
-                                               <div class="media">
-                                                   <img src="assets/images/users/avatar-4.jpg" class="avatar-xs rounded-circle align-self-end" alt="...">
-                                                   <div class="media-body">
-                                                       <div class="conversation-text">
-                                                           <div class="ctext-wrap">
-                                                               <a href="#" class="user-name">Kimber Rivera</a></h6>
-                                                               <p>Thank you. 😊</p>
-                                                           </div>
-                                                           <div class="msg-seen">
-                                                               <p class="text-muted font-size-12 mb-0 t mt-1"><i class="mdi mdi-clock-outline"></i> 09:07AM <i class="mdi mdi-check-all text-success ml-1"></i></p>
-                                                           </div>
-                                                           <a href="#" class="chat-share-icon"><i class="mdi mdi-reply font-size-20 ml-2"></i></a>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </li>
+
+
                                            
                                        </ul>
                                    </div>
+                                   
                                    
                                    <div class="row align-items-center pt-2 chat-input-box">
                                        <div class="col-xl-10 col-md-8 col-8 chat-inputbar">
