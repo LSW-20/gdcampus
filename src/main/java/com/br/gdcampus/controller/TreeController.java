@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.gdcampus.dto.DeptDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.TreeService;
 
@@ -36,7 +37,7 @@ public class TreeController {
 	 * @return 해당부서 사용자 목록
 	 */
 	@GetMapping("/dept/{deptNo}/users")
-	public List<Map<String,Object>> getDeptUsers(@PathVariable String deptNo){
+	public List<UserDto> getDeptUsers(@PathVariable String deptNo){
 
 		return treeService.selectUsersByDept(deptNo);
 	}
@@ -47,7 +48,7 @@ public class TreeController {
 	 * @return 부서목록
 	 */
 	@GetMapping("/departments")
-	public List<Map<String,Object>> getDepartments(){
+	public List<DeptDto> getDepartments(){
 		return treeService.selectDepartments();
 	}
 	
