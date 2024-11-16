@@ -186,7 +186,7 @@
                                                            <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
                                                        </div>
                                                <div class="media-body">
-                                                   <h5 class="font-size-16 mb-1 text-truncate"><a href="#" class="text-dark">RoomNo : <span id="room_no"></span></a></h5>
+                                                   <h5 class="font-size-16 mb-1 text-truncate"><a href="#" class="text-dark">RoomNo : <span id="room-no"></span></a></h5>
                                                    <p class="text-muted text-truncate mb-0"><i class="uil uil-users-alt mr-1"></i> <span id="room_count"></span> members </p>
                                                </div>
                                            </div>
@@ -260,15 +260,75 @@
 							// 메세지 전송시 실행될 함수
 							function sendMessage() {
 				    	  
-								sock.send($("#chat-input").val()); // 웹소켓 측으로 메세지를 전송 (ChatEchoHandler의 handleMessage 메소드 자동 실행)
+				    	  console.log("sendMessage() 실행됨");
+				    	  console.log( $("#chat-input").val() );
+								sock.send( $("#chat-input").val() ); // 웹소켓 측으로 메세지를 전송 (ChatEchoHandler의 handleMessage 메소드 자동 실행)
 								$("#chat-input").val("");
 								
 							}
+				      
 							
 							
 							// 나에게 메세지가 왔을 때 실행될 함수
-							function onMessage() {
+							function onMessage(evt) { // 웹소켓에서 클라이언트로 보내는 메세지를 받기 위해 매개변수를 둔다.
+								
 							 
+								let msgArr = evt.data.split("|"); // ["메세지유형(chat|entry|exit)", "출력시킬메세지내용", "발신자아이디"];
+								
+								
+								
+						    let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
+
+						    
+			          if(msgArr[0] == "chat"){ // 채팅메세지일 경우
+			        			  
+			        	  	
+				        	  $chatDiv.addClass("clearfix");
+	
+				        	  let mediaDiv = $("<div>").addClass("media");
+				        	  let mediaBodyDiv = $("<div>").addClass("media-body");
+				        	  let conversationTextDiv = $("<div>").addClass("conversation-text");
+	
+				        	  let ctextWrapDiv = $("<div>").addClass("ctext-wrap");
+				        	  let ctextWrapP = $("<p>").text(msgArr[1]); // p태그에 메세지 출력
+				        	  ctextWrapDiv.append(ctextWrapP); 
+	
+				        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
+				        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1");
+				        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline");
+				        	  msgSeenP.append(msgSeenPI);
+				        	  msgSeenDiv.append(msgSeenP);
+	
+				        	  // 계층적으로 연결
+				        	  conversationTextDiv.append(ctextWrapDiv);
+				        	  conversationTextDiv.append(msgSeenDiv);
+				        	  mediaBodyDiv.append(conversationTextDiv);
+				        	  mediaDiv.append(mediaBodyDiv);
+				        	  $chatDiv.append(mediaDiv);
+	
+				        	  
+
+			        	  	if(msgArr[2] == "${loginUser.userId}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
+			        	  		$chatDiv.addClass("odd") 
+			        	  	}else {
+			        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
+			        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
+			        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
+
+			        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
+			        	        let customDiv = $("<div>").addClass("sender-name").text(msgArr[2]); 
+			        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
+			        	    }
+			        	  
+			        	  	$conversationList.append($chatDiv);
+			        	  	    
+			                     
+		            }else { // 입장 또는 퇴장 메세지일 경우
+		              // $chatDiv.addClass("chat-user").addClass(msgArr[0]).text(msgArr[1]);
+		            }						    
+						    
+						    
+								
 							}
 							
 							
@@ -287,7 +347,20 @@
 							function onError() {
 							  console.log('웹소켓 통신 중 오류 발생');
 							}							
-														
+												
+							
+							// 메세지 입력창에 엔터 눌러서 전송하기, shift 엔터면 줄바꿈.
+			        $(document).ready(function(){
+			            // enter 눌렀을 때 메세지 전송, shift+enter 눌렀을 때 줄바꿈 적용
+			            $("#chat-input").on("keydown", function(evt){
+			              if(evt.keyCode == 13){
+			                if(!evt.shiftKey){
+			                  evt.preventDefault();
+			                  sendMessage(); // 메세지 전송시키는 함수
+			                }
+			              }
+			            })
+			        })
 							
 							
 							
@@ -303,7 +376,7 @@
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
 								
 							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
-							  $('#room_no').html(roomNo);
+							  $('#room-no').html(roomNo);
 
 							  
 								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
@@ -324,7 +397,7 @@
 							        success: function(response) {
 							        	
 							            // 채팅방 정보 업데이트
-							            $('#room_no').text(response.roomName);
+							            $('#room-no').text(response.roomName);
 							            $('#room_count').text(response.memberCount);
 							            
 							            // 메시지 리스트 업데이트

@@ -13,9 +13,12 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.br.gdcampus.dto.UserDto;
+import com.br.gdcampus.service.ChatService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Component // serlvet-context.xml에 빈 등록 구문 대체
 @Slf4j // 로그 출력을 위한 롬복 어노테이션
 public class ChatEchoHandler extends TextWebSocketHandler {
@@ -26,6 +29,8 @@ public class ChatEchoHandler extends TextWebSocketHandler {
     
     // 각 채팅방에 사용자가 참여하고 있는지 여부를 저장하는 맵 (roomNo와 userNo로 구성)
     private Map<String, Map<String, Boolean>> userStatusMap = new ConcurrentHashMap<>();
+    
+    private final ChatService chatService;
     
 
     
@@ -76,19 +81,26 @@ public class ChatEchoHandler extends TextWebSocketHandler {
      */
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+    	
+    	log.debug("handleMessage 실행됨");
+    	
         String roomNo = (String) session.getAttributes().get("roomNo");
         String userId = (String) session.getAttributes().get("userId");
         String payload = message.getPayload().toString();
-
+        
+        log.debug("payload : {}", payload);
         
         // 메세지유형(chat/entry/exit) | 채팅방에띄워주고자하는메세지내용 | 발신자아이디 | ...(프로필이미지경로 등) <- 나중에 |으로 split.
         String msg = "chat|" + payload + "|" + userId;
+        
+        log.debug("msg : {}", msg);
         
         // 현재 채팅방의 모든 사용자에게 메시지 전송
         for (WebSocketSession sss : chatRooms.get(roomNo)) {
             sss.sendMessage(new TextMessage(msg)); // 화면에서 onMesage 함수가 자동 실행된다.
         }
         
+        // 여기서 ChatService 호출해서 db에 insert 할 예정.
     }
     
     
@@ -103,7 +115,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         String userId = (String) session.getAttributes().get("userId");
 
         // 채팅방에서 해당 세션 제거
-        chatRooms.get(roomNo).remove(session);
+        chatRooms.get(roomNo).remove(session); // Java의 List.remove(Object o)는 객체의 주소값(참조값)을 기준으로 객체를 구분하고 제거한다.
         
         log.debug("User {} has disconnected from room {}", userId, roomNo);
     }
