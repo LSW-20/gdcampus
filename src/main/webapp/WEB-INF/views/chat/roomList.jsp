@@ -44,7 +44,7 @@
                <div class="d-lg-flex mb-4">
                
                		 <!-- 왼쪽 채팅방 목록 시작 -->
-                   <div class="chat-leftsidebar card">
+                   <div class="chat-leftsidebar card" style="height:680px;">
                    
                      <br>
                        <div class="p-3 px-4">
