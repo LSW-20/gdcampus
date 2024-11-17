@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="classMapper">
+
 	<resultMap id="classResultMap" type="CLassDto">
 	
 		<result column="CLASS_CODE" property="classCode"/>
@@ -62,6 +63,13 @@
 	</resultMap>
 	
 	<!-- 강의신청 목록/교무팀 -->
+	<select id="selectStaffClassList" resultMap="classResultMap">
+	SELECT C.USER_NO,CLASS_CODE, CLASS_TITLE, APPL_DATE, USER_NAME, STATUS
+	  FROM T_OPEN_APPL
+	  JOIN T_CLASS C USING(CLASS_CODE)
+	  JOIN T_USER U ON C.USER_NO = U.USER_NO
+	  ORDER BY APPL_DATE DESC
+	</select>
 	<!-- 강의신청 상세조회/교무팀 -->
 	<!-- 강의신청 숭인/교무팀 -->
 	<!-- 강의신청 반려/교무팀 -->
