@@ -320,14 +320,16 @@
 			        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
 			        	    }
 			        	  
-			        	  	$conversationList.append($chatDiv);
-			        	  	    
+			        	  	
 			                     
 		            }else { // 입장 또는 퇴장 메세지일 경우
 		              // $chatDiv.addClass("chat-user").addClass(msgArr[0]).text(msgArr[1]);
 		            }						    
 						    
 						    
+			          $conversationList.append($chatDiv);
+			          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
+	    
 								
 							}
 							
