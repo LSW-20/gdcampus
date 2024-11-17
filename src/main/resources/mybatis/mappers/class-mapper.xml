@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="classMapper">
+
+	
+	<resultMap id="classResultMap" type="CLassDto">
+	
+		<result column="CLASS_CODE" property="classCode"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		
+		<result column="CLASS_TITLE" property="classTitle"/>
+		<result column="CLASS_TYPE" property="classType"/>
+		<result column="PRG_METHOD" property="prgMethod"/>
+		<result column="TARGET_GRADE" property="targetGrade"/>
+		<result column="CLASS_HOURS" property="classHours"/>
+		<result column="CLASS_GOALS" property="classGoals"/>
+		<result column="OPERATION_PLAN" property="opreationPlan"/>
+		<result column="MAIN_TEXTBOOK" property="mainTextBook"/>
+		<result column="REFN_BOOK" property="refnBook"/>
+		<result column="CONFIRM_YN" property="confirmYn"/>
+		
+		<result column="STATUS" property="status"/>
+		<result column="APPL_DATE" property="applDate"/>
+		<result column="REASON" property="reason"/>
+		<result column="DEL_YN" property="delYn"/>
+		
+		<result column="DEPT_NAME" property="evaList"/>
+		<result column="RANK_NAME" property="learnerList"/>
+		<result column="RANK_NAME" property="planList"/>
+		
+		 <!-- 평가방식, 수강생, 수업계획 매핑 -->
+	    <collection ofType="EvaMethodDto" property="evaList" resultMap="evaList"/>
+	    <collection ofType="LearnerDto" property="learnerList" resultMap="learnerList"/>
+	    <collection ofType="LessonPlanDto" property="planList" resultMap="planList"/>
+	</resultMap>
+
+	<!-- 평가방식 매핑 -->
+	<resultMap id="evaList" type="EvaMethodDto">
+	    <result column="dept_no" property="deptNo"/>
+	    <result column="dn" property="deptName"/>
+	</resultMap>
+	
+	<!-- 수강생 매핑 -->
+	<resultMap id="learnerList" type="LearnerDto">
+	    <result column="LEARNER_NO" property="learnerNo"/>
+	    <result column="STU_NO" property="stuNo"/>
+	    <result column="MIDDLE_TEST" property="middleTest"/>
+	    <result column="FINAL_TESTL" property="finalTest"/>
+	    <result column="PRACTICE" property="practice"/>
+	    <result column="ATTENDANCE" property="attendance"/>
+	    <result column="ETC" property="etc"/>
+	    <result column="FINAL_GRADE" property="finalGrade"/>
+	</resultMap>
+		
+	<!-- 수업계획 매핑 -->
+	<resultMap id="planList" type="LessonPlanDto">
+	    <result column="WEEK" property="week"/>
+	    <result column="CONTENT" property="content"/>
+	    <result column="TCHNG_MTHD" property="tchngMthd"/>
+	    <result column="MATERIAL" property="material"/>
+	</resultMap>
+	
+	<!-- 강의신청 목록/교무팀 -->
+	<!-- 강의신청 상세조회/교무팀 -->
+	<!-- 강의신청 숭인/교무팀 -->
+	<!-- 강의신청 반려/교무팀 -->
+	<!-- 강의신청 보완요청/교무팀 -->
+	
+	<!-- 강의신청 목록/교수 -->
+	<!-- 강의신청 신청/교수 -->
+	<!-- 강의신청 상세조회/교수 -->
+	<!-- 강의신청 수정(보완)/교수 -->
+	<!-- 강의신청 취소/교수 -->
+	
+	<!-- 내강의 목록조회 -->
+	<!-- 내강의 상세조회 -->
+	
+	<!-- 수업계획서 조회 -->
+	<!-- 수업계획서 수정 -->
+	<!-- 수업계획서 삭제 -->
+	<!-- 수업계획서 추가 -->
+
+	
+</mapper>
