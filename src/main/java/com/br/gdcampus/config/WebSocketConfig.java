@@ -38,7 +38,7 @@ public class WebSocketConfig implements WebSocketConfigurer{
 	
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(chatEchoHandler, "/chat")
+		registry.addHandler(chatEchoHandler, "/websocket/chat")
 				.addInterceptors(HttpSessionHandshakeInterceptor()) // 메소드 호출구문을 쓰면 저 객체가 생성되어서 온다. 이 객체를 인터셉터로 등록한다.
 				.withSockJS(); // <websocket:sockjs /> 대체
 	}
