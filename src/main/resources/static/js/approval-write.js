@@ -177,8 +177,34 @@ const ApprovalModal = {
 		// hidden input에 저장
 		document.getElementById('approvalLine').value = JSON.stringify(approvers);
 
+		// 결재선 테이블 컨테이너 초기화
+		const container = document.getElementById('approvalTablesContainer');
+		container.innerHTML = '';		
+		
+		//각 결재자 별로 테이블 생성
+		approvers.forEach((approver,index) =>{
+			const table = document.createElement('table');
+			table.className = 'approvalLineTable';
+			
+			table.innerHTML= `
+				<tr class="approvalHeader">
+					<th width="100%">${index+1}차결재</th>
+				</tr>
+				<tr class="approvalStamp">
+				    <td>
+				        <div class="stamp pending">대기</div>
+				        ${approver.userName} ${approver.rankName}
+				    </td>
+				</tr>
+				<tr class="approvalDate">
+				    <td></td>
+				</tr>				
+			`;
+			container.appendChild(table);
+		});
+		
 		this.hide();
-		console.log('Saved approvers:', approvers);
+		console.log('저장된 결재선:', approvers);
 	},
 
 	// 결재 요청 제출

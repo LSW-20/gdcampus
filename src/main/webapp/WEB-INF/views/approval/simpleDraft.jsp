@@ -46,6 +46,10 @@
 				    table-layout: fixed;
 				    border-collapse: collapse;
 				}
+				#approvalTablesContainer {
+				    display: flex;
+				    gap: 20px;
+				}
 				
 				.approvalLineTable {
 				    width: 126px;  /* 결재선 테이블 너비 */
@@ -181,23 +185,29 @@
 					    </table>
 					
 					    <!-- 결재선 테이블 -->
+<!-- 					    
 					    <table class="approvalLineTable">
 					        <tr class="approvalHeader">
 					            <th width="100%">1차 결재</th>
-					            <!-- 동적으로 추가될 결재자 칸 -->
+					            동적으로 추가될 결재자 칸
 					        </tr>
 					        <tr class="approvalStamp">
 					            <td>
 					                <div class="stamp pending">대기</div>
-					                <!-- 여기에 1차 결재자 정보 동적 추가 -->
+					                여기에 1차 결재자 정보 동적 추가
 					            </td>
-					            <!-- 동적으로 추가될 결재자 도장 -->
+					            동적으로 추가될 결재자 도장
 					        </tr>
 					        <tr class="approvalDate">
 					            <td></td>
-					            <!-- 동적으로 추가될 날짜 칸 -->
+					            동적으로 추가될 날짜 칸
 					        </tr>
 					    </table>
+					     -->
+				    <!-- 결재선 테이블들이 동적으로 추가될 컨테이너 -->
+				    <div id="approvalTablesContainer">
+				        <!-- 여기에 결재선 테이블들이 동적으로 추가됨 -->
+				    </div>					     
 					</div>
         </div>
 
