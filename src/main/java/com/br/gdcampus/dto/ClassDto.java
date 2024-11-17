@@ -23,7 +23,9 @@ public class ClassDto {
 	// 수업테이블
 	 private String classCode; 	 
 	 private String userNo;
-	 private String modifyDate;
+	 private String modifyDate; // 수정일
+	 
+	 private String deptName; // 개설 학과명
 	 
 	 private String classTitle;
 	 private String classType;
@@ -34,11 +36,11 @@ public class ClassDto {
 	 private String opreationPlan;
 	 private String mainTextBook;
 	 private String refnBook;
-	 private String confirmYn;
+	 private String confirmYn; // 승인YN 강의목록에 띄울땐 Y만뜨게
 	 
 	 // 신청서테이블
 	 private String status;
-	 private String applDate;
+	 private String applDate; // 신청일
 	 private String reason;
 	 private int delYn;
 	
