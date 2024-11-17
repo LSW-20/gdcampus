@@ -2,12 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="classMapper">
 
-	
-	<resultMap id="classResultMap" type="CLassDto">
+	<resultMap id="classResultMap" type="ClassDto">
 	
 		<result column="CLASS_CODE" property="classCode"/>
 		<result column="USER_NO" property="userNo"/>
 		<result column="MODIFY_DATE" property="modifyDate"/>
+		
+		<result column="DEPT_NAME" property="deptName"/>
 		
 		<result column="CLASS_TITLE" property="classTitle"/>
 		<result column="CLASS_TYPE" property="classType"/>
@@ -25,10 +26,6 @@
 		<result column="REASON" property="reason"/>
 		<result column="DEL_YN" property="delYn"/>
 		
-		<result column="DEPT_NAME" property="evaList"/>
-		<result column="RANK_NAME" property="learnerList"/>
-		<result column="RANK_NAME" property="planList"/>
-		
 		 <!-- 평가방식, 수강생, 수업계획 매핑 -->
 	    <collection ofType="EvaMethodDto" property="evaList" resultMap="evaList"/>
 	    <collection ofType="LearnerDto" property="learnerList" resultMap="learnerList"/>
@@ -37,8 +34,9 @@
 
 	<!-- 평가방식 매핑 -->
 	<resultMap id="evaList" type="EvaMethodDto">
-	    <result column="dept_no" property="deptNo"/>
-	    <result column="dn" property="deptName"/>
+	    <result column="EVA_ITEM" property="evaItem"/>
+	    <result column="ALLOCATION" property="allocation"/>
+	    <result column="EVA_DETAIL" property="evaDetail"/>
 	</resultMap>
 	
 	<!-- 수강생 매핑 -->
@@ -62,6 +60,13 @@
 	</resultMap>
 	
 	<!-- 강의신청 목록/교무팀 -->
+	<select id="selectStaffClassList" resultMap="classResultMap">
+	SELECT C.USER_NO,CLASS_CODE, CLASS_TITLE, APPL_DATE, USER_NAME, STATUS
+	  FROM T_OPEN_APPL
+	  JOIN T_CLASS C USING(CLASS_CODE)
+	  JOIN T_USER U ON C.USER_NO = U.USER_NO
+	  ORDER BY APPL_DATE DESC
+	</select>
 	<!-- 강의신청 상세조회/교무팀 -->
 	<!-- 강의신청 숭인/교무팀 -->
 	<!-- 강의신청 반려/교무팀 -->
@@ -75,6 +80,7 @@
 	
 	<!-- 내강의 목록조회 -->
 	<!-- 내강의 상세조회 -->
+	<!-- 수강생 상세조회 -->
 	
 	<!-- 수업계획서 조회 -->
 	<!-- 수업계획서 수정 -->
