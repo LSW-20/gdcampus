@@ -272,7 +272,7 @@
 							// 나에게 메세지가 왔을 때 실행될 함수
 							function onMessage(evt) { // 웹소켓에서 클라이언트로 보내는 메세지를 받기 위해 매개변수를 둔다.
 								
-							 
+							 console.log('onMessage 실행됨');
 								let msgArr = evt.data.split("|"); // ["메세지유형(chat|entry|exit)", "출력시킬메세지내용", "발신자아이디"];
 								
 								
@@ -367,10 +367,10 @@
 							// 왼쪽 채팅방 목록에서 특정 채팅방 클릭시 실행되는 함수.
 							function loadChatRoom(roomNo) {
 								
-						    if (sock) {
+/* 						    if (sock) {
 						        sock.close(); // 기존 WebSocket 닫기
 						        console.log("기존 WebSocket 연결 종료: RoomNo =", currentRoomNo);
-						    }
+						    } */
 						    
 								
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
@@ -378,7 +378,7 @@
 							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
 							  $('#room-no').html(roomNo);
 
-							  
+							  console.log(roomNo);
 								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
 							  sock.onopen = onOpen; // 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
 							  sock.onclose = onClose; // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
