@@ -12,6 +12,8 @@
     
     <!-- Summernote CSS -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    
+		
 
     <style>
         .draft-title {
@@ -169,160 +171,12 @@
     
     <script>
         const contextPath = "${contextPath}";
-        
-        // 모듈 패턴으로 전역 네임스페이스 오염 방지
-        const ApprovalModal = {
-            init: function() {
-                this.initTree();
-                this.bindEvents();
-            },
             
-            initTree: function() {
-                $('#orgTree').jstree({
-                    'core': {
-                        'data': {
-                            'url': `${contextPath}/tree/org`,
-                            'dataType': 'json'
-                        },
-                        'themes': {
-                            'responsive': false
-                        }
-                    },
-                    'types': {
-                        'department': {
-                            'icon': 'fas fa-building'
-                        },
-                        'user': {
-                            'icon': 'fas fa-user'
-                        }
-                    },
-                    'plugins': ['types']
-                });
-            },
             
-            bindEvents: function() {
-                $('#orgTree').on('select_node.jstree', (e, data) => {
-                    console.log('선택된노드:', data.node);  // 디버깅용
-                    
-                    if(data.node.type === 'user') {
-                        const userData = data.node.data;
-                        console.log('사원정보:', userData);  // 디버깅용
-                        
-                        if(userData) {
-                            this.addApprover(
-                                userData.userNo,
-                                userData.userName,
-                                userData.rankName,
-                                userData.deptName
-                            );
-                        } else {
-                            console.error('유저정보없음');
-                        }
-                    }
-                });
-            },
+
+
             
-            show: function() {
-                $('#approvalModal').show();
-            },
-            
-            hide: function() {
-                $('#approvalModal').hide();
-            },
-            
-            addApprover: function(userNo, userName, rankName, deptName) {
-                console.log('Trying to add:', { userNo, userName, rankName, deptName });
-
-                // 중복 체크
-                const existingApprovers = $('#approversList li');
-                let isDuplicate = false;
-
-                existingApprovers.each(function() {
-                    if($(this).attr('data-user-id') === userNo) {
-                        isDuplicate = true;
-                        return false; // each 루프 중단
-                    }
-                });
-
-                if(isDuplicate) {
-                    alert('이미 추가된 결재자입니다.');
-                    return;
-                }
-
-                // 결재자 수 제한
-                if(existingApprovers.length >= 4) {
-                    alert('결재선은 최대 4명까지만 지정할 수 있습니다.');
-                    return;
-                }
-
-                // Template literal 사용하여 모든 값이 제대로 들어가는지 확인
-                const approverHtml = 
-                    <li data-user-id=${userNo} data-rank="${rankName}" data-dept="${deptName}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>[${deptName}] ${userName} ${rankName}</span>
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                onclick="ApprovalModal.removeApprover('${userNo}')">삭제</button>
-                        </div>
-                    </li>
-                ;
-
-                console.log('Generated HTML:', approverHtml); // 생성된 HTML 확인
-                
-                $('#approversList').append(approverHtml);
-                
-                // 추가 후 확인
-                const addedItem = $(`#approversList li[data-user-id="${userNo}"]`);
-                console.log('Added item exists:', addedItem.length > 0);
-                console.log('Added item data:', {
-                    userNo: addedItem.attr('data-user-id'),
-                    rankName: addedItem.attr('data-rank'),
-                    deptName: addedItem.attr('data-dept')
-                });
-            },
-
-            removeApprover: function(userNo) {
-                console.log('Removing approver:', userNo);
-                $(`#approversList li[data-user-id="${userNo}"]`).remove();
-            },
-            
-            save: function() {
-                const approvers = [];
-                $('#approversList li').each(function(index) {
-                    const $li = $(this);
-                    approvers.push({
-                        userNo: $li.data('user-id'),
-                        userName: $li.find('span').text().split(']')[1].trim().split(' ')[0],
-                        rankName: $li.data('rank'),
-                        deptName: $li.data('dept'),
-                        lineOrder: index + 1
-                    });
-                });
-
-                if(approvers.length === 0) {
-                    alert('결재자를 한 명 이상 선택해주세요.');
-                    return;
-                }
-
-                $('#approvalLine').val(JSON.stringify(approvers));
-                this.hide();
-            },
-            
-            submitForm: function() {
-                if(!$('#approvalLine').val()) {
-                    alert('결재선을 지정해주세요.');
-                    return;
-                }
-
-                if(confirm('결재를 요청하시겠습니까?')) {
-                    document.getElementById('approvalForm').submit();
-                }
-            }
-        };
-
-        // DOM 로드 완료 후 초기화
-        $(document).ready(function() {
-            ApprovalModal.init();
-        });
     </script>
+    <script src="${contextPath}/js/approval-write.js"></script>
 </body>
 </html>

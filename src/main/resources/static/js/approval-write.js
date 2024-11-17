@@ -84,15 +84,30 @@ const ApprovalModal = {
     
     // 결재자 추가
     addApprover: function(userNo, userName, rankName, deptName) {
-        console.log('Adding approver:', { userNo, userName, rankName, deptName });
+        console.log('approval-write 결재가추가:', { userNo, userName, rankName, deptName });
         
+				let isDuplicate = false;
+				
         // 이미 추가된 결재자 체크
         const existingApprover = document.querySelector(`#approversList li[data-user-id='${userNo}']`);
         if(existingApprover) {
             alert('이미 추가된 결재자입니다.');
             return;
-        }
+        }else {
+					
+				}
 
+/*				existingApprover.each(function() {
+					if ($(this).attr('data-user-id') === null){
+						isDuplicate = true;
+						return false; // each 루프 중단
+					}
+				    if($(this).attr('data-user-id') === userNo) {
+				        isDuplicate = true;
+				        return false; // each 루프 중단
+				    }
+				});		*/		
+				
         // 결재자 수 제한
         if(document.querySelectorAll('#approversList li').length >= 4) {
             alert('결재선은 최대 4명까지만 지정할 수 있습니다.');
@@ -118,6 +133,11 @@ const ApprovalModal = {
         
         // 결재자 수 업데이트
         this.updateApproverCount();
+				
+				//console
+				console.log('Trying to add:', { userNo, userName, rankName, deptName });
+
+		
     },
     
     // 결재자 제거
@@ -175,3 +195,10 @@ const ApprovalModal = {
         }
     }
 };
+
+
+
+
+/*-----------------------------*/
+
+
