@@ -94,7 +94,9 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         String msg = "chat|" + payload + "|" + userId;
         
         log.debug("msg : {}", msg);
-        
+
+        log.debug("roomNo : {}", roomNo);  
+        log.debug("chatRooms.get(roomNo) : {}", chatRooms.get(roomNo));
         // 현재 채팅방의 모든 사용자에게 메시지 전송
         for (WebSocketSession sss : chatRooms.get(roomNo)) {
             sss.sendMessage(new TextMessage(msg)); // 화면에서 onMesage 함수가 자동 실행된다.
