@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 수업 평가방식 관련 dto
+ * 수강생 Dto
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,10 +18,14 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class EvaMethodDto {
+public class LearnerDto {
 
-	private String evaItem;
-	private int allocation;
-	private String evaDetail;
-
+	private int learnerNo;
+	private int stuNo;
+	private int middleTest;
+	private int finalTest;
+	private int practice;
+	private int attendance;
+	private int etc;
+	private String finalGrade;
 }
