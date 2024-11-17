@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="classMapper">
 
-	<resultMap id="classResultMap" type="CLassDto">
+	<resultMap id="classResultMap" type="ClassDto">
 	
 		<result column="CLASS_CODE" property="classCode"/>
 		<result column="USER_NO" property="userNo"/>
@@ -26,10 +26,6 @@
 		<result column="REASON" property="reason"/>
 		<result column="DEL_YN" property="delYn"/>
 		
-		<result column="DEPT_NAME" property="evaList"/>
-		<result column="RANK_NAME" property="learnerList"/>
-		<result column="RANK_NAME" property="planList"/>
-		
 		 <!-- 평가방식, 수강생, 수업계획 매핑 -->
 	    <collection ofType="EvaMethodDto" property="evaList" resultMap="evaList"/>
 	    <collection ofType="LearnerDto" property="learnerList" resultMap="learnerList"/>
@@ -38,8 +34,9 @@
 
 	<!-- 평가방식 매핑 -->
 	<resultMap id="evaList" type="EvaMethodDto">
-	    <result column="dept_no" property="deptNo"/>
-	    <result column="dn" property="deptName"/>
+	    <result column="EVA_ITEM" property="evaItem"/>
+	    <result column="ALLOCATION" property="allocation"/>
+	    <result column="EVA_DETAIL" property="evaDetail"/>
 	</resultMap>
 	
 	<!-- 수강생 매핑 -->
