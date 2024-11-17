@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="now" class="java.util.Date" />
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -17,8 +20,6 @@
         .approval-form {
             width: 1000px;
             height: 845px;
-            margin-top: 35px;
-            margin-left: 280px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -35,11 +36,33 @@
         }
         
         .approval-line {
-            width: 60%;
+				    width: 55%;
+				    display: flex;
+				    gap: 20px;  /* 테이블 간 간격 */
         }
-        
+        /* 결재선 */
+				#apprUserLineTable {
+				    width: 126px;  /* 기안자 테이블 너비 */
+				    table-layout: fixed;
+				    border-collapse: collapse;
+				}
+				
+				.approvalLineTable {
+				    width: 126px;  /* 결재선 테이블 너비 */
+				    table-layout: fixed;
+				    border-collapse: collapse;
+				}
+				.approvalHeader, .approvalDate{
+						height: 36.5px;
+				}	
+				
+				.approval-line table th,
+				.approval-line table td {
+				    border: 1px solid #ddd;
+				    padding: 8px;
+				    text-align: center;
+				}        
         table {
-            width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
@@ -55,16 +78,15 @@
         }
         
         .stamp {
-            width: 50px;
-            height: 50px;
-            margin: 5px auto;
-            border: 2px solid #ff0000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ff0000;
-            font-weight: bold;
+				    width: 50px;
+				    height: 50px;
+				    margin: 5px auto;
+				    border: 2px solid #ff0000;
+				    border-radius: 50%;
+				    display: flex;
+				    align-items: center;
+				    justify-content: center;
+				    font-weight: bold;
         }
 				/* 미결재 상태의 스타일 */
 				.approval-stamp.pending {
@@ -93,12 +115,18 @@
         .appr-title
         {
           width: 600px;
-        }
-        /* simpleDraft별도 */
-        textarea {
-/*         	height: 300px;
-        	width: 500px; */
-        }        
+        }  
+        
+        /* 결재도장 */
+				.stamp.approved {
+				    border-color: #ff0000;
+				    color: #ff0000;
+				}
+				
+				.stamp.pending {
+				    border-color: #ccc;
+				    color: #ccc;
+				}             
     </style>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
@@ -117,45 +145,60 @@
                 <table>
                     <tr>
                         <th width="30%">기안자</th>
-                        <td>apprName</td>
+                        <td>${loginUser.userName}</td>
                     </tr>
                     <tr>
                         <th>소속</th>
-                        <td>deptName</td>
+                         <td>${loginUser.deptNo}</td>
                     </tr>
                     <tr>
                         <th>기안일</th>
-                        <td>apprDate</td>
+                        <td><fmt:formatDate value="${now}" pattern="yy/MM/dd"/></td>
                     </tr>
                     <tr>
                         <th>문서번호</th>
-                        <td>apprNo</td>
+                        <td>${apprNo}</td>
                     </tr>
                 </table>
             </div>
             
-            <div class="approval-line">
-                <table>
-                    <tr>
-                        <th width="50%">신청</th>
-                        <th width="50%">대표이사</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stamp">승인</div>
-                            loginUser
-                        </td>
-                        <td>
-                            <div class="stamp">승인</div>
-                            userNo
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>lineDate</td>
-                        <td>lineDate</td>
-                    </tr>
-                </table>
-            </div>
+					<div class="approval-line">
+					
+					    <!-- 기안자 결재 테이블 -->
+					    <table id="apprUserLineTable">
+					        <tr>
+					            <th width="100%">기안</th>
+					        </tr>
+					        <tr>
+					            <td>
+					                <div class="stamp">승인</div>
+					                ${loginUser.userName} ${loginUser.rankName}
+					            </td>
+					        </tr>
+					        <tr>
+					            <td><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></td>
+					        </tr>
+					    </table>
+					
+					    <!-- 결재선 테이블 -->
+					    <table class="approvalLineTable">
+					        <tr class="approvalHeader">
+					            <th width="100%">1차 결재</th>
+					            <!-- 동적으로 추가될 결재자 칸 -->
+					        </tr>
+					        <tr class="approvalStamp">
+					            <td>
+					                <div class="stamp pending">대기</div>
+					                <!-- 여기에 1차 결재자 정보 동적 추가 -->
+					            </td>
+					            <!-- 동적으로 추가될 결재자 도장 -->
+					        </tr>
+					        <tr class="approvalDate">
+					            <td></td>
+					            <!-- 동적으로 추가될 날짜 칸 -->
+					        </tr>
+					    </table>
+					</div>
         </div>
 
 
