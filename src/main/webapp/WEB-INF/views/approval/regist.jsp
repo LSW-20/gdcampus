@@ -12,16 +12,11 @@
     
     <!-- Summernote CSS -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
-    
-		
+   
 
     <style>
         .draft-title {
             font-size: 25px;
-        }
-        .btn-form {
-            margin-top: 100px;
-            margin-left: 275px;
         }
         
         /* Modal Styles */
@@ -38,18 +33,18 @@
         
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
+            margin: 5% auto;
             padding: 20px;
             width: 70%;
             max-width: 800px;
             position: relative;
         }
         
-.modal-body {
-    display: flex;
-    gap: 20px;
-    padding: 15px;
-}
+				.modal-body {
+				    display: flex;
+				    gap: 20px;
+				    padding: 15px;
+				}
         
         #orgTree {
             height: 400px;
@@ -171,11 +166,6 @@
     
     <script>
         const contextPath = "${contextPath}";
-            
-            
-
-
-            
     </script>
     <script src="${contextPath}/js/approval-write.js"></script>
 </body>
