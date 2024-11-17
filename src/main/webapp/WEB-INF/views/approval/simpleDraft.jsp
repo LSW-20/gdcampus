@@ -38,17 +38,18 @@
         .approval-line {
 				    width: 55%;
 				    display: flex;
-				    gap: 20px;  /* 테이블 간 간격 */
+				    gap: 10px;  /* 테이블 간 간격 */
         }
         /* 결재선 */
 				#apprUserLineTable {
 				    width: 126px;  /* 기안자 테이블 너비 */
+				    margin-left: -140px;
 				    table-layout: fixed;
 				    border-collapse: collapse;
 				}
 				#approvalTablesContainer {
 				    display: flex;
-				    gap: 20px;
+				    gap: 0px;
 				}
 				
 				.approvalLineTable {
@@ -168,45 +169,25 @@
             
 					<div class="approval-line">
 					
-					    <!-- 기안자 결재 테이블 -->
-					    <table id="apprUserLineTable">
-					        <tr>
-					            <th width="100%">기안</th>
-					        </tr>
-					        <tr>
-					            <td>
-					                <div class="stamp">승인</div>
-					                ${loginUser.userName} ${loginUser.rankName}
-					            </td>
-					        </tr>
-					        <tr>
-					            <td><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></td>
-					        </tr>
-					    </table>
-					
-					    <!-- 결재선 테이블 -->
-<!-- 					    
-					    <table class="approvalLineTable">
-					        <tr class="approvalHeader">
-					            <th width="100%">1차 결재</th>
-					            동적으로 추가될 결재자 칸
-					        </tr>
-					        <tr class="approvalStamp">
-					            <td>
-					                <div class="stamp pending">대기</div>
-					                여기에 1차 결재자 정보 동적 추가
-					            </td>
-					            동적으로 추가될 결재자 도장
-					        </tr>
-					        <tr class="approvalDate">
-					            <td></td>
-					            동적으로 추가될 날짜 칸
-					        </tr>
-					    </table>
-					     -->
+				    <!-- 기안자 결재선 테이블 -->
+				    <table id="apprUserLineTable">
+				        <tr>
+				            <th width="100%">기안</th>
+				        </tr>
+				        <tr>
+				            <td>
+				                <div class="stamp">승인</div>
+				                ${loginUser.userName} ${loginUser.rankName}
+				            </td>
+				        </tr>
+				        <tr>
+				            <td><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></td>
+				        </tr>
+				    </table>
+
 				    <!-- 결재선 테이블들이 동적으로 추가될 컨테이너 -->
 				    <div id="approvalTablesContainer">
-				        <!-- 여기에 결재선 테이블들이 동적으로 추가됨 -->
+				        <!-- 여기에 결재선 테이블들이 동적으로 추가 -->
 				    </div>					     
 					</div>
         </div>
