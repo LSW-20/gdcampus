@@ -328,7 +328,8 @@
 						    
 						    
 			          $conversationList.append($chatDiv);
-			          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
+			          
+			          //$conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
 	    
 								
 							}
@@ -369,18 +370,19 @@
 							// 왼쪽 채팅방 목록에서 특정 채팅방 클릭시 실행되는 함수.
 							function loadChatRoom(roomNo) {
 								
-/* 						    if (sock) {
+ 						    if (sock) {
 						        sock.close(); // 기존 WebSocket 닫기
-						        console.log("기존 WebSocket 연결 종료: RoomNo =", currentRoomNo);
-						    } */
+						        console.log("기존 WebSocket 연결 종료: 이전에 있던 방의 번호 =", currentRoomNo);
+						    } 
 						    
 								
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
 								
 							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
+							  // 이곳에 채팅창영역 비우기.
 							  $('#room-no').html(roomNo);
 
-							  console.log(roomNo);
+							  console.log("현재 이 함수의 roomNo;", roomNo);
 								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
 							  sock.onopen = onOpen; // 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
 							  sock.onclose = onClose; // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
@@ -389,7 +391,7 @@
 							  
 							  
 							  
-							    					    
+							    	/*				    
 							    // AJAX 요청을 보내 해당 채팅방의 과거 메시지들을 가져와서 보여준다.
 							    $.ajax({
 							        url: '/chat/getChatRoomData',  // 서버에서 채팅방 데이터를 가져올 URL
@@ -426,8 +428,9 @@
 							            $('#conversationList').html(conversationList);
 							        }
 							    });
+									*/
 							}
-	
+
 							
 							
 							// x버튼 클릭시 오른쪽 채팅방 영역을 닫고, 세션 종료.
