@@ -109,8 +109,8 @@ const ApprovalModal = {
 						});		*/
 
 		// 결재자 수 제한
-		if (document.querySelectorAll('#approversList li').length >= 4) {
-			alert('결재선은 최대 4명까지만 지정할 수 있습니다.');
+		if (document.querySelectorAll('#approversList li').length >= 3) {
+			alert('결재선은 최대 3명까지만 지정할 수 있습니다.');
 			return;
 		}
 

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="now" class="java.util.Date" />
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -16,9 +18,7 @@
         }
         .purchase-form {
             width: 1000px;
-            height: 1000px;
-            margin-top: 35px;
-            margin-left: 280px;
+            height: 845px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -36,10 +36,36 @@
         
         .approval-line {
             width: 60%;
+				    display: flex;
+				    gap: 10px;  /* 테이블 간 간격 */            
         }
-        
+        /* 결재선 */
+				#apprUserLineTable {
+				    width: 126px;  /* 기안자 테이블 너비 */
+				    margin-left: -140px;
+				    table-layout: fixed;
+				    border-collapse: collapse;
+				}
+				#approvalTablesContainer {
+				    display: flex;
+				    gap: 0px;
+				}        
+				.approvalLineTable {
+				    width: 126px;  /* 결재선 테이블 너비 */
+				    table-layout: fixed;
+				    border-collapse: collapse;
+				}
+				.approvalHeader, .approvalDate{
+						height: 36.5px;
+				}	
+				
+				.approval-line table th,
+				.approval-line table td {
+				    border: 1px solid #ddd;
+				    padding: 8px;
+				    text-align: center;
+				}          
         table {
-            width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
@@ -55,23 +81,26 @@
         }
         
         .stamp {
-            width: 50px;
-            height: 50px;
-            margin: 5px auto;
-            border: 2px solid #ff0000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ff0000;
-            font-weight: bold;
+				    width: 50px;
+				    height: 50px;
+				    margin: 5px auto;
+				    border: 2px solid #ff0000;
+				    border-radius: 50%;
+				    display: flex;
+				    align-items: center;
+				    justify-content: center;
+				    font-weight: bold;
         }
 				/* 미결재 상태의 스타일 */
 				.approval-stamp.pending {
 				    border-color: #ccc;
 				    color: #ccc;
 				}
-				
+				/* 미결재 상태의 스타일 */
+				.approval-stamp.pending {
+				    border-color: #ccc;
+				    color: #ccc;
+				}				
 				/* 반려 상태의 스타일 */
 				.approval-stamp.rejected {
 				    border-color: #ff0000;
@@ -94,7 +123,16 @@
         {
           width: 600px;
         }    
-        
+        /* 결재도장 */
+				.stamp.approved {
+				    border-color: #ff0000;
+				    color: #ff0000;
+				}
+				
+				.stamp.pending {
+				    border-color: #ccc;
+				    color: #ccc;
+				}          
         /* 품의서 별도 style */
         .btn-section {
             text-align: right;
@@ -125,62 +163,64 @@
   <!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
   <div id="layout-wrapper">
       <!-- header 시작 -->
-      <jsp:include page="/WEB-INF/views/common/header.jsp" />
+      <%-- <jsp:include page="/WEB-INF/views/common/header.jsp" /> --%>
       <!-- header 끝 -->
 
       <!-- sidebar 시작 -->
-      <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+      <%-- <jsp:include page="/WEB-INF/views/common/sidebar.jsp" /> --%>
       <!-- sidebar 끝 -->
       <!-- main-content 시작 -->
-		<div class="purchase-form">
 		<!-- 결재 공통부분 start -->
+		<div class="purchase-form">
     <div class="title">구매품의서</div>        
         <div class="form-header">
             <div class="form-info">
                 <table>
                     <tr>
                         <th width="30%">기안자</th>
-                        <td>apprName</td>
+                        <td>${loginUser.userName}</td>
                     </tr>
                     <tr>
                         <th>소속</th>
-                        <td>deptName</td>
+                         <td>${loginUser.deptNo}</td>
                     </tr>
                     <tr>
                         <th>기안일</th>
-                        <td>apprDate</td>
+                        <td><fmt:formatDate value="${now}" pattern="yy/MM/dd"/></td>
                     </tr>
                     <tr>
                         <th>문서번호</th>
-                        <td>apprNo</td>
+                        <td>${apprNo}</td>
                     </tr>
                 </table>
             </div>
             
-            <div class="approval-line">
-                <table>
-                    <tr>
-                        <th width="50%">신청</th>
-                        <th width="50%">대표이사</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="stamp">승인</div>
-                            loginUser
-                        </td>
-                        <td>
-                            <div class="stamp">승인</div>
-                            userNo
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>lineDate</td>
-                        <td>lineDate</td>
-                    </tr>
-                </table>
-            </div>
-        </div>				
+					<div class="approval-line">
+					
+				    <!-- 기안자 결재선 테이블 -->
+				    <table id="apprUserLineTable">
+				        <tr>
+				            <th width="100%">기안</th>
+				        </tr>
+				        <tr>
+				            <td>
+				                <div class="stamp">승인</div>
+				                ${loginUser.userName} ${loginUser.rankName}
+				            </td>
+				        </tr>
+				        <tr>
+				            <td><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></td>
+				        </tr>
+				    </table>
+
+				    <!-- 결재선 테이블들이 동적으로 추가될 컨테이너 -->
+				    <div id="approvalTablesContainer">
+				        <!-- 여기에 결재선 테이블들이 동적으로 추가 -->
+				    </div>					     
+					</div>
+        </div>		
 				<!-- 결재 공통부분 end -->
+				
     <div class="btn-section">
         <button class="btn" onclick="addRow()">추가</button>
         <button class="btn" onclick="deleteRow()">삭제</button>

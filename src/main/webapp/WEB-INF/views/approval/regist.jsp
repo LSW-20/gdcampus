@@ -127,10 +127,10 @@
                         <div class="approval-content">
                             <c:choose>
                                 <c:when test="${param.formType eq 'purchase'}">
-                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
                                 </c:otherwise>
                             </c:choose>
                         </div>
@@ -150,7 +150,7 @@
 		                <div id="orgTree"></div>
 		            </div>
 		            <div id="selectedApprovers">
-		                <h5>결재선 (<span id="approverCount">0</span>/4)</h5>
+		                <h5>결재선 (<span id="approverCount">0</span>/3)</h5>
 		                <ul id="approversList"></ul>
 		            </div>
 		        </div>
