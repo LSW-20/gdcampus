@@ -48,28 +48,43 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         session.getAttributes().put("roomNo", roomNo); // roomNo 저장
         session.getAttributes().put("userId", userId); // userId 저장       
         
-
-        // 채팅방이 없으면 새로 생성
-        chatRooms.putIfAbsent(roomNo, new ArrayList<>());
-        userStatusMap.putIfAbsent(roomNo, new ConcurrentHashMap<>());
+        log.debug("{} --> User {} has entered room {} \n", "ChatEchoHandler의 afterConnectionEstablished 실행됨", userId, roomNo);
         
 
-        // 사용자가 채팅방에 없었던 경우에는 입장처리
-        if (!userStatusMap.get(roomNo).getOrDefault(userId, false)) {  
-        	// sessionList.contains(session) 조건 검사를 생략했는데, 이는 userStatusMap을 사용하여 해당 사용자가 이미 접속 상태인지 확인하는 방식으로 바뀌었기 때문입니다. 
-        	// 이 경우, userStatusMap에 사용자의 상태가 true로 기록된 경우 이미 입장한 것으로 간주하고, 중복 메시지를 방지할 수 있습니다.
+        // 현재 roomNo를 key값으로 가지는 List<WebSocketSession>이 없으면 생성한다.
+        if ( !chatRooms.containsKey(roomNo) ) {
+            chatRooms.put(roomNo, new ArrayList<>());
+        }
+        
+        // 현재 roomNo를 key값으로 가지는 Map<String, Boolean>이 없으면 생성한다.
+        if ( !userStatusMap.containsKey(roomNo) ) {
+            userStatusMap.put(roomNo, new ConcurrentHashMap<>());
+        }
+              
+
+        // 사용자가 현재 roomNo 채팅방에 없었거나 퇴장상태인 경우에는 입장처리한다.
+        if ( !userStatusMap.get(roomNo).containsKey(userId) || userStatusMap.get(roomNo).get(userId) == false ) {  
+
             
-        	userStatusMap.get(roomNo).put(userId, true);
-            chatRooms.get(roomNo).add(session); // 현재 roomNo를 key로 List<WebSocketSession>에 현재 session 추가. 
+        	userStatusMap.get(roomNo).put(userId, true); // 이 userId를 현재 roomNo에 입장처리. (Map에 이미 있는 키로 put을 호출하면 기존 키에 매핑된 값이 새로운 값으로 덮어쓰기 됨)
+            log.debug("{} 유저가 {} 채팅방 번호에 입장처리됨.\n", userId, roomNo);
+        	
+            chatRooms.get(roomNo).add(session); // 현재 roomNo를 key로 List<WebSocketSession>에 현재 클라이언트 session을 추가한다. 
+            
 
             // 입장 메시지 생성 및 전송
-            String msg = "entry|" + userId + "님이 " + roomNo + " 채팅방에 입장하였습니다.";
+            String msg = "entry|" + userId + " 님이 " + roomNo + " 채팅방에 입장하였습니다.";
+            log.debug("입장 메세지 : {}\n", msg);
+            
+            
             for (WebSocketSession sss : chatRooms.get(roomNo)) {
                 sss.sendMessage(new TextMessage(msg));
             }
+            
         }
         
-        log.debug("{} User {} has entered room {}", "ChatEchoHandler의 afterConnectionEstablished 실행됨", userId, roomNo);
+        
+        
     }
    
     
@@ -82,7 +97,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
     	
-    	log.debug("ChatEchoHandler의 handleMessage 실행됨");
+    	log.debug("ChatEchoHandler의 handleMessage 실행됨.");
     	
         String roomNo = (String) session.getAttributes().get("roomNo");
         String userId = (String) session.getAttributes().get("userId");
@@ -96,7 +111,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         log.debug("(handleMessage) 웹소켓에서 화면으로 보낼 메세지 : {}", msg);
 
         log.debug("(handleMessage) 현재 채팅방 번호 : {}", roomNo);  
-        log.debug("(handleMessage) chatRooms.get(roomNo) : {}", chatRooms.get(roomNo));
+        log.debug("(handleMessage) 현재 {} 채팅방 번호에 연결되어 있는 클라이언트들의 세션 리스트 : {} \n", roomNo, chatRooms.get(roomNo));
         // 현재 채팅방의 모든 사용자에게 메시지 전송
         for (WebSocketSession sss : chatRooms.get(roomNo)) {
             sss.sendMessage(new TextMessage(msg)); // 화면에서 onMesage 함수가 자동 실행된다.
@@ -119,7 +134,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         // 채팅방에서 해당 세션 제거
         chatRooms.get(roomNo).remove(session); // Java의 List.remove(Object o)는 객체의 주소값(참조값)을 기준으로 객체를 구분하고 제거한다.
         
-        log.debug("{} User {} has disconnected from room {}", "ChatEchoHandler의 afterConnectionClosed 실행됨", userId, roomNo);
+        log.debug("{} --> User {} has disconnected from room {} \n", "ChatEchoHandler의 afterConnectionClosed 실행됨", userId, roomNo);
     }
     
     
@@ -137,7 +152,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
             for (WebSocketSession sss : chatRooms.get(roomNo)) {
                 sss.sendMessage(new TextMessage(msg));
             }
-            log.debug("User {} has left chat room {}", userId, roomNo);
+            log.debug("User {} has left chat room {} \n", userId, roomNo);
         }
     }
     

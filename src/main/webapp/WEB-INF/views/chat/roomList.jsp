@@ -324,6 +324,7 @@
 			                     
 		            }else { // 입장 또는 퇴장 메세지일 경우
 		              // $chatDiv.addClass("chat-user").addClass(msgArr[0]).text(msgArr[1]);
+		            	$chatDiv.append($("<div>").html("입장메세지"));
 		            }						    
 						    
 						    
@@ -379,7 +380,7 @@
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
 								
 							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
-							  // 이곳에 채팅창영역 비우기.
+							  $conversationList.empty()
 							  $('#room-no').html(roomNo);
 
 							  console.log("현재 이 함수의 roomNo;", roomNo);
