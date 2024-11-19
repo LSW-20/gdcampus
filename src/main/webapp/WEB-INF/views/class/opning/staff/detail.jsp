@@ -3,164 +3,192 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>개설 신청 조회</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            width: 600px;
-            margin: 0 auto;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        .section label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .data {
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        .buttons {
-            text-align: center;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .buttons button.back {
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개설신청 관리</title>
+<style type="text/css">
+.main-content {
+	min-height: 900px;
+}
+
+.page-content {
+	margin: auto;
+	width: 75%;
+}
+
+.card-body {
+	height: 500px;
+}
+</style>
 </head>
-<body>
-    <div class="container">
-        <h1>개설 신청 조회</h1>
-        <!-- 상세 정보 -->
-        <div class="section">
-            <h3>상세정보</h3>
-            <label>교과명:</label>
-            <div class="data">${c.classTitle}</div>
-     		<c:set var = "year" value = "${fn:substring(c.classCode, 0, 2)}" />
-     		<c:set var = "term" value = "${fn:substring(c.classCode, 2, 4)}" />
-            <label>개설년도:</label>
-            <div class="data">${year}</div>
-            <label>개설학기:</label>
-            <div class="data">${term}</div>
-            <label>과정유형:</label>
-            <div class="data">${c.classType}</div>
-            <label>진행방식:</label>
-            <div class="data">${c.prgMethod}</div>
-            <label>담당교수(부):</label>
-            <div class="data">${c.userNo}</div>
-        </div>
 
-        <!-- 수업 목표 -->
-        <div class="section">
-            <h3>수업목표</h3>
-            <div class="data">${c.classGoals}</div>
-        </div>
 
-        <!-- 운영 방안 -->
-        <div class="section">
-            <h3>운영방안</h3>
-            <div class="data">${c.operationPlan}</div>
-        </div>
+<body data-topbar="dark" data-sidebar="dark">
+	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
+	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
 
-        <!-- 평가 방식 -->
-        <div class="section">
-            <h3>평가방식</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>중간고사</th>
-                        <th>기말고사</th>
-                        <th>실습/과제</th>
-                        <th>출결</th>
-                        <th>기타</th>
-                        <th>합계</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${c.evaList[0].allocation}</td>
-                        <td>${c.evaList[1].allocation}</td>
-                        <td>${c.evaList[2].allocation}</td>
-                        <td>20</td>
-                        <td>${c.evaList[3].allocation}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
-        <!-- 평가 상세 -->
-        <div class="section">
-            <h3>평가 상세</h3>
-            <% 
-                String midtermDetails = (String) request.getAttribute("midtermDetails");
-                String finalDetails = (String) request.getAttribute("finalDetails");
-                String assignmentDetails = (String) request.getAttribute("assignmentDetails");
-                String etcDetails = (String) request.getAttribute("etcDetails");
-            %>
-            <% if (midtermDetails != null && !midtermDetails.isEmpty()) { %>
-                <label>중간고사:</label>
-                <div class="data"><%= midtermDetails %></div>
-            <% } %>
-            <% if (finalDetails != null && !finalDetails.isEmpty()) { %>
-                <label>기말고사:</label>
-                <div class="data"><%= finalDetails %></div>
-            <% } %>
-            <% if (assignmentDetails != null && !assignmentDetails.isEmpty()) { %>
-                <label>실습/과제:</label>
-                <div class="data"><%= assignmentDetails %></div>
-            <% } %>
-            <% if (etcDetails != null && !etcDetails.isEmpty()) { %>
-                <label>기타:</label>
-                <div class="data"><%= etcDetails %></div>
-            <% } %>
-        </div>
 
-        <!-- 교재 -->
-        <div class="section">
-            <h3>교재</h3>
-            <label>주교재:</label>
-            <div class="data">${c.mainTextBook}</div>
-            <label>참고서적:</label>
-            <div class="data">${c.refnBook eq null ? '' : c.refnBook}</div>
-        </div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+	<div id="layout-wrapper">
 
-        <!-- 버튼 -->
-        <div class="buttons">
-            <button class="back" onclick="history.back()">뒤로가기</button>
-        </div>
-    </div>
+
+		<!-- header 시작 -->
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+		<!-- header 끝 -->
+
+
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+		<!-- sidebar 끝 -->
+
+
+
+		<!-- main-content 시작 -->
+		<div class="main-content">
+			<div class="page-content">
+				<div class="container-fluid mt-5">
+					<div class="text-center">
+						<h3>강의 개설 신청</h3>
+					</div>
+					<div class="float-right mb-5">
+						<p>신청일자 : ${c.applDate}</p>
+					</div>
+					<div class="mt-5 mb-3">
+						
+						<div class="table-responsive mb-4 ">
+							<table class="table table-bordered mb-0" style="table-layout: fixed">
+								<thead>
+									<tr class="table-secondary">
+										<th width="15%" scope="col" class="">신청자명</th>
+										<th width="15%" scope="col">${ c.userNo }</th>
+										<c:set var = "year" value = "${fn:substring(c.classCode, 0, 2)}" />
+     									<c:set var = "term" value = "${fn:substring(c.classCode, 3, 4)}" />
+										<th width="20%" scope="col">개설년도</th>
+										<th width="20%" scope="col">20${year}년도</th>
+										<th width="15%" scope="col">개설학기</th>
+										<th width="15%" scope="col">${term}학기</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+					</div>
+					<div class="mt-2 mb-3">
+						
+						<div class="table-responsive mb-4 ">
+							<table class="table table-bordered mb-0" style="table-layout: fixed">
+								<thead>
+									<tr>
+										<th width="15%" scope="col">강의명</th>
+										<td width="15%" scope="col">${ c.classTitle }</td>
+										<th width="20%" scope="col">대상학과</th>
+										<td width="20%" scope="col">${c.deptName}</td>
+									</tr>
+									<tr>
+										<th width="15%" scope="col">강의유형</th>
+										<td width="15%" scope="col">${ c.classType }</td>
+										<th width="20%" scope="col">진행방식</th>
+										<td width="20%" scope="col">${c.prgMethod}</td>
+									</tr>
+									<tr>
+										<th width="15%" scope="col">시수</th>
+										<td width="15%" scope="col">${ c.classHours}</td>
+										<th width="20%" scope="col">대상학년</th>
+										<td width="20%" scope="col">${c.targetGrade} 학년</td>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+					</div>
+					
+					<h5>수업목표</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+						${c.classGoals}
+					</div>
+					<h5>운영방안</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+						${c.operationPlan}
+					</div>
+					<h5>평가방식</h5>
+					<div class=" mt-2 mb-4" >
+						<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<tr class="table-secondary">
+								<th width="17%">중간고사</th>
+								<th width="17%">기말고사</th>
+								<th width="17%">실습/과제</th>
+								<th width="17%">출결</th>
+								<th width="17%">기타</th>
+								<th width="15%">합계</th>
+							</tr>
+							<tr>
+	            			</tr>
+            			</table>
+					</div>
+					<h5>평가상세</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+		
+					</div>
+					<h5>교재</h5>
+					<hr>
+					<div class=" mt-2 mb-4">
+						<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<tr>
+								<th width="20%">주교재</th>
+								<td width="80%">${c.mainTextBook}</td>
+							</tr>
+							<tr>
+								<th width="20%">참고서적</th>
+								<td width="80%">${c.refnBook eq null ? '' : c.refnBook}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="row ">
+						<div class="col-8">
+						</div>
+						<div class="col-4">
+							<div class="float-sm-center">
+								<c:if test="${c.status eq '보완완료' or c.status  eq '접수'}">
+									<div class="row mt-4">
+										<div class="select col pl-0">
+											<select class="custom-select" name="opStatus" id="opStatus">
+					                			<option value="보완요청">보완요청</option>
+					                			<option value="반려">반려</option>
+					                			<option value="승인">승인</option>
+											</select>
+										</div>
+										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
+									</div>
+								</c:if>
+								<div class="row mt-4">
+									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/staff/list.do">목록</a>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- main-content 끝 -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+		function fn_updateStatus(){
+			
+  			const opStatus = $('#opStatus').val();
+  			if(confirm('신청서를 ' + opStatus+'처리하시겠습니까?')){
+  				location.href='${contextPath}/'
+  			}
+  		}
+		</script>
+	</div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 </body>
 </html>
