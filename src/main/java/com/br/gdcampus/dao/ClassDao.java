@@ -29,6 +29,13 @@ public class ClassDao {
 	public ClassDto selectStaffOpningDetail(String classCode) {
 		return sqlSession.selectOne("classMapper.selectStaffOpningDetail",classCode);
 	}
+	public int updateOpningStatus(ClassDto c) {
+		return sqlSession.update("classMapper.updateOpningStatus",c);
+	}
+	public int updateClassStatus(ClassDto c) {
+		// 승인상태로 변경하는 경우 class의 confirmYn의 값을 y로 바꿔줘야함 
+		return sqlSession.update("classMapper.updateClassStatus",c);
+	}
 
 	
 //--------------------------------------개설신청 끝----------------------------------------------

@@ -54,7 +54,13 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public int updateOpningStatus(ClassDto c) {
-		return 0;
+		int result = 0;
+		
+		result += classDao.updateOpningStatus(c);
+		if(c.getStatus().equals("승인")) {
+			result += classDao.updateClassStatus(c);
+		}
+		return result;
 	}
 
 	@Override

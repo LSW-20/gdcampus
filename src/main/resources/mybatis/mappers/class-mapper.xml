@@ -66,6 +66,7 @@
 		  JOIN T_CLASS C USING(CLASS_CODE)
 		  JOIN T_USER U ON C.USER_NO = U.USER_NO
 	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
 	    <if test="status != 'all'">
 	        AND STATUS = #{status}
 	    </if>
@@ -84,6 +85,7 @@
 		 JOIN T_CLASS C USING(CLASS_CODE)
 		 JOIN T_USER U ON C.USER_NO = U.USER_NO
 		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
 		<if test="status != 'all'">
 		  AND STATUS = #{status}
 		</if>
@@ -125,6 +127,20 @@
 	<!-- 강의신청 승인/교무팀 -->
 	<!-- 강의신청 반려/교무팀 -->
 	<!-- 강의신청 보완요청/교무팀 -->
+	<update id="updateOpningStatus">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = #{status}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , USER_NO = #{userNo}
+		     , REASON = #{reason}
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
+	
+	<update id="updateClassStatus">
+		 UPDATE T_CLASS
+   			SET CONFIRM_YN = 'Y'
+ 		  WHERE CLASS_CODE = #{classCode};
+	</update>
 	
 	<!-- 강의신청 목록/교수 -->
 	<!-- 강의신청 신청/교수 -->

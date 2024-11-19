@@ -7,15 +7,18 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.ClassService;
 import com.br.gdcampus.util.PagingUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,5 +76,13 @@ public class ClassController {
 		log.debug("c : {}", c);
 		model.addAttribute("c", c);
 		
+	}
+	
+	@ResponseBody
+	@PostMapping("/opning/staff/update.do")
+	public String updateStaffOpningStatus(ClassDto c, HttpSession session) {
+		c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
+		int result = classService.updateOpningStatus(c); 
+		return "SUCCESS"; 
 	}
 }
