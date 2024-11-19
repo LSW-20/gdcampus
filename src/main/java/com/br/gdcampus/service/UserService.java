@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.RankDto;
 import com.br.gdcampus.dto.UserDto;
 
 /**
@@ -73,5 +74,14 @@ public interface UserService {
 	UserDto pwdSearch(String email,String userId);
 	//비번수정
 	int pwdUpdate(UserDto m);
-	
+	//직급페이지
+	List<RankDto> selectRank();
+	//직급추가
+	int insertRank(RankDto r);
+	//직급수정
+	int updateRank(RankDto r);
+	//직급삭제
+	int deleteRank(int rankNo);
+	//직급여러행삭제
+	int deleteRanks(List<Integer> rankNoList);
 }

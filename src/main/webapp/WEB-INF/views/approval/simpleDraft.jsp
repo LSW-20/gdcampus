@@ -154,7 +154,7 @@
                     </tr>
                     <tr>
                         <th>소속</th>
-                         <td>${loginUser.deptNo}</td>
+                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ deptNo == 1 ? "인사" : "교무" }</td>
                     </tr>
                     <tr>
                         <th>기안일</th>
@@ -178,6 +178,9 @@
 				            <td>
 				                <div class="stamp">승인</div>
 				                ${loginUser.userName} ${loginUser.rankName}
+				                <input type="hidden" name="apprUser" value=" ${loginUser.userNo}">
+				                <input type="hidden" name="apprType" value="기안서">
+				                <input type="hidden" name="createUser" value="${loginUser.userNo}">				                
 				            </td>
 				        </tr>
 				        <tr>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.br.gdcampus.dto.ChatRoomDto;
+import com.br.gdcampus.dto.MessageDto;
 import com.br.gdcampus.dto.UserChatRoomDto;
 
 public interface ChatService {
@@ -22,12 +23,12 @@ public interface ChatService {
 
 	// 1대1 채팅방 생성 - 상우
 	int makeOneToOneChat(Map<String, Object> map);
-    
-    // 채팅방 과거 메세지 조회 - 상우
-    // List<MessageDto> selectChatMessage(String chatRoomNo);
-    
-    // 채팅방 메세지 보내기 (db에 기록) - 상우
-    // int insertChatMessage(String chatMessage);
+
+    // 현재 채팅방의 과거 메세지 내역 조회 - 상우
+    List<MessageDto> selectChatMessage(Map<String, String> map);
+
+    // 채팅 메세지를 db에 insert - 상우
+	int insertMessage(Map<String, String> map);
     
     // 채팅방 생성 - 상우
     // int createChatRoom(String[] userNo);

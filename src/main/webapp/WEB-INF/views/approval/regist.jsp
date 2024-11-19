@@ -88,6 +88,7 @@
             background: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 1200px;
         }
 
         .approval-header {
@@ -106,7 +107,7 @@
     <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
     <!-- sidebar 끝 -->
     
-    <form id="approvalForm" action="${contextPath}/approval/regist" method="post">
+    <form id="approvalForm" action="${contextPath}/approval/insert" method="post">
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
@@ -150,7 +151,7 @@
 		                <div id="orgTree"></div>
 		            </div>
 		            <div id="selectedApprovers">
-		                <h5>결재선 (<span id="approverCount">0</span>/4)</h5>
+		                <h5>결재선 (<span id="approverCount">0</span>/3)</h5>
 		                <ul id="approversList"></ul>
 		            </div>
 		        </div>

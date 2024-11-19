@@ -36,13 +36,13 @@
 <!-- 부서 매핑 -->
 <resultMap id="deptList" type="DeptDto">
     <result column="dept_no" property="deptNo"/>
-    <result column="dn" property="deptName"/>
+    <result column="dept_name" property="deptName"/>
 </resultMap>
 
 <!-- 직급 매핑 -->
 <resultMap id="rankList" type="RankDto">
     <result column="rank_no" property="rankNo"/>
-    <result column="rn" property="rankName"/>
+    <result column="rank_name" property="rankName"/>
 </resultMap>
 	
 	<resultMap id="categoryResultMap" type="CategoryDto">
@@ -429,5 +429,51 @@
 			 set user_pwd = #{userPwd}
 		 where user_id = #{userId}
 	</update>
-	
+	<!-- 직급 조회 -->
+	<select id="selectRank" resultMap="rankList">
+		select *
+			from t_rank
+	</select>
+	<!-- 직급 추가 -->
+	<insert id="insertRank">
+		insert 
+			into t_rank
+					 (
+					 	 rank_no
+					 , create_date
+					 , create_user
+					 , modify_date
+					 , modify_user
+					 , rank_name
+					 )
+					 values
+					 (
+					 	 seq_rank.nextval
+					 , SYSDATE
+					 , 'test'
+					 , null
+					 , null
+					 , #{rankName}
+					 )		 
+	</insert>
+	<!-- 직급 수정 -->
+	<update id="updateRank">
+		update t_rank
+			 set rank_name = #{rankName}
+		 where rank_no = #{rankNo}
+	</update>
+	<!-- 직급 삭제 -->
+	<delete id="deleteRank">
+		delete
+			from t_rank
+		 where rank_no = #{rankNo}
+	</delete>
+	<!-- 직급 여러행삭제 -->
+	<delete id="deleteRanks">
+    DELETE FROM t_rank
+    WHERE rank_no IN
+	    <foreach collection="rankNoList" item="rankNo" open="(" separator="," close=")">
+	        #{rankNo}
+	    </foreach>
+	</delete>
 </mapper>

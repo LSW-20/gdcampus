@@ -74,10 +74,10 @@
                                        <ul class="list-unstyled chat-list group-list">
 
                                        
-                                          <c:forEach var="map" items="${list2}">
+                                          <c:forEach var="map" items="${resList}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'G'}">
                                           		
-																									<li data-room-no="${map['chatRoomDto'].roomNo}" onclick="loadChatRoom(${map['chatRoomDto'].roomNo})">
+																									<li data-room-no="'${map['chatRoomDto'].roomNo}'" onclick="loadChatRoom('${map['chatRoomDto'].roomNo}', '${map['chatRoomDto'].roomName}', ${map['count']})", '그룹채팅임'>
 																									    <a href="#">
 																									        <div class="media align-items-center">
 																									            <div class="avatar-xs mr-3">
@@ -112,14 +112,10 @@
 
                                        <ul class="list-unstyled chat-list">
                                        
-                                       
-                                       
-                                       
-                                       
-                                          <c:forEach var="map" items="${list2}">
+                                          <c:forEach var="map" items="${resList}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'O'}">                                          		
 
-			                                           <li data-room-no="${map['chatRoomDto'].roomNo}" onclick="loadChatRoom(${map['chatRoomDto'].roomNo})">
+			                                           <li data-room-no="'${map['chatRoomDto'].roomNo}'" onclick="loadChatRoom('${map['chatRoomDto'].roomNo}', '${map['chatRoomDto'].roomName}', ${map['count']},'${map['counterpartName']}')">
 			                                               <a href="#">
 			                                                   <div class="media">
 			                                                       
@@ -182,41 +178,29 @@
                                    <div class="row">
                                        <div class="col-xl-4 col-7">
                                            <div class="media align-items-center">
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
+                                               <div class="user-img online align-self-center mr-3">
+                                                   <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
+                                               </div>
                                                <div class="media-body">
-                                                   <h5 class="font-size-16 mb-1 text-truncate"><a href="#" class="text-dark">RoomNo : <span id="room-no"></span></a></h5>
-                                                   <p class="text-muted text-truncate mb-0"><i class="uil uil-users-alt mr-1"></i> <span id="room_count"></span> members </p>
+                                                   <h5 class="font-size-16 mb-1 text-truncate">
+                                                   	 RoomNo : <span id="room-no"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                   	 <span id="room-name"></span>
+                                                   </h5>
+                                                   <p class="text-muted text-truncate mb-0"><i class="uil uil-users-alt mr-1"></i> <span id="room-count"></span> members </p>
                                                </div>
                                            </div>
                                        </div>
-                                       <div class="col-xl-8 col-5">
-                                           <ul class="list-inline user-chat-nav text-right mb-0">
-                                               <li class="list-inline-item">
-                                                   <div class="dropdown">
-                                                       <button class="btn nav-btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                           <i class="uil uil-search"></i>
-                                                       </button>
-                                                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-md p-2">
-                                                           <form class="p-2">
-                                                               <div>
-                                                                   <input type="text" class="form-control rounded" placeholder="Search...">
-                                                               </div>
-                                                           </form>
-                                                       </div>
-                                                   </div>
-                                               </li>
-                                               <i data-feather="plus"></i> &nbsp;
-																							 <i data-feather="x"  onclick="closeConversationList();"></i>
-                                           </ul>
+                                       <div class="col-xl-8 col-5" style="text-align: right;">
+	                                         <i data-feather="plus" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	                                         <i data-feather="log-out" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																				   <i data-feather="x" onclick="closeConversationList();" style="cursor: pointer;"></i>
                                        </div>
                                    </div>
                                </div>
 
                                <div class="card-body">
-                                   <div data-simplebar style="height: 520px;">
-                                       <ul class="conversation-list p-0">
+                                   <div style="height: 520px;">
+                                       <ul class="conversation-list p-0" style="height: 520px; overflow-y: auto;" >
 
 																			 <!-- 메시지 목록은 동적으로 업데이트 -->
                                            
@@ -260,8 +244,7 @@
 							// 메세지 전송시 실행될 함수
 							function sendMessage() {
 				    	  
-				    	  console.log("sendMessage() 실행됨");
-				    	  console.log( $("#chat-input").val() );
+				    	  console.log( "sendMessage() 실행됨 : " + $("#chat-input").val() );
 								sock.send( $("#chat-input").val() ); // 웹소켓 측으로 메세지를 전송 (ChatEchoHandler의 handleMessage 메소드 자동 실행)
 								$("#chat-input").val("");
 								
@@ -272,7 +255,7 @@
 							// 나에게 메세지가 왔을 때 실행될 함수
 							function onMessage(evt) { // 웹소켓에서 클라이언트로 보내는 메세지를 받기 위해 매개변수를 둔다.
 								
-							 console.log('onMessage 실행됨');
+							  console.log('onMessage 함수 실행됨');
 								let msgArr = evt.data.split("|"); // ["메세지유형(chat|entry|exit)", "출력시킬메세지내용", "발신자아이디"];
 								
 								
@@ -287,15 +270,15 @@
 	
 				        	  let mediaDiv = $("<div>").addClass("media");
 				        	  let mediaBodyDiv = $("<div>").addClass("media-body");
-				        	  let conversationTextDiv = $("<div>").addClass("conversation-text");
+				        	  let conversationTextDiv = $("<div>").addClass("conversation-text").css( {"padding-right": "10px"} );
 	
 				        	  let ctextWrapDiv = $("<div>").addClass("ctext-wrap");
 				        	  let ctextWrapP = $("<p>").text(msgArr[1]); // p태그에 메세지 출력
 				        	  ctextWrapDiv.append(ctextWrapP); 
 	
 				        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
-				        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1");
-				        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline");
+				        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
+				        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + msgArr[4]);
 				        	  msgSeenP.append(msgSeenPI);
 				        	  msgSeenDiv.append(msgSeenP);
 	
@@ -308,7 +291,7 @@
 	
 				        	  
 
-			        	  	if(msgArr[2] == "${loginUser.userId}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
+			        	  	if(msgArr[3] == "${loginUser.userNo}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
 			        	  		$chatDiv.addClass("odd") 
 			        	  	}else {
 			        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
@@ -316,18 +299,21 @@
 			        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
 
 			        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
-			        	        let customDiv = $("<div>").addClass("sender-name").text(msgArr[2]); 
+			        	        let customDiv = $("<div>").addClass("sender-name").text( msgArr[2] + '(' + msgArr[3] +')' ); 
 			        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
 			        	    }
 			        	  
-			        	  	$conversationList.append($chatDiv);
-			        	  	    
+			        	  	
 			                     
 		            }else { // 입장 또는 퇴장 메세지일 경우
-		              // $chatDiv.addClass("chat-user").addClass(msgArr[0]).text(msgArr[1]);
+		            	$chatDiv.append( $("<div>").html(msgArr[1]).css( {"text-align": "center", "font-weight": "bold"} ) );
 		            }						    
 						    
 						    
+			          $conversationList.append($chatDiv);
+			          
+			          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
+	    
 								
 							}
 							
@@ -335,17 +321,17 @@
 							
 							// 웹소켓 연결이 성공적으로 이루어진 경우 실행될 함수
 							function onOpen() {
-							  console.log("웹소켓 연결 성공");
+							  console.log("onOpen 메소드 실행됨 : 웹소켓 연결 성공");
 							};
 							
 							// 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 실행될 함수
 							function onClose() {
-							  console.log('웹소켓과 연결 끊김');
+							  console.log('onClose 메소드 실행됨 : 웹소켓과 연결 끊김');
 							}							
 							
 							// 웹소켓 통신 중 통신 중 오류가 발생한 경우 실행될 함수
 							function onError() {
-							  console.log('웹소켓 통신 중 오류 발생');
+							  console.log('onError 메소드 실행됨 : 웹소켓 통신 중 오류 발생');
 							}							
 												
 							
@@ -363,79 +349,115 @@
 			        })
 							
 							
+			        
 							
 							// 왼쪽 채팅방 목록에서 특정 채팅방 클릭시 실행되는 함수.
-							function loadChatRoom(roomNo) {
+							function loadChatRoom(roomNo, roomName, count, counterpartName) {
 								
-/* 						    if (sock) {
+ 						    if (sock) {
 						        sock.close(); // 기존 WebSocket 닫기
-						        console.log("기존 WebSocket 연결 종료: RoomNo =", currentRoomNo);
-						    } */
+						        console.log("기존 WebSocket 연결 종료: 이전에 있던 방의 번호 =", currentRoomNo);
+						    } 
 						    
 								
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
 								
-							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
-							  $('#room-no').html(roomNo);
+							  $('#chatRoomContent').show(); // 오른쪽 채팅방 영역이 보이게 함.
+							  $conversationList.empty()		  // 오른쪽 채팅방 영역의 이전 내용들은 전부 없앰.
+							  
+							  $('#room-no').html(roomNo);	  // 오른쪽 채팅방 영역에 "현재 채팅방 번호" 표시
+								$('#room-count').text(count); // 오른쪽 채팅방 영역에 "현재 채팅방 인원수" 표시
+								
+								if(!roomName){ // 오른쪽 채팅방 영역에 "현재 채팅방 이름" 혹은 "상대방 이름(1:1 채팅의 경우)" 표시
+									$('#room-name').text('<' + counterpartName + ' 님과 채팅>'); 
+								}else {
+									$('#room-name').text('<' + roomName + '>');
+								}
+								
 
-							  console.log(roomNo);
-								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
-							  sock.onopen = onOpen; // 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
-							  sock.onclose = onClose; // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
-							  sock.onerror = onError; // 웹소켓 통신 중 통신 중 오류가 발생했을 때 실행될 함수를 지정.
-							  sock.onmessage = onMessage; // 웹소켓에서 해당 클라이언트로 메세지 발송시 자동으로 실행할 함수를 지정(매핑)하는 구문
+
 							  
 							  
 							  
-							    					    
-							    // AJAX 요청을 보내 해당 채팅방의 과거 메시지들을 가져와서 보여준다.
-							    $.ajax({
-							        url: '/chat/getChatRoomData',  // 서버에서 채팅방 데이터를 가져올 URL
-							        type: 'GET',
-							        data: { roomNo: roomNo },
-							        
-							        success: function(response) {
+						    			    
+						    // AJAX 요청을 보내 해당 채팅방의 과거 메시지들을 가져와서 보여준다.
+						    $.ajax({
+						        url: '/chat/getChatRoomData',  // 서버에서 채팅방 데이터를 가져올 URL
+						        type: 'GET',
+						        data: { roomNo: roomNo },
+						        
+						        success: function(resData) {
+						            	
+							        	console.log("ajax로 요청 후 돌아온 응답데이터 : " + JSON.stringify(resData) );						        	
+							        	// [{"msgNo":"1","msgContent":"직원1입니다.","userNo":"B0001","roomNo":"0001","createDateTime":"2024-10-01 01:30","status":"Y","userName":"김철수"},
+							        	//	{"msgNo":"2","msgContent":"안녕하세요. B입니다.","userNo":"B0002","roomNo":"0001","createDateTime":"2024-10-01 01:35","status":"Y","userName":"이영희"}]
 							        	
-							            // 채팅방 정보 업데이트
-							            $('#room-no').text(response.roomName);
-							            $('#room_count').text(response.memberCount);
-							            
-							            // 메시지 리스트 업데이트
-							            var conversationList = response.messages.map(function(message) {
-							                return '<li class="clearfix">' +
-							                           '<div class="media">' +
-							                               '<img src="' + message.userAvatar + '" class="avatar-xs rounded-circle align-self-end" alt="...">' +
-							                               '<div class="media-body">' +
-							                                   '<div class="conversation-text">' +
-							                                       '<div class="ctext-wrap">' +
-							                                           '<a href="#" class="user-name">' + message.userName + '</a>' +
-							                                           '<p>' + message.text + '</p>' +
-							                                       '</div>' +
-							                                       '<div class="msg-seen">' +
-							                                           '<p class="text-muted font-size-12 mb-0 t mt-1">' + message.timestamp + 
-							                                           '<i class="mdi mdi-check-all text-success ml-1"></i></p>' +
-							                                       '</div>' +
-							                                   '</div>' +
-							                               '</div>' +
-							                           '</div>' +
-							                       '</li>';
-							            }).join('');
-							            
-							            $('#conversationList').html(conversationList);
-							        }
-							    });
+							        	
+				        		    resData.forEach(function(messageDto) {
+
+														let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
+								        	  $chatDiv.addClass("clearfix");
+			
+								        	  let mediaDiv = $("<div>").addClass("media");
+								        	  let mediaBodyDiv = $("<div>").addClass("media-body");
+								        	  let conversationTextDiv = $("<div>").addClass("conversation-text").css( {"padding-right": "10px"} );
+					
+								        	  let ctextWrapDiv = $("<div>").addClass("ctext-wrap");
+								        	  let ctextWrapP = $("<p>").text( messageDto.msgContent ); // p태그에 메세지 출력
+								        	  ctextWrapDiv.append(ctextWrapP); 
+					
+								        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
+								        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
+								        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + messageDto.createDateTime);
+								        	  msgSeenP.append(msgSeenPI);
+								        	  msgSeenDiv.append(msgSeenP);
+					
+								        	  // 계층적으로 연결
+								        	  conversationTextDiv.append(ctextWrapDiv);
+								        	  conversationTextDiv.append(msgSeenDiv);
+								        	  mediaBodyDiv.append(conversationTextDiv);
+								        	  mediaDiv.append(mediaBodyDiv);
+								        	  $chatDiv.append(mediaDiv);
+					
+							        	  	if(messageDto.userNo == "${loginUser.userNo}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
+							        	  		$chatDiv.addClass("odd") 
+							        	  	}else {
+							        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
+							        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
+							        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
+			
+							        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
+							        	        let customDiv = $("<div>").addClass("sender-name").text( messageDto.userName + '(' + messageDto.userNo +')' ); 
+							        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
+							        	    }
+							        	  	
+									          $conversationList.append($chatDiv);
+									          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
+		
+				        		    	
+										    });
+							        	
+							        	
+											  console.log("현재 loadChatRoom 함수에 전달된 roomNo, count : ", roomNo, count);
+												sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
+											  sock.onopen = onOpen; 			// 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
+											  sock.onclose = onClose;		  // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
+											  sock.onerror = onError; 		// 웹소켓 통신 중 통신 중 오류가 발생했을 때 실행될 함수를 지정.
+											  sock.onmessage = onMessage; // 웹소켓에서 해당 클라이언트로 메세지 발송시 자동으로 실행할 함수를 지정(매핑)하는 구문
+							        	
+							      }
+						        
+						    });
+								
 							}
-	
+
 							
 							
 							// x버튼 클릭시 오른쪽 채팅방 영역을 닫고, 세션 종료.
-							function closeConversationList() {
-								
+							function closeConversationList() {								
 							    // 오른쪽 채팅방 영역 숨기기
 							    $('#chatRoomContent').hide(); 
-							    
 							    sock.close();
-							    
 							    console.log('채팅방이 닫혔습니다.');
 							}
 							
