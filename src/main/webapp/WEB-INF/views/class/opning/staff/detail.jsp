@@ -150,8 +150,19 @@
 							</tr>
 						</table>
 					</div>
-					<div class="row ">
+					<c:if test="${c.status eq '보완요청' or c.status  eq '반려' or  c.status  eq '취소' }">
+						<h5>${c.status} 사유</h5>
+						<hr>
+						<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+							${c.reason}
+						</div>
+					</c:if>
+					<div class="row"> 
 						<div class="col-8">
+							<div class="mt-1" id="reasonBox" hidden>
+							<span id="resonTitle"></span>사유
+							<textarea required class="form-control" rows="5" id="reason"></textarea>
+							</div>
 						</div>
 						<div class="col-4">
 							<div class="float-sm-center">
@@ -161,7 +172,7 @@
 											<select class="custom-select" name="opStatus" id="opStatus">
 					                			<option value="보완요청">보완요청</option>
 					                			<option value="반려">반려</option>
-					                			<option value="승인">승인</option>
+					                			<option value="승인" selected>승인</option>
 											</select>
 										</div>
 										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
@@ -170,7 +181,7 @@
 								<div class="row mt-4">
 									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/staff/list.do">목록</a>
 								</div>
-								
+								<input type="hidden" value="${c.classCode }">
 							</div>
 						</div>
 					</div>
@@ -180,11 +191,51 @@
 		<!-- main-content 끝 -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
+	    $('#opStatus').on('change', function() {
+	    	$('#reason').val('');
+	    	const opStatus = $('#opStatus').val();
+	        if(opStatus == '보완요청'){
+	        	$('#reasonBox').removeAttr('hidden');
+	        }
+	        if(opStatus == '반려'){
+	        	$('#reasonBox').removeAttr('hidden');
+	        }
+	        if(opStatus == '승인'){
+	        	$('#reasonBox').attr('hidden','');
+	        }
+	        
+	        $('#resonTitle').html(opStatus);
+	    });
 		function fn_updateStatus(){
 			
   			const opStatus = $('#opStatus').val();
+  			
+  			if(opStatus == '보완요청' || opStatus == '반려'){
+  				if($('#reason').val() == ''){
+  					alert('사유를 작성해주십시오.');
+  					return;
+  				}  				
+  			}
+  			
   			if(confirm('신청서를 ' + opStatus+'처리하시겠습니까?')){
-  				location.href='${contextPath}/'
+  				
+				$.ajax({
+					url: '${contextPath}/class/opning/staff/update.do',
+					type: 'post',
+					data: {
+						reason : $('#reason').val(),
+						status : opStatus,
+						classCode : '${c.classCode}'
+					},
+					success: function(res){
+						if(resData == "SUCCESS"){
+							location.reload();
+						}else{
+							alert("처리에 실패하였습니다.");
+						}
+					}
+				})
+  			
   			}
   		}
 		</script>
