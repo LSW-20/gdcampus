@@ -25,7 +25,7 @@ public class PostDto {
 
     private String postNo;           // 게시글 번호
     private int boardTypeNo;         // 게시판 유형 번호
-    private int userNo;              // 사용자 번호
+    private int userNo;              // 사번 : 사용자 번호
     private String postTitle;        // 게시글 제목
     private String postContent;      // 게시글 내용
     private Date registDate;         // 등록 날짜

@@ -19,6 +19,10 @@ public class PostDao {
 	
 	private final SqlSessionTemplate sqlSession;
 	
+	public int test(int num1, int num2) {
+		return num1+num2;
+	}
+	
 	public int selectPostListCount() {
 		return sqlSession.selectOne("PostMapper.selectPostListCount");
 	}
@@ -54,5 +58,6 @@ public class PostDao {
 	public int updateIncreaseCount(int postNo) {
 		return sqlSession.update("postMapper.updateIncreaseCount", postNo);
 	}
+
 
 }

@@ -112,14 +112,14 @@
           <h2 class="m-4">게시글 수정</h2>
           <br>
 
-          <form id="modify-form" method="post" action="${ contextPath }/post/update.do" enctype="multipart/form-data">
+          <form id="modify-form" method="post" action="${ contextPath }/post/modify.do" enctype="multipart/form-data">
               <input type="hidden" name="postNo" value="${ p.postNo }">
               <div class="form-group">
                   <label for="title">제목 </label>
                   <input type="text" class="form-control" id="title" name="postTitle" value="${ p.postTitle }" required><br>
                   
-                  <label for="writer">작성자 </label>
-                  <input type="text" class="form-control" id="writer" value="${ p.registDate }" readonly><br>
+                  <label for="writer">작성일 </label>
+                  <input type="text" class="form-control" id="registDate" value="${ p.registDate }" readonly><br>
                   
                   <label for="upfile">첨부파일 </label>
                   <input type="file" class="form-control-file post" id="upfile" name="uploadFiles" multiple>
@@ -133,7 +133,7 @@
                   
                   <br><br>
 
-                  <label for="userName">내용 </label>
+                  <label for="postName">내용 </label>
                   <textarea class="form-control" required name="postContent" id="content" rows="10" style="resize:none;">${ p.postContent }</textarea><br>
                   
               </div>

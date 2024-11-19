@@ -58,7 +58,7 @@
 								<div class="search-box ml-2">
 									<div class="position-relative">
 										<a href="${contextPath}/board/post/list.do" class="btn btn-success waves-effect waves-light"><i
-											class="mdi mdi-plus mr-2"></i> 게시글 추가</a>
+											class="mdi mdi-plus mr-2"></i> 게시글 목록</a>
 
 									</div>
 								</div>
@@ -96,8 +96,7 @@
 										<select class="custom-select" name="rank" id="rank">
 											<option value="all">전체</option>
 												<c:forEach var="category" items="${rankList}">
-	         								<option value="${category.rankNo}">
-	             								${category.rankName}
+	         								<option value="${category.rankNo}">${category.rankName}
 	         								</option>
 	       								</c:forEach>
 										</select>
@@ -133,9 +132,9 @@
 											</div>
 										</th>
 										<th scope="col">게시번호</th>
-										<th scope="col">작성자명</th>
 										<th scope="col">제목</th>
 										<th scope="col">내용</th>
+										<th scope="col">작성자명</th>
 										<th scope="col">작성일</th>
 									</tr>
 								</thead>
@@ -181,7 +180,7 @@
 	    
 	    function listDo(page){
 	        $.ajax({
-	            url: '${contextPath}/board/post/list.do', 
+	            url: '${contextPath}/Board/post/list.do', 
 	            data: 
 	            {
 					dept: $("#dept").val(),
@@ -212,7 +211,7 @@
 	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
 	                             +   '</div>'
 	                             +'</th>'
-	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/board/post/list.do?postNo=' + post.postNo + '\';">'+ post.postNo+'</td>'
+	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/Board/post/list.do?postNo=' + post.postNo + '\';">'+ post.postNo+'</td>'
 	                             +'<td>'+post.postName+'</td>'
 	                             +'<td>'+post.postNo+'</td>'
 	                             +'<td>'+post.rankNo+'</td>'                          

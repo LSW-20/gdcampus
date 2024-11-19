@@ -20,11 +20,16 @@
 .card-body {
 	height: 500px;
 }
+
+<style>
+    #reply_area tbody>tr>th:nth-child(1){width:120px}
 </style>
 </head>
 <body>
 
 <body data-topbar="dark" data-sidebar="dark">
+
+
 	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
 	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
 
