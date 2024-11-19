@@ -47,17 +47,12 @@ public class PostController {
 		PageInfoDto pi = pageUtil.getPageInfoDto(listCount, currentPage, 5,5);
 		List<PostDto> list = postService.selectPostList(pi);
 		
-		
-		
 		// 페이징바에 5개씩 보이게 할거임
 		// 페이징바에 시작수/마지막 끝수 모든것들이 담겨있는페이지 infodto 필요함
 		
 		
 		}
-		   
-
-		
-		// 페이징바에 있는 페이지 클릭시 
+		  
 		
 }
 		
