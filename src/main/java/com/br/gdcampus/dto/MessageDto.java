@@ -24,4 +24,6 @@ public class MessageDto {
 	private Date createDateTime;
 	private String status;
 	
+	private String userName;
+	
 }
