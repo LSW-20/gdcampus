@@ -21,7 +21,7 @@ public class LearnerDto {
 	private int learnerNo;
 	private int stuNo;
 	private int middleTest;
-	private int finalTest;
+	private int finalTestL; // 테이블에 오타나있음
 	private int practice;
 	private int attendance;
 	private int etc;
