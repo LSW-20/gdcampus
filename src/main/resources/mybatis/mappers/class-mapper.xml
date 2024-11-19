@@ -139,7 +139,7 @@
 	<update id="updateClassStatus">
 		 UPDATE T_CLASS
    			SET CONFIRM_YN = 'Y'
- 		  WHERE CLASS_CODE = #{classCode};
+ 		  WHERE CLASS_CODE = #{classCode}
 	</update>
 	
 	<!-- 강의신청 목록/교수 -->

@@ -83,6 +83,13 @@ public class ClassController {
 	public String updateStaffOpningStatus(ClassDto c, HttpSession session) {
 		c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
 		int result = classService.updateOpningStatus(c); 
-		return "SUCCESS"; 
+		if(c.getStatus().equals("승인")) {
+			result -= 1;
+		}
+		if(result >= 1) {
+			return "SUCCESS"; 
+		}else {
+			return "FAIL"; 
+		}
 	}
 }

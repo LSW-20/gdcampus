@@ -228,8 +228,8 @@
 						classCode : '${c.classCode}'
 					},
 					success: function(res){
-						if(resData == "SUCCESS"){
-							location.reload();
+						if(res == "SUCCESS"){
+							location.reload('${c.classCode}');
 						}else{
 							alert("처리에 실패하였습니다.");
 						}
