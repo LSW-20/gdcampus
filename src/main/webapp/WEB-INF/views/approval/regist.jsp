@@ -107,7 +107,7 @@
     <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
     <!-- sidebar 끝 -->
     
-    <form id="approvalForm" action="${contextPath}/approval/regist" method="post">
+    <form id="approvalForm" action="${contextPath}/approval/insert" method="post">
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
