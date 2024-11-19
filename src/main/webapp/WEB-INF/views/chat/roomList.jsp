@@ -278,7 +278,7 @@
 	
 				        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
 				        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
-				        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline");
+				        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + msgArr[4]);
 				        	  msgSeenP.append(msgSeenPI);
 				        	  msgSeenDiv.append(msgSeenP);
 	
@@ -362,24 +362,20 @@
 								
 								currentRoomNo = roomNo; // 현재 열린 채팅방의 번호를 전역 변수에 저장
 								
-							  $('#chatRoomContent').show();  // 오른쪽 채팅방 영역이 보이게 함
-							  $conversationList.empty() // 방을 바꿨으니 오른쪽 채팅방 영역 전부 초기화
+							  $('#chatRoomContent').show(); // 오른쪽 채팅방 영역이 보이게 함.
+							  $conversationList.empty()		  // 오른쪽 채팅방 영역의 이전 내용들은 전부 없앰.
 							  
-							  $('#room-no').html(roomNo); // 오른쪽 채팅방 영역에 "현재 채팅방 번호" 표시
+							  $('#room-no').html(roomNo);	  // 오른쪽 채팅방 영역에 "현재 채팅방 번호" 표시
 								$('#room-count').text(count); // 오른쪽 채팅방 영역에 "현재 채팅방 인원수" 표시
 								
-								if(!roomName){ // 오른쪽 채팅방 영역에 "현재 채팅방 인원수" 표시
+								if(!roomName){ // 오른쪽 채팅방 영역에 "현재 채팅방 이름" 혹은 "상대방 이름(1:1 채팅의 경우)" 표시
 									$('#room-name').text('<' + counterpartName + ' 님과 채팅>'); 
 								}else {
 									$('#room-name').text('<' + roomName + '>');
 								}
+								
 
-							  console.log("현재 loadChatRoom 함수에 전달된 roomNo, count : ", roomNo, count);
-								sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
-							  sock.onopen = onOpen; // 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
-							  sock.onclose = onClose; // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
-							  sock.onerror = onError; // 웹소켓 통신 중 통신 중 오류가 발생했을 때 실행될 함수를 지정.
-							  sock.onmessage = onMessage; // 웹소켓에서 해당 클라이언트로 메세지 발송시 자동으로 실행할 함수를 지정(매핑)하는 구문
+
 							  
 							  
 							  
@@ -392,10 +388,9 @@
 						        
 						        success: function(resData) {
 						            	
-							        	console.log("ajax로 요청 후 돌아온 응답데이터 : " + JSON.stringify(resData) );
-							        	// [ {"msgNo":"3","msgContent":"점심 뭐 먹을까요.","userNo":"B0001","roomNo":"0002","createDateTime":"2024-10-02","status":"Y"},
-							        	//	 {"msgNo":"7","msgContent":"중국집 가죠.","userNo":"B0001","roomNo":"0002","createDateTime":"2024-10-02","status":"Y"} ]
-							        	
+							        	console.log("ajax로 요청 후 돌아온 응답데이터 : " + JSON.stringify(resData) );						        	
+							        	// [{"msgNo":"1","msgContent":"직원1입니다.","userNo":"B0001","roomNo":"0001","createDateTime":"2024-10-01 01:30","status":"Y","userName":"김철수"},
+							        	//	{"msgNo":"2","msgContent":"안녕하세요. B입니다.","userNo":"B0002","roomNo":"0001","createDateTime":"2024-10-01 01:35","status":"Y","userName":"이영희"}]
 							        	
 							        	
 				        		    resData.forEach(function(messageDto) {
@@ -413,7 +408,7 @@
 					
 								        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
 								        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
-								        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline");
+								        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + messageDto.createDateTime);
 								        	  msgSeenP.append(msgSeenPI);
 								        	  msgSeenDiv.append(msgSeenP);
 					
@@ -443,9 +438,13 @@
 										    });
 							        	
 							        	
+											  console.log("현재 loadChatRoom 함수에 전달된 roomNo, count : ", roomNo, count);
+												sock = new SockJS(`${contextPath}/websocket/chat?roomNo=` + roomNo); // 클라이언트 - 웹소켓 서버와 연결(ChatEchoHandler의 afterConnectionEstablished 메소드 실행).
+											  sock.onopen = onOpen; 			// 웹소켓 연결이 성공적으로 이루어졌을 때 실행될 함수를 지정. 
+											  sock.onclose = onClose;		  // 웹소켓과 해당 클라이언트간의 연결이 끊겼을 경우 자동으로 실행할 함수를 지정(매핑)하는 구문
+											  sock.onerror = onError; 		// 웹소켓 통신 중 통신 중 오류가 발생했을 때 실행될 함수를 지정.
+											  sock.onmessage = onMessage; // 웹소켓에서 해당 클라이언트로 메세지 발송시 자동으로 실행할 함수를 지정(매핑)하는 구문
 							        	
-							        	
-
 							      }
 						        
 						    });
@@ -455,13 +454,10 @@
 							
 							
 							// x버튼 클릭시 오른쪽 채팅방 영역을 닫고, 세션 종료.
-							function closeConversationList() {
-								
+							function closeConversationList() {								
 							    // 오른쪽 채팅방 영역 숨기기
 							    $('#chatRoomContent').hide(); 
-							    
 							    sock.close();
-							    
 							    console.log('채팅방이 닫혔습니다.');
 							}
 							
