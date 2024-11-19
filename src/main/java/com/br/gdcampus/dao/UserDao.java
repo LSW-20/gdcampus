@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.RankDto;
 import com.br.gdcampus.dto.UserDto;
 
 import lombok.RequiredArgsConstructor;
@@ -193,5 +194,35 @@ public class UserDao {
 		return sqlSession.update("userMapper.pwdUpdate",m);
 	}
 
-
-}
+	/**
+	 * 직급페이지
+	 * 정언
+	 */
+	public List<RankDto> selectRank(){
+		return sqlSession.selectList("userMapper.selectRank");
+	}
+	/**
+	 * 직급추가
+	 */
+	public int insertRank(RankDto r) {
+		return sqlSession.insert("userMapper.insertRank", r);
+	}
+	/**
+	 * 직급수정
+	 */
+	public int updateRank(RankDto r) {
+		return sqlSession.update("userMapper.updateRank", r);
+	}
+	/**
+	 * 직급삭제
+	 */
+	public int deleteRank(int rankNo) {
+		return sqlSession.delete("userMapper.deleteRank", rankNo);
+	}
+	
+	/**
+	 * 직급여러행삭제
+	 */
+	public int deleteRanks(List<Integer> rankNoList) {
+	    return sqlSession.delete("userMapper.deleteRanks", rankNoList);
+	}}
