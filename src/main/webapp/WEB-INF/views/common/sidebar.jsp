@@ -196,7 +196,7 @@
 								<li class="menu-title">전자결재</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/approval/home" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="check"></i>
 												<span class="menu-item">결재하기</span>
 										</a>
