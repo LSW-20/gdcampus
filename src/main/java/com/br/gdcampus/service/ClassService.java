@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
-import com.br.gdcampus.dto.UserDto;
 
 public interface ClassService {
 
