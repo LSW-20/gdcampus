@@ -8,6 +8,8 @@
 			form post
 		 where status = 'Y'	
 	</select>
+	
+	
 
 	
 </mapper>
