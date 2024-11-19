@@ -107,6 +107,19 @@ public class ChatServiceImpl implements ChatService {
 		
 		return result;
 	}
+
+
+	/**
+	 * 현재 채팅방의 과거 메세지 내역 조회
+	 * author : 임상우
+	 * @param roomNo 현재 채팅방 번호
+	 * return 과거 메세지 내역
+	 */
+	@Override
+	public List<MessageDto> selectChatMessage(Map<String, String> map) {
+		
+		return chatDao.selectChatMessage(map);
+	}
 	
 	
 

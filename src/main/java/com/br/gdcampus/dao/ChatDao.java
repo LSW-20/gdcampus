@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.br.gdcampus.dto.ChatRoomDto;
+import com.br.gdcampus.dto.MessageDto;
 import com.br.gdcampus.dto.UserChatRoomDto;
 
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,17 @@ public class ChatDao {
 	 */
 	public int insertChatMapping(String userNo) {
 		return sqlSession.insert("chatMapper.insertChatMapping", userNo);
+	}
+
+
+	/**
+	 * 현재 채팅방의 과거 메세지 내역 조회
+	 * author : 임상우
+	 * @param roomNo 현재 채팅방 번호
+	 * return 과거 메세지 내역
+	 */
+	public List<MessageDto> selectChatMessage(Map<String, String> map) {
+		return sqlSession.selectList("chatMapper.selectChatMessage", map);
 	}
 
 
