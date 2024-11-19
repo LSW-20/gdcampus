@@ -208,12 +208,19 @@ const ApprovalModal = {
 			alert('결재선을 지정해주세요.');
 			return;
 		}
-
+		
+		// 필수값 체크
 		if (confirm('결재를 요청하시겠습니까?')) {
 			document.getElementById('approvalForm').submit();
 		}
 	}
-};
+},
+
+	checkRequiredFields: function(){
+		const apprType = document.querySelector('input[name="apprType"]').value;
+}
+
+;
 
 
 
