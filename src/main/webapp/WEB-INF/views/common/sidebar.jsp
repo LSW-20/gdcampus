@@ -171,9 +171,7 @@
 												<span class="menu-item">강의 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">강의 개설신청 조회</a></li>
-												<li><a href="#">강의 개설신청 승인/반려/보완</a></li>
-												<li><a href="#">강의 개설신청 취소사유조회</a></li>
+												<li><a href="${contextPath}/class/opning/staff/list.do">강의 개설신청 조회</a></li>
 										</ul>
 								</li>
 								
