@@ -37,13 +37,13 @@
 					    VALUES
 					    (
 					        SEQ_STU.NEXTVAL,
-					        #{department},
+					        #{dept},
 					        SYSDATE,
 					        'test',
 					        null,  <!-- UPDATE_DATE -->
 					        null,  <!-- UPDATE_USER -->
 					        #{stuName},
-					        #{enrollStatus},
+					        #{status},
 					        #{grade}
 					    )
 	</insert>
@@ -81,8 +81,9 @@
 	</update>
 	
 	<!-- 학생 삭제 delete-->
-	<delete id="deleteStu">
-		delete t_student
+	<update id="deleteStu">
+		update t_student
+			 set enroll_status = 5
 		 where stu_no = #{stuNo}
-	</delete>
+	</update>
 </mapper>

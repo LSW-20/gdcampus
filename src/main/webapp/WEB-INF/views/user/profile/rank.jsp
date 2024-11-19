@@ -48,7 +48,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">학생 List</h4>
+                                    <h4 class="mb-0">직급 List</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
@@ -62,50 +62,24 @@
                         </div>
                         <!-- end page title -->
                         
-												<!--학생추가 모달 창 -->
-												<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+												<!--직급추가 모달 창 -->
+												<div class="modal fade" id="addRankModal" tabindex="-1" aria-labelledby="addRankModalLabel" aria-hidden="true">
 												    <div class="modal-dialog modal-dialog-centered">
 												        <div class="modal-content">
-												            <form action="${contextPath}/student/insertStu" method="POST" id="studentForm">
+												            <form action="${contextPath}/user/profile/insertRank" method="POST" id="rankForm">
 												            <!-- 모달 헤더 -->
 												            <div class="modal-header">
-												                <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+												                <h5 class="modal-title" id="addRankModalLabel">Add Rank</h5>
 												                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												                    <span aria-hidden="true">&times;</span>
 												                </button>
 												            </div>
 												            <!-- 모달 바디 -->
 												            <div class="modal-body">
-												                <!-- Select Fields 세로 정렬 -->
-												                <div class="form-group">
-												                    <label for="select1">학년</label>
-												                    <select class="form-control" id="grade" name="grade" required>
-												                        <option value="1">1</option>
-												                        <option value="2">2</option>
-												                        <option value="3">3</option>
-												                        <option value="4">4</option>
-												                    </select>
-												                </div>
-												                <div class="form-group">
-												                    <label for="select2">학과</label>
-												                    <select class="form-control" id="dept" name="dept" required>
-												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
-												                        <option value="전자공학과">전자공학과</option>
-												                    </select>
-												                </div>
-												                <div class="form-group">
-												                    <label for="select3">재적상태</label>
-												                    <select class="form-control" id="select3" name="status" required>
-												                        <option value="1">재학</option>
-												                        <option value="2">휴학</option>
-												                        <option value="3">졸업</option>
-												                        <option value="4">제적</option>
-												                    </select>
-												                </div>
 												                <!-- 텍스트 입력 필드 -->
 												                <div class="form-group">
 												                    <label for="inputText" >이름</label>
-												                    <input type="text" class="form-control" id="inputText" name="stuName" placeholder="Enter text here" required>
+												                    <input type="text" class="form-control" id="inputText" name="rankName" placeholder="Enter text here" required>
 												                </div>
 												            </div>
 												            <!-- 모달 푸터 -->
@@ -118,14 +92,14 @@
 												    </div>
 												</div>
 												
-												<!-- 학생 수정 모달 -->
-												<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+												<!-- 직급 수정 모달 -->
+												<div class="modal fade" id="editRankModal" tabindex="-1" aria-labelledby="editRankModalLabel" aria-hidden="true">
 												    <div class="modal-dialog modal-dialog-centered">
 												        <div class="modal-content">
-												        		<form action="${contextPath}/student/updateStu" method="POST" id="studentEditForm">
+												        		<form action="${contextPath}/user/profile/updateRank" method="POST" id="rankEditForm">
 												            <!-- 모달 헤더 -->
 												            <div class="modal-header">
-												                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+												                <h5 class="modal-title" id="editRankModalLabel">Edit Rank</h5>
 												                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												                    <span aria-hidden="true">&times;</span>
 												                </button>
@@ -134,38 +108,14 @@
 												            <div class="modal-body">
 												                <!-- Select Fields 세로 정렬 -->
 												                <div class="form-group">
-												                    <label for="editStuNo">학번</label>
-										                        <input type="text" class="form-control" id="editStuNo" name="stuNo" readonly style="cursor: default;">
+												                    <label for="editRankNo">직급번호</label>
+										                        <input type="text" class="form-control" id="editRankNo" name="rankNo" readonly style="cursor: default;">
 												                </div>
-												                <div class="form-group">
-												                    <label for="editGrade">학년</label>
-												                    <select class="form-control" id="editGrade" name="grade" required>
-												                        <option value="1">1</option>
-												                        <option value="2">2</option>
-												                        <option value="3">3</option>
-												                        <option value="4">4</option>
-												                    </select>
-												                </div>
-												                <div class="form-group">
-												                    <label for="editDept">학과</label>
-												                    <select class="form-control" id="editDept" name="dept" required>
-												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
-												                        <option value="전자공학과">전자공학과</option>
-												                    </select>
-												                </div>
-												                <div class="form-group">
-												                    <label for="editStatus">재적상태</label>
-												                    <select class="form-control" id="editStatus" name="status" required>
-												                        <option value="1">재학</option>
-												                        <option value="2">휴학</option>
-												                        <option value="3">졸업</option>
-												                        <option value="4">제적</option>
-												                    </select>
-												                </div>
+												                
 												                <!-- 텍스트 입력 필드 -->
 												                <div class="form-group">
-												                    <label for="editName">이름</label>
-												                    <input type="text" class="form-control" id="editName" name="stuName" placeholder="Enter name here" required>
+												                    <label for="editRankName">직급이름</label>
+												                    <input type="text" class="form-control" id="editRankName" name="rankName" placeholder="Enter name here" required>
 												                </div>
 												            </div>
 												            <!-- 모달 푸터 -->
@@ -178,11 +128,11 @@
 												    </div>
 												</div>
 												
-												<!-- 학생삭제모달 -->
+												<!-- 직급삭제모달 -->
 												<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
 											    <div class="modal-dialog modal-dialog-centered">
 											        <div class="modal-content">
-											        		<form action="${contextPath}/student/deleteStu" method="POST" id="studentdeleteForm">
+											        		<form action="${contextPath}/user/profile/deleteRank" method="POST" id="deleteForm">
 											            <!-- 모달 헤더 -->
 											            <div class="modal-header">
 											                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
@@ -192,8 +142,8 @@
 											            </div>
 											            <!-- 모달 본문 -->
 											            <div class="form-group" style="display: none;">
-									                    <label for="deleteStuNo">학번</label>
-							                        <input type="text" class="form-control" id="deleteStuNo" name="stuNo" readonly style="cursor: default;">
+									                    <label for="deleteRankNo">직급번호</label>
+							                        <input type="text" class="form-control" id="deleteRankNo" name="rankNo" readonly style="cursor: default;">
 									                </div>
 											            <div class="modal-body">
 											                <p>정말로 이 항목을 삭제하시겠습니까?</p>
@@ -201,21 +151,20 @@
 											            <!-- 모달 푸터 -->
 											            <div class="modal-footer">
 											                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-											                <button type="submit" class="btn btn-danger" id="confirmDeleteBtn">삭제</button>
+											                <button type="submit" class="btn btn-danger" id="confirmDelete">삭제</button>
 											            </div>
 											            </form>
 											        </div>
 											    </div>
 											</div>
-												
 												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                        
-                       <!-- 학생리스트 -->
+                       <!-- 직급리스트 -->
                         <div class="row">
                             <div class="col-md-4">
                                 <div>
-                                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal" data-target="#addStudentModal"><i class="mdi mdi-plus mr-1"></i> Add Student</button>
+                                    <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal" data-target="#addRankModal"><i class="mdi mdi-plus mr-1"></i> Add Rank</button>
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -232,56 +181,40 @@
                                             <tr class="bg-transparent">
                                                 <th style="width: 24px;">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="checkAll">
+                                                        <input type="checkbox" class="custom-control-input" id="checkAll" >
                                                         <label class="custom-control-label" for="checkAll"></label>
                                                     </div>
                                                 </th>
-                                                <th>학번</th>
-                                                <th>학년</th>
-                                                <th>학과</th>
-                                                <th>이름</th>
-                                                <th>재적</th>
+                                                <th>직급</th>
                                                 <th style="width: 120px;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
-                                            
-                                            <c:forEach var="s" items="${ stuList }">
-                                            	<c:if test="${s.status < 5}">
+                                            <c:forEach var="r" items="${ rankList }">
                                             			<tr>
 																								    <td>
 																								        <div class="custom-control custom-checkbox">
-																								            <input type="checkbox" class="custom-control-input" id="invoicecheck${s.stuNo}">
-																								            <label class="custom-control-label" for="invoicecheck${s.stuNo}"></label>
+																								            <input type="checkbox" class="custom-control-input" id="invoicecheck${r.rankNo}" data-rank-no="${r.rankNo}">
+																								            <label class="custom-control-label" for="invoicecheck${r.rankNo}"></label>
 																								        </div>
 																								    </td>
-																								    <td>${ s.stuNo }</td>
-																								    <td>${ s.grade }</td>
-																								    <td>${ s.dept }</td>
-																								    <td>${ s.stuName }</td>
-																								    <td>
-																								        <c:choose>
-																								            <c:when test="${ s.status eq 1 }">재학</c:when>
-																								            <c:when test="${ s.status eq 2 }">휴학</c:when>
-																								            <c:when test="${ s.status eq 3 }">졸업</c:when>
-																								            <c:when test="${ s.status eq 4 }">제적</c:when>
-																								        </c:choose>
-																								    </td>
+																								    <td>${r.rankName}</td>
+																								    
 																								    
 																								    <td>
-																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stuNo="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
+																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editRankModal" data-rankNo="${r.rankNo}" data-rankName="${r.rankName }">
 																						                <i class="uil uil-pen font-size-18"></i>
 																						            </a>
-																								        <a href="javascript:void(0);" class="px-3 text-danger edit-btn" data-toggle="modal" data-target="#deleteConfirmModal" data-placement="top" title="Delete" data-stuNo="${s.stuNo}" id="deleteBtn">
+																								        <a href="javascript:void(0);" class="px-3 text-danger edit-btn" data-toggle="modal" data-target="#deleteConfirmModal" data-placement="top" title="Delete" data-rankNo="${r.rankNo}" data-rankName="${r.rankName }" id="deleteBtn">
 																												    <i class="uil uil-trash font-size-18"></i>
 																												</a>
 																								    </td>
 																								</tr>
-																							</c:if>
 																	          </c:forEach>
+																	          
                                         </tbody>
                                     </table>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -388,22 +321,42 @@
         
         <script>
         $(document).on('click', '.edit-btn', function() {
-            var stuNo = $(this).attr('data-stuNo');
-            console.log("stuNo: " + stuNo);
-            var grade = $(this).data('grade');
-            var dept = $(this).data('dept');
-            var name = $(this).data('name');
-            var status = $(this).data('status');
+        	var rankNo = $(this).attr('data-rankNo');
+            var rankName = $(this).attr('data-rankName');
 
             // 모달에 해당 데이터 채우기
-            $('#editStuNo').val(stuNo);
-            $('#deleteStuNo').val(stuNo);
-            $('#editGrade').val(grade);
-            $('#editDept').val(dept);
-            $('#editStatus').val(status);
-            $('#editName').val(name);
+            $('#editRankNo').val(rankNo);
+            $('#deleteRankNo').val(rankNo);
             
+            $('#editRankName').val(rankName);
         });
         </script>
+        <script>
+        function deleteSelectedRanks() {
+            const selectedRanks = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
+                selectedRanks.push(checkbox.getAttribute('data-rank-no'));
+            });
+
+            if (selectedRanks.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
+
+            // AJAX 요청으로 전달
+            fetch("/profile/deleteRanks", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(selectedRanks)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error("Error:", error));
+        }
+        </script>
+       
     </body>
 </html>
