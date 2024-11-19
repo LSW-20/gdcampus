@@ -19,15 +19,14 @@ public class StudentDao {
 	}
 	
 	public int insertStu(StudentDto s) {
-		return sqlSession.insert("studentMapper.insertStu", s);
+		return sqlSession.insert("studentMapper.insertStu");
 	}
-	
 	
 	public int updateStu(StudentDto s) {
-		return sqlSession.update("studentMapper.updateStu", s);
+		return sqlSession.update("studentMapper.updateStu");
 	}
 	
-	public int deleteStu(int stuNo) {
-		return sqlSession.update("studentMapper.deleteStu", stuNo);
+	public int deleteStu(StudentDto s) {
+		return sqlSession.update("studentMapper.deleteStu");
 	}
 }

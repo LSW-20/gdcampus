@@ -337,4 +337,34 @@
 		 ]]>	
 	</select>
 	
+	<insert id="insertApproval">
+		INSERT 
+		  INTO T_APPROVAL 
+		(
+		    APPR_NO
+		  , APPR_USER
+		  , DEPT_NO
+		  , APPR_TYPE
+		  , APPR_DATE
+		  , APPR_TITLE
+		  , APPR_CONTENT
+		  , CURR_ORDER
+		  , APPR_STATUS
+		  , CREATE_DATE
+		  , CREATE_USER
+		) VALUES 
+		(
+		    LPAD(SEQ_ANO.NEXTVAL, 4, '0')
+		  , #{apprUser}
+		  , #{deptNo}
+		  , #{apprType}
+		  , SYSDATE
+		  , #{apprTitle}
+		  , #{apprContent}
+		  , 2
+		  , 0
+		  , SYSDATE
+		  , #{apprUser}
+		)	
+	</insert>
 </mapper>

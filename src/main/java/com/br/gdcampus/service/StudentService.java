@@ -15,6 +15,6 @@ public interface StudentService {
 	//학생 수정
 	int updateStu(StudentDto s);
 	
-	//학생 삭제
-	int deleteStu(int stuNo);
+	//학생 삭제(delete)
+	int deleteStu(StudentDto s);
 }

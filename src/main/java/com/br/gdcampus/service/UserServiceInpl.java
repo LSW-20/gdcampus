@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.br.gdcampus.dao.UserDao;
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.PageInfoDto;
-import com.br.gdcampus.dto.RankDto;
 import com.br.gdcampus.dto.UserDto;
 
 import lombok.RequiredArgsConstructor;
@@ -270,43 +268,7 @@ public class UserServiceInpl implements UserService {
 		return userDao.pwdUpdate(m);
 	}
 
-	/**
-	 * 직급페이지
-	 */
-	@Override
-	public List<RankDto> selectRank() {
-		return userDao.selectRank();
-	}
-	/**
-	 * 직급추가
-	 */
-	@Override
-	public int insertRank(RankDto r) {
-		return userDao.insertRank(r);
-	}
-	/**
-	 * 직급수정
-	 */
-	@Override
-	public int updateRank(RankDto r) {
-		return userDao.updateRank(r);
-	}
-	/**
-	 * 직급삭제
-	 */
-	@Override
-	public int deleteRank(int rankNo) {
-		return userDao.deleteRank(rankNo);
-	}
 
-	/**
-	 * 여러행삭제
-	 */
-	@Override
-	@Transactional
-	public int deleteRanks(List<Integer> rankNoList) {
-	    return userDao.deleteRanks(rankNoList);
-	}
 	
 	
 

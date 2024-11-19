@@ -63,10 +63,10 @@
                         <!-- end page title -->
                         
 												<!--학생추가 모달 창 -->
+												<form action="${contextPath }/student/insertStu" method="POST" id="studentForm">
 												<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
 												    <div class="modal-dialog modal-dialog-centered">
 												        <div class="modal-content">
-												            <form action="${contextPath}/student/insertStu" method="POST" id="studentForm">
 												            <!-- 모달 헤더 -->
 												            <div class="modal-header">
 												                <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
@@ -113,16 +113,15 @@
 												                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 												                <button type="submit" class="btn btn-primary">Save</button>
 												            </div>
-												            </form>
 												        </div>
 												    </div>
 												</div>
+												</form>
 												
 												<!-- 학생 수정 모달 -->
 												<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
 												    <div class="modal-dialog modal-dialog-centered">
 												        <div class="modal-content">
-												        		<form action="${contextPath}/student/updateStu" method="POST" id="studentEditForm">
 												            <!-- 모달 헤더 -->
 												            <div class="modal-header">
 												                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
@@ -134,12 +133,8 @@
 												            <div class="modal-body">
 												                <!-- Select Fields 세로 정렬 -->
 												                <div class="form-group">
-												                    <label for="editStuNo">학번</label>
-										                        <input type="text" class="form-control" id="editStuNo" name="stuNo" readonly style="cursor: default;">
-												                </div>
-												                <div class="form-group">
 												                    <label for="editGrade">학년</label>
-												                    <select class="form-control" id="editGrade" name="grade" required>
+												                    <select class="form-control" id="editGrade" required>
 												                        <option value="1">1</option>
 												                        <option value="2">2</option>
 												                        <option value="3">3</option>
@@ -148,14 +143,14 @@
 												                </div>
 												                <div class="form-group">
 												                    <label for="editDept">학과</label>
-												                    <select class="form-control" id="editDept" name="dept" required>
+												                    <select class="form-control" id="editDept" required>
 												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
 												                        <option value="전자공학과">전자공학과</option>
 												                    </select>
 												                </div>
 												                <div class="form-group">
 												                    <label for="editStatus">재적상태</label>
-												                    <select class="form-control" id="editStatus" name="status" required>
+												                    <select class="form-control" id="editStatus" required>
 												                        <option value="1">재학</option>
 												                        <option value="2">휴학</option>
 												                        <option value="3">졸업</option>
@@ -165,53 +160,22 @@
 												                <!-- 텍스트 입력 필드 -->
 												                <div class="form-group">
 												                    <label for="editName">이름</label>
-												                    <input type="text" class="form-control" id="editName" name="stuName" placeholder="Enter name here" required>
+												                    <input type="text" class="form-control" id="editName" placeholder="Enter name here" required>
 												                </div>
 												            </div>
 												            <!-- 모달 푸터 -->
 												            <div class="modal-footer">
 												                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-												                <button type="submit" class="btn btn-success waves-effect waves-light" id="saveEditBtn">Save</button>
+												                <button type="button" class="btn btn-success waves-effect waves-light" id="saveEditBtn">Save</button>
 												            </div>
-												            </form>
 												        </div>
 												    </div>
 												</div>
 												
-												<!-- 학생삭제모달 -->
-												<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-											    <div class="modal-dialog modal-dialog-centered">
-											        <div class="modal-content">
-											        		<form action="${contextPath}/student/deleteStu" method="POST" id="studentdeleteForm">
-											            <!-- 모달 헤더 -->
-											            <div class="modal-header">
-											                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
-											                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											                    <span aria-hidden="true">&times;</span>
-											                </button>
-											            </div>
-											            <!-- 모달 본문 -->
-											            <div class="form-group" style="display: none;">
-									                    <label for="deleteStuNo">학번</label>
-							                        <input type="text" class="form-control" id="deleteStuNo" name="stuNo" readonly style="cursor: default;">
-									                </div>
-											            <div class="modal-body">
-											                <p>정말로 이 항목을 삭제하시겠습니까?</p>
-											            </div>
-											            <!-- 모달 푸터 -->
-											            <div class="modal-footer">
-											                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-											                <button type="submit" class="btn btn-danger" id="confirmDeleteBtn">삭제</button>
-											            </div>
-											            </form>
-											        </div>
-											    </div>
-											</div>
-												
 												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                        
-                       <!-- 학생리스트 -->
+                       <!-- 학생추가 -->
                         <div class="row">
                             <div class="col-md-4">
                                 <div>
@@ -236,7 +200,7 @@
                                                         <label class="custom-control-label" for="checkAll"></label>
                                                     </div>
                                                 </th>
-                                                <th>학번</th>
+                                                
                                                 <th>학년</th>
                                                 <th>학과</th>
                                                 <th>이름</th>
@@ -248,7 +212,6 @@
 
                                             
                                             <c:forEach var="s" items="${ stuList }">
-                                            	<c:if test="${s.status < 5}">
                                             			<tr>
 																								    <td>
 																								        <div class="custom-control custom-checkbox">
@@ -256,7 +219,7 @@
 																								            <label class="custom-control-label" for="invoicecheck${s.stuNo}"></label>
 																								        </div>
 																								    </td>
-																								    <td>${ s.stuNo }</td>
+																								    
 																								    <td>${ s.grade }</td>
 																								    <td>${ s.dept }</td>
 																								    <td>${ s.stuName }</td>
@@ -270,15 +233,15 @@
 																								    </td>
 																								    
 																								    <td>
-																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stuNo="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
+																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stu-no="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
 																						                <i class="uil uil-pen font-size-18"></i>
 																						            </a>
-																								        <a href="javascript:void(0);" class="px-3 text-danger edit-btn" data-toggle="modal" data-target="#deleteConfirmModal" data-placement="top" title="Delete" data-stuNo="${s.stuNo}" id="deleteBtn">
-																												    <i class="uil uil-trash font-size-18"></i>
-																												</a>
+																								        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+																								            <i class="uil uil-trash font-size-18"></i>
+																								        </a>
 																								    </td>
 																								</tr>
-																							</c:if>
+
 																	          </c:forEach>
                                         </tbody>
                                     </table>
@@ -388,21 +351,20 @@
         
         <script>
         $(document).on('click', '.edit-btn', function() {
-            var stuNo = $(this).attr('data-stuNo');
-            console.log("stuNo: " + stuNo);
+            var stuNo = $(this).data('stu-no');
             var grade = $(this).data('grade');
             var dept = $(this).data('dept');
             var name = $(this).data('name');
             var status = $(this).data('status');
 
             // 모달에 해당 데이터 채우기
-            $('#editStuNo').val(stuNo);
-            $('#deleteStuNo').val(stuNo);
             $('#editGrade').val(grade);
             $('#editDept').val(dept);
             $('#editStatus').val(status);
             $('#editName').val(name);
             
+            // 추가적으로 stuNo를 저장하거나 수정 시 사용할 수 있습니다.
+            $('#saveEditBtn').data('stu-no', stuNo);
         });
         </script>
     </body>
