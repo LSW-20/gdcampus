@@ -16,7 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Repository
 public class PostDao {
-private final SqlSessionTemplate sqlSession;
+	
+	private final SqlSessionTemplate sqlSession;
 	
 	public int selectPostListCount() {
 		return sqlSession.selectOne("PostMapper.selectPostListCount");

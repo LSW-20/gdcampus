@@ -1,143 +1,262 @@
-<%-- <%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-    #boardList th, #boardList td:not(:nth-child(2)){text-align: center;}
-    #boardList>tbody>tr:hover{cursor:pointer;}
+<title>게시글 목록</title>
+<style type="text/css">
+.main-content {
+	min-height: 900px;
+}
+
+.page-content {
+	margin: auto;
+	width: 75%;
+}
+
+.card-body {
+	height: 500px;
+}
 </style>
 </head>
-<body>
 
-	<div class="container p-3">
+<body data-topbar="dark" data-sidebar="dark">
+	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
+	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
 
-        <!-- Header, Nav start -->
-        <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-        <!-- Header, Nav end -->
-    
-        <!-- Section start -->
-        <section class="row m-3" style="min-height: 500px">
-    
-          <div class="container border p-5 m-4 rounded">
-            <h2 class="m-4">게시글 목록</h2>
-            <br>
 
-            <c:if test="${ not empty loginUser }">
-	            <a class="btn btn-secondary" style="float:right" href="${ contextPath }/board/regist.do">글쓰기</a>
-	            <br>
-            </c:if>
-            
-            <br>
-            <table id="boardList" class="table table-hover" align="center">
-                <thead>
-                  <tr>
-                    <th width="100px">번호</th>
-                    <th width="400px">제목</th>
-                    <th width="120px">작성자</th>
-                    <th>조회수</th>
-                    <th>작성일</th>
-                    <th>첨부파일</th>
-                  </tr>
-                </thead>
-                <tbody>
-                	<c:choose>
-                		<c:when test="${ empty list }">
-                			<tr>
-                				<td colspan="6">조회된 게시글이 없습니다.</td>
-                			</tr>
-                		</c:when>
-                    <c:otherwise>
-                    	<c:forEach var="b" items="${ list }">
-		                    <tr onclick='location.href = "${contextPath}/board/${ loginUser.userId eq b.boardWriter ? "detail.do" : "increase.do" }?no=${ b.boardNo }";'>
-		                        <td>${ b.boardNo }</td>
-		                        <td>${ b.boardTitle }</td>
-		                        <td>${ b.boardWriter }</td>
-		                        <td>${ b.count }</td>
-		                        <td>${ b.registDt }</td>
-		                        <td>${ b.attachCount > 0 ? '★' : '' }</td>
-		                    </tr>
-                  		</c:forEach>
-                  	</c:otherwise>
-                  </c:choose>  
-                </tbody>
-            </table>
-            <br>
 
-            <ul id="paging_area" class="pagination d-flex justify-content-center">
-            
-              <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-              	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Previous</a>
-              </li>
-              
-              <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-              	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
-              		<a class="page-link" href="${ contextPath }/board/list.do?page=${p}">${ p }</a>
-              	</li>
-              </c:forEach>
-              
-              <li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
-              	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage+1}">Next</a>
-              </li>
-              
-            </ul>
-           
-            <br clear="both"><br>
-            
-            <form id="search_form" action="${ contextPath }/board/search.do" method="get" class="d-flex justify-content-center">
-                <input type="hidden" name="page" value="1">
-                <div class="select" >
-                    <select class="custom-select" name="condition">
-                        <option value="user_id">작성자</option>
-                        <option value="board_title">제목</option>
-                        <option value="board_content">내용</option>
-                    </select>
-                </div>
-                <div class="text">
-                    <input type="text" class="form-control" name="keyword" value="${ search.keyword }">
-                </div>
-                <button type="submit" class="search_btn btn btn-secondary">검색</button>
-            </form>
-            <c:if test="${ not empty search }">
-	            <script>
-	            	$(document).ready(function(){
-	            		$("#search_form select").val('${search.condition}');
-	            		
-	            		// 검색후의 페이징바 클릭시 검색 form 을 강제로 submit 
-	            		// (단, 페이지번호는 현재 클릭한 페이지번호로 바꿔서)
-	            		$("#paging_area a").on("click", function(){
-	            			
-	            			let page = $(this).text(); // Previous | Next | 페이지번호
-	            			if(page == 'Previous'){
-	            				page = ${pi.currentPage - 1};
-	            			}else if(page == 'Next'){
-	            				page = ${pi.currentPage + 1};
-	            			}
-	            			
-	            			$("#search_form input[name=page]").val(page);
-	            			$("#search_form").submit();
-	            			
-	            			return false; // 기본이벤트(href='/board/list.do' url요청)가 동작 안되도록
-	            			
-	            		})
-	            	})
-	            </script>
-            </c:if>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+	<div id="layout-wrapper">
+
+
+		<!-- header 시작 -->
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+		<!-- header 끝 -->
+
+
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+		<!-- sidebar 끝 -->
+
+
+
+		<!-- main-content 시작 -->
+		<div class="main-content">
+			<div class="page-content">
+				<div class="container-fluid mt-5">
+					<div class="row mb-2">
+						<div class="col-md-6">
+							<h2>게시글 목록</h2>
+						</div>
+						<div class="col-md-6">
+							<div class="form-inline float-md-right mb-3">
+								<div class="search-box ml-2">
+									<div class="position-relative">
+										<a href="${contextPath}/board/post/list.do" class="btn btn-success waves-effect waves-light"><i
+											class="mdi mdi-plus mr-2"></i> 게시글 추가</a>
+
+									</div>
+								</div>
+								<!-- 체크박스가 눌렸을때만 보이게 -->
+								<div class="search-box ml-2">
+									<div class="position-relative">
+										<a href="#" class="btn btn-danger waves-effect waves-light">
+										<i class="uil-minus mr-2"></i> 수정</a>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="card-body mt-5">
+						<div class="row mb-4">
+							<div class="col-md-2">
+								<div class="mb-3">
+									<div class="select">
+										<select class="custom-select" name="dept" id="dept">
+											<option value="all">전체</option>
+												<c:forEach var="category" items="${deptList}">
+           								<option value="${category.deptNo}">
+               								${category.deptName}
+      										</option>	
+       									</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="mb-3">
+									<div class="select">
+										<select class="custom-select" name="rank" id="rank">
+											<option value="all">전체</option>
+												<c:forEach var="category" items="${rankList}">
+	         								<option value="${category.rankNo}">
+	             								${category.rankName}
+	         								</option>
+	       								</c:forEach>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-8">
+								<div class="form-inline float-md-right mb-3">
+									<div class="search-box ml-2">
+										<div class="position-relative">
+											<input type="text" id="search"
+												class="form-control rounded bg-light border-0"
+												placeholder="제목별"> <i
+												class="mdi mdi-magnify search-icon"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+						<!-- end row -->
+						<div class="table-responsive mb-4 ">
+							<table class="table table-centered table-nowrap table-check mb-0">
+								<thead>
+									<tr>
+										<th scope="col" style="width: 50px;">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" class="custom-control-input"
+													id="checkAll"> <label class="custom-control-label"
+													for="checkAll"></label>
+											</div>
+										</th>
+										<th scope="col">게시번호</th>
+										<th scope="col">작성자명</th>
+										<th scope="col">제목</th>
+										<th scope="col">내용</th>
+										<th scope="col">작성일</th>
+									</tr>
+								</thead>
+								<tbody id="output">
+									
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row mt-4">
+						<div class="col-sm-12">
+
+							<div class="float-sm-center">
+								<ul id="paging_area" class="pagination d-flex justify-content-center">
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- main-content 끝 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			
+		    listDo(1);
+		    
+		    $('#dept, #rank, #search').on('change keyup', function() {
+		        listDo(1); 
+		    });
+
+		    // 페이징바를 선택한 경우
+		    $(document).on('click', '#paging_area a', function(e) {
+		        e.preventDefault();  
+		        var page = $(this).data('page'); 
+		        listDo(page); 
+		    });
+		});
+	    
+	    function listDo(page){
+	        $.ajax({
+	            url: '${contextPath}/board/post/list.do', 
+	            data: 
+	            {
+					dept: $("#dept").val(),
+					rank: $('#rank').val(),
+					keyword:$('#search').val(),
+					page: page
+					
+					},
+	            type: 'GET',
+	            dataType: 'json', // 응답 데이터 타입
+	            success: function(response) {
+	
+	                var pi = response.pi;          // Pi 객체
+	                var postList = response.postList; // List<UserDto>
+									var num=1;
+	                
+	                var tbody = '';
+
+	                // 각 게시글 데이터를 테이블에 추가
+	                postList.forEach(function(post) {
+	                	
+	                	var status = p.postStatus === 'Y' ? '생성' : '삭제';	             
+
+	                	tbody += '<tr>'
+	                             +'<th scope="row">'
+	                             +   '<div class="custom-control custom-checkbox">'
+	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+'">'
+	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
+	                             +   '</div>'
+	                             +'</th>'
+	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/board/post/list.do?postNo=' + post.postNo + '\';">'+ post.postNo+'</td>'
+	                             +'<td>'+post.postName+'</td>'
+	                             +'<td>'+post.postNo+'</td>'
+	                             +'<td>'+post.rankNo+'</td>'                          
+	                             +'<td>'+status+'</td>'
+	                             +'</tr>'
+	                    ;
+	                	num++;
+	                });
+	
+	                // 페이지 다시 그려줘야됨
+	                $('#output').html(tbody);
+	                
+	                // 페이징바도 처리	                
+	                var paging = '';
+					const previousDisabled = pi.currentPage == 1 ? 'disabled' : '';
+					paging += '<li class="page-item ' + previousDisabled + '">' 
+						   +    '<a class="page-link" href="#" data-page="' + (pi.currentPage - 1) + '"> Prev </a>'
+						   +  '</li>';
+
+					for (let p = pi.startPage; p <= pi.endPage; p++) {
+						const active = p === pi.currentPage ? 'active' : '';
+						paging+= '<li class="page-item ' + active + '">' 
+						      +    '<a class="page-link" href="#" data-page="' + p + '">' + p + '</a>' 
+						      +  '</li>';
+					}
+
+					const nextDisabled = pi.currentPage == pi.maxPage ? 'disabled' : '';
+					paging+= '<li class="page-item ' + nextDisabled + '">' 
+						  +    '<a class="page-link" href="#" data-page="' + (pi.currentPage + 1) + '"> Next </a>'
+						  +  '</li>';
+				
+	                $('#paging_area').html(paging);
           
-          </div>
-    
-        </section>
-        <!-- Section end -->
-    
-        <!-- Footer start -->
-        <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-        <!-- Footer end -->
-    
-    </div>
+	            },
+	            error: function(error) {
+	                alert('AJAX 요청 실패: ' + error);
+	            }
+	        });    	
+	    }
+	</script>
 
+
+
+	</div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 </body>
-</html> --%> --%>
+</html>
