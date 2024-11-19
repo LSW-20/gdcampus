@@ -18,15 +18,15 @@ import lombok.ToString;
 @Builder
 public class StudentDto {
 	
-	private Integer stuNo;
+	private int stuNo;
 	private String dept;
-	private String CreateDate;
+	private Date CreateDate;
 	private String CreateUser;
-	private String updateDate;
+	private Date updateDate;
 	private String updateUser;
 	private String stuName;
-	private String status;
-	private String grade;
+	private int status;
+	private int grade;
 	
 	//다수의 학생 객체
 	private ArrayList<StudentDto> studentList;
