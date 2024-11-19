@@ -17,25 +17,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/category")
+@RequestMapping("/dept")
 @RequiredArgsConstructor
 @Controller
-public class CategoryController {
+public class DeptController {
 
 	 private final DeptService deptService;
 
     @GetMapping("/")
     public String redirectToDeptList() {
-        return "redirect:/category/list"; // 부서관리 페이지로 리다이렉트
+        return "redirect:/dept/list"; // 부서관리 페이지로 리다이렉트
     }
     
  
     // 부서 목록 조회
-    @GetMapping("/category/list")
+    @GetMapping("/dept/list")
     public String listDept(Model model) {
         List<DeptDto> deptList = deptService.selectCategoryDeptDto();
         model.addAttribute("deptList", deptList);
-        return "category/deptList"; // JSP 템플릿
+        return "dept/deptList"; // JSP 템플릿
     }
 
     // 부서 추가
