@@ -1,5 +1,6 @@
 package com.br.gdcampus.controller;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,10 +10,12 @@ import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.RankDto;
+import com.br.gdcampus.dto.StudentDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.UserService;
 import com.br.gdcampus.util.FileUtil;
@@ -370,6 +375,106 @@ public class UserController {
 	    session.invalidate();
 
 	    return "redirect:/";  // 비밀번호 변경 후 홈으로 리디렉션
+	}
+	
+	//직급페이지
+	@GetMapping("/profile/rank.do")
+	public void student(Model model) { 
+		List<RankDto> rankList =  userService.selectRank();
+		model.addAttribute("rankList", rankList);
+	}
+
+	/**
+	 * 직급추가
+	 */
+	@Transactional
+	@PostMapping("/profile/insertRank")
+	public String insertStu(@ModelAttribute RankDto r, RedirectAttributes rdAttributes) {
+		
+		System.out.println("컨트롤 r: " + r);
+		int result = 0;
+		
+		try {
+	        result = userService.insertRank(r);
+	    } catch (Exception e) {
+	        // 예외 처리: 에러 발생 시 리다이렉트하면서 에러 메시지 전달
+	        rdAttributes.addFlashAttribute("alertMsg", "오류가났습니다 정확한 값을 입력해주세요.");
+	        return "redirect:/user/profile/rank.do"; // 리다이렉트
+	    }
+		 
+		if(result > 0) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+		}
+		return "redirect:/user/profile/rank.do";
+	}
+	
+	/**
+	 * 직급수정
+	 */
+	@Transactional
+	@PostMapping("/profile/updateRank")
+	public String updateStu(@ModelAttribute RankDto r, RedirectAttributes rdAttributes) {
+		
+		int result = 0;
+		
+		try {
+	        result = userService.updateRank(r);
+	    } catch (Exception e) {
+	        // 예외 처리: 에러 발생 시 리다이렉트하면서 에러 메시지 전달
+	        rdAttributes.addFlashAttribute("alertMsg", "오류가났습니다 정확한 값을 입력해주세요.");
+	        return "redirect:/user/profile/rank.do"; // 리다이렉트
+	    }
+		 
+		if(result > 0) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+		}
+		return "redirect:/user/profile/rank.do";
+	}
+	
+	/**
+	 * 직급삭제
+	 */
+	@Transactional
+	@PostMapping("/profile/deleteRank")
+	public String deleteStu(int rankNo, RedirectAttributes rdAttributes) {
+		
+		int result = 0;
+		
+		try {
+	        result = userService.deleteRank(rankNo);
+	    } catch (Exception e) {
+	        // 예외 처리: 에러 발생 시 리다이렉트하면서 에러 메시지 전달
+	        rdAttributes.addFlashAttribute("alertMsg", "오류가났습니다 정확한 값을 입력해주세요.");
+	        return "redirect:/user/profile/rank.do"; // 리다이렉트
+	    }
+		 
+		if(result > 0) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+		}
+		return "redirect:/user/profile/rank.do";
+	}
+	
+	/**
+	 * 직급여러행삭제
+	 */
+	@PostMapping("/profile/deleteRanks")
+	@ResponseBody
+	public Map<String, String> deleteRanks(@RequestBody List<Integer> rankNoList) {
+	    int result = userService.deleteRanks(rankNoList);
+	    
+	    Map<String, String> response = new HashMap<>();
+	    if (result > 0) {
+	        response.put("message", "성공적으로 삭제되었습니다.");
+	    } else {
+	        response.put("message", "삭제에 실패했습니다.");
+	    }
+	    return response;
 	}
 	
 }
