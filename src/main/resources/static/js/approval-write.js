@@ -214,11 +214,8 @@ const ApprovalModal = {
 			document.getElementById('approvalForm').submit();
 		}
 	}
-},
-
-	checkRequiredFields: function(){
-		const apprType = document.querySelector('input[name="apprType"]').value;
 }
+
 
 ;
 
