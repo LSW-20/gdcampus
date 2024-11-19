@@ -26,8 +26,8 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public int deleteStu(StudentDto s) {
-		return stuDao.deleteStu(s);
+	public int deleteStu(int stuNo) {
+		return stuDao.deleteStu(stuNo);
 	}
 
 	@Override
