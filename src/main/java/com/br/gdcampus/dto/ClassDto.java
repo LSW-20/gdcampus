@@ -33,7 +33,7 @@ public class ClassDto {
 	 private int targetGrade;
 	 private int classHours;
 	 private String classGoals;
-	 private String opreationPlan;
+	 private String operationPlan;
 	 private String mainTextBook;
 	 private String refnBook;
 	 private String confirmYn; // 승인YN 강의목록에 띄울땐 Y만뜨게
@@ -42,14 +42,18 @@ public class ClassDto {
 	 private String status;
 	 private String applDate; // 신청일
 	 private String reason;
-	 private int delYn;
+	 private String delYn;
 	
 	 // 평가방식Dto
 	 private List<EvaMethodDto> evaList; 
+	 private List<EvaMethodDto> deleteEvaList; 
+	 private List<EvaMethodDto> updateEvaList; 
 	 
 	 // 수강생Dto
-	 private List<LearnerDto> lernerList;
+	 private List<LearnerDto> learnerList;
 	 
 	 // 수업계획Dto
 	 private List<LessonPlanDto> planList;
+	 private List<LessonPlanDto> deletePlanList;
+	 private List<LessonPlanDto> updatePlanList;
 }
