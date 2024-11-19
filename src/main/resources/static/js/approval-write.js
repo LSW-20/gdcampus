@@ -155,7 +155,7 @@ const ApprovalModal = {
 			userName: li.querySelector('span').textContent.split(']')[1].trim().split(' ')[0],
 			rankName: li.getAttribute('data-rank'),
 			deptName: li.getAttribute('data-dept'),
-			lineOrder: index + 1
+			lineOrder: index + 2
 		}));
 
 		if (approvers.length === 0) {
@@ -177,11 +177,10 @@ const ApprovalModal = {
 			
 			table.innerHTML= `
 				<tr class="approvalHeader">
+					<th width="100%">${index+1}차결재</th>
 					<input type="hidden" name="userNo" value="${approver.userNo}">
 					<input type="hidden" name="lineOrder" value="${index+2}">
-					<input type="hidden" name="createUser" value=${approver.userNo}
-					
-					<th width="100%">${index+1}차결재</th>
+					<input type="hidden" name="createUser" value=${approver.userNo}					
 				</tr>
 				<tr class="approvalStamp">
 				    <td>
@@ -200,24 +199,66 @@ const ApprovalModal = {
 		console.log('저장된 결재선:', approvers);
 	},
 
+	// 필수값 체크
+	checkRequiredFields: function() {
+	    const apprType = document.querySelector('input[name="apprType"]').value;
+	    
+	    // 공통 필수값 체크
+	    if(!document.querySelector('#approvalLine').value) {
+	        alert('결재선을 지정해주세요.');
+	        return false;
+	    }
+
+	    // 문서 타입별 필수값 체크
+	    if(apprType === '품의서') {
+	        if(!document.querySelector('input[name="purchDept"]').value) {
+	            alert('담당부서를 입력해주세요.');
+	            return false;
+	        }
+	        if(!document.querySelector('input[name="purchEmpName"]').value) {
+	            alert('납품자를 입력해주세요.');
+	            return false;
+	        }
+	        if(!document.querySelector('input[name="purchPurpose"]').value) {
+	            alert('사용목적을 입력해주세요.');
+	            return false;
+	        }
+	        if(!document.querySelector('input[name="purchDeadline"]').value) {
+	            alert('희망납기일을 선택해주세요.');
+	            return false;
+	        }
+	        if(document.querySelector('#totalAmount').textContent === '0') {
+	            alert('구매 물품을 입력해주세요.');
+	            return false;
+	        }
+	    } else if(apprType === '기안서') {
+	        if(!document.querySelector('input[name="enforceDate"]').value) {
+	            alert('시행일자를 선택해주세요.');
+	            return false;
+	        }
+	        if(!document.querySelector('input[name="coopDept"]').value) {
+	            alert('협조부서를 입력해주세요.');
+	            return false;
+	        }
+	        if(!document.querySelector('input[name="apprTitle"]').value) {
+	            alert('제목을 입력해주세요.');
+	            return false;
+	        }
+	    }
+
+	    return true;
+	},	
+	
+	
 	// 결재 요청 제출
 	submitForm: function() {
-		const approvalLine = document.getElementById('approvalLine').value;
-
-		if (!approvalLine) {
-			alert('결재선을 지정해주세요.');
-			return;
+		    if(this.checkRequiredFields()) {
+		        if (confirm('결재를 요청하시겠습니까?')) {
+		            document.getElementById('approvalForm').submit();
+		        }
+		    }
 		}
-		
-		// 필수값 체크
-		if (confirm('결재를 요청하시겠습니까?')) {
-			document.getElementById('approvalForm').submit();
-		}
-	}
-}
-
-
-;
+};
 
 
 

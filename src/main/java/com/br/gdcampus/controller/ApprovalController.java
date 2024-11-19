@@ -7,9 +7,11 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.ApprovalDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -129,6 +131,26 @@ public class ApprovalController {
 	    response.put("maxPage", pi.getMaxPage());
 	    return response;
 	}
+	
+	@PostMapping("/insert")
+	public String insertApproval(ApprovalDto approval, HttpSession session, RedirectAttributes ra) {
+		
+		UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+		approval.setApprUser(loginUser.getUserNo());
+		
+		int result = apprService.insertApproval(approval);
+		
+		if(result > 0) {
+			ra.addFlashAttribute("alertMsg","결재요청 완료");
+			return "redirect:approval/home";			
+		}else {
+			ra.addFlashAttribute("alertMsg","결재요청 실패");
+			return "redirect:approval/home";						
+		}
+		
+		
+	}
+	
 	
 	
 }
