@@ -15,15 +15,15 @@ import lombok.ToString;
 @ToString
 @Builder
 public class ApprLineDto {
-	private int lineNo;
-	private String apprNo;
+	private int lineNo;		//nextval
+	private String apprNo;	//currval
 	private String userNo;
 	private int lineOrder;
-	private int lineStatus;
-	private Date lineDate;
-	private String lineReason;
-	private Date createDate;
+	private int lineStatus;	//0
+	private Date lineDate;	//SYSDATE
+	private String lineReason;//NULL
+	private Date createDate;//SYSDATE
 	private String createUser;
-	private Date modifyDate;
-	private String modifyUser;
+	private Date modifyDate;	//NULL
+	private String modifyUser;	//NULL
 }

@@ -18,10 +18,12 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            height: 300px;
         }
 
         .todo-documents {
+        		height: 300px;
             grid-column: 1 / -1;
             border: 1px solid #ddd;
             padding: 20px;
@@ -74,7 +76,7 @@
         .pagination {
             display: flex;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 145px;
             margin-bottom: 20px;
         }
 
