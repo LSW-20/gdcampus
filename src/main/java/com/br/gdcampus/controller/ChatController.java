@@ -76,9 +76,6 @@ public class ChatController {
 			String rankName = userService.selectRankName(((UserDto)session.getAttribute("loginUser")).getRankNo());		
 			model.addAttribute("description", deptName + " - " + rankName);
 			
-			
-			System.out.println("rankNo : " + ((UserDto)session.getAttribute("loginUser")).getRankNo());
-			System.out.println("rankName : " + rankName);
 		}
 		
 		
