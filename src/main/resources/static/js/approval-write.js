@@ -97,17 +97,6 @@ const ApprovalModal = {
 
 		}
 
-		/*				existingApprover.each(function() {
-							if ($(this).attr('data-user-id') === null){
-								isDuplicate = true;
-								return false; // each 루프 중단
-							}
-								if($(this).attr('data-user-id') === userNo) {
-										isDuplicate = true;
-										return false; // each 루프 중단
-								}
-						});		*/
-
 		// 결재자 수 제한
 		if (document.querySelectorAll('#approversList li').length >= 3) {
 			alert('결재선은 최대 3명까지만 지정할 수 있습니다.');
@@ -188,6 +177,10 @@ const ApprovalModal = {
 			
 			table.innerHTML= `
 				<tr class="approvalHeader">
+					<input type="hidden" name="userNo" value="${approver.userNo}">
+					<input type="hidden" name="lineOrder" value="${index+2}">
+					<input type="hidden" name="createUser" value=${approver.userNo}
+					
 					<th width="100%">${index+1}차결재</th>
 				</tr>
 				<tr class="approvalStamp">

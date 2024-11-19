@@ -6,9 +6,13 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.ApprovalDao;
+import com.br.gdcampus.dto.ApprLineDto;
 import com.br.gdcampus.dto.ApprRefDto;
 import com.br.gdcampus.dto.ApprovalDto;
+import com.br.gdcampus.dto.DraftDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.PurchaseDraftDto;
+import com.br.gdcampus.dto.PurchaseHistoryDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -104,6 +108,42 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public List<ApprovalDto> getRecentCompletedDocs(String userNo) {
 		return apprDao.getRecentCompletedDocs(userNo);
+	}
+
+	//결재요청
+	@Override
+	public int insertApproval(ApprovalDto approval) {
+		return apprDao.insertApproval(approval);
+	}
+
+	@Override
+	public int insertSimpleDraft(DraftDto draft) {
+		return 0;
+	}
+
+	@Override
+	public int insertPurchaseDraft(PurchaseDraftDto purchDraft) {
+		return 0;
+	}
+
+	@Override
+	public int insertPurchaseHistory(PurchaseHistoryDto purchHistory) {
+		return 0;
+	}
+
+	@Override
+	public int updateNextOrder(ApprovalDto approval) {
+		return 0;
+	}
+
+	@Override
+	public int updateAppAgree(ApprLineDto apprLine) {
+		return 0;
+	}
+
+	@Override
+	public int updateAject(ApprLineDto apprLine) {
+		return 0;
 	}
 
 }

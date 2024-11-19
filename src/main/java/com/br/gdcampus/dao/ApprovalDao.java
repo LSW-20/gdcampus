@@ -83,6 +83,15 @@ public class ApprovalDao {
 	public List<ApprovalDto> getRecentCompletedDocs(String userNo) {
 		return sqlSession.selectList("approvalMapper.getRecentCompletedDocs",userNo);
 	}
+
+	/**
+	 * 결재요청
+	 * @param approval
+	 * @return 처리행수
+	 */
+	public int insertApproval(ApprovalDto approval) {
+		return sqlSession.insert("approvalmapper.insertApproval",approval);
+	}
 	
 	
 

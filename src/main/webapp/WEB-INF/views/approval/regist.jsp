@@ -88,6 +88,7 @@
             background: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 1200px;
         }
 
         .approval-header {
@@ -127,10 +128,10 @@
                         <div class="approval-content">
                             <c:choose>
                                 <c:when test="${param.formType eq 'purchase'}">
-                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
                                 </c:otherwise>
                             </c:choose>
                         </div>
