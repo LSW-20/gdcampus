@@ -36,6 +36,13 @@ public class ClassDao {
 		// 승인상태로 변경하는 경우 class의 confirmYn의 값을 y로 바꿔줘야함 
 		return sqlSession.update("classMapper.updateClassStatus",c);
 	}
+	public int selectProfOpningListCount(Map<String, String> search) {
+		return sqlSession.selectOne("classMapper.selectProfOpningListCount",search);
+	}
+	public List<ClassDto> selectProfOpningList(Map<String, String> search, PageInfoDto pi) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
+		return sqlSession.selectList("classMapper.selectProfOpningList",search,rowBounds);
+	}
 
 	
 //--------------------------------------개설신청 끝----------------------------------------------

@@ -34,12 +34,12 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public int selectProfOpningListCount(Map<String, String> search) {
-		return 0;
+		return classDao.selectProfOpningListCount(search);
 	}
 
 	@Override
 	public List<ClassDto> selectProfOpningList(Map<String, String> search, PageInfoDto pi) {
-		return null;
+		return classDao.selectProfOpningList(search, pi);
 	}
 
 	@Override

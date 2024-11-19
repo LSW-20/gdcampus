@@ -1,0 +1,232 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개설신청 관리</title>
+<style type="text/css">
+.main-content {
+	min-height: 900px;
+}
+
+.page-content {
+	margin: auto;
+	width: 75%;
+}
+
+.card-body {
+	height: 500px;
+}
+</style>
+</head>
+
+
+<body data-topbar="dark" data-sidebar="dark">
+	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
+	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
+
+
+
+	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+	<div id="layout-wrapper">
+
+
+		<!-- header 시작 -->
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+		<!-- header 끝 -->
+
+
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
+		<!-- sidebar 끝 -->
+
+
+
+		<!-- main-content 시작 -->
+		<div class="main-content">
+			<div class="page-content">
+				<div class="container-fluid mt-5">
+					<div class="text-center">
+						<h3>강의 개설 신청</h3>
+					</div>
+					<div class="float-right mb-5">
+						<p>신청일자 : ${c.applDate}</p>
+					</div>
+					<div class="mt-5 mb-3">
+						
+						<div class="table-responsive mb-4 ">
+							<table class="table table-bordered mb-0" style="table-layout: fixed">
+								<thead>
+									<tr class="table-secondary">
+										<th width="15%" scope="col" class="">신청자명</th>
+										<th width="15%" scope="col">${ c.userNo }</th>
+										<c:set var = "year" value = "${fn:substring(c.classCode, 0, 2)}" />
+     									<c:set var = "term" value = "${fn:substring(c.classCode, 3, 4)}" />
+										<th width="20%" scope="col">개설년도</th>
+										<th width="20%" scope="col">20${year}년도</th>
+										<th width="15%" scope="col">개설학기</th>
+										<th width="15%" scope="col">${term}학기</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+					</div>
+					<div class="mt-2 mb-3">
+						
+						<div class="table-responsive mb-4 ">
+							<table class="table table-bordered mb-0" style="table-layout: fixed">
+								<thead>
+									<tr>
+										<th width="15%" scope="col">강의명</th>
+										<td width="15%" scope="col">${ c.classTitle }</td>
+										<th width="20%" scope="col">대상학과</th>
+										<td width="20%" scope="col">${c.deptName}</td>
+									</tr>
+									<tr>
+										<th width="15%" scope="col">강의유형</th>
+										<td width="15%" scope="col">${ c.classType }</td>
+										<th width="20%" scope="col">진행방식</th>
+										<td width="20%" scope="col">${c.prgMethod}</td>
+									</tr>
+									<tr>
+										<th width="15%" scope="col">시수</th>
+										<td width="15%" scope="col">${ c.classHours}</td>
+										<th width="20%" scope="col">대상학년</th>
+										<td width="20%" scope="col">${c.targetGrade} 학년</td>
+									</tr>
+								</thead>
+							</table>
+						</div>
+	
+					</div>
+					
+					<h5>수업목표</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+						${c.classGoals}
+					</div>
+					<h5>운영방안</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+						${c.operationPlan}
+					</div>
+					<h5>평가방식</h5>
+					<div class=" mt-2 mb-4" >
+						<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<tr class="table-secondary">
+								<th width="17%">중간고사</th>
+								<th width="17%">기말고사</th>
+								<th width="17%">실습/과제</th>
+								<th width="17%">출결</th>
+								<th width="17%">기타</th>
+								<th width="15%">합계</th>
+							</tr>
+							<tr>
+	            			</tr>
+            			</table>
+					</div>
+					<h5>평가상세</h5>
+					<hr>
+					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+		
+					</div>
+					<h5>교재</h5>
+					<hr>
+					<div class=" mt-2 mb-4">
+						<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<tr>
+								<th width="20%">주교재</th>
+								<td width="80%">${c.mainTextBook}</td>
+							</tr>
+							<tr>
+								<th width="20%">참고서적</th>
+								<td width="80%">${c.refnBook eq null ? '' : c.refnBook}</td>
+							</tr>
+						</table>
+					</div>
+					<c:if test="${c.status eq '보완요청' or c.status  eq '반려' or  c.status  eq '취소' }">
+						<h5>${c.status} 사유</h5>
+						<hr>
+						<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
+							${c.reason}
+						</div>
+					</c:if>
+					<div class="row"> 
+						<div class="col-8">
+							<div class="mt-1" id="reasonBox" hidden>
+								취소사유
+								<textarea required class="form-control" rows="5" id="reason"></textarea>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="float-sm-center">
+								
+								<div class="row mt-4">
+									<div class="select col pl-0">
+										<c:if test="${c.status eq '보완완료' or c.status  eq '접수'or c.status  eq '보완요청'or c.status }">
+											<a class="btn btn-primary w-md mr-3 col" id="opStatus">취소</a>
+										</c:if>
+									</div>
+									<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
+								</div>
+								
+								<div class="row mt-4">
+									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/prof/list.do">목록</a>
+								</div>
+								<input type="hidden" value="${c.classCode }">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- main-content 끝 -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+	    $('#opStatus').on('click', function() {
+	    	console.log('취소버튼 눌림');
+	    	$('#reason').val('');
+	    	$('#reasonBox').removeAttr('hidden');
+	    });
+		function fn_updateStatus(){
+			
+  			const opStatus = $('#opStatus').val();
+  			
+  			if($('#reason').val() == ''){
+  				alert('사유를 작성해주십시오.');
+  				return;
+  			}  				
+
+  			
+  			if(confirm('신청서를 ' + opStatus+'처리하시겠습니까?')){
+  				
+				$.ajax({
+					url: '${contextPath}/class/opning/prof/update.do',
+					type: 'post',
+					data: {
+						reason : $('#reason').val(),
+						status : opStatus,
+						classCode : '${c.classCode}'
+					},
+					success: function(res){
+						if(res == "SUCCESS"){
+							location.reload('${c.classCode}');
+						}else{
+							alert("처리에 실패하였습니다.");
+						}
+					}
+				})
+  			
+  			}
+  		}
+		</script>
+	</div>
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+</body>
+</html>
