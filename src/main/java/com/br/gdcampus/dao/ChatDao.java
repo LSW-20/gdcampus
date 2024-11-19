@@ -80,7 +80,26 @@ public class ChatDao {
 	public List<MessageDto> selectChatMessage(Map<String, String> map) {
 		return sqlSession.selectList("chatMapper.selectChatMessage", map);
 	}
+	
 
+	/**
+	 * 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert.
+	 * author : 임상우
+	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.		
+	 * return 성공시 1 , 실패시 0
+	 */
+	public int insertMessage(Map<String, String> map) {
+		return sqlSession.insert("chatMapper.insertMessage", map);
+	}
 
+	/**
+	 * 채팅 메세지를 db에 insert - (2/2) T_MESSAGE_READ 테이블에 insert.
+	 * author : 임상우
+	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.		
+	 * return 성공시 1 , 실패시 0
+	 */
+	public int insertMessageRead(Map<String, String> map) {
+		return sqlSession.insert("chatMapper.insertMessageRead", map);
+	}
 
 }

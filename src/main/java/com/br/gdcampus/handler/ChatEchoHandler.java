@@ -1,7 +1,8 @@
 package com.br.gdcampus.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -110,10 +111,18 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         String userName = ((UserDto) session.getAttributes().get("loginUser")).getUserName(); 
         String payload = message.getPayload().toString();
         
+        
+        LocalDateTime now = LocalDateTime.now(); // 현재 시간
+        DateTimeFormatter formatterWithSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 정의(연월일 시분초)
+        DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); // 포맷 정의(연월일 시분)
+        String nowWithSeconds = now.format(formatterWithSeconds);  		 // 포맷 적용
+        String nowWithoutSeconds = now.format(formatterWithoutSeconds);  // 포맷 적용
+        
+        
         log.debug("(handleMessage) 화면 -> 웹소켓으로 넘어온 메세지 : {}", payload);
         
-        // 메세지유형(chat/entry/exit) | 메세지내용 | 발신자이름 | 발신자사번 | ...(프로필이미지경로 등) <- 화면에서 .split("|") 한다.
-        String msg = "chat|" + payload + "|" + userName + "|" + userNo;
+        // 메세지유형(chat/entry/exit) | 메세지내용 | 발신자이름 | 발신자사번 | 보낸시간 | ...(프로필이미지경로 등) <- 화면에서 .split("|") 한다.
+        String msg = "chat|" + payload + "|" + userName + "|" + userNo + "|" + nowWithoutSeconds;
         
         log.debug("(handleMessage) 웹소켓에서 화면으로 보낼 메세지 : {}", msg);
 
@@ -124,7 +133,15 @@ public class ChatEchoHandler extends TextWebSocketHandler {
             sss.sendMessage(new TextMessage(msg)); // 화면에서 onMesage 함수가 자동 실행된다.
         }
         
-        // 여기서 ChatService 호출해서 db에 insert 할 예정.
+        
+        // 채팅 메세지를 db에 insert.
+        Map<String, String> map = new HashMap<>();
+        map.put("message", payload);
+        map.put("userNo", userNo);
+        map.put("roomNo", roomNo);
+        map.put("nowWithoutSeconds", nowWithSeconds);
+        chatService.insertMessage(map);
+        
     }
     
     

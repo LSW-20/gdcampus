@@ -129,6 +129,16 @@
  	     and STATUS = 'Y'
  	   order by CREATE_DATETIME  
 	</select>
-
+	
+	
+	<!-- (상우) 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert. -->
+	<insert id="insertMessage">
+	
+	</insert>
+	
+	<!-- (상우) 채팅 메세지를 db에 insert - (2/2) T_MESSAGE_READ 테이블에 insert. -->
+	<insert id="insertMessageRead">
+	
+	</insert>
 	
 </mapper>

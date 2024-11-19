@@ -26,9 +26,9 @@ public interface ChatService {
 
     // 현재 채팅방의 과거 메세지 내역 조회 - 상우
     List<MessageDto> selectChatMessage(Map<String, String> map);
-    
-    // 채팅방 메세지 보내기 (db에 기록) - 상우
-    // int insertChatMessage(String chatMessage);
+
+    // 채팅 메세지를 db에 insert - 상우
+	int insertMessage(Map<String, String> map);
     
     // 채팅방 생성 - 상우
     // int createChatRoom(String[] userNo);
