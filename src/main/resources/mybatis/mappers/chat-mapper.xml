@@ -27,6 +27,7 @@
 		<result column="CREATE_DATETIME" property="createDateTime"/>	
 		<result column="STATUS" property="status"/>	
 		<result column="USER_NAME" property="userName"/>		
+		<result column="MSG_TYPE" property="msgType"/>		
 	</resultMap>
 
 
@@ -121,6 +122,7 @@
 			   , USER_NO
 			   , USER_NAME
 			   , ROOM_NO
+			   , MSG_TYPE
 			   , CREATE_DATETIME
 			   , STATUS
 			from T_MESSAGE  
@@ -140,6 +142,7 @@
 			, MSG_CONTENT
 			, USER_NO
 			, ROOM_NO
+			, MSG_TYPE
 			, CREATE_DATETIME
 			, STATUS
 		  )
@@ -149,6 +152,7 @@
 		  , #{message}
 		  , #{userNo}	
 		  , #{roomNo}
+		  , 'NORMAL'
 		  , TO_DATE(#{nowWithSeconds}, 'YYYY-MM-DD HH24:MI:SS')
 		  , 'Y'
 		  ) 

@@ -115,8 +115,8 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
         DateTimeFormatter formatterWithSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 정의(연월일 시분초)
         DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); // 포맷 정의(연월일 시분)
-        String nowWithSeconds = now.format(formatterWithSeconds);  		 // 포맷 적용
-        String nowWithoutSeconds = now.format(formatterWithoutSeconds);  // 포맷 적용
+        String nowWithSeconds = now.format(formatterWithSeconds);  		 // 포맷 적용(db에 insert는 연월일 시분초)
+        String nowWithoutSeconds = now.format(formatterWithoutSeconds);  // 포맷 적용(화면에는 연월일 시분만 뿌려줌)
         
         
         log.debug("(handleMessage) 화면 -> 웹소켓으로 넘어온 메세지 : {}", payload);
