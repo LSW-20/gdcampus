@@ -3,49 +3,56 @@ package com.br.gdcampus.controller;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
-import com.br.gdcampus.util.FileUtil;
+import com.br.gdcampus.service.PostService;
 import com.br.gdcampus.util.PagingUtil;
 
-import ch.qos.logback.core.model.Model;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-/**
- * 게시글 관련 
- */
 
+		/**
+		 * 게시글 목록 조회 요청
+		 */
 
 @Slf4j
-@RequestMapping("/post")
+@RequestMapping("/board")
 @RequiredArgsConstructor
 @Controller
 public class PostController {
-//
-//		private final PostController postController;
-//		private final PagingUtil pagingUtil;
-//		private final FileUtil fileUtil;
-//		
-//		// 메뉴바에있는 메뉴 클릭시       /board/list.do    		=> 1번페이지 요청
-//		// 페이징바에 있는 페이지 클릭시  /board/list.do?page=xx
-//		@GetMapping("/list.do")
-//		public void list(@RequestParam(value="page", defaultValue="1") int currentPage
-//						, Model model) {
-//			
-//			int listCount = postService.selectBoardListCount();
-//			
-//			PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
-//			List<PostDto> list = postService.selectBoardList(pi);
-//			
-//			model.addAttribute("pi", pi);
-//			model.addAttribute("list", list);
-//			
-//			//return "board/list";
-//			
-//		}		
+
+	private final PostService postService; 
+	private final PagingUtil pageUtil;
+	
+	@GetMapping("/test")
+	public String test(RedirectAttributes rdAttributes, int num1, int num2) {
+		int result = postService.test(num1,num2);
+		String str = "덧셈의 결과는 : "+result; 
+
+		rdAttributes.addFlashAttribute("alertMsg",str);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/post/list.do")
+	public void postList(@RequestParam(value="page", defaultValue="1") int currentPage) {
+		
+		int listCount = postService.selectPostList();
+		
+		PageInfoDto pi = pageUtil.getPageInfoDto(listCount, currentPage, 5,5);
+		List<PostDto> list = postService.selectPostList(pi);
+		
+		// 페이징바에 5개씩 보이게 할거임
+		// 페이징바에 시작수/마지막 끝수 모든것들이 담겨있는페이지 infodto 필요함
+		
+		
+		}
+		  
 		
 }
+		

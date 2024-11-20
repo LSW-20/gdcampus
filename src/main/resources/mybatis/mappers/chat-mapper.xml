@@ -19,7 +19,16 @@
 		<result column="JOIN_YN" property="joinYN"/>	
 	</resultMap>
 	
-
+	<resultMap id="messageResultMap" type="MessageDto">
+		<result column="MSG_NO" property="msgNo"/>
+		<result column="MSG_CONTENT" property="msgContent"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="ROOM_NO" property="roomNo"/>	
+		<result column="CREATE_DATETIME" property="createDateTime"/>	
+		<result column="STATUS" property="status"/>	
+		<result column="USER_NAME" property="userName"/>		
+		<result column="MSG_TYPE" property="msgType"/>		
+	</resultMap>
 
 
 	<!-- (상우) 채팅방 전체 리스트 조회 -->
@@ -74,15 +83,15 @@
 			,	CREATE_USER
 			,	STATUS
 		  )
-		 values 
-		 (
-		 	 LPAD(SEQ_CHNO.NEXTVAL, 4, '0')
-		 , #{title}
-		 , #{type}
-		 , SYSDATE
-		 , #{createUser}
-		 , 'Y' 
-		 ) 
+		  values 
+		  (
+		  	LPAD(SEQ_CHNO.NEXTVAL, 4, '0')
+		  , #{title}
+		  , #{type}
+		  , SYSDATE
+		  , #{createUser}
+		  , 'Y' 
+		  ) 
 	</insert>
 	
 	<!-- (상우) 채팅방 생성 후 초대인원들 매핑테이블에 담기 -->
@@ -95,16 +104,74 @@
       , JOIN_TIME
       , JOIN_YN
 		  )
-		 values 
-		 (
-		 	 #{userNo}
-		 , LPAD(SEQ_CHNO.CURRVAL, 4, '0')
-		 , SYSDATE
-		 , 'Y' 
-		 ) 
+		  values 
+		  (
+		    #{userNo}
+		  , LPAD(SEQ_CHNO.CURRVAL, 4, '0')
+		  , SYSDATE
+		  , 'Y' 
+		  ) 
 	</insert>
 	
+	
+	<!-- (상우) 현재 채팅방의 과거 메세지 내역 조회 -->
+	<select id="selectChatMessage" resultMap="messageResultMap">
+		select 
+				   MSG_NO
+				 , MSG_CONTENT
+			   , USER_NO
+			   , USER_NAME
+			   , ROOM_NO
+			   , MSG_TYPE
+			   , CREATE_DATETIME
+			   , STATUS
+			from T_MESSAGE  
+			join T_USER USING (USER_NO)
+ 	   where ROOM_NO = #{roomNo}
+ 	     and STATUS = 'Y'
+ 	   order by CREATE_DATETIME  
+	</select>
+	
+	
+	<!-- (상우) 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert. -->
+	<insert id="insertMessage">
+		insert 
+		  into T_MESSAGE
+		  (
+		    MSG_NO
+			, MSG_CONTENT
+			, USER_NO
+			, ROOM_NO
+			, MSG_TYPE
+			, CREATE_DATETIME
+			, STATUS
+		  )
+		  values
+		  (
+		  	SEQ_MNO.NEXTVAL
+		  , #{message}
+		  , #{userNo}	
+		  , #{roomNo}
+		  , 'NORMAL'
+		  , TO_DATE(#{nowWithSeconds}, 'YYYY-MM-DD HH24:MI:SS')
+		  , 'Y'
+		  ) 
 
-
+	</insert>
+	
+	<!-- (상우) 채팅 메세지를 db에 insert - (2/2) T_MESSAGE_READ 테이블에 insert. -->
+	<insert id="insertMessageRead">
+		insert 
+		  into T_MESSAGE_READ
+		  (
+		  	USER_NO
+		  , MSG_NO
+		  )
+		  values
+		  (
+		  	#{userNo}
+		  ,	SEQ_MNO.CURRVAL
+		  ) 	
+	</insert>
 	
 </mapper>

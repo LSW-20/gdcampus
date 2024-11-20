@@ -107,6 +107,39 @@ public class ChatServiceImpl implements ChatService {
 		
 		return result;
 	}
+
+
+	/**
+	 * 현재 채팅방의 과거 메세지 내역 조회
+	 * author : 임상우
+	 * @param roomNo 현재 채팅방 번호
+	 * return 과거 메세지 내역
+	 */
+	@Override
+	public List<MessageDto> selectChatMessage(Map<String, String> map) {
+		
+		return chatDao.selectChatMessage(map);
+	}
+
+
+	/**
+	 * 채팅 메세지를 db에 insert
+	 * author : 임상우
+	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.
+	 * return 성공시 1 , 실패시 0
+	 */
+	@Override
+	public int insertMessage(Map<String, String> map) {
+		
+		// (1) T_MESSAGE 테이블에 insert.
+		int result = chatDao.insertMessage(map);
+		
+		// (2) T_MESSAGE_READ 테이블에 insert.
+		if(result > 0) {
+			result = chatDao.insertMessageRead(map);
+		}
+		return result;
+	}
 	
 	
 

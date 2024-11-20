@@ -16,7 +16,7 @@
 		<result column="TARGET_GRADE" property="targetGrade"/>
 		<result column="CLASS_HOURS" property="classHours"/>
 		<result column="CLASS_GOALS" property="classGoals"/>
-		<result column="OPERATION_PLAN" property="opreationPlan"/>
+		<result column="OPERATION_PLAN" property="operationPlan"/>
 		<result column="MAIN_TEXTBOOK" property="mainTextBook"/>
 		<result column="REFN_BOOK" property="refnBook"/>
 		<result column="CONFIRM_YN" property="confirmYn"/>
@@ -44,7 +44,7 @@
 	    <result column="LEARNER_NO" property="learnerNo"/>
 	    <result column="STU_NO" property="stuNo"/>
 	    <result column="MIDDLE_TEST" property="middleTest"/>
-	    <result column="FINAL_TESTL" property="finalTest"/>
+	    <result column="FINAL_TESTL" property="finalTestL"/>
 	    <result column="PRACTICE" property="practice"/>
 	    <result column="ATTENDANCE" property="attendance"/>
 	    <result column="ETC" property="etc"/>
@@ -60,19 +60,123 @@
 	</resultMap>
 	
 	<!-- 강의신청 목록/교무팀 -->
-	<select id="selectStaffClassList" resultMap="classResultMap">
-	SELECT C.USER_NO,CLASS_CODE, CLASS_TITLE, APPL_DATE, USER_NAME, STATUS
-	  FROM T_OPEN_APPL
-	  JOIN T_CLASS C USING(CLASS_CODE)
-	  JOIN T_USER U ON C.USER_NO = U.USER_NO
-	  ORDER BY APPL_DATE DESC
+	<select id="selectStaffOpningListCount" resultType="_int">
+		SELECT count(*) as count
+		  FROM T_OPEN_APPL
+		  JOIN T_CLASS C USING(CLASS_CODE)
+		  JOIN T_USER U ON C.USER_NO = U.USER_NO
+	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
+	    <if test="status != 'all'">
+	        AND STATUS = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectStaffOpningList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , USER_NAME as USER_NO
+		     , to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		     , to_char(O.MODIFY_DATE,'YY/MM/DD') as "MODIFY_DATE"
+		     , STATUS
+		 FROM T_OPEN_APPL O
+		 JOIN T_CLASS C USING(CLASS_CODE)
+		 JOIN T_USER U ON C.USER_NO = U.USER_NO
+		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
+		<if test="status != 'all'">
+		  AND STATUS = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+		  AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY APPL_DATE DESC
 	</select>
 	<!-- 강의신청 상세조회/교무팀 -->
-	<!-- 강의신청 숭인/교무팀 -->
+	<select id="selectStaffOpningDetail" resultMap="classResultMap">
+		SELECT CLASS_CODE
+	          ,USER_NAME as USER_NO
+	          ,(SELECT DEPT_NAME
+	              FROM T_ST_DEPT
+		         WHERE ST_DEPT_NO = SUBSTR(#{classCode}, INSTR(#{classCode},'_') + 1, 2)
+		        ) AS DEPT_NAME
+		      ,CLASS_TITLE
+		      ,CLASS_TYPE
+		      ,PRG_METHOD
+		      ,TARGET_GRADE
+		      ,CLASS_HOURS
+		      ,CLASS_GOALS
+		      ,OPERATION_PLAN
+		      ,MAIN_TEXTBOOK
+		      ,REFN_BOOK
+		      ,STATUS
+		      ,to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		      ,REASON
+		      ,EVA_ITEM
+		      ,ALLOCATION
+		      ,EVA_DETAIL   
+		  FROM T_OPEN_APPL O
+		  JOIN T_CLASS C ON O.CLASS_CODE = C.CLASS_CODE
+		  JOIN T_USER U ON C.USER_NO = U.USER_NO
+		  LEFT JOIN T_EVA_METHOD E ON C.CLASS_CODE = E.CLASS_CODE
+		 WHERE CLASS_CODE = #{classCode}
+	</select>
+	
+	<!-- 강의신청 취소/교수 -->
+	<!-- 강의신청 승인/교무팀 -->
 	<!-- 강의신청 반려/교무팀 -->
 	<!-- 강의신청 보완요청/교무팀 -->
+	<update id="updateOpningStatus">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = #{status}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , USER_NO = #{userNo}
+		     , REASON = #{reason}
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
+	
+	<update id="updateClassStatus">
+		 UPDATE T_CLASS
+   			SET CONFIRM_YN = 'Y'
+ 		  WHERE CLASS_CODE = #{classCode}
+	</update>
 	
 	<!-- 강의신청 목록/교수 -->
+	<select id="selectProfOpningListCount" resultType="_int">
+		SELECT count(*) as count
+		  FROM T_OPEN_APPL O
+  		  JOIN T_CLASS C USING(CLASS_CODE)
+	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
+	       AND C.USER_NO = #{userNo}
+	    <if test="status != 'all'">
+	        AND STATUS = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectProfOpningList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		     , to_char(O.MODIFY_DATE,'YY/MM/DD') as "MODIFY_DATE"
+		     , STATUS
+		 FROM T_OPEN_APPL O
+		 JOIN T_CLASS C USING(CLASS_CODE)
+		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
+		  AND C.USER_NO = #{userNo}
+		<if test="status != 'all'">
+		  AND STATUS = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+		  AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY APPL_DATE DESC
+	</select>
 	<!-- 강의신청 신청/교수 -->
 	<!-- 강의신청 상세조회/교수 -->
 	<!-- 강의신청 수정(보완)/교수 -->
