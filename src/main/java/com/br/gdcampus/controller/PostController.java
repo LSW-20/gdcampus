@@ -30,14 +30,6 @@ public class PostController {
 	private final PostService postService; 
 	private final PagingUtil pageUtil;
 	
-	@GetMapping("/test")
-	public String test(RedirectAttributes rdAttributes, int num1, int num2) {
-		int result = postService.test(num1,num2);
-		String str = "덧셈의 결과는 : "+result; 
-
-		rdAttributes.addFlashAttribute("alertMsg",str);
-		return "redirect:/";
-	}
 	
 	@GetMapping("/post/list.do")
 	public void postList(@RequestParam(value="page", defaultValue="1") int currentPage) {

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="postMapper">
+	    <!-- 결과 매핑 -->
+    <resultMap id="DeptResultMap" type="com.example.dto.Dept">
+        <id property="deptNo" column="DEPT_NO" />
+        <result property="deptName" column="DEPT_NAME" />
+        <result property="createDate" column="CREATE_DATE" />
+        <result property="createUser" column="CREATE_USER" />
+        <result property="modifyDate" column="MODIFY_DATE" />
+        <result property="modifyUser" column="MODIFY_USER" />
+    </resultMap>
 	
 	<select id="selectPostListCount">
 		select
@@ -8,9 +17,111 @@
 			form post
 		 where status = 'Y'	
 	</select>
-	
-	
 
 	
 </mapper>
 
+<!-- 
+
+공지사항 참고용 코드
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+	<resultMap id="noticeResultMap" type="NoticeDto">
+		<result column="NOTICE_NO" property="noticeNo"/>
+		<result column="NOTICE_TITLE" property="noticeTitle"/>
+		<result column="user_id" property="noticeWriter"/>
+		<result column="NOTICE_CONTENT" property="noticeContent"/>
+		<result column="regist_date" property="registDt"/>
+		<collection resultMap="attachResultMap" property="attachList"/>
+	</resultMap>
+	
+	<resultMap id="attachResultMap" type="AttachmentDto">
+			<result column="FILE_NO" property="fileNo"/>
+			<result column="FILE_PATH" property="filePath"/>
+			<result column="FILESYSTEM_NAME" property="filesystemName"/>
+			<result column="ORIGINAL_NAME" property="originalName"/>
+	</resultMap>
+	
+	<select id="selectNoticeListCount" resultType="_int">
+		select
+					 count(*)
+			from notice
+	</select>
+	<select id="selectNoticeList" resultMap="noticeResultMap">
+	  select 
+		        NOTICE_NO
+		      , NOTICE_TITLE
+		      , user_id
+		      , to_char(regist_date,'YYYY-MM-DD') as "regist_date"
+		 from notice 
+		 join member on (user_no = NOTICE_WRITER)
+		order by NOTICE_NO desc
+	</select>
+	<insert id="insertNotice">
+		insert
+			into notice
+			(
+				NOTICE_NO
+			, NOTICE_TITLE
+			, NOTICE_WRITER
+			, NOTICE_CONTENT
+			)
+			values
+			(
+				seq_nno.nextval
+			, #{noticeTitle}
+			, #{noticeWriter}
+			, #{noticeContent}
+			)
+	</insert>
+	
+	<insert id="insertAttach">
+		insert
+			into attachment
+			(
+				FILE_NO
+			, FILE_PATH
+			, FILESYSTEM_NAME
+			, ORIGINAL_NAME
+			, REF_TYPE
+			, REF_NO
+			)
+			values
+			(
+				seq_ano.nextval
+			, #{filePath}
+			, #{filesystemName}
+			, #{originalName}
+			, #{refType}
+			<choose>
+				<when test="refNo == 0">
+					, seq_nno.currval
+				</when>
+				<otherwise>
+					, #{refNo}
+				</otherwise>
+			</choose>
+			)
+	</insert>
+	<select id="selectNotice" resultMap="noticeResultMap">
+		select
+		       NOTICE_NO
+		     , NOTICE_TITLE
+		     , NOTICE_CONTENT
+		     , user_id
+		     , to_char(regist_date,'YYYY-MM-DD') as "regist_date"
+		     , file_no
+		     , file_path
+		     , filesystem_name
+		     , original_name
+		  from notice n
+		  join member on (user_no = NOTICE_WRITER)
+		  left join attachment on (ref_type = 'N' and ref_no = NOTICE_NO)
+		 where NOTICE_NO = #{noticeNo}
+	</select>
+</mapper>
+
+	
+	-->

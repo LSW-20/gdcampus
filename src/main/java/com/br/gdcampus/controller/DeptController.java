@@ -41,16 +41,18 @@ public class DeptController {
     // 부서 추가
     @PostMapping("/add")
     public ResponseEntity<String> insertDept(@RequestParam String deptName) {
-        DeptDto newDept = DeptDto.builder().deptName(deptName).createUser("admin").build();
+        DeptDto newDept = DeptDto.builder().deptName(deptName).createUser("/*로그인세션user*/").build();
         deptService.insertCategoryDept(newDept);
         log.info("부서 추가: {}", deptName);
         return ResponseEntity.ok("부서 카테고리가 성공적으로 추가되었습니다.");
+        // 관리자 두명이기떄문에 관리자 아이디 넣어야 하고 어드민 으로 작성하면 안됨 
+        
     }
 
     // 부서 수정
-    @PostMapping("/modify")
+    @PostMapping("/deptmodify")
     public ResponseEntity<String> modifyDept(@RequestParam String deptNo, @RequestParam String deptName) {
-        DeptDto updatedDept = DeptDto.builder().deptNo(deptNo).deptName(deptName).modifyUser("admin").build();
+        DeptDto updatedDept = DeptDto.builder()./*시퀀스작성*/deptNo(deptNo).deptName(deptName).modifyUser("admin").build();
         deptService.updateCategoryDept(updatedDept);
         log.info("부서 수정: ID={}, 이름={}", deptNo, deptName);
         return ResponseEntity.ok("부서 카테고리가 성공적으로 수정되었습니다.");
