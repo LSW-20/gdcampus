@@ -49,7 +49,7 @@
 
 		<!-- main-content 시작 -->
 		<div class="main-content">
-			<div class="page-content">
+			<div class="page-content ">
 				<div class="container-fluid mt-5">
 					<div class="text-center">
 						<h3>강의 개설 신청</h3>
@@ -80,7 +80,7 @@
 					<div class="mt-2 mb-3">
 						
 						<div class="table-responsive mb-4 ">
-							<table class="table table-bordered mb-0" style="table-layout: fixed;background-color: #F2F2F2;">
+							<table class="table table-bordered mb-0" style="table-layout: fixed; background-color: #F2F2F2;">
 								<thead>
 									<tr>
 										<th width="15%" scope="col">강의명</th>
@@ -162,7 +162,7 @@
 											</c:if>
 										</c:forEach>
 									</td>
-								<td id="sum"><c:out value="${sum}"/></td>
+									<td id="sum"><c:out value="${sum}"/></td>								
 	            			</tr>
             			</table>
 					</div>
@@ -202,26 +202,25 @@
 					<div class="row"> 
 						<div class="col-8">
 							<div class="mt-1" id="reasonBox" hidden>
-							<span id="resonTitle"></span>사유
-							<textarea required class="form-control" rows="5" id="reason"></textarea>
+								취소사유
+								<textarea required class="form-control" rows="5" id="reason"></textarea>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="float-sm-center">
-								<c:if test="${c.status eq '보완완료' or c.status  eq '접수'}">
-									<div class="row mt-4">
-										<div class="select col pl-0">
-											<select class="custom-select" name="opStatus" id="opStatus">
-					                			<option value="보완요청">보완요청</option>
-					                			<option value="반려">반려</option>
-					                			<option value="승인" selected>승인</option>
-											</select>
+								
+								<div class="row mt-4">
+								<c:if test="${c.status eq '보완완료' or c.status  eq '접수'or c.status  eq '보완요청'or c.status }">
+									<div class="select col pl-0">							
+											<a class="btn btn-primary w-md mr-3 col" id="opStatus">신청 취소</a>
+										
 										</div>
 										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
-									</div>
-								</c:if>
+									</c:if>
+								</div>
+								
 								<div class="row mt-4">
-									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/staff/list.do">목록</a>
+									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/prof/list.do">목록</a>
 								</div>
 								<input type="hidden" value="${c.classCode }">
 							</div>
@@ -233,40 +232,27 @@
 		<!-- main-content 끝 -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
-	    $('#opStatus').on('change', function() {
+	    $('#opStatus').on('click', function() {
+	    	console.log('${c.evaList}');
 	    	$('#reason').val('');
-	    	const opStatus = $('#opStatus').val();
-	        if(opStatus == '보완요청'){
-	        	$('#reasonBox').removeAttr('hidden');
-	        }
-	        if(opStatus == '반려'){
-	        	$('#reasonBox').removeAttr('hidden');
-	        }
-	        if(opStatus == '승인'){
-	        	$('#reasonBox').attr('hidden','');
-	        }
-	        
-	        $('#resonTitle').html(opStatus);
+	    	$('#reasonBox').removeAttr('hidden');
 	    });
 		function fn_updateStatus(){
-			
-  			const opStatus = $('#opStatus').val();
   			
-  			if(opStatus == '보완요청' || opStatus == '반려'){
-  				if($('#reason').val() == ''){
-  					alert('사유를 작성해주십시오.');
-  					return;
-  				}  				
-  			}
+  			if($('#reason').val() == ''){
+  				alert('사유를 작성해주십시오.');
+  				return;
+  			}  				
+
   			
-  			if(confirm('신청서를 ' + opStatus+'처리하시겠습니까?')){
+  			if(confirm('신청서를 취소 처리하시겠습니까?')){
   				
 				$.ajax({
 					url: '${contextPath}/class/opning/staff/update.do',
 					type: 'post',
 					data: {
 						reason : $('#reason').val(),
-						status : opStatus,
+						status : '취소',
 						classCode : '${c.classCode}'
 					},
 					success: function(res){
