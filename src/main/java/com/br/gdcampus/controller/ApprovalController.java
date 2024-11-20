@@ -241,7 +241,8 @@ public class ApprovalController {
 		if(approval == null) {
 			throw new RuntimeException("문서를 찾을 수 없음");
 		}
-		System.out.println("controller에 가져온 결재선 : "+ approval.getApprovers());
+		System.out.println("### approval" + approval);
+		System.out.println("### approval의 approvers : "+ approval.getApprovers());
 		model.addAttribute("approval",approval);
 		model.addAttribute("type",type);
 		

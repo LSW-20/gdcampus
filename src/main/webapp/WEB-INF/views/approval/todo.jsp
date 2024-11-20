@@ -121,9 +121,9 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <table class="approval-table">
+                            <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                 <thead>
-                                    <tr>
+                                    <tr class="bg-transparent">
                                         <th>기안일</th>
                                         <th>결재양식</th>
                                         <th>제목</th>
