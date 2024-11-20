@@ -19,16 +19,12 @@ public class PostServiceImpl implements PostService {
 	
 	private final PostDao postDao;
 	
-	@Override
-	public int test2() {
-		return postDao.test2();
-	}
-	
-	@Override
-	public int test(int num1, int num2) {
-		return postDao.test(num1,num2);
-	}
-	
+	/*
+	 * @Override public int test2() { return postDao.test2(); }
+	 * 
+	 * @Override public int test(int num1, int num2) { return
+	 * postDao.test(num1,num2); }
+	 */
 	@Override
 	public int selectPostList() {
 		return 0;

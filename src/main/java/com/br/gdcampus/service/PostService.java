@@ -15,12 +15,13 @@ public interface PostService {
      * @author 박한나
      */
 	//test
-	int test(int num1, int num2);
+//	int test(int num1, int num2);
+	
     // 게시글 목록 조회 (페이징 처리)
     int selectPostList();
     List<PostDto> selectPostList(PageInfoDto pi); // 일부데이터만 조회할
 	
-    int test2();
+    
     
 
     // 게시글 검색 조회 (키워드/부서/직급별 조회 - 페이징 처리)
