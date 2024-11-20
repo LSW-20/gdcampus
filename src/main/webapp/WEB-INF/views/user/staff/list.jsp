@@ -11,18 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>인사관리</title>
 <style type="text/css">
-.main-content {
-	min-height: 900px;
-}
 
-.page-content {
-	margin: auto;
-	width: 75%;
-}
-
-.card-body {
-	height: 500px;
-}
 </style>
 </head>
 
@@ -124,10 +113,10 @@
 
 						</div>
 						<!-- end row -->
-						<div class="table-responsive mb-4 ">
-							<table class="table table-centered table-nowrap table-check mb-0">
+						<div class="table-responsive custom-table mb-4 ">
+							<table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
 								<thead>
-									<tr>
+									<tr class="bg-transparent">
 										<th scope="col" style="width: 50px;">
 											<div class="custom-control custom-checkbox">
 												<input type="checkbox" class="custom-control-input"
