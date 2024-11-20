@@ -67,7 +67,7 @@ public class ClassController {
 		return res;
 	}
 	
-	/**교무팀 개설신청 상세조회
+	/**교무팀/교수 개설신청 상세조회
 	 * @param classCode 상세조회할 강의번호
 	 */
 	@GetMapping("/opning/staff/detail.do")
@@ -141,6 +141,49 @@ public class ClassController {
 		log.debug("c : {}", c);
 		model.addAttribute("c", c);
 		
+	}
+	
+	/**교수 개설신청 전 신청년도 총 신청한 수업 시수 구함(21시간 이상이면 신청 못함)
+	 * @param yy 년도
+	 * @param session 로그인 회원의 사번을 가져오기위해
+	 * @return 년도에 해당하는 1학기와 2학기 총 신청 수업 시수
+	 */
+	@ResponseBody
+	@GetMapping(value="/opning/prof/sum.do" , produces="application/json")
+	public Map<String,Object> selectSumClassTime(String yy, HttpSession session) {
+		
+		Map<String, Object> res = new HashMap<>();
+		Map<String,String> search = new HashMap<>();
+		
+		search.put("year", yy);
+		search.put("userNo", ((UserDto)session.getAttribute("loginUser")).getUserNo());
+		search.put("term", "1");
+		
+		int sum1 = classService.selectSumClassTime(search);
+		search.put("term", "2");
+		int sum2 = classService.selectSumClassTime(search);
+		
+		res.put("sum1", sum1);
+		res.put("sum2", sum2);
+		return res;
+	}
+	
+	/**교수측 신청폼으로 이동
+	 * @param yytt classNo의 앞부분(년도두자리+학기+_+교수의소속학과번호+_)
+	 * @param limit 시수 제한
+	 * @param session 
+	 * @param model
+	 */
+	@GetMapping("/opning/prof/addForm.do")
+	public void classAddForm(String yytt, String limit, HttpSession session, Model model) {
+		//개설학기, 년도, 소속학과, limit값을 받아서 보내줘야함
+		log.debug("yytt : "+yytt);
+		log.debug("limit : "+limit);
+		String classNo = yytt+((UserDto)session.getAttribute("loginUser")).getStDeptNo()+'_';
+		log.debug("classNo : "+classNo);
+		
+		model.addAttribute("classCode", classNo);
+		model.addAttribute("limit", Integer.parseInt(limit));
 	}
 	
 }

@@ -41,7 +41,10 @@ public class ClassServiceImpl implements ClassService {
 	public List<ClassDto> selectProfOpningList(Map<String, String> search, PageInfoDto pi) {
 		return classDao.selectProfOpningList(search, pi);
 	}
-
+	@Override
+	public int selectSumClassTime(Map<String, String> search) {
+		return classDao.selectSumClassTime(search);
+	}
 	@Override
 	public ClassDto selectProfOpningDetail(String classCode) {
 		return null;

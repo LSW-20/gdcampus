@@ -26,6 +26,9 @@ public interface ClassService {
 
 	// 개설신청 승인, 반려, 보완요청, 취소(교수측)
 	int updateOpningStatus(ClassDto c);
+	// 개설강의 총 시수 조회(교수측)
+	int selectSumClassTime(Map<String, String> search);
+	
 	
 //--------------------------------------개설신청 끝----------------------------------------------	
 
