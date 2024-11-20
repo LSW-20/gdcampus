@@ -197,5 +197,21 @@
 		   AND USER_NO = #{userNo}
 	</update>
 	
-
+	<!-- (상우) 채팅방별 최근 메세지 조회 -->
+	<select id="recentMessage" resultMap="messageResultMap">
+		SELECT MSG_NO
+				 , MSG_CONTENT
+				 , USER_NO
+				 , ROOM_NO
+				 , MSG_TYPE
+				 , CREATE_DATETIME
+				 , STATUS
+			FROM (
+					    SELECT MSG_NO, MSG_CONTENT, USER_NO, ROOM_NO, MSG_TYPE, CREATE_DATETIME, STATUS,
+					           ROW_NUMBER() OVER (PARTITION BY ROOM_NO ORDER BY CREATE_DATETIME DESC) AS RN
+					    FROM T_MESSAGE
+					    WHERE STATUS = 'Y'
+						)
+		 WHERE RN = 1
+	</select>
 </mapper>

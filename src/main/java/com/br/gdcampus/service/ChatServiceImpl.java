@@ -168,6 +168,17 @@ public class ChatServiceImpl implements ChatService {
 	public int exitRoom(Map<String, String> map) {
 		return chatDao.exitRoom(map);
 	}
+
+
+	/**
+	 * 채팅방 별 최근 메세지 조회
+	 * author : 상우
+	 * return 채팅방 별 최근 메세지가 담긴 List<MessageDto>
+	 */
+	@Override
+	public List<MessageDto> recentMessage() {
+		return chatDao.recentMessage();
+	}
 	
 	
 

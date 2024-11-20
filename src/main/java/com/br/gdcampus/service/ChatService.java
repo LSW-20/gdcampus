@@ -35,6 +35,9 @@ public interface ChatService {
 
 	// 채팅방 나가기 - 상우
 	int exitRoom(Map<String, String> map);
+
+	// 채팅방 별 최근 메세지 조회 - 상우
+	List<MessageDto> recentMessage();
     
     
     // 채팅방 초대 - 상우

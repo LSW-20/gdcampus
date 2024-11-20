@@ -106,9 +106,13 @@ public class ChatController {
 		model.addAttribute("chatRoomList", chatRoomList);
 		
 		
+		// 5. 채팅방 별 최근 메세지 조회.
+		List<MessageDto> recentMessageList = chatService.recentMessage();
+		model.addAttribute("recentMessageList", recentMessageList);
 		
 		
-		// 5. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
+		
+		// 6. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
 
 		
 		// (1) 관리자 유저의 사번, 이름 담기

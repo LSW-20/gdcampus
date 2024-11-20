@@ -53,7 +53,11 @@
                                    <img src="${contextPath}/images/users/avatar-4.jpg" class="avatar-sm rounded-circle" alt="">
                                </div>
                                <div class="media-body">
-                                   <h5 class="font-size-16 mt-0 mb-1"><a href="#" class="text-dark">${loginUser.userName}<i class="mdi mdi-circle text-success align-middle font-size-10 ml-1"></i></a></h5>
+                                   <h5 class="font-size-16 mt-0 mb-1">
+                                   	   <a href="#" class="text-dark">${loginUser.userName}
+                                   	       <%-- <i class="mdi mdi-circle text-success align-middle font-size-10 ml-1"></i> --%>
+                                   	   </a>
+                                   </h5>
 																	 <p class="text-muted mb-0">${description}</p>
 																	 <%-- 사번이 A시작이면 관리자, B시작이면 부서명 + 직급명, C시작이면 소속학과 + 교수 --%>
                                </div>
@@ -79,15 +83,20 @@
                                           		
 																									<li data-room-no="'${map['chatRoomDto'].roomNo}'" onclick="loadChatRoom('${map['chatRoomDto'].roomNo}', '${map['chatRoomDto'].roomName}', ${map['count']})", '그룹채팅임'>
 																									    <a href="#">
-																									        <div class="media align-items-center">
+																									        <div class="media">
 																									            <div class="avatar-xs mr-3">
 																									                <span class="avatar-title rounded-circle bg-soft-primary text-primary">
 																									                    G
 																									                </span>
 																									            </div>
 																									            
-																									            <div class="media-body">
-																									                <h5 class="font-size-14 mb-0">${map['chatRoomDto'].roomName} &nbsp;&nbsp;(${map['count']}명)  </h5>
+																									            <div class="media-body overflow-hidden">
+																									                <h5 class="text-truncate font-size-14 mb-1">${map['chatRoomDto'].roomName} &nbsp;&nbsp;(${map['count']}명)  </h5>
+			                                                            <c:forEach var="messageDto" items="${recentMessageList}"> <%-- 채팅방별 최근 메세지 1개 띄우기 --%>
+                                          		                       <c:if test="${map['chatRoomDto'].roomNo eq messageDto.roomNo}">  
+                                          		                     		  <p class="text-truncate mb-0">${messageDto.msgContent}</p>
+                                          		                       </c:if>
+                                          		                    </c:forEach>  
 																									            </div>
 																									        </div>
 																									    </a>
@@ -127,7 +136,11 @@
 			                                                           <h5 class="text-truncate font-size-14 mb-1">
 			                                                           	 ${map['counterpartName']} (${map['counterpartNo']})
 			                                                           </h5>
-			                                                           <%-- <p class="text-truncate mb-0">최근메세지 띄울곳</p> --%>
+			                                                           <c:forEach var="messageDto" items="${recentMessageList}"> <%-- 채팅방별 최근 메세지 1개 띄우기 --%>
+                                          		                       <c:if test="${map['chatRoomDto'].roomNo eq messageDto.roomNo}">  
+                                          		                     		  <p class="text-truncate mb-0">${messageDto.msgContent}</p>
+                                          		                       </c:if>
+                                          		                    </c:forEach>  
 			                                                       </div>
 			                                                       <%--
 			                                                       <div class="font-size-11">몇분전에 왔는지 띄울곳</div>
@@ -141,11 +154,6 @@
 
 																							</c:if>
 																					</c:forEach>                                       
-                                       
-                                       
-                                           <%-- 
-                                           --%>
-
                                           
                                        </ul>
                                    </div>
