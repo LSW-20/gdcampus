@@ -28,5 +28,5 @@ public class MessageDto {
 	private String status;
 	
 	private String userName;
-	
+	private String msgType;
 }

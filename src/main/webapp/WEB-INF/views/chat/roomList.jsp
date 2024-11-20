@@ -389,52 +389,59 @@
 						        success: function(resData) {
 						            	
 							        	console.log("ajax로 요청 후 돌아온 응답데이터 : " + JSON.stringify(resData) );						        	
-							        	// [{"msgNo":"1","msgContent":"직원1입니다.","userNo":"B0001","roomNo":"0001","createDateTime":"2024-10-01 01:30","status":"Y","userName":"김철수"},
-							        	//	{"msgNo":"2","msgContent":"안녕하세요. B입니다.","userNo":"B0002","roomNo":"0001","createDateTime":"2024-10-01 01:35","status":"Y","userName":"이영희"}]
+							        	// [{"msgNo":"1","msgContent":"직원1입니다.","userNo":"B0001","roomNo":"0001","createDateTime":"2024-10-01 01:30","status":"Y","userName":"김철수","msgType":"NORMAL"},
+							        	//	{"msgNo":"2","msgContent":"안녕하세요. B입니다.","userNo":"B0002","roomNo":"0001","createDateTime":"2024-10-01 01:35","status":"Y","userName":"이영희","msgType":"NORMAL"}]
 							        	
 							        	
 				        		    resData.forEach(function(messageDto) {
-
-														let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
-								        	  $chatDiv.addClass("clearfix");
-			
-								        	  let mediaDiv = $("<div>").addClass("media");
-								        	  let mediaBodyDiv = $("<div>").addClass("media-body");
-								        	  let conversationTextDiv = $("<div>").addClass("conversation-text").css( {"padding-right": "10px"} );
-					
-								        	  let ctextWrapDiv = $("<div>").addClass("ctext-wrap");
-								        	  let ctextWrapP = $("<p>").text( messageDto.msgContent ); // p태그에 메세지 출력
-								        	  ctextWrapDiv.append(ctextWrapP); 
-					
-								        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
-								        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
-								        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + messageDto.createDateTime);
-								        	  msgSeenP.append(msgSeenPI);
-								        	  msgSeenDiv.append(msgSeenP);
-					
-								        	  // 계층적으로 연결
-								        	  conversationTextDiv.append(ctextWrapDiv);
-								        	  conversationTextDiv.append(msgSeenDiv);
-								        	  mediaBodyDiv.append(conversationTextDiv);
-								        	  mediaDiv.append(mediaBodyDiv);
-								        	  $chatDiv.append(mediaDiv);
-					
-							        	  	if(messageDto.userNo == "${loginUser.userNo}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
-							        	  		$chatDiv.addClass("odd") 
-							        	  	}else {
-							        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
-							        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
-							        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
-			
-							        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
-							        	        let customDiv = $("<div>").addClass("sender-name").text( messageDto.userName + '(' + messageDto.userNo +')' ); 
-							        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
-							        	    }
-							        	  	
-									          $conversationList.append($chatDiv);
-									          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
-		
+												    
+				        		    		let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
+				        		    		
 				        		    	
+				        		    	  if (messageDto.msgType === "NORMAL") { // 입장, 퇴장메세지가 아닌 일반메세지인 경우
+																
+										        	  $chatDiv.addClass("clearfix");
+					
+										        	  let mediaDiv = $("<div>").addClass("media");
+										        	  let mediaBodyDiv = $("<div>").addClass("media-body");
+										        	  let conversationTextDiv = $("<div>").addClass("conversation-text").css( {"padding-right": "10px"} );
+							
+										        	  let ctextWrapDiv = $("<div>").addClass("ctext-wrap");
+										        	  let ctextWrapP = $("<p>").text( messageDto.msgContent ); // p태그에 "메세지 내용" 출력.
+										        	  ctextWrapDiv.append(ctextWrapP); 
+							
+										        	  let msgSeenDiv = $("<div>").addClass("msg-seen");
+										        	  let msgSeenP = $("<p>").addClass("text-muted font-size-12 mb-0 t mt-1").css( {"padding-right": "10px"} );
+										        	  let msgSeenPI = $("<i>").addClass("mdi mdi-clock-outline").text(" " + messageDto.createDateTime);  // "메세지 발신 시간" 출력.
+										        	  msgSeenP.append(msgSeenPI);
+										        	  msgSeenDiv.append(msgSeenP);
+							
+										        	  // 계층적으로 연결
+										        	  conversationTextDiv.append(ctextWrapDiv);
+										        	  conversationTextDiv.append(msgSeenDiv);
+										        	  mediaBodyDiv.append(conversationTextDiv);
+										        	  mediaDiv.append(mediaBodyDiv);
+										        	  $chatDiv.append(mediaDiv);
+							
+									        	  	if(messageDto.userNo == "${loginUser.userNo}"){ // 내가 보낸 메세지인 경우 <li class="clearfix odd">
+									        	  		$chatDiv.addClass("odd") 
+									        	  	}else {
+									        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
+									        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
+									        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
+					
+									        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
+									        	        let customDiv = $("<div>").addClass("sender-name").text( messageDto.userName + '(' + messageDto.userNo +')' );  // 발신자 "이름"과 "사번" 출력.
+									        	        ctextWrapDiv.prepend(customDiv); // ctext-wrap의 첫 번째 자손으로 추가
+									        	    }
+
+				        		    	  }else if(messageDto.msgType === "ENTRY" || (messageDto.msgType === "EXIT")){ // 입장 또는 퇴장 메세지일 경우
+				        		    		    $chatDiv.append( $("<div>").html(messageDto.msgContent).css( {"text-align": "center", "font-weight": "bold"} ) );
+				        		    	  }
+				        		    		
+									          $conversationList.append($chatDiv);
+									          
+									          $conversationList.scrollTop( $conversationList[0].scrollHeight ); // 스크롤을 항상 하단으로 유지시켜주는 코드.    
 										    });
 							        	
 							        	

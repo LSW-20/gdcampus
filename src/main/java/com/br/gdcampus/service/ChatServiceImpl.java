@@ -132,10 +132,13 @@ public class ChatServiceImpl implements ChatService {
 	public int insertMessage(Map<String, String> map) {
 		
 		// (1) T_MESSAGE 테이블에 insert.
-		return chatDao.insertMessage(map);
+		int result = chatDao.insertMessage(map);
 		
 		// (2) T_MESSAGE_READ 테이블에 insert.
-		
+		if(result > 0) {
+			result = chatDao.insertMessageRead(map);
+		}
+		return result;
 	}
 	
 	
