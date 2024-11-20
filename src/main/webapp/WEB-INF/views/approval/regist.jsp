@@ -116,7 +116,7 @@
                             <div class="btn-form">
                                 <div class="draft-title">업무 기안</div> <br>
                                 <button type="button" class="btn btn-primary" onclick="ApprovalModal.show()">결재선</button> &nbsp;
-                                <button type="button" class="btn btn-success" onclick="ApprovalModal.submitForm()">결재요청</button> &nbsp;
+        												<button type="button" class="btn btn-success" onclick="ApprovalModal.submitForm()">결재요청</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
                             </div>
                         </div>
