@@ -34,8 +34,8 @@ public class ChatDao {
 	 * @param chatRoomNo 채팅방 번호
 	 * return 그 채팅방의 인원 수
 	 */
-	public int selectChatRoomPeopleCount(String chatRoomNo) {
-		return sqlSession.selectOne("chatMapper.selectChatRoomPeopleCount", chatRoomNo);
+	public int selectChatRoomPeopleCount(String roomNo) {
+		return sqlSession.selectOne("chatMapper.selectChatRoomPeopleCount", roomNo);
 	}
 
 	
@@ -45,8 +45,8 @@ public class ChatDao {
 	 * @param roomNo 채팅방 번호
 	 * return List<UserChatRoomDto>
 	 */
-	public List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo) {
-		return sqlSession.selectList("chatMapper.selectUserChatRoomList", chatRoomNo);
+	public List<UserChatRoomDto> selectUserChatRoomList(String roomNo) {
+		return sqlSession.selectList("chatMapper.selectUserChatRoomList", roomNo);
 	}
 
 	
@@ -88,8 +88,8 @@ public class ChatDao {
 	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.		
 	 * return 성공시 1 , 실패시 0
 	 */
-	public int insertMessage(Map<String, String> map) {
-		return sqlSession.insert("chatMapper.insertMessage", map);
+	public int insertNormalMessage(Map<String, String> map) {
+		return sqlSession.insert("chatMapper.insertNormalMessage", map);
 	}
 
 	/**

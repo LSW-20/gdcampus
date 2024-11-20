@@ -140,7 +140,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         map.put("userNo", userNo);
         map.put("roomNo", roomNo);
         map.put("nowWithSeconds", nowWithSeconds);
-        chatService.insertMessage(map);
+        chatService.insertNormalMessage(map);
         
     }
     

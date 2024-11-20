@@ -37,8 +37,8 @@ public class ChatServiceImpl implements ChatService {
 	 * return 그 채팅방의 인원 수
 	 */
 	@Override
-	public int selectChatRoomPeopleCount(String chatRoomNo) {
-		return chatDao.selectChatRoomPeopleCount(chatRoomNo);
+	public int selectChatRoomPeopleCount(String roomNo) {
+		return chatDao.selectChatRoomPeopleCount(roomNo);
 	}
 	
 
@@ -49,8 +49,8 @@ public class ChatServiceImpl implements ChatService {
 	 * return List<UserChatRoomDto>
 	 */
 	@Override
-	public List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo) {
-		return chatDao.selectUserChatRoomList(chatRoomNo);
+	public List<UserChatRoomDto> selectUserChatRoomList(String roomNo) {
+		return chatDao.selectUserChatRoomList(roomNo);
 	}
 
 	
@@ -129,14 +129,18 @@ public class ChatServiceImpl implements ChatService {
 	 * return 성공시 1 , 실패시 0
 	 */
 	@Override
-	public int insertMessage(Map<String, String> map) {
+	public int insertNormalMessage(Map<String, String> map) {
 		
 		// (1) T_MESSAGE 테이블에 insert.
-		int result = chatDao.insertMessage(map);
+		int result = chatDao.insertNormalMessage(map);
 		
 		// (2) T_MESSAGE_READ 테이블에 insert.
 		if(result > 0) {
-			result = chatDao.insertMessageRead(map);
+			List<UserChatRoomDto> list = chatDao.selectUserChatRoomList(map.get("roomNo"));
+			for(UserChatRoomDto dto : list) {
+				map.put("targetUserNo", dto.getUserNo() );
+				result = chatDao.insertMessageRead(map);
+			}
 		}
 		return result;
 	}

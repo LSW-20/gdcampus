@@ -13,10 +13,10 @@ public interface ChatService {
 	List<ChatRoomDto> selectChatRoomList(String userNo);
    
     // 채팅방 번호로 채팅방 인원수 조회 - 상우
-    int selectChatRoomPeopleCount(String chatRoomNo);
+    int selectChatRoomPeopleCount(String roomNo);
     
     // 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회 - 상우
-	List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo);
+	List<UserChatRoomDto> selectUserChatRoomList(String roomNo);
 
 	// 그룹 채팅방 생성 - 상우
 	int makeGroupChat(Map<String, Object> map);
@@ -28,7 +28,7 @@ public interface ChatService {
     List<MessageDto> selectChatMessage(Map<String, String> map);
 
     // 채팅 메세지를 db에 insert - 상우
-	int insertMessage(Map<String, String> map);
+	int insertNormalMessage(Map<String, String> map);
     
     // 채팅방 생성 - 상우
     // int createChatRoom(String[] userNo);

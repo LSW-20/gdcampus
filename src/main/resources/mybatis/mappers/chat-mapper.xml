@@ -53,7 +53,7 @@
 		select 
 					 COUNT(*)
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = #{chatRoomNo} 
+		 where ROOM_NO = #{roomNo} 
 		   and JOIN_YN = 'Y'
 	</select>
 	
@@ -66,7 +66,7 @@
 				 , JOIN_TIME
 				 , JOIN_YN
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = #{chatRoomNo} 	 
+		 where ROOM_NO = #{roomNo} 	 
 		   and JOIN_YN = 'Y'
 	</select>
 	
@@ -134,7 +134,7 @@
 	
 	
 	<!-- (상우) 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert. -->
-	<insert id="insertMessage">
+	<insert id="insertNormalMessage">
 		insert 
 		  into T_MESSAGE
 		  (
@@ -169,7 +169,7 @@
 		  )
 		  values
 		  (
-		  	#{userNo}
+		  	#{targetUserNo}
 		  ,	SEQ_MNO.CURRVAL
 		  ) 	
 	</insert>
