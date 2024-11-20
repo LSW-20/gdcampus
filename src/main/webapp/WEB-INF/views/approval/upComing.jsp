@@ -1,12 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<jsp:useBean id="now" class="java.util.Date" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>    
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>결재대기함</title>
+<meta charset="UTF-8">
+    <title>결재예정문서함</title>
     <style>
         .main-content {
             margin-left: 250px;
@@ -91,7 +93,7 @@
         }
         
         #paging_area {
-        	margin-top: 500px;
+            margin-top: 500px;
         }
     </style>
 </head>
@@ -110,10 +112,10 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
-                    <h2 class="page-title">결재 대기 문서</h2>
-							        <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist">결재작성</a>
-								     
-							      <br>                    
+                    <h2 class="page-title">결재 예정 문서</h2>
+                    <a class="btn btn-secondary" style="float:right" href="${contextPath}/approval/regist">결재작성</a>
+                    <br>
+                    
                     <c:choose>
                         <c:when test="${empty apprList}">
                             <div class="no-data">
@@ -127,7 +129,6 @@
                                         <th>기안일</th>
                                         <th>결재양식</th>
                                         <th>제목</th>
-                                      <!--   <th>첨부</th> -->
                                         <th>기안자</th>
                                     </tr>
                                 </thead>
@@ -139,15 +140,10 @@
                                             </td>
                                             <td>${appr.apprType}</td>
                                             <td>
-                                                <a href="${contextPath}/approval/detail/${appr.apprNo}?type=todo" class="appr-title">
+                                                <a href="${contextPath}/approval/detail/${appr.apprNo}?type=upcoming" class="appr-title">
                                                     ${appr.apprTitle}
                                                 </a>
                                             </td>
-                <%--                             <td>
-                                                <c:if test="${not empty appr.attach}">
-                                                    <img src="${contextPath}/images/attach-icon.png" class="attach-icon" alt="첨부파일"/>
-                                                </c:if>
-                                            </td> --%>
                                             <td>${appr.apprUser}</td>
                                         </tr>
                                     </c:forEach>
@@ -155,21 +151,21 @@
                             </table>
                             
                             <!-- 페이징 처리 -->
-											      <ul id="paging_area" class="pagination d-flex justify-content-center">
-											          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-											          	<a class="page-link" href="${ contextPath }/approval/todo?page=${pi.currentPage-1}">Prev</a>
-											          </li>
-											          
-											          <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-											          	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
-											          		<a class="page-link" href="${ contextPath }/approval/todo?page=${p}">${ p }</a>
-											          	</li>
-											          </c:forEach>
-											   
-   							 								<li class="page-item ${pi.currentPage == pi.maxPage || pi.currentPage == 1 ? 'disabled' : ''}">
-											          	<a class="page-link" href="${ contextPath }/approval/todo?page=${pi.currentPage+1}">Next</a>
-											          </li>
-											      </ul>
+                            <ul id="paging_area" class="pagination d-flex justify-content-center">
+                                <li class="page-item ${pi.currentPage == 1 ? 'disabled' : ''}">
+                                    <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage-1}">Prev</a>
+                                </li>
+                                
+                                <c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
+                                    <li class="page-item ${pi.currentPage == p ? 'active' : ''}">
+                                        <a class="page-link" href="${contextPath}/approval/upcoming?page=${p}">${p}</a>
+                                    </li>
+                                </c:forEach>
+                                
+                                <li class="page-item ${pi.currentPage == pi.maxPage || pi.endPage == 0 ? 'disabled' : ''}">
+                                    <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage+1}">Next</a>
+                                </li>
+                            </ul>
                         </c:otherwise>
                     </c:choose>
                 </div>
