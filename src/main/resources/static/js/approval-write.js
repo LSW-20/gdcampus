@@ -178,9 +178,9 @@ const ApprovalModal = {
 			table.innerHTML= `
 				<tr class="approvalHeader">
 					<th width="100%">${index+1}차결재</th>
-					<input type="hidden" name="userNo" value="${approver.userNo}">
-					<input type="hidden" name="lineOrder" value="${index+2}">
-					<input type="hidden" name="createUser" value=${approver.userNo}					
+					<input type="hidden" name="approvers[${index}].userNo" value="${approver.userNo}">
+					<input type="hidden" name="approvers[${index}].lineOrder" value="${index+2}">
+					<input type="hidden" name="approvers[${index}].createUser" value=${approver.userNo}					
 				</tr>
 				<tr class="approvalStamp">
 				    <td>

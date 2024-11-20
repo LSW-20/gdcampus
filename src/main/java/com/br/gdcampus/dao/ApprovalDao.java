@@ -103,7 +103,7 @@ public class ApprovalDao {
 	 * @return
 	 */
 	public int insertApprovalLine(ApprLineDto line) {
-		return sqlSession.insert("approvalMapper.insertApprvalLine",line);
+		return sqlSession.insert("approvalMapper.insertApprovalLine",line);
 	}
 
 	/**

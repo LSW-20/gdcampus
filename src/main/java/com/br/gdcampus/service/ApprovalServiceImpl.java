@@ -120,9 +120,12 @@ public class ApprovalServiceImpl implements ApprovalService {
 			throw new RuntimeException("결재 문서 등록 실패");
 		}
 		
+		System.out.println("결재 insert result : "+result);
+	
 		//결재선 insert
 		List<ApprLineDto> approvers = approval.getApprovers();
-		if(approvers != null) {
+		System.out.println("결재선 : "+approvers);
+		if(approvers != null && !approvers.isEmpty()) {
 			for(ApprLineDto line : approvers) {
 				result = apprDao.insertApprovalLine(line);
 				if(result == 0) {
@@ -130,15 +133,18 @@ public class ApprovalServiceImpl implements ApprovalService {
 				}
 			}
 		}
+		System.out.println("결재선 insert result : "+result);
 		
 		//문서타입따라 다르게 문서 등록
 		if("기안서".equals(approval.getApprType())) {
 			DraftDto draft = approval.getDraft();
+			System.out.println("draft : "+draft);
 			if(draft != null) {
 				result = apprDao.insertSimpleDraft(draft);
 				if(result == 0) {
 					throw new RuntimeException("기안서 등록 실패");
 				}
+				System.out.println("기안서 insert result : "+result);
 			}
 		} else if("품의서".equals(approval.getApprType())) {
 			PurchaseDraftDto purchDraft = approval.getPurchDraft();
@@ -155,6 +161,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 						if(result == 0) {
 							throw new RuntimeException("품의서 물품 등록 실패");
 						}
+						System.out.println("품의서 insert result : "+result);
 					}
 				}
 			}
@@ -165,17 +172,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public int insertSimpleDraft(DraftDto draft) {
-		return 0;
+		return apprDao.insertSimpleDraft(draft);
 	}
 
 	@Override
 	public int insertPurchaseDraft(PurchaseDraftDto purchDraft) {
-		return 0;
+		return apprDao.insertPurchaseDraft(purchDraft);
 	}
 
 	@Override
 	public int insertPurchaseHistory(PurchaseHistoryDto purchHistory) {
-		return 0;
+		return apprDao.insertPurchaseHistory(purchHistory);
 	}
 
 	@Override
@@ -195,7 +202,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public int insertApprovalLine(ApprLineDto line) {
-		return 0;
+		return apprDao.insertApprovalLine(line);
 	}
 
 }

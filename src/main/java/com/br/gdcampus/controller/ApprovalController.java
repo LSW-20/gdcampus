@@ -142,10 +142,10 @@ public class ApprovalController {
 		
 		if(result > 0) {
 			ra.addFlashAttribute("alertMsg","결재요청 완료");
-			return "redirect:approval/home";			
+			return "redirect:/approval/home";			
 		}else {
 			ra.addFlashAttribute("alertMsg","결재요청 실패");
-			return "redirect:approval/home";						
+			return "redirect:/approval/home";						
 		}
 		
 		

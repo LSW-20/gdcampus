@@ -408,8 +408,8 @@
 		) 
 	  VALUES 
 		(
-		    SEQ_LNO.NEXTVAL
-		  , #{apprNo}
+		    SEQ_ALNO.NEXTVAL
+		  , SEQ_ANO.CURRVAL
 		  , #{userNo}
 		  , #{lineOrder}
 		  , 0
@@ -420,32 +420,64 @@
 	
 	<!-- 기안서 등록 -->
 	<insert id="insertSimpleDraft">
-	   INSERT INTO T_DRAFT (
-	       APPR_NO, ENFORCE_DATE, COOP_DEPT
-	   ) VALUES (
-	       #{apprNo}, #{enforceDate}, #{coopDept}
+	   INSERT 
+	     INTO T_DRAFT 
+	   (
+	       APPR_NO
+	     , ENFORCE_DATE
+	     , COOP_DEPT
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{enforceDate}
+	     , #{coopDept}
 	   )
 	</insert>
 	
 	<!-- 품의서 등록 -->
 	<insert id="insertPurchDraft">
-	   INSERT INTO T_PURCH_DRAFT (
-	       APPR_NO, PURCH_DEPT, PURCH_EMP_NAME,
-	       PURCH_PURPOSE, PURCH_DEADLINE, PURCH_TOTAL
-	   ) VALUES (
-	       #{apprNo}, #{purchDept}, #{purchEmpName},
-	       #{purchPurpose}, #{purchDeadline}, #{purchTotal}
+	   INSERT 
+	     INTO T_PURCH_DRAFT 
+	   (
+	       APPR_NO
+	     , PURCH_DEPT
+	     , PURCH_EMP_NAME
+	     , PURCH_PURPOSE
+	     , PURCH_DEADLINE
+	     , PURCH_TOTAL
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{purchDept}
+	     , #{purchEmpName}
+	     , #{purchPurpose}
+	     , #{purchDeadline}
+	     , #{purchTotal}
 	   )
 	</insert>
 	
 	<!-- 품의서 물품 등록 -->
 	<insert id="insertPurchaseHistory">
-	   INSERT INTO T_PURCH_HISTORY (
-	       APPR_NO, PRODUCT_NO, PRODUCT_NAME,
-	       PRODUCT_UNIT, PRODUCT_AMT, PRODUCT_PRICE
-	   ) VALUES (
-	       #{apprNo}, #{productNo}, #{productName},
-	       #{productUnit}, #{productAmt}, #{productPrice}
+	   INSERT 
+	     INTO T_PURCH_HISTORY 
+	   (
+	       APPR_NO
+	     , PRODUCT_NO
+	     , PRODUCT_NAME
+	     , PRODUCT_UNIT
+	     , PRODUCT_AMT
+	     , PRODUCT_PRICE
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{productNo}
+	     , #{productName}
+	     , #{productUnit}
+	     , #{productAmt}
+	     , #{productPrice}
 	   )
 	</insert>	
 	
