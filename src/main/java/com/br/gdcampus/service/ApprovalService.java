@@ -83,6 +83,7 @@ public interface ApprovalService {
 	//글수정
 	
 	//결재선 추가
+	int insertApprovalLine(ApprLineDto line);
 	
 	//결재선 조회
 	

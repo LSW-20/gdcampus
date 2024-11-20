@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class ApprLineDto {
-	private int lineNo;		//nextval
+	private Integer lineNo;	//nextval
 	private String apprNo;	//currval
 	private String userNo;
 	private int lineOrder;

@@ -40,7 +40,7 @@ public class ClassController {
 	@GetMapping("/opning/staff/list.do")
 	public void staffOpningList() {}
 	
-	/**인사팀 행정직원 리스트(테이블 안 내용) 조회 요청
+	/**교무팀 개설신청 리스트(테이블 안 내용) 조회 요청
 	 * @param currentPage 
 	 * @param status 신청 상태
 	 * @param keyword 검색어
@@ -67,7 +67,7 @@ public class ClassController {
 		return res;
 	}
 	
-	/**인사팀 개설신청 상세조회
+	/**교무팀 개설신청 상세조회
 	 * @param classCode 상세조회할 강의번호
 	 */
 	@GetMapping("/opning/staff/detail.do")
@@ -78,6 +78,11 @@ public class ClassController {
 		
 	}
 	
+	/**교무팀 개설신청 보완요청, 승인, 반려
+	 * @param c 개설신청 정보가 담긴 ClassDto
+	 * @param session 로그인유저의 정보를 가져오기위한 session
+	 * @return 승인여부
+	 */
 	@ResponseBody
 	@PostMapping("/opning/staff/update.do")
 	public String updateStaffOpningStatus(ClassDto c, HttpSession session) {
@@ -92,4 +97,50 @@ public class ClassController {
 			return "FAIL"; 
 		}
 	}
+	
+	/**
+	 * 교수 개설신청 목록페이지 요청
+	 */
+	@GetMapping("/opning/prof/list.do")
+	public void profOpningList() {}
+	
+	/**교수 개설신청 리스트(테이블 안 내용) 조회 요청
+	 * @param currentPage 
+	 * @param status 신청 상태
+	 * @param keyword 검색어
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(value="/opning/prof/listContent.do", produces="application/json")
+	public Map<String,Object> profOpningListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+			,HttpSession session,String status,String keyword) {
+		
+		Map<String, Object> res = new HashMap<>();
+		Map<String,String> search = new HashMap<>();
+		log.debug("status:{}, keyword:{}",status,keyword);
+		search.put("status", status);
+		search.put("keyword", keyword);
+		search.put("userNo", ((UserDto)session.getAttribute("loginUser")).getUserNo());
+		
+		int listCount = classService.selectProfOpningListCount(search);
+		log.debug("listCount:{}",listCount);
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		List<ClassDto> list = classService.selectProfOpningList(search, pi);
+		
+		res.put("classList", list);
+		res.put("pi", pi);
+		return res;
+	}
+	
+	/**교수 개설신청 상세조회
+	 * @param classCode 상세조회할 강의번호
+	 */
+	@GetMapping("/opning/prof/detail.do")
+	public void selectProfOpningDetail(String classCode, Model model) {
+		ClassDto c = classService.selectStaffOpningDetail(classCode);
+		log.debug("c : {}", c);
+		model.addAttribute("c", c);
+		
+	}
+	
 }

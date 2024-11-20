@@ -8,8 +8,12 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.gdcampus.dto.ApprLineDto;
 import com.br.gdcampus.dto.ApprovalDto;
+import com.br.gdcampus.dto.DraftDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.PurchaseDraftDto;
+import com.br.gdcampus.dto.PurchaseHistoryDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -90,7 +94,43 @@ public class ApprovalDao {
 	 * @return 처리행수
 	 */
 	public int insertApproval(ApprovalDto approval) {
-		return sqlSession.insert("approvalmapper.insertApproval",approval);
+		return sqlSession.insert("approvalMapper.insertApproval",approval);
+	}
+
+	/**
+	 * 결재선 insert
+	 * @param line
+	 * @return
+	 */
+	public int insertApprovalLine(ApprLineDto line) {
+		return sqlSession.insert("approvalMapper.insertApprovalLine",line);
+	}
+
+	/**
+	 * 기안서 insert
+	 * @param draft
+	 * @return
+	 */
+	public int insertSimpleDraft(DraftDto draft) {
+		return sqlSession.insert("approvalMapper.insertSimpleDraft",draft);
+	}
+
+	/**
+	 * 품의서 insert
+	 * @param purchDraft
+	 * @return
+	 */
+	public int insertPurchaseDraft(PurchaseDraftDto purchDraft) {
+		return sqlSession.insert("approvalMapper.insertPurchaseDraft",purchDraft);
+	}
+
+	/**
+	 * 품의서>물품 insert
+	 * @param item
+	 * @return
+	 */
+	public int insertPurchaseHistory(PurchaseHistoryDto item) {
+		return sqlSession.insert("approvalMapper.insertPurchaseHistory",item);
 	}
 	
 	

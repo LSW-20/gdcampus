@@ -124,6 +124,7 @@
 		 WHERE CLASS_CODE = #{classCode}
 	</select>
 	
+	<!-- 강의신청 취소/교수 -->
 	<!-- 강의신청 승인/교무팀 -->
 	<!-- 강의신청 반려/교무팀 -->
 	<!-- 강의신청 보완요청/교무팀 -->
@@ -143,6 +144,39 @@
 	</update>
 	
 	<!-- 강의신청 목록/교수 -->
+	<select id="selectProfOpningListCount" resultType="_int">
+		SELECT count(*) as count
+		  FROM T_OPEN_APPL O
+  		  JOIN T_CLASS C USING(CLASS_CODE)
+	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
+	       AND C.USER_NO = #{userNo}
+	    <if test="status != 'all'">
+	        AND STATUS = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectProfOpningList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		     , to_char(O.MODIFY_DATE,'YY/MM/DD') as "MODIFY_DATE"
+		     , STATUS
+		 FROM T_OPEN_APPL O
+		 JOIN T_CLASS C USING(CLASS_CODE)
+		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
+		  AND C.USER_NO = #{userNo}
+		<if test="status != 'all'">
+		  AND STATUS = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+		  AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY APPL_DATE DESC
+	</select>
 	<!-- 강의신청 신청/교수 -->
 	<!-- 강의신청 상세조회/교수 -->
 	<!-- 강의신청 수정(보완)/교수 -->

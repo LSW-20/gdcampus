@@ -15,7 +15,45 @@
 		<result column="CREATE_DATE" property="createDate"/>
 		<result column="CREATE_USER" property="createUser"/>
 		<result column="MODIFY_DATE" property="modifyDate"/>
-		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>	
+		
+    <!-- 문서 타입별 association(1 : 1) 매핑 추가 -->
+    <association property="draft" javaType="DraftDto">
+        <result column="ENFORCE_DATE" property="enforceDate"/>
+        <result column="COOP_DEPT" property="coopDept"/>
+    </association>		
+    <association property="purchDraft" javaType="PurchaseDraftDto">
+        <result column="PURCH_DEPT" property="purchDept"/>
+        <result column="PURCH_EMP_NAME" property="purchEmpName"/>
+        <result column="PURCH_PURPOSE" property="purchPurpose"/>
+        <result column="PURCH_DEADLINE" property="purchDeadline"/>
+        <result column="PURCH_TOTAL" property="purchTotal"/>
+				
+				<!-- 물품목록 -->
+        <collection property="purchaseItems" ofType="PurchaseHistoryDto">
+            <result column="PRODUCT_NO" property="productNo"/>
+            <result column="PRODUCT_NAME" property="productName"/>
+            <result column="PRODUCT_UNIT" property="productUnit"/>
+            <result column="PRODUCT_AMT" property="productAmt"/>
+            <result column="PRODUCT_PRICE" property="productPrice"/>
+        </collection>
+    </association>
+    
+		<!-- 결재선 정보 collection 매핑 추가 -->
+		<collection property="approvers" ofType="ApprLineDto">
+			<result column="LINE_NO" property="lineNo"/>
+			<result column="APPR_NO" property="apprNo"/>
+			<result column="USER_NO" property="userNo"/>
+			<result column="LINE_ORDER" property="lineOrder"/>
+			<result column="LINE_STATUS" property="lineStatus"/>
+			<result column="LINE_DATE" property="lineDate"/>
+			<result column="LINE_REASON" property="lineReason"/>
+			<result column="CREATE_DATE" property="createDate"/>
+			<result column="CREATE_USER" property="createUser"/>
+			<result column="MODIFY_DATE" property="modifyDate"/>
+			<result column="MODIFY_USER" property="modifyUser"/>
+		</collection>	    
+    		
 	</resultMap>
 	
 	<resultMap id="apprRefResultMap" type="ApprRefDto">
@@ -31,19 +69,7 @@
 		<result column="MODIFY_USER" property="modifyUser"/>
 	</resultMap>
 	
-	<resultMap id="apprLineResultMap" type="ApprLineDto">
-		<result column="LINE_NO" property="lineNo"/>
-		<result column="APPR_NO" property="apprNo"/>
-		<result column="USER_NO" property="userNo"/>
-		<result column="LINE_ORDER" property="lineOrder"/>
-		<result column="LINE_STATUS" property="lineStatus"/>
-		<result column="LINE_DATE" property="lineDate"/>
-		<result column="LINE_REASON" property="lineReason"/>
-		<result column="CREATE_DATE" property="createDate"/>
-		<result column="CREATE_USER" property="createUser"/>
-		<result column="MODIFY_DATE" property="modifyDate"/>
-		<result column="MODIFY_USER" property="modifyUser"/>
-	</resultMap>
+
 	
 	<!-- 결재대기문서함페이징 -->
 	<select id="selectApprTodoListCount" resultType="_int">
@@ -367,4 +393,92 @@
 		  , #{apprUser}
 		)	
 	</insert>
+	
+	<insert id="insertApprovalLine">
+		INSERT 
+		  INTO T_APPR_LINE 
+	  (
+		    LINE_NO
+		  , APPR_NO
+		  , USER_NO
+		  , LINE_ORDER
+		  , LINE_STATUS
+		  , CREATE_DATE
+		  , CREATE_USER
+		) 
+	  VALUES 
+		(
+		    SEQ_ALNO.NEXTVAL
+		  , SEQ_ANO.CURRVAL
+		  , #{userNo}
+		  , #{lineOrder}
+		  , 0
+		  , SYSDATE
+		  , #{createUser}
+		)	
+	</insert>
+	
+	<!-- 기안서 등록 -->
+	<insert id="insertSimpleDraft">
+	   INSERT 
+	     INTO T_DRAFT 
+	   (
+	       APPR_NO
+	     , ENFORCE_DATE
+	     , COOP_DEPT
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{enforceDate}
+	     , #{coopDept}
+	   )
+	</insert>
+	
+	<!-- 품의서 등록 -->
+	<insert id="insertPurchDraft">
+	   INSERT 
+	     INTO T_PURCH_DRAFT 
+	   (
+	       APPR_NO
+	     , PURCH_DEPT
+	     , PURCH_EMP_NAME
+	     , PURCH_PURPOSE
+	     , PURCH_DEADLINE
+	     , PURCH_TOTAL
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{purchDept}
+	     , #{purchEmpName}
+	     , #{purchPurpose}
+	     , #{purchDeadline}
+	     , #{purchTotal}
+	   )
+	</insert>
+	
+	<!-- 품의서 물품 등록 -->
+	<insert id="insertPurchaseHistory">
+	   INSERT 
+	     INTO T_PURCH_HISTORY 
+	   (
+	       APPR_NO
+	     , PRODUCT_NO
+	     , PRODUCT_NAME
+	     , PRODUCT_UNIT
+	     , PRODUCT_AMT
+	     , PRODUCT_PRICE
+	   ) 
+	   VALUES 
+	   (
+	       SEQ_ANO.CURRVAL
+	     , #{productNo}
+	     , #{productName}
+	     , #{productUnit}
+	     , #{productAmt}
+	     , #{productPrice}
+	   )
+	</insert>	
+	
 </mapper>
