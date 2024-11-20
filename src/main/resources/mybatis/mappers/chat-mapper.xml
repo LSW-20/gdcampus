@@ -82,15 +82,15 @@
 			,	CREATE_USER
 			,	STATUS
 		  )
-		 values 
-		 (
-		 	 LPAD(SEQ_CHNO.NEXTVAL, 4, '0')
-		 , #{title}
-		 , #{type}
-		 , SYSDATE
-		 , #{createUser}
-		 , 'Y' 
-		 ) 
+		  values 
+		  (
+		  	LPAD(SEQ_CHNO.NEXTVAL, 4, '0')
+		  , #{title}
+		  , #{type}
+		  , SYSDATE
+		  , #{createUser}
+		  , 'Y' 
+		  ) 
 	</insert>
 	
 	<!-- (상우) 채팅방 생성 후 초대인원들 매핑테이블에 담기 -->
@@ -103,13 +103,13 @@
       , JOIN_TIME
       , JOIN_YN
 		  )
-		 values 
-		 (
-		 	 #{userNo}
-		 , LPAD(SEQ_CHNO.CURRVAL, 4, '0')
-		 , SYSDATE
-		 , 'Y' 
-		 ) 
+		  values 
+		  (
+		    #{userNo}
+		  , LPAD(SEQ_CHNO.CURRVAL, 4, '0')
+		  , SYSDATE
+		  , 'Y' 
+		  ) 
 	</insert>
 	
 	
@@ -133,12 +133,41 @@
 	
 	<!-- (상우) 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert. -->
 	<insert id="insertMessage">
-	
+		insert 
+		  into T_MESSAGE
+		  (
+		    MSG_NO
+			, MSG_CONTENT
+			, USER_NO
+			, ROOM_NO
+			, CREATE_DATETIME
+			, STATUS
+		  )
+		  values
+		  (
+		  	SEQ_MNO.NEXTVAL
+		  , #{message}
+		  , #{userNo}	
+		  , #{roomNo}
+		  , TO_DATE(#{nowWithSeconds}, 'YYYY-MM-DD HH24:MI:SS')
+		  , 'Y'
+		  ) 
+
 	</insert>
 	
 	<!-- (상우) 채팅 메세지를 db에 insert - (2/2) T_MESSAGE_READ 테이블에 insert. -->
 	<insert id="insertMessageRead">
-	
+		insert 
+		  into T_MESSAGE_READ
+		  (
+		  	USER_NO
+		  , MSG_NO
+		  )
+		  values
+		  (
+		  	#{userNo}
+		  ,	SEQ_MNO.CURRVAL
+		  ) 	
 	</insert>
 	
 </mapper>
