@@ -1,5 +1,6 @@
 package com.br.gdcampus.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,14 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.ApprovalDto;
+import com.br.gdcampus.dto.DraftDto;
 import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.PurchaseDraftDto;
+import com.br.gdcampus.dto.PurchaseHistoryDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.ApprovalService;
 import com.br.gdcampus.util.PagingUtil;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestMapping("/approval")
 @RequiredArgsConstructor
 @Controller
@@ -132,23 +139,57 @@ public class ApprovalController {
 	    return response;
 	}
 	
-	@PostMapping("/insert")
-	public String insertApproval(ApprovalDto approval, HttpSession session, RedirectAttributes ra) {
-		
-		UserDto loginUser = (UserDto)session.getAttribute("loginUser");
-		approval.setApprUser(loginUser.getUserNo());
-		
-		int result = apprService.insertApproval(approval);
-		
-		if(result > 0) {
-			ra.addFlashAttribute("alertMsg","결재요청 완료");
-			return "redirect:/approval/home";			
-		}else {
-			ra.addFlashAttribute("alertMsg","결재요청 실패");
-			return "redirect:/approval/home";						
-		}
-		
-		
+	@PostMapping("/insert") 
+	public String insertApproval(@ModelAttribute ApprovalDto approval,
+	                           @ModelAttribute DraftDto draft,
+	                           @ModelAttribute PurchaseDraftDto purchDraft,
+	                           @RequestParam(value="productNo", required=false) List<Integer> productNos,
+	                           @RequestParam(value="productName", required=false) List<String> productNames,
+	                           @RequestParam(value="productUnit", required=false) List<String> productUnits,
+	                           @RequestParam(value="productAmt", required=false) List<Integer> productAmts,
+	                           @RequestParam(value="productPrice", required=false) List<String> productPrices,
+	                           HttpSession session,
+	                           RedirectAttributes ra) {
+	    
+	    try {
+	        UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+	        approval.setApprUser(loginUser.getUserNo());
+
+	        // 문서 타입에 따른 처리
+	        if("기안서".equals(approval.getApprType())) {
+	            approval.setDraft(draft);
+	        } else if("품의서".equals(approval.getApprType())) {
+	            // 품목 리스트 처리
+	            if(productNos != null && !productNos.isEmpty()) {
+	                List<PurchaseHistoryDto> items = new ArrayList<>();
+	                for(int i=0; i<productNos.size(); i++) {
+	                    items.add(PurchaseHistoryDto.builder()
+	                            .productNo(productNos.get(i))
+	                            .productName(productNames.get(i))
+	                            .productUnit(productUnits.get(i))
+	                            .productAmt(productAmts.get(i))
+	                            .productPrice(productPrices.get(i))
+	                            .build());
+	                }
+	                purchDraft.setPurchaseItems(items);
+	            }
+	            approval.setPurchDraft(purchDraft);
+	        }
+
+	        int result = apprService.insertApproval(approval);
+	        
+	        if(result > 0) {
+	            ra.addFlashAttribute("alertMsg", "결재요청 완료");
+	        } else {
+	            ra.addFlashAttribute("alertMsg", "결재요청 실패");
+	        }
+	        
+	    } catch(Exception e) {
+	        log.error("결재 요청 중 오류 발생", e);
+	        ra.addFlashAttribute("alertMsg", "결재요청 처리 중 오류가 발생했습니다.");
+	    }
+	    
+	    return "redirect:/approval/home";
 	}
 	
 	

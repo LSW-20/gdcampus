@@ -409,7 +409,7 @@
 	  VALUES 
 		(
 		    SEQ_ALNO.NEXTVAL
-		  , SEQ_ANO.CURRVAL
+		  , LPAD(SEQ_ANO.CURRVAL, 4, '0')
 		  , #{userNo}
 		  , #{lineOrder}
 		  , 0
@@ -429,7 +429,7 @@
 	   ) 
 	   VALUES 
 	   (
-	       SEQ_ANO.CURRVAL
+	       LPAD(SEQ_ANO.CURRVAL, 4, '0')
 	     , #{enforceDate}
 	     , #{coopDept}
 	   )
@@ -449,7 +449,7 @@
 	   ) 
 	   VALUES 
 	   (
-	       SEQ_ANO.CURRVAL
+	       LPAD(SEQ_ANO.CURRVAL, 4, '0')
 	     , #{purchDept}
 	     , #{purchEmpName}
 	     , #{purchPurpose}
@@ -472,7 +472,7 @@
 	   ) 
 	   VALUES 
 	   (
-	       SEQ_ANO.CURRVAL
+	       LPAD(SEQ_ANO.CURRVAL, 4, '0')
 	     , #{productNo}
 	     , #{productName}
 	     , #{productUnit}
