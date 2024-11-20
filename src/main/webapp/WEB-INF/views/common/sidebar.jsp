@@ -115,9 +115,7 @@
 												<span class="menu-item">강의 개설 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">강의 개설 신청</a></li>
-												<li><a href="#">강의 개설 신청 현황 조회</a></li>
-												<li><a href="#">반려/보완 사유 조회</a></li>
+												<li><a href="${contextPath}/class/opning/prof/list.do">강의 개설 신청 현황</a></li>
 										</ul>
 								</li>
 								

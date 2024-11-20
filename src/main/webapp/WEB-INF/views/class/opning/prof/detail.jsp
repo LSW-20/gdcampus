@@ -49,7 +49,7 @@
 
 		<!-- main-content 시작 -->
 		<div class="main-content">
-			<div class="page-content">
+			<div class="page-content ">
 				<div class="container-fluid mt-5">
 					<div class="text-center">
 						<h3>강의 개설 신청</h3>
@@ -80,7 +80,7 @@
 					<div class="mt-2 mb-3">
 						
 						<div class="table-responsive mb-4 ">
-							<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<table class="table table-bordered mb-0" style="table-layout: fixed; background-color: #F2F2F2;">
 								<thead>
 									<tr>
 										<th width="15%" scope="col">강의명</th>
@@ -127,26 +127,68 @@
 								<th width="17%">기타</th>
 								<th width="15%">합계</th>
 							</tr>
-							<tr>
+							<tr style="background-color: #F2F2F2;">
+								<c:set var ="sum" value ="20" />
+									<td id="middle">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '중간고사' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td id="final">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '기말고사' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td id="work">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '실습/과제' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td>20</td>
+									<td id="etc">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '기타' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td id="sum"><c:out value="${sum}"/></td>								
 	            			</tr>
             			</table>
 					</div>
 					<h5>평가상세</h5>
 					<hr>
-					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
-		
+					<div style="min-height:100px">
+						<table class="table mb-0" style="table-layout: fixed">
+							<c:forEach var="eva" items="${c.evaList}">
+								<tr class="table-secondary">
+									<th style="width:20%">${eva.evaItem}</th>
+									<td style="background-color: #F2F2F2;">${eva.evaDetail eq null or "" ? "미기입" : eva.evaDetail}</td>
+								</tr>
+							</c:forEach>
+						</table>
 					</div>
 					<h5>교재</h5>
 					<hr>
 					<div class=" mt-2 mb-4">
-						<table class="table table-bordered mb-0" style="table-layout: fixed">
-							<tr>
+						<table class="table mb-0" style="table-layout: fixed">
+							<tr class="table-secondary">
 								<th width="20%">주교재</th>
-								<td width="80%">${c.mainTextBook}</td>
+								<td style="background-color: #F2F2F2;">${c.mainTextBook}</td>
 							</tr>
-							<tr>
+							<tr class="table-secondary">
 								<th width="20%">참고서적</th>
-								<td width="80%">${c.refnBook eq null ? '' : c.refnBook}</td>
+								<td style="background-color: #F2F2F2;">${c.refnBook eq null ? '' : c.refnBook}</td>
 							</tr>
 						</table>
 					</div>
@@ -168,12 +210,13 @@
 							<div class="float-sm-center">
 								
 								<div class="row mt-4">
-									<div class="select col pl-0">
-										<c:if test="${c.status eq '보완완료' or c.status  eq '접수'or c.status  eq '보완요청'or c.status }">
-											<a class="btn btn-primary w-md mr-3 col" id="opStatus">취소</a>
-										</c:if>
-									</div>
-									<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
+								<c:if test="${c.status eq '보완완료' or c.status  eq '접수'or c.status  eq '보완요청'or c.status }">
+									<div class="select col pl-0">							
+											<a class="btn btn-primary w-md mr-3 col" id="opStatus">신청 취소</a>
+										
+										</div>
+										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
+									</c:if>
 								</div>
 								
 								<div class="row mt-4">
@@ -190,13 +233,11 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
 	    $('#opStatus').on('click', function() {
-	    	console.log('취소버튼 눌림');
+	    	console.log('${c.evaList}');
 	    	$('#reason').val('');
 	    	$('#reasonBox').removeAttr('hidden');
 	    });
 		function fn_updateStatus(){
-			
-  			const opStatus = $('#opStatus').val();
   			
   			if($('#reason').val() == ''){
   				alert('사유를 작성해주십시오.');
@@ -204,14 +245,14 @@
   			}  				
 
   			
-  			if(confirm('신청서를 ' + opStatus+'처리하시겠습니까?')){
+  			if(confirm('신청서를 취소 처리하시겠습니까?')){
   				
 				$.ajax({
-					url: '${contextPath}/class/opning/prof/update.do',
+					url: '${contextPath}/class/opning/staff/update.do',
 					type: 'post',
 					data: {
 						reason : $('#reason').val(),
-						status : opStatus,
+						status : '취소',
 						classCode : '${c.classCode}'
 					},
 					success: function(res){

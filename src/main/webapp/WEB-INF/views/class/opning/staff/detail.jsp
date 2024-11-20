@@ -80,7 +80,7 @@
 					<div class="mt-2 mb-3">
 						
 						<div class="table-responsive mb-4 ">
-							<table class="table table-bordered mb-0" style="table-layout: fixed">
+							<table class="table table-bordered mb-0" style="table-layout: fixed;background-color: #F2F2F2;">
 								<thead>
 									<tr>
 										<th width="15%" scope="col">강의명</th>
@@ -127,26 +127,68 @@
 								<th width="17%">기타</th>
 								<th width="15%">합계</th>
 							</tr>
-							<tr>
+							<tr style="background-color: #F2F2F2;">
+								<c:set var ="sum" value ="20" />
+									<td id="middle">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '중간고사' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td id="final">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '기말고사' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td id="work">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '실습/과제' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+									<td>20</td>
+									<td id="etc">
+										<c:forEach var="eva" items="${c.evaList}">
+											<c:if test="${eva.evaItem eq '기타' }">
+												<c:set var ="sum" value ="${sum + eva.allocation}"/>
+												${eva.allocation}
+											</c:if>
+										</c:forEach>
+									</td>
+								<td id="sum"><c:out value="${sum}"/></td>
 	            			</tr>
             			</table>
 					</div>
 					<h5>평가상세</h5>
 					<hr>
-					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
-		
+					<div style="min-height:100px">
+						<table class="table mb-0" style="table-layout: fixed">
+							<c:forEach var="eva" items="${c.evaList}">
+								<tr class="table-secondary">
+									<th style="width:20%">${eva.evaItem}</th>
+									<td style="background-color: #F2F2F2;">${eva.evaDetail eq null or "" ? "미기입" : eva.evaDetail}</td>
+								</tr>
+							</c:forEach>
+						</table>
 					</div>
 					<h5>교재</h5>
 					<hr>
 					<div class=" mt-2 mb-4">
-						<table class="table table-bordered mb-0" style="table-layout: fixed">
-							<tr>
+						<table class="table mb-0" style="table-layout: fixed">
+							<tr class="table-secondary">
 								<th width="20%">주교재</th>
-								<td width="80%">${c.mainTextBook}</td>
+								<td style="background-color: #F2F2F2;">${c.mainTextBook}</td>
 							</tr>
-							<tr>
+							<tr class="table-secondary">
 								<th width="20%">참고서적</th>
-								<td width="80%">${c.refnBook eq null ? '' : c.refnBook}</td>
+								<td style="background-color: #F2F2F2;">${c.refnBook eq null ? '' : c.refnBook}</td>
 							</tr>
 						</table>
 					</div>
