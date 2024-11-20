@@ -94,6 +94,7 @@
 	    </if>
 		ORDER BY APPL_DATE DESC
 	</select>
+	<!-- 강의신청 상세조회/교수 -->
 	<!-- 강의신청 상세조회/교무팀 -->
 	<select id="selectStaffOpningDetail" resultMap="classResultMap">
 		SELECT CLASS_CODE
@@ -178,9 +179,30 @@
 		ORDER BY APPL_DATE DESC
 	</select>
 	<!-- 강의신청 신청/교수 -->
-	<!-- 강의신청 상세조회/교수 -->
+	<!-- 개설신청한 수업이 총 몇시수인지 조회 -->
+	<select id="selectSumClassTime" resultType="_int">
+		SELECT 
+	    	   NVL(SUM(C.CLASS_HOURS),0) AS SUM
+		  FROM 
+	    	   T_CLASS C
+		  JOIN 
+	    	   T_OPEN_APPL O
+			ON 
+	    	   C.CLASS_CODE = O.CLASS_CODE
+		 WHERE 
+		       O.STATUS IN ('접수','승인', '보완요청', '보완완료') 
+		   AND C.USER_NO = #{userNo}
+		   AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
+		   AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
+		 GROUP 
+		    BY SUBSTR(C.CLASS_CODE, 1, 2), 
+	           SUBSTR(C.CLASS_CODE, 4, 1), 
+	    	   C.USER_NO
+		 ORDER 
+		    BY SUBSTR(C.CLASS_CODE, 1, 2)
+	</select>
 	<!-- 강의신청 수정(보완)/교수 -->
-	<!-- 강의신청 취소/교수 -->
+
 	
 	<!-- 내강의 목록조회 -->
 	<!-- 내강의 상세조회 -->
