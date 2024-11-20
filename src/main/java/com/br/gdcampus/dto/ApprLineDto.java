@@ -26,4 +26,10 @@ public class ApprLineDto {
 	private String createUser;
 	private Date modifyDate;	//NULL
 	private String modifyUser;	//NULL
+	
+	//따로 추가
+	private String userName;
+	private String deptName;
+	private String rankName;
+	
 }

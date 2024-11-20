@@ -23,43 +23,48 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	//결재홈 페이징
 	@Override
-	public int selectApprHomeListCount() {
+	public int selectApprHomeListCount(String userNo) {
 		return 0;
 	}
 
 	//결재대기문서 페이징
 	@Override
-	public int selectApprTodoListCount() {
-		return apprDao.selectApprTodoListCount();
+	public int selectApprTodoListCount(String userNo) {
+		return apprDao.selectApprTodoListCount(userNo);
 	}
 
+	//결재대기문서 리스트
 	@Override
 	public List<ApprovalDto> selectApprTodoList(PageInfoDto pi, String userNo) {
 		return apprDao.selectApprTodoList(pi, userNo);
 	}
 
+	//결재예정문서 페이징
 	@Override
-	public int selectApprUpcomingListCount() {
-		return 0;
+	public int selectApprUpcomingListCount(String userNo) {
+		return apprDao.selectApprUpcomingListCount(userNo);
 	}
 
+	//결재예정문서 리스트
 	@Override
 	public List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi, String userNo) {
-		return null;
+		return apprDao.selectApprUpcomingList(pi,userNo);
 	}
 
+	//기안문서함 페이징
 	@Override
 	public int selectMyDocListCount(Map<String, Object> params) {
 		return apprDao.selectMyDocListCount(params);
 	}
 
+	//기안문서함 리스트
 	@Override
 	public List<ApprovalDto> selectMyDocList(PageInfoDto pi,  Map<String, Object> params) {
 		return apprDao.selectMyDocList(pi, params);
 	}
 
 	@Override
-	public int selectMyApprovedListCount() {
+	public int selectMyApprovedListCount(String userNo) {
 		return 0;
 	}
 
@@ -69,7 +74,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selectApprViewerListCount() {
+	public int selectApprViewerListCount(String userNo) {
 		return 0;
 	}
 
@@ -78,23 +83,52 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return null;
 	}
 
+	//결재대기문서상세
 	@Override
-	public ApprovalDto selectApprTodoDetail(String userNo, String apprNo) {
-		return null;
+	public ApprovalDto selectApprTodoDetail(Map<String, Object> params) {
+		ApprovalDto approval = apprDao.selectApprTodoDetail(params);
+		String apprNo = (String)params.get("apprNo");
+		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		if(approval != null) {
+			//결재선조회
+			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
+			approval.setApprovers(approvers);
+		}
+		return approval;
+	}
+
+	//결재예정문서상세
+	@Override
+	public ApprovalDto selectApprUpcomingDetail(Map<String, Object> params) {
+		ApprovalDto approval = apprDao.selectApprUpcomingDetail(params);
+		String apprNo = (String)params.get("apprNo");
+		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		if(approval != null) {
+			//결재선조회
+			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
+			approval.setApprovers(approvers);
+		}
+		return approval;
+	}
+
+	//기안문서상세
+	@Override
+	public ApprovalDto selectMyDocDetail(Map<String, Object> params) {
+		
+		ApprovalDto approval = apprDao.selectMyDocDetail(params);
+		
+		String apprNo = (String)params.get("apprNo");
+		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		if(approval != null) {
+			//결재선조회
+			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
+			approval.setApprovers(approvers);
+		}
+		return approval;
 	}
 
 	@Override
-	public ApprovalDto selectApprUpcomingDetail(String userNo, String apprNo) {
-		return null;
-	}
-
-	@Override
-	public ApprovalDto selectMyDocDetail(String userNo, String apprNo) {
-		return null;
-	}
-
-	@Override
-	public ApprovalDto selectMyApprovedDetail(String userNo, String apprNo) {
+	public ApprovalDto selectMyApprovedDetail(Map<String, Object> params) {
 		return null;
 	}
 
@@ -203,6 +237,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public int insertApprovalLine(ApprLineDto line) {
 		return apprDao.insertApprovalLine(line);
+	}
+
+	@Override
+	public List<ApprLineDto> selectApproversList(String apprNo) {
+		return apprDao.selectApproversList(apprNo);
 	}
 
 }
