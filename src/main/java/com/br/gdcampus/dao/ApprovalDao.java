@@ -28,8 +28,8 @@ public class ApprovalDao {
 	 * @author 보겸
 	 * @return 게시물개수
 	 */
-	public int selectApprTodoListCount() {
-		return sqlSession.selectOne("approvalMapper.selectApprTodoListCount");
+	public int selectApprTodoListCount(String userNo) {
+		return sqlSession.selectOne("approvalMapper.selectApprTodoListCount", userNo);
 	}
 
 	/**
@@ -131,6 +131,36 @@ public class ApprovalDao {
 	 */
 	public int insertPurchaseHistory(PurchaseHistoryDto item) {
 		return sqlSession.insert("approvalMapper.insertPurchaseHistory",item);
+	}
+
+	/**
+	 * 결재예정문서페이징
+	 * @return int 게시물개수
+	 */
+	public int selectApprUpcomingListCount(String userNo) {
+		return sqlSession.selectOne("approvalMapper.selectApprUpcomingListCount",userNo);
+	}
+
+	public List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi, String userNo) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1)*pi.getBoardLimit(),pi.getBoardLimit());
+
+		return sqlSession.selectList("approvalMapper.selectApprUpcomingList",userNo,rowBounds);
+	}
+
+	public ApprovalDto selectApprTodoDetail(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.selectApprTodoDetail", params);
+	}
+
+	public ApprovalDto selectApprUpcomingDetail(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.selectApprUpcomingDetail",params);
+	}
+
+	public ApprovalDto selectMyDocDetail(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.selectMyDocDetail",params);
+	}
+
+	public List<ApprLineDto> selectApproversList(String apprNo) {
+		return sqlSession.selectList("approvalMapper.selectApproversList",apprNo);
 	}
 	
 	

@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.br.gdcampus.dto.ApprLineDto;
 import com.br.gdcampus.dto.ApprovalDto;
 import com.br.gdcampus.dto.DraftDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -46,16 +48,31 @@ public class ApprovalController {
 	 */
 	@GetMapping("/todo")
 	public void todoPage(@RequestParam(value="page",defaultValue="1") int currentPage, Model model, HttpSession session) {
-		int listCount = apprService.selectApprTodoListCount();
 		
 		//Session에서 userNo가져오기
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		int listCount = apprService.selectApprTodoListCount(userNo);
 		
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		List<ApprovalDto> apprList = apprService.selectApprTodoList(pi, userNo);
 		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
+	}
+	
+	//결재예정문서페이지
+	@GetMapping("/upComing")
+	public void upComingPage(@RequestParam(value="page",defaultValue="1") int currentPage, Model model, HttpSession session) {
+		//Session에서 userNo가져오기
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		int listCount = apprService.selectApprUpcomingListCount(userNo);
+		
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		List<ApprovalDto> apprList = apprService.selectApprUpcomingList(pi, userNo);
+		
+		model.addAttribute("pi",pi);
+		model.addAttribute("apprList",apprList);
+		
 	}
 	
 	//기안서페이지 단순 페이지요청
@@ -124,11 +141,11 @@ public class ApprovalController {
 	@GetMapping("/todo/list")
 	@ResponseBody
 	public Map<String, Object> getTodoDocs( @RequestParam(value="page", defaultValue="1") int currentPage,HttpSession session){
-		//결재대기문서 총개수
-		int listCount = apprService.selectApprTodoListCount();
-
 		//Session에서 userNo가져오기
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();	
+
+		//결재대기문서 총개수
+		int listCount = apprService.selectApprTodoListCount(userNo);
 		
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 4, 4);
 		List<ApprovalDto> docs = apprService.selectApprTodoList(pi, userNo);	
@@ -191,6 +208,47 @@ public class ApprovalController {
 	    
 	    return "redirect:/approval/home";
 	}
+	
+	@GetMapping("/detail/{apprNo}")
+	public String detailPage(@PathVariable String apprNo, @RequestParam String type, Model model, HttpSession session) {
+		
+		UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+		ApprovalDto approval = null;
+		
+		System.out.println("세션유저 userNo : "+loginUser.getUserNo());
+		Map<String, Object> params = new HashMap<>();
+		params.put("userNo", loginUser.getUserNo());
+		params.put("apprNo", apprNo);
+		
+		
+		//문서종류함따라 상세조회
+		switch(type) {
+			case "todo":
+				approval = apprService.selectApprTodoDetail(params);
+				
+				System.out.println(approval);
+				break;
+			case "upcoming":
+				approval = apprService.selectApprUpcomingDetail(params);
+				System.out.println(approval);
+				break;
+			case "myDoc":
+				approval = apprService.selectMyDocDetail(params);
+				System.out.println(approval);
+				break;
+			//case "others":
+		}
+		if(approval == null) {
+			throw new RuntimeException("문서를 찾을 수 없음");
+		}
+		System.out.println("controller에 가져온 결재선 : "+ approval.getApprovers());
+		model.addAttribute("approval",approval);
+		model.addAttribute("type",type);
+		
+		return "/approval/detail";
+	}
+	
+	
 	
 	
 	
