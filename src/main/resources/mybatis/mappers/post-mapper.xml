@@ -11,6 +11,11 @@
         <result property="modifyUser" column="MODIFY_USER" />
     </resultMap>
 	
+	<select id="test2">
+		select 1 from dual
+	
+	</select>
+	
 	<select id="selectPostListCount">
 		select
 					 count(*)

@@ -20,12 +20,12 @@ public interface PostService {
     int selectPostList();
     List<PostDto> selectPostList(PageInfoDto pi); // 일부데이터만 조회할
 	
+    int test2();
+    
 
     // 게시글 검색 조회 (키워드/부서/직급별 조회 - 페이징 처리)
     // 검색 결과 결과가 총 몇개인지를 조회해야함.
     int selectSearchListCount(Map<String, String> search);
-    List<PostDto> selectSearchList(Map<String, String> search, PageInfoDto pi);
-
     // 게시글 등록
     int insertPost(PostDto p);
 

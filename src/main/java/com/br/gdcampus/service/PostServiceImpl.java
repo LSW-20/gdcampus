@@ -20,9 +20,15 @@ public class PostServiceImpl implements PostService {
 	private final PostDao postDao;
 	
 	@Override
+	public int test2() {
+		return postDao.test2();
+	}
+	
+	@Override
 	public int test(int num1, int num2) {
 		return postDao.test(num1,num2);
 	}
+	
 	@Override
 	public int selectPostList() {
 		return 0;
@@ -39,13 +45,6 @@ public class PostServiceImpl implements PostService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	public List<PostDto> selectSearchList(Map<String, String> search, PageInfoDto pi) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public int insertPost(PostDto p) {
 		// TODO Auto-generated method stub

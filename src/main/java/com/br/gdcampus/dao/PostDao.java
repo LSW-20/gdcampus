@@ -19,14 +19,18 @@ public class PostDao {
 	
 	private final SqlSessionTemplate sqlSession;
 	
+	public int test2(){
+		return sqlSession.selectOne("postMapper.test2");
+	}	
+	
 	public int test(int num1, int num2) {
 		return num1+num2;
 	}
 	
 	public int selectPostListCount() {
-		return sqlSession.selectOne("PostMapper.selectPostListCount");
+		return sqlSession.selectOne("postMapper.selectPostListCount");
 	}
-	
+
 	public List<PostDto> selectPostList(PageInfoDto pi){
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPageLimit() , pi.getPageLimit());
 		return sqlSession.selectList("postMapper.selectPostList", null, rowBounds);

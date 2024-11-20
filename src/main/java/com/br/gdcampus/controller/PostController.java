@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 		 */
 
 @Slf4j
-@RequestMapping("/board")
+@RequestMapping("/board/post")
 @RequiredArgsConstructor
 @Controller
 public class PostController {
@@ -30,8 +30,20 @@ public class PostController {
 	private final PostService postService; 
 	private final PagingUtil pageUtil;
 	
+<<<<<<< Updated upstream
+	@GetMapping("/list")
+	public void test2() {
+=======
+	@GetMapping("/post/test")
+	public String test() {
+		String str = "덧셈의 결과는 : "; 
+		System.out.print("111");
+		return "redirect:/";
+>>>>>>> Stashed changes
+	}
 	
-	@GetMapping("/post/list.do")
+	
+	@GetMapping("list.do")
 	public void postList(@RequestParam(value="page", defaultValue="1") int currentPage) {
 		
 		int listCount = postService.selectPostList();
