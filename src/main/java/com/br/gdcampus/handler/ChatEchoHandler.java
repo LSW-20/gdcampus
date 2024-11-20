@@ -13,6 +13,7 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.br.gdcampus.dto.UserChatRoomDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.ChatService;
 
@@ -25,11 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatEchoHandler extends TextWebSocketHandler {
 	
 
-    // 각 채팅방의 세션 리스트를 관리하는 맵 (roomNo, userId)
+    // 각 채팅방의 세션 리스트를 관리하는 맵 (roomNo, userNo)
     private Map<String, Map<String, WebSocketSession>> chatRooms = new ConcurrentHashMap<>();
-    
-    // 각 채팅방에 사용자가 참여하고 있는지 여부를 flag로 저장하는 맵 (roomNo, userId)
-    private Map<String, Map<String, Boolean>> userStatusMap = new ConcurrentHashMap<>();
     
     private final ChatService chatService;
     
@@ -53,44 +51,58 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         log.debug("{} --> User {} has entered room {}", "ChatEchoHandler의 afterConnectionEstablished 실행됨", userNo, roomNo);
         
 
-        // 현재 roomNo를 key값으로 가지는 List<WebSocketSession>이 없으면 생성한다.
+        // 현재 roomNo를 key값으로 가지는 List<WebSocketSession>이 없다면 생성한다.
         if ( !chatRooms.containsKey(roomNo) ) {
             chatRooms.put(roomNo, new ConcurrentHashMap<>() );
         }
-        
-        // 현재 roomNo를 key값으로 가지는 Map<String, Boolean>이 없으면 생성한다.
-        if ( !userStatusMap.containsKey(roomNo) ) {
-            userStatusMap.put(roomNo, new ConcurrentHashMap<>() );
-        }
-              
-
-        // 사용자가 현재 roomNo 채팅방에 없었거나 퇴장상태인 경우에는 입장처리한다.
-        if ( !userStatusMap.get(roomNo).containsKey(userNo) || userStatusMap.get(roomNo).get(userNo) == false ) {  
-
-            
-        	userStatusMap.get(roomNo).put(userNo, true); // 이 userId를 현재 roomNo에 입장처리. (Map에 이미 있는 키로 put을 호출하면 기존 키에 매핑된 값이 새로운 값으로 덮어쓰기 됨)
-            log.debug("{} 유저가 {} 채팅방 번호에 입장처리됨.", userNo, roomNo);
-        	
-            chatRooms.get(roomNo).put(userNo, session); // 현재 roomNo를 key로 List<WebSocketSession>에 현재 클라이언트 session을 추가한다. 
-            
-
-            // 이 채팅방에 처음이거나 없었던 경우 입장 메시지 전송.
-            String msg = "entry|" + "================ " + userName + "(" + userNo + ") 님이 " + roomNo + " 채팅방에 입장하였습니다. ================" + "|" + userNo;
-            log.debug("입장 메세지 : {}\n", msg);
-            
-            
-            for (WebSocketSession sss : chatRooms.get(roomNo).values() ) { 
-            	sss.sendMessage(new TextMessage(msg));
-            }
-        	// .values()는 Java의 Map 인터페이스에서 제공하는 메서드로 Map에 저장된 값들(value)만을 Collection 형태로 반환합니다. 즉, 키(key)에 상관없이 Map에 저장된 값들을 한꺼번에 처리하고 싶을 때 사용됩니다.
-            // Map<K, V>에서 .values()를 호출하면 V 타입의 모든 값(value)이 포함된 Collection<V> 객체를 반환합니다. 반환된 Collection은 Iterable 인터페이스를 구현하고 있으므로, for-each 루프에서 사용할 수 있습니다.
-        }
-        
         // 클라이언트의 session이 현재 roomNo의 List<WebSocketSession>에 없다면 추가한다.
         if( chatRooms.get(roomNo).get(userNo) == null ) {
         	chatRooms.get(roomNo).put(userNo, session);
         }
         
+        
+        // 사용자가 이 채팅방에 이미 입장상태인지 조회
+        Map<String, String> isFirstTime = new HashMap<>();
+        isFirstTime.put("userNo", userNo);
+        isFirstTime.put("roomNo", roomNo);
+        UserChatRoomDto userChatRoomDto = chatService.selectMappingByUserAndRoom(isFirstTime);
+        
+        
+        // 사용자가 현재 roomNo 채팅방에 없거나 퇴장상태였던 경우에는 화면에 입장 메세지를 보내고 db에도 기록한다.
+        if( userChatRoomDto == null || userChatRoomDto.getJoinYN().equals("N") ) {
+        	
+            String msg = "entry|" + "================ " + userName + "(" + userNo + ") 님이 " + roomNo + " 채팅방에 입장하였습니다. ================" + "|" + userNo;
+            log.debug("입장 메세지 : {}\n", msg);
+        	
+            for (WebSocketSession sss : chatRooms.get(roomNo).values() ) { 
+            	sss.sendMessage(new TextMessage(msg)); // 이 roomNo 채팅방에 현재 연결되어있는 모든 session에 메세지 전송.
+            }
+        	// .values()는 Java의 Map 인터페이스에서 제공하는 메서드로 Map에 저장된 값들(value)만을 Collection 형태로 반환합니다. 즉, 키(key)에 상관없이 Map에 저장된 값들을 한꺼번에 처리하고 싶을 때 사용됩니다.
+            // Map<K, V>에서 .values()를 호출하면 V 타입의 모든 값(value)이 포함된 Collection<V> 객체를 반환합니다. 반환된 Collection은 Iterable 인터페이스를 구현하고 있으므로, for-each 루프에서 사용할 수 있습니다.
+            
+            
+            // 입장 메세지를 db에 insert.
+            LocalDateTime now = LocalDateTime.now(); // 현재 시간
+            DateTimeFormatter formatterWithSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 정의(연월일 시분초)
+            String nowWithSeconds = now.format(formatterWithSeconds);  		 // 포맷 적용(db에 insert는 연월일 시분초)
+            
+            Map<String, String> map = new HashMap<>();
+            map.put("message",  msg.split("\\|")[1] );
+            map.put("userNo", userNo);
+            map.put("roomNo", roomNo);
+            map.put("nowWithSeconds", nowWithSeconds);
+            map.put("msgType", "ENTRY");
+            chatService.insertMessage(map);
+            
+            
+	        if( userChatRoomDto == null) { // 매핑테이블(유저, 채팅방)에 데이터가 아예 없는경우
+	        	log.debug("{}", "매핑테이블(유저, 채팅방)에 데이터가 아예 없는경우");
+	        }else if( userChatRoomDto.getJoinYN().equals("N") ){ // 매핑테이블(유저, 채팅방)에 데이터가 있지만 퇴장상태인 경우
+	        	log.debug("{}", "매핑테이블(유저, 채팅방)에 데이터가 있지만 퇴장상태인 경우");
+	        }
+	        
+        }    
+              
         
     }
    
@@ -128,6 +140,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
 
         log.debug("(handleMessage) 현재 채팅방 번호 : {}", roomNo);  
         log.debug("(handleMessage) 현재 {} 채팅방 번호에 연결되어 있는 클라이언트들의 세션 리스트 : {} \n", roomNo, chatRooms.get(roomNo));
+        
         // 현재 채팅방의 모든 사용자에게 메시지 전송
         for (WebSocketSession sss : chatRooms.get(roomNo).values()) {
             sss.sendMessage(new TextMessage(msg)); // 화면에서 onMesage 함수가 자동 실행된다.
@@ -140,7 +153,8 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         map.put("userNo", userNo);
         map.put("roomNo", roomNo);
         map.put("nowWithSeconds", nowWithSeconds);
-        chatService.insertNormalMessage(map);
+        map.put("msgType", "NORMAL");
+        chatService.insertMessage(map);
         
     }
     
@@ -167,7 +181,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
      * 사용자가 채팅방에서 완전히 나가는 메서드 <- 사용자가 '채팅방 나가기' 버튼 클릭시 실행.
      * @param roomId - 사용자가 나가려는 채팅방 ID
      * @param userId - 나가려는 사용자의 ID
-     */
+    
     public void leaveChat(String roomNo, String userId) throws Exception {
         if (userStatusMap.containsKey(roomNo) && userStatusMap.get(roomNo).containsKey(userId)) {
             userStatusMap.get(roomNo).put(userId, false);
@@ -179,6 +193,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
             log.debug("User {} has left chat room {} \n", userId, roomNo);
         }
     }
+    */
     
     
 }

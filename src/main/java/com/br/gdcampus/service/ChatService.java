@@ -28,17 +28,17 @@ public interface ChatService {
     List<MessageDto> selectChatMessage(Map<String, String> map);
 
     // 채팅 메세지를 db에 insert - 상우
-	int insertNormalMessage(Map<String, String> map);
+	int insertMessage(Map<String, String> map);
+
+	// 사용자가 채팅방에 이미 입장상태인지 조회 - 상우
+	UserChatRoomDto selectMappingByUserAndRoom(Map<String, String> isFirstTime);
+
+	// 채팅방 나가기 - 상우
+	int exitRoom(Map<String, String> map);
     
-    // 채팅방 생성 - 상우
-    // int createChatRoom(String[] userNo);
     
     // 채팅방 초대 - 상우
     // int inviteChatRoom(String[] userNo);
-    
-    // 채팅방 나가기 (T_USER_CHAT_ROOM에 상태를 N으로) - 상우
-    // int exitChatRoom(String userNo);
-
 
     
 }

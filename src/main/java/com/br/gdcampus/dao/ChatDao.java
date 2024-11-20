@@ -88,8 +88,8 @@ public class ChatDao {
 	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.		
 	 * return 성공시 1 , 실패시 0
 	 */
-	public int insertNormalMessage(Map<String, String> map) {
-		return sqlSession.insert("chatMapper.insertNormalMessage", map);
+	public int insertMessage(Map<String, String> map) {
+		return sqlSession.insert("chatMapper.insertMessage", map);
 	}
 
 	/**
@@ -100,6 +100,27 @@ public class ChatDao {
 	 */
 	public int insertMessageRead(Map<String, String> map) {
 		return sqlSession.insert("chatMapper.insertMessageRead", map);
+	}
+
+
+	/**
+	 * 사용자가 채팅방에 이미 입장상태인지 조회
+	 * atuhor : 상우
+	 * @param isFirstTime userNo, roomNo
+	 * return UserChatRoomDto
+	 */	
+	public UserChatRoomDto selectMappingByUserAndRoom(Map<String, String> isFirstTime) {
+		return sqlSession.selectOne("chatMapper.selectMappingByUserAndRoom", isFirstTime);
+	}
+
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 * @param map userNo, roomNo
+	 * return 성공시 1 , 실패시 0
+	 */
+	public int exitRoom(Map<String, String> map) {
+		return sqlSession.update("chatMapper.exitRoom", map);
 	}
 
 }

@@ -74,7 +74,7 @@
                                        <ul class="list-unstyled chat-list group-list">
 
                                        
-                                          <c:forEach var="map" items="${resList}">
+                                          <c:forEach var="map" items="${chatRoomList}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'G'}">
                                           		
 																									<li data-room-no="'${map['chatRoomDto'].roomNo}'" onclick="loadChatRoom('${map['chatRoomDto'].roomNo}', '${map['chatRoomDto'].roomName}', ${map['count']})", '그룹채팅임'>
@@ -112,7 +112,7 @@
 
                                        <ul class="list-unstyled chat-list">
                                        
-                                          <c:forEach var="map" items="${resList}">
+                                          <c:forEach var="map" items="${chatRoomList}">
                                           		<c:if test="${map['chatRoomDto'].roomType eq 'O'}">                                          		
 
 			                                           <li data-room-no="'${map['chatRoomDto'].roomNo}'" onclick="loadChatRoom('${map['chatRoomDto'].roomNo}', '${map['chatRoomDto'].roomName}', ${map['count']},'${map['counterpartName']}')">
@@ -127,9 +127,14 @@
 			                                                           <h5 class="text-truncate font-size-14 mb-1">
 			                                                           	 ${map['counterpartName']} (${map['counterpartNo']})
 			                                                           </h5>
-			                                                           <p class="text-truncate mb-0">Hey! there I'm available</p>
+			                                                           <%-- <p class="text-truncate mb-0">최근메세지 띄울곳</p> --%>
 			                                                       </div>
-			                                                       <div class="font-size-11">02 min</div>
+			                                                       <%--
+			                                                       <div class="font-size-11">몇분전에 왔는지 띄울곳</div>
+			                                                       <div class="unread-message">
+                                                        			   <span class="badge badge-danger badge-pill">01</span>
+                                                      			 </div>
+                                                      			 --%>
 			                                                   </div>
 			                                               </a>
 			                                           </li>
@@ -138,25 +143,8 @@
 																					</c:forEach>                                       
                                        
                                        
-                                           
-                                           <li class="unread">
-                                               <a href="#">
-                                                   <div class="media">
-                                                       <div class="user-img online align-self-center mr-3">
-                                                           <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
-                                                       </div>
-                                                       
-                                                       <div class="media-body overflow-hidden">
-                                                           <h5 class="text-truncate font-size-14 mb-1">Galen Rizo</h5>
-                                                           <p class="text-truncate mb-0">I've finished it! See you so</p>
-                                                       </div>
-                                                       <div class="font-size-11">10 min</div>
-                                                       <div class="unread-message">
-                                                           <span class="badge badge-danger badge-pill">01</span>
-                                                       </div>
-                                                   </div>
-                                               </a>
-                                           </li>
+                                           <%-- 
+                                           --%>
 
                                           
                                        </ul>
@@ -191,8 +179,8 @@
                                            </div>
                                        </div>
                                        <div class="col-xl-8 col-5" style="text-align: right;">
-	                                         <i data-feather="plus" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	                                         <i data-feather="log-out" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	                                         <%-- <i data-feather="plus" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --%>
+	                                         <i data-feather="log-out" onclick="exitRoom();" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																				   <i data-feather="x" onclick="closeConversationList();" style="cursor: pointer;"></i>
                                        </div>
                                    </div>
@@ -468,7 +456,13 @@
 							    console.log('채팅방이 닫혔습니다.');
 							}
 							
-							
+							// 나가기버튼 클릭시 alert로 다시 한번 묻고, yes시 채팅방 나가기.
+							function exitRoom(){
+					        if ( confirm("정말로 채팅방을 나가시겠습니까?") ) {
+					        		let roomNo = $("#room-no").text();
+					            location.href = '/chat/exitRoom?roomNo=' + roomNo;
+					        }
+							}
 							
 							</script>
 							

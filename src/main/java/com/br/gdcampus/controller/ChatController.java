@@ -83,7 +83,7 @@ public class ChatController {
 		// 2. 로그인한 유저가 속한 채팅방 리스트 조회하기.
 		List<ChatRoomDto> list = chatService.selectChatRoomList(userNo); // 로그인한 유저가 속한 채팅방 DTO가 list로 담김.
 		
-		List<Map<String, Object>> resList = new ArrayList<>(); // 응답 페이지로 넘길 list.
+		List<Map<String, Object>> chatRoomList = new ArrayList<>(); // 응답 페이지로 넘길 list.
 		
 		
 		for(ChatRoomDto c : list) {
@@ -100,10 +100,10 @@ public class ChatController {
 				}
 			}
 					
-			resList.add(map);
+			chatRoomList.add(map);
 		}
 		
-		model.addAttribute("resList", resList);
+		model.addAttribute("chatRoomList", chatRoomList);
 		
 		
 		
@@ -217,6 +217,29 @@ public class ChatController {
 		
 		return chatService.selectChatMessage(map);
 		
+	}
+	
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 */
+	@GetMapping("/exitRoom")
+	public String exitRoom(HttpSession session, String roomNo, RedirectAttributes ra) {
+		
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("roomNo", roomNo);
+		map.put("userNo", userNo);
+		
+		int result = chatService.exitRoom(map);
+		
+		if(result > 0) {
+			ra.addFlashAttribute("alertMsg", "채팅방 나가기 성공");
+			return "redirect:/chat/roomList";
+		}else {
+			return null; // 원래 있던 자리로.
+		}
 	}
 
 

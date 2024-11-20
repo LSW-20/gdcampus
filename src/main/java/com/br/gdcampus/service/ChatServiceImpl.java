@@ -129,20 +129,44 @@ public class ChatServiceImpl implements ChatService {
 	 * return 성공시 1 , 실패시 0
 	 */
 	@Override
-	public int insertNormalMessage(Map<String, String> map) {
+	public int insertMessage(Map<String, String> map) {
 		
 		// (1) T_MESSAGE 테이블에 insert.
-		int result = chatDao.insertNormalMessage(map);
+		int result = chatDao.insertMessage(map);
 		
 		// (2) T_MESSAGE_READ 테이블에 insert.
 		if(result > 0) {
-			List<UserChatRoomDto> list = chatDao.selectUserChatRoomList(map.get("roomNo"));
+			List<UserChatRoomDto> list = chatDao.selectUserChatRoomList(map.get("roomNo")); // 이 채팅방의 모든 유저들의 userNo 알아옴.
 			for(UserChatRoomDto dto : list) {
 				map.put("targetUserNo", dto.getUserNo() );
 				result = chatDao.insertMessageRead(map);
 			}
 		}
 		return result;
+	}
+
+
+	/**
+	 * 사용자가 채팅방에 이미 입장상태인지 조회
+	 * author : 상우
+	 * @param isFirstTime userNo, roomNo
+	 * return UserChatRoomDto
+	 */
+	@Override
+	public UserChatRoomDto selectMappingByUserAndRoom(Map<String, String> isFirstTime) {
+		return chatDao.selectMappingByUserAndRoom(isFirstTime);
+	}
+
+
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 * @param map userNo, roomNo
+	 * return 성공시 1 , 실패시 0
+	 */
+	@Override
+	public int exitRoom(Map<String, String> map) {
+		return chatDao.exitRoom(map);
 	}
 	
 	

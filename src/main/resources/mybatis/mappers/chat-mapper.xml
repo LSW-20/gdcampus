@@ -44,6 +44,7 @@
  	   where ROOM_NO IN ( SELECT ROOM_NO 
                     		  FROM T_USER_CHAT_ROOM
                   			 WHERE USER_NO = #{userNo}
+                  			   AND JOIN_YN = 'Y'
 											)
 	</select>
 
@@ -58,7 +59,7 @@
 	</select>
 	
 	
-	<!-- (상우) 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회 -->
+	<!-- (상우) roomNo로 유저-채팅방 매핑 테이블 조회 -->
 	<select id="selectUserChatRoomList" resultMap="userChatRoomResultMap">
 		select 
 					 USER_NO
@@ -134,7 +135,7 @@
 	
 	
 	<!-- (상우) 채팅 메세지를 db에 insert - (1/2) T_MESSAGE 테이블에 insert. -->
-	<insert id="insertNormalMessage">
+	<insert id="insertMessage">
 		insert 
 		  into T_MESSAGE
 		  (
@@ -152,7 +153,7 @@
 		  , #{message}
 		  , #{userNo}	
 		  , #{roomNo}
-		  , 'NORMAL'
+		  , #{msgType}
 		  , TO_DATE(#{nowWithSeconds}, 'YYYY-MM-DD HH24:MI:SS')
 		  , 'Y'
 		  ) 
@@ -174,4 +175,27 @@
 		  ) 	
 	</insert>
 	
+	
+	<!-- (상우) userNo와 roomNo로 유저-채팅방 매핑 테이블 조회 -->
+	<select id="selectMappingByUserAndRoom" resultMap="userChatRoomResultMap">
+		select 
+					 USER_NO
+				 , ROOM_NO
+				 , JOIN_TIME
+				 , JOIN_YN
+		  from T_USER_CHAT_ROOM
+		 where ROOM_NO = #{roomNo} 	 
+		   and USER_NO = #{userNo}
+		   and JOIN_YN = 'Y'
+	</select>
+	
+	<!-- (상우) 채팅방 나가기 -->
+	<update id="exitRoom">
+		UPDATE T_USER_CHAT_ROOM
+			 SET JOIN_YN = 'N'
+		 WHERE ROOM_NO = #{roomNo}
+		   AND USER_NO = #{userNo}
+	</update>
+	
+
 </mapper>
