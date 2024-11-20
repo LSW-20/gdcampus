@@ -37,8 +37,8 @@ public class ChatServiceImpl implements ChatService {
 	 * return 그 채팅방의 인원 수
 	 */
 	@Override
-	public int selectChatRoomPeopleCount(String chatRoomNo) {
-		return chatDao.selectChatRoomPeopleCount(chatRoomNo);
+	public int selectChatRoomPeopleCount(String roomNo) {
+		return chatDao.selectChatRoomPeopleCount(roomNo);
 	}
 	
 
@@ -49,8 +49,8 @@ public class ChatServiceImpl implements ChatService {
 	 * return List<UserChatRoomDto>
 	 */
 	@Override
-	public List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo) {
-		return chatDao.selectUserChatRoomList(chatRoomNo);
+	public List<UserChatRoomDto> selectUserChatRoomList(String roomNo) {
+		return chatDao.selectUserChatRoomList(roomNo);
 	}
 
 	
@@ -136,9 +136,48 @@ public class ChatServiceImpl implements ChatService {
 		
 		// (2) T_MESSAGE_READ 테이블에 insert.
 		if(result > 0) {
-			result = chatDao.insertMessageRead(map);
+			List<UserChatRoomDto> list = chatDao.selectUserChatRoomList(map.get("roomNo")); // 이 채팅방의 모든 유저들의 userNo 알아옴.
+			for(UserChatRoomDto dto : list) {
+				map.put("targetUserNo", dto.getUserNo() );
+				result = chatDao.insertMessageRead(map);
+			}
 		}
 		return result;
+	}
+
+
+	/**
+	 * 사용자가 채팅방에 이미 입장상태인지 조회
+	 * author : 상우
+	 * @param isFirstTime userNo, roomNo
+	 * return UserChatRoomDto
+	 */
+	@Override
+	public UserChatRoomDto selectMappingByUserAndRoom(Map<String, String> isFirstTime) {
+		return chatDao.selectMappingByUserAndRoom(isFirstTime);
+	}
+
+
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 * @param map userNo, roomNo
+	 * return 성공시 1 , 실패시 0
+	 */
+	@Override
+	public int exitRoom(Map<String, String> map) {
+		return chatDao.exitRoom(map);
+	}
+
+
+	/**
+	 * 채팅방 별 최근 메세지 조회
+	 * author : 상우
+	 * return 채팅방 별 최근 메세지가 담긴 List<MessageDto>
+	 */
+	@Override
+	public List<MessageDto> recentMessage() {
+		return chatDao.recentMessage();
 	}
 	
 	

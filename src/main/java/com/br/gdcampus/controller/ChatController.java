@@ -83,7 +83,7 @@ public class ChatController {
 		// 2. 로그인한 유저가 속한 채팅방 리스트 조회하기.
 		List<ChatRoomDto> list = chatService.selectChatRoomList(userNo); // 로그인한 유저가 속한 채팅방 DTO가 list로 담김.
 		
-		List<Map<String, Object>> resList = new ArrayList<>(); // 응답 페이지로 넘길 list.
+		List<Map<String, Object>> chatRoomList = new ArrayList<>(); // 응답 페이지로 넘길 list.
 		
 		
 		for(ChatRoomDto c : list) {
@@ -100,15 +100,19 @@ public class ChatController {
 				}
 			}
 					
-			resList.add(map);
+			chatRoomList.add(map);
 		}
 		
-		model.addAttribute("resList", resList);
+		model.addAttribute("chatRoomList", chatRoomList);
+		
+		
+		// 5. 채팅방 별 최근 메세지 조회.
+		List<MessageDto> recentMessageList = chatService.recentMessage();
+		model.addAttribute("recentMessageList", recentMessageList);
 		
 		
 		
-		
-		// 5. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
+		// 6. 채팅방 초대를 위해 (1) 관리자 유저 담기, (2) 교수 학과명 조회해서 담기, (3) 부서 카테고리 조회,  (4) 각 부서별 유저의 사번, 이름, 부서(직책), 직급 조회해서 담기
 
 		
 		// (1) 관리자 유저의 사번, 이름 담기
@@ -217,6 +221,29 @@ public class ChatController {
 		
 		return chatService.selectChatMessage(map);
 		
+	}
+	
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 */
+	@GetMapping("/exitRoom")
+	public String exitRoom(HttpSession session, String roomNo, RedirectAttributes ra) {
+		
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("roomNo", roomNo);
+		map.put("userNo", userNo);
+		
+		int result = chatService.exitRoom(map);
+		
+		if(result > 0) {
+			ra.addFlashAttribute("alertMsg", "채팅방 나가기 성공");
+			return "redirect:/chat/roomList";
+		}else {
+			return null; // 원래 있던 자리로.
+		}
 	}
 
 

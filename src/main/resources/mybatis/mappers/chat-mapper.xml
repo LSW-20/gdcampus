@@ -44,6 +44,7 @@
  	   where ROOM_NO IN ( SELECT ROOM_NO 
                     		  FROM T_USER_CHAT_ROOM
                   			 WHERE USER_NO = #{userNo}
+                  			   AND JOIN_YN = 'Y'
 											)
 	</select>
 
@@ -53,12 +54,12 @@
 		select 
 					 COUNT(*)
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = #{chatRoomNo} 
+		 where ROOM_NO = #{roomNo} 
 		   and JOIN_YN = 'Y'
 	</select>
 	
 	
-	<!-- (상우) 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회 -->
+	<!-- (상우) roomNo로 유저-채팅방 매핑 테이블 조회 -->
 	<select id="selectUserChatRoomList" resultMap="userChatRoomResultMap">
 		select 
 					 USER_NO
@@ -66,7 +67,7 @@
 				 , JOIN_TIME
 				 , JOIN_YN
 		  from T_USER_CHAT_ROOM
-		 where ROOM_NO = #{chatRoomNo} 	 
+		 where ROOM_NO = #{roomNo} 	 
 		   and JOIN_YN = 'Y'
 	</select>
 	
@@ -152,7 +153,7 @@
 		  , #{message}
 		  , #{userNo}	
 		  , #{roomNo}
-		  , 'NORMAL'
+		  , #{msgType}
 		  , TO_DATE(#{nowWithSeconds}, 'YYYY-MM-DD HH24:MI:SS')
 		  , 'Y'
 		  ) 
@@ -169,9 +170,48 @@
 		  )
 		  values
 		  (
-		  	#{userNo}
+		  	#{targetUserNo}
 		  ,	SEQ_MNO.CURRVAL
 		  ) 	
 	</insert>
 	
+	
+	<!-- (상우) userNo와 roomNo로 유저-채팅방 매핑 테이블 조회 -->
+	<select id="selectMappingByUserAndRoom" resultMap="userChatRoomResultMap">
+		select 
+					 USER_NO
+				 , ROOM_NO
+				 , JOIN_TIME
+				 , JOIN_YN
+		  from T_USER_CHAT_ROOM
+		 where ROOM_NO = #{roomNo} 	 
+		   and USER_NO = #{userNo}
+		   and JOIN_YN = 'Y'
+	</select>
+	
+	<!-- (상우) 채팅방 나가기 -->
+	<update id="exitRoom">
+		UPDATE T_USER_CHAT_ROOM
+			 SET JOIN_YN = 'N'
+		 WHERE ROOM_NO = #{roomNo}
+		   AND USER_NO = #{userNo}
+	</update>
+	
+	<!-- (상우) 채팅방별 최근 메세지 조회 -->
+	<select id="recentMessage" resultMap="messageResultMap">
+		SELECT MSG_NO
+				 , MSG_CONTENT
+				 , USER_NO
+				 , ROOM_NO
+				 , MSG_TYPE
+				 , CREATE_DATETIME
+				 , STATUS
+			FROM (
+					    SELECT MSG_NO, MSG_CONTENT, USER_NO, ROOM_NO, MSG_TYPE, CREATE_DATETIME, STATUS,
+					           ROW_NUMBER() OVER (PARTITION BY ROOM_NO ORDER BY CREATE_DATETIME DESC) AS RN
+					    FROM T_MESSAGE
+					    WHERE STATUS = 'Y'
+						)
+		 WHERE RN = 1
+	</select>
 </mapper>

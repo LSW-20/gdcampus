@@ -34,8 +34,8 @@ public class ChatDao {
 	 * @param chatRoomNo 채팅방 번호
 	 * return 그 채팅방의 인원 수
 	 */
-	public int selectChatRoomPeopleCount(String chatRoomNo) {
-		return sqlSession.selectOne("chatMapper.selectChatRoomPeopleCount", chatRoomNo);
+	public int selectChatRoomPeopleCount(String roomNo) {
+		return sqlSession.selectOne("chatMapper.selectChatRoomPeopleCount", roomNo);
 	}
 
 	
@@ -45,8 +45,8 @@ public class ChatDao {
 	 * @param roomNo 채팅방 번호
 	 * return List<UserChatRoomDto>
 	 */
-	public List<UserChatRoomDto> selectUserChatRoomList(String chatRoomNo) {
-		return sqlSession.selectList("chatMapper.selectUserChatRoomList", chatRoomNo);
+	public List<UserChatRoomDto> selectUserChatRoomList(String roomNo) {
+		return sqlSession.selectList("chatMapper.selectUserChatRoomList", roomNo);
 	}
 
 	
@@ -101,5 +101,36 @@ public class ChatDao {
 	public int insertMessageRead(Map<String, String> map) {
 		return sqlSession.insert("chatMapper.insertMessageRead", map);
 	}
+
+
+	/**
+	 * 사용자가 채팅방에 이미 입장상태인지 조회
+	 * atuhor : 상우
+	 * @param isFirstTime userNo, roomNo
+	 * return UserChatRoomDto
+	 */	
+	public UserChatRoomDto selectMappingByUserAndRoom(Map<String, String> isFirstTime) {
+		return sqlSession.selectOne("chatMapper.selectMappingByUserAndRoom", isFirstTime);
+	}
+
+	/**
+	 * 채팅방 나가기
+	 * author : 상우
+	 * @param map userNo, roomNo
+	 * return 성공시 1 , 실패시 0
+	 */
+	public int exitRoom(Map<String, String> map) {
+		return sqlSession.update("chatMapper.exitRoom", map);
+	}
+
+	/**
+	 * 채팅방 별 최근 메세지 조회
+	 * author : 상우
+	 * return 채팅방 별 최근 메세지가 담긴 List<MessageDto>
+	 */
+	public List<MessageDto> recentMessage() {
+		return sqlSession.selectList("chatMapper.recentMessage");
+	}
+
 
 }

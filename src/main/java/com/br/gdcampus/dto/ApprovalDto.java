@@ -36,4 +36,9 @@ public class ApprovalDto {
     // 문서 타입별 정보
     private DraftDto draft;           // 기안서인 경우
     private PurchaseDraftDto purchDraft;  // 품의서인 경우
+    
+	//따로 추가
+	private String userName;
+	private String deptName;
+	private String rankName;
 }

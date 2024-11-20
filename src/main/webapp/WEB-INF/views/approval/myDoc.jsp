@@ -169,7 +169,7 @@
                                     </td>
                                     <td>${appr.apprType}</td>
                                     <td>
-                                        <a href="${contextPath}/approval/detail/${appr.apprNo}" class="doc-link">
+                                        <a href="${contextPath}/approval/detail/${appr.apprNo}?type=myDoc" class="doc-link">
                                             ${appr.apprTitle}
                                         </a>
                                     </td>
