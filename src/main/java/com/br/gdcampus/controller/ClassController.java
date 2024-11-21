@@ -176,14 +176,13 @@ public class ClassController {
 	 */
 	@GetMapping("/opning/prof/addForm.do")
 	public void classAddForm(String yytt, String limit, HttpSession session, Model model) {
-		//개설학기, 년도, 소속학과, limit값을 받아서 보내줘야함
+		//개설학기, 년도, limit값을 받아서 보내줘야함
 		log.debug("yytt : "+yytt);
 		log.debug("limit : "+limit);
-		String classNo = yytt+((UserDto)session.getAttribute("loginUser")).getStDeptNo()+'_';
-		log.debug("classNo : "+classNo);
 		
-		model.addAttribute("classCode", classNo);
+		model.addAttribute("classCode", yytt);
 		model.addAttribute("limit", Integer.parseInt(limit));
+		model.addAttribute("user", ((UserDto)session.getAttribute("loginUser")));
 	}
 	
 }

@@ -52,7 +52,7 @@
 			<div class="page-content ">
 				<div class="container-fluid mt-5">
 					<div class="text-center">
-						<h3>강의 개설 신청</h3>
+						<h3>강의 개설 신청서</h3>
 					</div>
 					<div class="float-right mb-5">
 						<p>신청일자 : ${c.applDate}</p>
@@ -62,48 +62,65 @@
 					<div class="mt-5 mb-3">
 						
 						<div class="table-responsive mb-4 ">
+							<p class="text-danger">*기본 정보가 일치하는지 확인해주세요</p>
 							<table class="table table-bordered mb-0" style="table-layout: fixed">
 								<thead>
 									<tr class="table-secondary">
-										<th width="15%" scope="col" class="">신청자명</th>
-										<th width="15%" scope="col">${ c.userNo }</th>
-										<c:set var = "year" value = "${fn:substring(c.classCode, 0, 2)}" />
-     									<c:set var = "term" value = "${fn:substring(c.classCode, 3, 4)}" />
+										<th width="15%" scope="col">신청자명</th>
+										<th width="15%" scope="col"class="text-primary">${ user.userName }</th>
+										<c:set var = "year" value = "${fn:substring(classCode, 0, 2)}" />
+     									<c:set var = "term" value = "${fn:substring(classCode, 3, 4)}" />
 										<th width="20%" scope="col">개설년도</th>
-										<th width="20%" scope="col">20${year}년도</th>
+										<th width="20%" scope="col" class="text-primary">20${year}년도</th>
 										<th width="15%" scope="col">개설학기</th>
-										<th width="15%" scope="col">${term}학기</th>
+										<th width="15%" scope="col" class="text-primary">${term}학기</th>
 									</tr>
 								</thead>
 							</table>
 						</div>
 	
 					</div>
+					<hr>
 					<div class="mt-2 mb-3">
 						
-						<div class="table-responsive mb-4 ">
-							<table class="table table-bordered mb-0" style="table-layout: fixed; background-color: #F2F2F2;">
-								<thead>
-									<tr>
-										<th width="15%" scope="col">강의명</th>
-										<td width="15%" scope="col">${ c.classTitle }</td>
-										<th width="20%" scope="col">대상학과</th>
-										<td width="20%" scope="col">${c.deptName}</td>
-									</tr>
-									<tr>
-										<th width="15%" scope="col">강의유형</th>
-										<td width="15%" scope="col">${ c.classType }</td>
-										<th width="20%" scope="col">진행방식</th>
-										<td width="20%" scope="col">${c.prgMethod}</td>
-									</tr>
-									<tr>
-										<th width="15%" scope="col">시수</th>
-										<td width="15%" scope="col">${ c.classHours}</td>
-										<th width="20%" scope="col">대상학년</th>
-										<td width="20%" scope="col">${c.targetGrade} 학년</td>
-									</tr>
-								</thead>
-							</table>
+						<div class="m-3">
+						
+							<div class="form-group row">
+                                <label for="example-text-input1" class="col-md-2 col-form-label">강의명</label>
+                                <div class="col-md-5">
+                                    <input class="form-control" type="text" value=" " id="example-text-input1">
+                                </div>
+                                
+                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학과</label>
+                                <div class="col-md-3">
+                                    <input class="form-control" type="text" value=" " id="example-text-input2">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="example-text-input1" class="col-md-2 col-form-label">강의유형</label>
+                                <div class="col-md-5">
+                                    <input class="form-control" type="text" value=" " id="example-text-input1">
+                                </div>
+                                
+                                <label for="example-text-input2" class="col-md-2 col-form-label">진행방식</label>
+                                <div class="col-md-3">
+                                    <input class="form-control" type="text" value=" " id="example-text-input2">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="example-text-input1" class="col-md-2 col-form-label">시수</label>
+                                <div class="col-md-5">
+                                    <input class="form-control" type="text" value=" " id="example-text-input1">
+                                </div>
+                                
+                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학년</label>
+                                <div class="col-md-3">
+                                    <input class="form-control" type="text" value=" " id="example-text-input2">
+                              	</div>                           
+                            </div>    
+                                                   
 						</div>
 	
 					</div>
