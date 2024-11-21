@@ -56,7 +56,6 @@ public interface ApprovalService {
 	//결재문서 상세
 	ApprovalDto selectMyApprovedDetail(Map<String, Object> params);
 
-	
 	//결재요청
 	int insertApproval(ApprovalDto approval);
 	
@@ -69,26 +68,39 @@ public interface ApprovalService {
 	//품의서물품history insert
 	int insertPurchaseHistory(PurchaseHistoryDto purchHistory);
 	
-	//결재선 다음사람
-	int updateNextOrder(ApprovalDto approval);
-	
 	//결재선 조회
 	List<ApprLineDto> selectApproversList(String apprNo);
 	
-	//결재 승인
-	int updateAppAgree(ApprLineDto apprLine);
+	//기안서상세요청
+	DraftDto selectSimpleDraftDetail(String apprNo);
 	
-	//반려
-	int updateAject(ApprLineDto apprLine);
+	//품의서상세요청
+	PurchaseDraftDto selectPurchDraftDetail(String apprNo);
 	
-	//글삭제
+	//결재선 승인
+	int updateLineAgree(Map<String, Object> params);
 	
-	//글수정
+	//결재선 반려
+	int updateLineReject(Map<String, Object> params);
+	
+	//결재상태 승인 처리
+	int updateApprAgree(String apprNo);
+	
+	//결재상태 반려 처리
+	int updateApprReject(String apprNo);
+	
+	//마지막결재자인지체크
+	int isLastOrder(Map<String, Object> params);
+	
+	//다음결재자로
+	int updateNextOrder(String apprNo);
 	
 	//결재선 추가
 	int insertApprovalLine(ApprLineDto line);
 	
-	//결재자 순서 업데이트
+	//글삭제
+	
+	//글수정
 	
 	//양식생성
 	

@@ -93,6 +93,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
@@ -107,6 +116,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
@@ -121,9 +139,19 @@ public class ApprovalServiceImpl implements ApprovalService {
 		System.out.println("가져올apprNo : "+apprNo);
 		
 		if(approval != null) {
+			
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
@@ -173,7 +201,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 		//문서타입따라 다르게 문서 등록
 		if("기안서".equals(approval.getApprType())) {
 			DraftDto draft = approval.getDraft();
-			System.out.println("draft : "+draft);
+//			System.out.println("draft : "+draft);
 			if(draft != null) {
 				result = apprDao.insertSimpleDraft(draft);
 				if(result == 0) {
@@ -183,6 +211,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 			}
 		} else if("품의서".equals(approval.getApprType())) {
 			PurchaseDraftDto purchDraft = approval.getPurchDraft();
+			System.out.println("ServiceImple purchDraft : "+purchDraft);
 			if(purchDraft != null) {
 				result = apprDao.insertPurchaseDraft(purchDraft);
 				if(result == 0) {
@@ -190,6 +219,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 				}
 				
 				List<PurchaseHistoryDto> purchaseItems = purchDraft.getPurchaseItems();
+				System.out.println("ServiceImpl items : " + purchaseItems);
 				if(purchaseItems != null) {
 					for(PurchaseHistoryDto item : purchaseItems) {
 						result = apprDao.insertPurchaseHistory(item);
@@ -221,17 +251,47 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int updateNextOrder(ApprovalDto approval) {
+	public List<ApprLineDto> selectApproversList(String apprNo) {
+		return apprDao.selectApproversList(apprNo);
+	}
+
+	@Override
+	public DraftDto selectSimpleDraftDetail(String apprNo) {
+		return apprDao.selectSimpleDraftDetail(apprNo);
+	}
+
+	@Override
+	public PurchaseDraftDto selectPurchDraftDetail(String apprNo) {
+		return apprDao.selectPurchDraftDetail(apprNo);
+	}
+
+	@Override
+	public int updateLineAgree(Map<String, Object> params) {
 		return 0;
 	}
 
 	@Override
-	public int updateAppAgree(ApprLineDto apprLine) {
+	public int updateLineReject(Map<String, Object> params) {
 		return 0;
 	}
 
 	@Override
-	public int updateAject(ApprLineDto apprLine) {
+	public int updateApprAgree(String apprNo) {
+		return 0;
+	}
+	
+	@Override
+	public int updateApprReject(String apprNo) {
+		return 0;
+	}
+
+	@Override
+	public int isLastOrder(Map<String, Object> params) {
+		return 0;
+	}
+
+	@Override
+	public int updateNextOrder(String apprNo) {
 		return 0;
 	}
 
@@ -239,10 +299,4 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int insertApprovalLine(ApprLineDto line) {
 		return apprDao.insertApprovalLine(line);
 	}
-
-	@Override
-	public List<ApprLineDto> selectApproversList(String apprNo) {
-		return apprDao.selectApproversList(apprNo);
-	}
-
 }

@@ -162,6 +162,18 @@ public class ApprovalDao {
 	public List<ApprLineDto> selectApproversList(String apprNo) {
 		return sqlSession.selectList("approvalMapper.selectApproversList",apprNo);
 	}
+
+	public DraftDto selectSimpleDraftDetail(String apprNo) {
+		return sqlSession.selectOne("approvalMapper.selectSimpleDraftDetail",apprNo);
+	}
+
+	public PurchaseDraftDto selectPurchDraftDetail(String apprNo) {
+		return sqlSession.selectOne("approvalMapper.selectPurchDraftDetail",apprNo);
+	}
+
+	public List<PurchaseHistoryDto> selectPurchHistoryDetail(String apprNo) {
+		return sqlSession.selectList("approvalMapper.selectPurchHistoryDetail",apprNo);
+	}
 	
 	
 
