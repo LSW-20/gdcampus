@@ -90,15 +90,19 @@ public class ChatController {
 			Map<String, Object> map = new HashMap<>();
 			map.put("chatRoomDto", c);
 			map.put("count", chatService.selectChatRoomPeopleCount(c.getRoomNo()) ); // 3. 각 채팅방 마다 채팅방 번호로 채팅방 인원수 구하기.
-
-			List<UserChatRoomDto> userChatRoomList = chatService.selectUserChatRoomList(c.getRoomNo());  // 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 user_no, join_time, join_yn 조회. (1대1 채팅방에서 상대방을 보여주기 위해)
-
+			
+			// 4. 채팅방 번호로 유저-채팅방 매핑 테이블에서 현재 채팅방에 있는 유저들의 정보 조회(user_no, user_name, room_no, join_time, join_yn)
+			List<UserChatRoomDto> userChatRoomList = chatService.selectUserChatRoomList(c.getRoomNo());  
+			map.put("userChatRoomList", userChatRoomList);
+			
+			/*
 			for(UserChatRoomDto u : userChatRoomList) {
 				if(!u.getUserNo().equals(userNo)) {
 					map.put("counterpartNo", u.getUserNo()); // 상대방 사번이 "counterpart"라는 key값에 계속 덮어씌워지긴 하는데 1:1 채팅방에선 어차피 1개의 값만 담겨서 괜찮다.
 					map.put("counterpartName", userService.selectUserNameByUserNo(u.getUserNo()) );
 				}
 			}
+			*/
 					
 			chatRoomList.add(map);
 		}
@@ -206,12 +210,12 @@ public class ChatController {
 	
 	
 	/**
-	 * 현재 채팅방의 과거 메세지 내역 조회
+	 * 현재 채팅방의 과거 메세지 내역, 채팅방 이름, 채팅방 참여 인원 목록 조회
 	 * author : 상우
 	 */
 	@ResponseBody
 	@GetMapping(value="/getChatRoomData", produces="application/json")
-	public List<MessageDto> getChatRoomData(HttpSession session, String roomNo) {
+	public Map<String, Object> getChatRoomData(HttpSession session, String roomNo) {
 		
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
 		
@@ -219,8 +223,24 @@ public class ChatController {
 		map.put("roomNo", roomNo);
 		map.put("userNo", userNo);
 		
-		return chatService.selectChatMessage(map);
 		
+		// (1) 현재 채팅방의 과거 메세지 내역 조회
+		List<MessageDto> chatMessageList = chatService.selectChatMessage(map);
+		
+		// (2) 현재 채팅방 이름 조회
+		ChatRoomDto chatRoomDto = chatService.selectChatRoomOne(roomNo);
+		String roomName = chatRoomDto.getRoomName();
+		
+		// (3) 현재 채팅방 참여 인원 목록 조회 (메소드 재사용)
+		List<UserChatRoomDto> userChatRoomList = chatService.selectUserChatRoomList(roomNo);
+		
+
+		Map<String, Object> resdataMap = new HashMap<>();
+		resdataMap.put("chatMessageList", chatMessageList);
+		resdataMap.put("roomName", roomName);
+		resdataMap.put("userChatRoomList", userChatRoomList);
+		
+		return resdataMap;
 	}
 	
 	/**
@@ -240,10 +260,11 @@ public class ChatController {
 		
 		if(result > 0) {
 			ra.addFlashAttribute("alertMsg", "채팅방 나가기 성공");
-			return "redirect:/chat/roomList";
 		}else {
-			return null; // 원래 있던 자리로.
+			ra.addFlashAttribute("alertMsg", "채팅방 나가기 실패");
 		}
+		
+		return "redirect:/chat/roomList";
 	}
 
 
