@@ -468,14 +468,21 @@ public class UserController {
 	 */
 	@PostMapping("/profile/deleteRanks")
 	@ResponseBody
-	public Map<String, String> deleteRanks(@RequestBody List<Integer> rankNoList) {
-	    int result = userService.deleteRanks(rankNoList);
-	    
-	    Map<String, String> response = new HashMap<>();
-	    if (result > 0) {
-	        response.put("message", "성공적으로 삭제되었습니다.");
-	    } else {
-	        response.put("message", "삭제에 실패했습니다.");
+	public Map<String, Object> deleteRanks(@RequestBody List<Integer> rankNos) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean isDeleted = userService.deleteRanks(rankNos);
+	        if (isDeleted) {
+	            response.put("success", true);
+	            response.put("message", "선택한 직급이 삭제되었습니다.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "삭제 실패.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "삭제 중 오류 발생.");
+	        e.printStackTrace();
 	    }
 	    return response;
 	}

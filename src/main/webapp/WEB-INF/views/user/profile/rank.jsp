@@ -157,6 +157,30 @@
 											        </div>
 											    </div>
 											</div>
+											
+											<!-- 직급선택삭제모달 -->
+												<div class="modal fade" id="selectConfirmModal" tabindex="-1" aria-labelledby="selectConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- 모달 헤더 -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- 모달 본문 -->
+            <div class="modal-body">
+                <p>선택한 항목들을 삭제하시겠습니까?</p>
+            </div>
+            <!-- 모달 푸터 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete" onclick="deleteSelectedRanks()">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
 												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                        
@@ -165,6 +189,8 @@
                             <div class="col-md-4">
                                 <div>
                                     <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal" data-target="#addRankModal"><i class="mdi mdi-plus mr-1"></i> Add Rank</button>
+                                     <button type="button" class="btn btn-danger waves-effect waves-light mb-3" data-toggle="modal" data-target="#selectConfirmModal"><i class="mdi mdi-minus mr-1"></i> Select Delete</button>
+                                    
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -334,6 +360,7 @@
         <script>
         function deleteSelectedRanks() {
             const selectedRanks = [];
+            // 선택된 체크박스에서 직급 번호 수집
             document.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
                 selectedRanks.push(checkbox.getAttribute('data-rank-no'));
             });
@@ -343,19 +370,24 @@
                 return;
             }
 
-            // AJAX 요청으로 전달
-            fetch("/profile/deleteRanks", {
+            // AJAX 요청으로 선택 항목 삭제
+            fetch("/user/profile/deleteRanks", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(selectedRanks)
+                body: JSON.stringify(selectedRanks) // 수정된 부분
             })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("삭제 실패: " + data.message);
+                }
             })
-            .catch(error => console.error("Error:", error));
+            .catch((error) => console.error("Error:", error));
         }
+
         </script>
        
     </body>

@@ -85,7 +85,7 @@ public interface UserService {
 	//직급삭제
 	int deleteRank(int rankNo);
 	//직급여러행삭제
-	int deleteRanks(List<Integer> rankNoList);
+	boolean deleteRanks(List<Integer> rankNoList);
 	//회원탈퇴
 	int resignUser(String userNo);
 }

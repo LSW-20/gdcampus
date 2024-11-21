@@ -224,8 +224,11 @@ public class UserDao {
 	 * 직급여러행삭제
 	 * 미완성
 	 */
-	public int deleteRanks(List<Integer> rankNoList) {
-	    return sqlSession.delete("userMapper.deleteRanks", rankNoList);
+	public int deleteRanks(List<Integer> rankNos) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("rankNos", rankNos);
+
+	    return sqlSession.delete("userMapper.deleteRanks", params);
 	}
 	
 	/**

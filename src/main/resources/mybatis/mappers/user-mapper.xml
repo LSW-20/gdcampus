@@ -472,7 +472,7 @@
 	<delete id="deleteRanks">
     DELETE FROM t_rank
     WHERE rank_no IN
-	    <foreach collection="rankNoList" item="rankNo" open="(" separator="," close=")">
+	    <foreach collection="rankNos" item="rankNo" open="(" separator="," close=")">
 	        #{rankNo}
 	    </foreach>
 	</delete>
