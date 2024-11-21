@@ -16,14 +16,14 @@ import com.br.gdcampus.dto.PurchaseHistoryDto;
  */
 public interface ApprovalService {
 	//결재홈 목록 조회
-	int selectApprHomeListCount();
+	int selectApprHomeListCount(String userNo);
 	
 	//결재대기문서함 목록 조회
-	int selectApprTodoListCount();
+	int selectApprTodoListCount(String userNo);
 	List<ApprovalDto> selectApprTodoList(PageInfoDto pi, String userNo);
 		
 	//결재예정문서 조회  apprStatus==1 && linOrder<나 join
-	int selectApprUpcomingListCount();
+	int selectApprUpcomingListCount(String userNo);
 	List<ApprovalDto> selectApprUpcomingList(PageInfoDto pi,  String userNo);
 	
 	//기안문서함 조회
@@ -37,24 +37,24 @@ public interface ApprovalService {
 	List<ApprovalDto> getRecentCompletedDocs(String userNo);
 	
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
-	int selectMyApprovedListCount();
+	int selectMyApprovedListCount(String userNo);
 	List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, String userNo);
 	
 	//참조/열람대기문서 조회 T_APPR_REF userNo == loginUser
-	int selectApprViewerListCount();
+	int selectApprViewerListCount(String userNo);
 	List<ApprRefDto> selectApprViewerList(PageInfoDto pi, String userNo);
 	
 	//결재대기문서상세
-	ApprovalDto selectApprTodoDetail(String userNo, String apprNo);
+	ApprovalDto selectApprTodoDetail(Map<String, Object> params);
 	
 	//결재예정문서 상세
-	ApprovalDto selectApprUpcomingDetail(String userNo, String apprNo);
+	ApprovalDto selectApprUpcomingDetail(Map<String, Object> params);
 	
 	//기안문서상세
-	ApprovalDto selectMyDocDetail(String userNo, String apprNo);
+	ApprovalDto selectMyDocDetail(Map<String, Object> params);
 	
 	//결재문서 상세
-	ApprovalDto selectMyApprovedDetail(String userNo, String apprNo);
+	ApprovalDto selectMyApprovedDetail(Map<String, Object> params);
 
 	
 	//결재요청
@@ -72,6 +72,9 @@ public interface ApprovalService {
 	//결재선 다음사람
 	int updateNextOrder(ApprovalDto approval);
 	
+	//결재선 조회
+	List<ApprLineDto> selectApproversList(String apprNo);
+	
 	//결재 승인
 	int updateAppAgree(ApprLineDto apprLine);
 	
@@ -85,10 +88,8 @@ public interface ApprovalService {
 	//결재선 추가
 	int insertApprovalLine(ApprLineDto line);
 	
-	//결재선 조회
-	
 	//결재자 순서 업데이트
-
+	
 	//양식생성
 	
 }

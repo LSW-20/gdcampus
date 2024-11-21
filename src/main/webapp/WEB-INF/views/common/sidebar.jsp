@@ -240,7 +240,7 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/approval/upComing" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="clipboard"></i>
 												<span class="menu-item">결재 예정 문서함</span>
 										</a>
