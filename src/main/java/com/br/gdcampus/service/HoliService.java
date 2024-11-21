@@ -1,5 +1,9 @@
 package com.br.gdcampus.service;
 
-public class HoliService {
+import com.br.gdcampus.dto.WorkStatusDto;
 
+public interface HoliService {
+		
+	WorkStatusDto selectworkStatus(String userNo);
+	
 }

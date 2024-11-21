@@ -55,7 +55,7 @@
 												<span class="menu-item">근태 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">나의 근태 현황</a></li>
+												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
 												<li><a href="#">휴가 신청</a></li>
 										</ul>
 								</li>
