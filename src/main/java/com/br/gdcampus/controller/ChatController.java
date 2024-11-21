@@ -260,10 +260,11 @@ public class ChatController {
 		
 		if(result > 0) {
 			ra.addFlashAttribute("alertMsg", "채팅방 나가기 성공");
-			return "redirect:/chat/roomList";
 		}else {
-			return null; // 원래 있던 자리로.
+			ra.addFlashAttribute("alertMsg", "채팅방 나가기 실패");
 		}
+		
+		return "redirect:/chat/roomList";
 	}
 
 
