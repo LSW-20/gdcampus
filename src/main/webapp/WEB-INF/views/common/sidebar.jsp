@@ -318,7 +318,7 @@
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">비품, 시설 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="${contextPath }/equipAndFacility/manageCategory">비품, 시설 관리</a></li>
 										</ul>
 								</li>
 
