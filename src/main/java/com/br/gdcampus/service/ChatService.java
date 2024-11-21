@@ -38,6 +38,9 @@ public interface ChatService {
 
 	// 채팅방 별 최근 메세지 조회 - 상우
 	List<MessageDto> recentMessage();
+
+	// 현재 채팅방(1개)에 대한 정보 조회 - 상우
+	ChatRoomDto selectChatRoomOne(String roomNo);
     
     
     // 채팅방 초대 - 상우
