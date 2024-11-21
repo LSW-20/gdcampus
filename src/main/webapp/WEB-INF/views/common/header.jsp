@@ -63,7 +63,7 @@
 												<div class="row no-gutters">
 														<div class="col">
 																<a class="dropdown-icon-item" href="#">
-																		<img src="${contextPath}images/brands/github.png" alt="Github">
+																		<img src="${contextPath}/images/brands/github.png" alt="Github">
 																		<span key="t-gitHub">GitHub</span>
 																</a>
 														</div>

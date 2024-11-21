@@ -288,7 +288,7 @@
 												<span class="menu-item">부서 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">부서 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="#">부서 카테고리 관리</a></li>
 										</ul>
 								</li>
 
@@ -298,7 +298,7 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">직급 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="#">직급 카테고리 관리</a></li>
 										</ul>
 								</li>
 								
@@ -308,7 +308,7 @@
 												<span class="menu-item">게시판 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">게시판 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="#">게시판 카테고리 관리</a></li>
 										</ul>
 								</li>
 
@@ -318,7 +318,7 @@
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">비품, 시설 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="${contextPath }/equipAndFacility/manageCategory">비품, 시설 카테고리 관리</a></li>
 										</ul>
 								</li>
 
