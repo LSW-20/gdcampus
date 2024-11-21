@@ -198,6 +198,7 @@ public class ClassController {
 	
 	@PostMapping("opning/prof/regist.do")
 	public String registOpningForm(ClassDto c) {
+		log.debug("ClassDto : "+c);
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
