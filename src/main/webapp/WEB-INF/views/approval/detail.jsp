@@ -91,7 +91,7 @@
 
     .form-header {
         display: flex;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         margin-bottom: 20px;
     }
 
@@ -193,7 +193,12 @@
     #purchaseTable {
         margin-top: 20px;
     }
-    
+     /* 결재자 테이블 영역 가로 배치 */
+     #approvalTablesContainer {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 10px;
+     }    
 </style>
 
 </head>
@@ -220,7 +225,7 @@
                                 </c:when>
                                 
                                 <%-- 결재 대기 문서함 --%>
-                                <c:when test="${type eq 'todo' && approval.currOrder eq loginUser.lineOrder}">
+                                <c:when test="${type eq 'todo'}">
                                     <button type="button" class="action-button primary" onclick="approveDoc()">결재</button>
                                     <button type="button" class="action-button danger" onclick="rejectDoc()">반려</button>
                                 </c:when>
@@ -272,11 +277,24 @@
     <!-- jstree -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <!-- Summernote JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
-    
+		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+	 
     <script>
         const contextPath = "${contextPath}";
         let isEditMode = false;
+
+        $(document).ready(function() {
+            $('#summernote').summernote({
+                width: 900,
+                height:300,
+                toolbar: [],
+                disable: true
+            });
+            $('#summernote').summernote('disable');
+        });
         
         // 수정 모드 활성화
         function enableEdit() {
