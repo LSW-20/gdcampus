@@ -619,7 +619,7 @@
     UPDATE T_APPR_LINE
        SET LINE_STATUS = 2  <!-- 반려 -->
          , LINE_DATE = SYSDATE
-         , LINE_REASON = #{reason}<!-- lineReason -->
+         , LINE_REASON = #{lineReason}
      WHERE APPR_NO = #{apprNo}
        AND USER_NO = #{userNo}	
 	</update>

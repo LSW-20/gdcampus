@@ -1,5 +1,6 @@
 package com.br.gdcampus.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -267,36 +268,79 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public int updateLineAgree(Map<String, Object> params) {
-		return 0;
+		return apprDao.updateLineAgree(params);
 	}
 
 	@Override
 	public int updateLineReject(Map<String, Object> params) {
-		return 0;
+		return apprDao.updateLineReject(params);
 	}
 
 	@Override
 	public int updateApprAgree(String apprNo) {
-		return 0;
+		return apprDao.updateApprAgree(apprNo);
 	}
 	
 	@Override
 	public int updateApprReject(String apprNo) {
-		return 0;
+		return apprDao.updateApprReject(apprNo);
 	}
 
 	@Override
 	public int isLastOrder(Map<String, Object> params) {
-		return 0;
+		return apprDao.isLastOrder(params);
 	}
 
 	@Override
 	public int updateNextOrder(String apprNo) {
-		return 0;
+		return apprDao.updateNextOrder(apprNo);
 	}
 
 	@Override
 	public int insertApprovalLine(ApprLineDto line) {
 		return apprDao.insertApprovalLine(line);
 	}
+	
+	//승인통합메소드
+	public int processApprove(String apprNo, String userNo) {
+		Map<String,Object> params = new HashMap<>();
+		params.put("apprNo", apprNo);
+		params.put("userNo", userNo);
+		
+		//결재선승인처리
+		int result = updateLineAgree(params);
+		
+		if(result > 0) {
+			int isLast = isLastOrder(params);
+			if(isLast > 0) { //다음결재자가 존재
+				result = updateNextOrder(apprNo);
+			}else {//마지막 결재자인 경우
+				result = updateApprAgree(apprNo);
+			}
+		}
+		
+		return result;
+	}
+	
+	//반려통합메소드
+	public int processReject(String apprNo, String userNo, String lineReason) {
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("apprNo", apprNo);
+		params.put("userNo", userNo);
+		params.put("lineReason", lineReason);
+		
+		//결재선반려처리
+		int result = updateLineReject(params);
+		
+		if(result > 0) {
+			//결재문서반려전환
+			result = updateApprReject(apprNo);
+		}
+		
+		
+		return result;
+	}
+	
+	
 }

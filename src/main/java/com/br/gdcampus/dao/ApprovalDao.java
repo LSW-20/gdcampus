@@ -174,6 +174,33 @@ public class ApprovalDao {
 	public List<PurchaseHistoryDto> selectPurchHistoryDetail(String apprNo) {
 		return sqlSession.selectList("approvalMapper.selectPurchHistoryDetail",apprNo);
 	}
+
+	public int updateLineAgree(Map<String, Object> params) {
+		return sqlSession.update("approvalMapper.updateLineAgree",params);
+	}
+
+	public int updateLineReject(Map<String, Object> params) {
+		return sqlSession.update("approvalMapper.updateLineReject",params);
+	}
+
+	public int updateApprAgree(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprAgree",apprNo);
+	}
+
+	public int updateApprReject(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprReject",apprNo);
+	}
+
+	public int isLastOrder(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.isLastOrder",params);
+	}
+
+	public int updateNextOrder(String apprNo) {
+		return sqlSession.update("approvalMapper.updateNextOrder",apprNo);
+	}
+	
+	
+	
 	
 	
 

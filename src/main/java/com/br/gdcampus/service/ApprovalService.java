@@ -97,6 +97,10 @@ public interface ApprovalService {
 	
 	//결재선 추가
 	int insertApprovalLine(ApprLineDto line);
+
+	int processApprove(String apprNo, String userNo);
+	
+	int processReject(String apprNo, String userNo, String lineReason);
 	
 	//글삭제
 	
