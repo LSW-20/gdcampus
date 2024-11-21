@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -465,16 +468,63 @@ public class UserController {
 	 */
 	@PostMapping("/profile/deleteRanks")
 	@ResponseBody
-	public Map<String, String> deleteRanks(@RequestBody List<Integer> rankNoList) {
-	    int result = userService.deleteRanks(rankNoList);
-	    
-	    Map<String, String> response = new HashMap<>();
-	    if (result > 0) {
-	        response.put("message", "성공적으로 삭제되었습니다.");
-	    } else {
-	        response.put("message", "삭제에 실패했습니다.");
+	public Map<String, Object> deleteRanks(@RequestBody List<Integer> rankNos) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean isDeleted = userService.deleteRanks(rankNos);
+	        if (isDeleted) {
+	            response.put("success", true);
+	            response.put("message", "선택한 직급이 삭제되었습니다.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "삭제 실패.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "삭제 중 오류 발생.");
+	        e.printStackTrace();
 	    }
 	    return response;
 	}
 	
+	/**
+	 * 회원탈퇴페이지
+	 *
+	*/
+	@GetMapping("/profile/resign.do")
+	public void resign() {}
+	
+	
+
+    @PostMapping("/resign.do")
+    public String resignBtn(String pwd, String userPwd, String userNo, RedirectAttributes rdAttributes, HttpSession session) {
+    	
+    	//비밀번호 미입력시
+		if(pwd == null || pwd.isEmpty()) {
+			rdAttributes.addFlashAttribute("alertMsg", "비밀번호를 입력해주세요.");
+            return "redirect:/user/profile/resign.do";
+        }
+		
+		//비밀번호가 일치했을 경우
+        if(bcryptPwdEncoder.matches(pwd,userPwd)) {
+        	int result = userService.resignUser(userNo);
+        	if (result > 0) {
+                session.invalidate();
+
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴가 완료되었습니다.");
+
+                return "redirect:/";
+            } else {
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴 처리에 실패하였습니다.");
+                return "redirect:/user/profile/resign.do";
+            }
+        	
+        //비밀번호가 틀렸을경우
+        }else {
+        	rdAttributes.addFlashAttribute("alertMsg", "비밀번호가 틀렸습니다.");
+            return "redirect:/user/profile/resign.do";
+        }
+	      
+    	
+    }
 }
