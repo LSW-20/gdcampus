@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deptMapper">
+    <select id="selectDeptList" resultType="com.br.gdcampus.dto.DeptDto">
+        SELECT DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER, MODIFY_DATE, MODIFY_USER
+        FROM DEPT
+        ORDER BY DEPT_NO
+    </select>
+
+    <insert id="insertDept" parameterType="com.br.gdcampus.dto.DeptDto">
+        INSERT INTO DEPT (DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER)
+        VALUES (#{deptNo}, #{deptName}, SYSDATE, #{createUser})
+    </insert>
+
+    <update id="updateDept" parameterType="com.br.gdcampus.dto.DeptDto">
+        UPDATE DEPT
+        SET DEPT_NAME = #{deptName}, MODIFY_DATE = SYSDATE, MODIFY_USER = #{modifyUser}
+        WHERE DEPT_NO = #{deptNo}
+    </update>
+
+    <delete id="deleteDept" parameterType="string">
+        DELETE FROM DEPT WHERE DEPT_NO = #{deptNo}
+    </delete>
+</mapper>

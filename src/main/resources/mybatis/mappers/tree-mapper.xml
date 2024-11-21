@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="treeMapper">
+	
+	<!-- USER -->
+	<resultMap id="userResultMap" type="UserDto">
+		<result column="USER_NO" property="userNo"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_PWD" property="userPwd"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="EMAIL" property="email"/>
+		<result column="GENDER" property="gender"/>
+		<result column="PHONE" property="phone"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="PROFILE_URL" property="profileURL"/>
+		<result column="USER_STATUS" property="userStatus"/>
+		<result column="ST_DEPT_NO" property="stDeptNo"/>
+		<result column="RANK_NO" property="rankNo"/>
+ 		<result column="DEPT_NO" property="deptNo"/> 
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="NAME_URL" property="nameURL"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="HOLI_DATE_TOTAL" property="holyDateTotal"/>
+		<result column="HIRE_DATE" property="hireDate"/>
+		<result column="LEAVE_DATE" property="leaveDate"/>
+
+		
+		<result column="RANK_NAME" property="rankName"/>
+ 		<result column="DEPT_NAME" property="deptName"/> 
+		 <!-- 부서, 직급 컬렉션 매핑 -->
+<!--     <collection resultMap="deptResultMap" property="deptName"/>		
+    <collection resultMap="rankResultMap" property="rankName"/>	 -->	
+
+	</resultMap>
+	
+	<!-- DEPT -->
+	<resultMap id="deptResultMap" type="DeptDto">
+		<result column="DEPT_NO" property="deptNo"/>
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="MODIFY_USER" property="modifyUser"/>
+	</resultMap>
+	
+	<!-- RANK -->
+	<resultMap id="rankResultMap" type="RankDto">
+		<result column="RANK_NO" property="rankNo"/>
+		<result column="RANK_NAME" property="rankName"/>
+	</resultMap>
+
+	<!-- 부서 목록 조회 -->
+	<select id="selectDepartments" resultMap="deptResultMap">
+		SELECT 
+			     DEPT_NO as DEPT_NO<!-- 이러면 안되나 -->
+			   , DEPT_NAME as DEPT_NAME
+		  FROM T_DEPT
+		 WHERE DEPT_NO != '3' <!-- 가발령 제외 -->
+		 ORDER 
+		    BY DEPT_NO	
+	</select>
+	
+	<!-- 부서별 사용자 조회 -->
+	<select id="selectUsersByDept" resultMap="userResultMap">
+		SELECT U.USER_NO as USER_NO
+			   , U.USER_NAME as USER_NAME
+			   , U.EMAIL as EMAIL 
+			   , U.PHONE as PHONE
+			   , R.RANK_NO as RANK_NO
+			   , R.RANK_NAME as RANK_NAME
+			   , D.DEPT_NAME as DEPT_NAME
+		  FROM T_USER U
+		  JOIN T_RANK R 
+		    ON U.RANK_NO = R.RANK_NO
+		  JOIN T_DEPT D 
+		    ON U.DEPT_NO = D.DEPT_NO
+		 WHERE U.DEPT_NO = #{deptNo}
+		   AND U.USER_STATUS = 'Y'
+		 ORDER 
+		    BY U.RANK_NO DESC, U.USER_NAME		
+	</select>
+	
+	<!-- 직급별 사용자 조회 -->
+	<select id="selectUsersByRank" resultMap="userResultMap">
+		SELECT U.USER_NO as USER_NO
+		     , U.USER_NAME as USER_NAME
+		     , U.EMAIL as EMAIL
+		     , U.PHONE as PHONE
+		     , D.DEPT_NO as DEPT_NO
+		     , D.DEPT_NAME as DEPT_NAME
+		  FROM T_USER U
+		  JOIN T_DEPT D 
+		    ON U.DEPT_NO = D.DEPT_NO
+		 WHERE U.RANK_NO = #{rankNo}
+		   AND U.USER_STATUS = 'Y'
+		 ORDER 
+		    BY D.DEPT_NO, U.USER_NAME
+	</select>	
+	
+	<!-- 사용자 상세 정보 조회 -->
+	<select id="selectUserDetail" resultMap="userResultMap">
+		SELECT U.USER_NO as USER_NO
+		     , U.USER_NAME as USER_NAME
+		     , U.USER_ID as USER_ID
+		     , U.EMAIL as EMAIL
+		     , U.PHONE as PHONE
+		     , U.ADDRESS as ADDRESS
+		     , U.HIRE_DATE as HIRE_DATE
+		     , U.PROFILE_URL as PROFILE_URL
+		     , R.RANK_NO as RANK_NO
+		     , R.RANK_NAME as RANK_NAME
+		     , D.DEPT_NO as DEPT_NO
+		     , D.DEPT_NAME as DEPT_NAME
+		  FROM T_USER U
+		  JOIN T_RANK R 
+		    ON U.RANK_NO = R.RANK_NO
+		  JOIN T_DEPT D 
+		    ON U.DEPT_NO = D.DEPT_NO
+		 WHERE 1=1
+		 	 AND U.USER_NO = #{userNo}
+		   AND U.USER_STATUS = 'Y'
+	</select>
+	
+</mapper>

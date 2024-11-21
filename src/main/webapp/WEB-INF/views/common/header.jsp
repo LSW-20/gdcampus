@@ -4,122 +4,221 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     
+<c:if test="${not empty alertMsg}">
+    <script>
+        alert("${alertMsg}");
+    </script>
+</c:if>
+    
+<!-- App favicon -->
+<link rel="shortcut icon" href="${contextPath}/images/favicon.ico">
+<!-- Bootstrap Css -->
+<link href="${contextPath}/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+<!-- Icons Css -->
+<link href="${contextPath}/css/icons.min.css" rel="stylesheet" type="text/css" />
+<!-- App Css-->
+<link href="${contextPath}/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
-<!-- Bootstrap 사용을 위한 CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- ------------------------- -->
 
-<style>
-	header{height: 50px}
-	header a{color:black;}
-	header .profile-img{width:30px;}
+<!-- jQuery should be loaded first -->
+<script src="${contextPath}/libs/jquery/jquery.min.js" ></script>
+
+<!-- Other JS libraries -->
+<script src="${contextPath}/libs/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+<script src="${contextPath}/libs/metismenu/metisMenu.min.js" defer></script>
+<script src="${contextPath}/libs/simplebar/simplebar.min.js" defer></script>
+<script src="${contextPath}/libs/node-waves/waves.min.js" defer></script>
+<script src="${contextPath}/libs/waypoints/lib/jquery.waypoints.min.js" defer></script>
+<script src="${contextPath}/libs/jquery.counterup/jquery.counterup.min.js" defer></script>
+<script src="${contextPath}/libs/feather-icons/feather.min.js" defer></script>
+<script src="${contextPath}/libs/apexcharts/apexcharts.min.js" defer></script>
+
+<!-- App JS -->
+<script src="${contextPath}/js/app.js" defer></script>
+
+
+
+
+<!-- header 시작 -->
+<header id="page-topbar">
+		<div class="navbar-header">
 		
-	    .page-link {
-	        color: #6c757d; 
-	        background-color: #fff;
-	        border: 1px solid #ccc; 
-	    }
-	    .page-item.active .page-link {
-	        z-index: 1;
-	        color: #555;
-	        font-weight:bold;
-	        background-color: #f1f1f1;
-	        border-color: #ccc;
-	    }
-	    .page-link:focus, .page-link:hover {
-	        color: #000;
-	        background-color: #fafafa; 
-	        border-color: #ccc;
-	    }
-</style>
-
-<script>
-	if('${alertMsg}' != ''){
-		alert('${alertMsg}');
-		if('${historyBackYN}' == 'Y'){
-			history.back();
-		}
-	}
-</script>
-
-
-
-<header class="row m-3">
-	<div class="col-3 d-flex justify-content-center align-items-center">
-	    <!-- <a href="${contextPath}"><img src="${ contextPath }/resources/images/goodee_logo.png" width="100px"></a> -->
-			<a href="${contextPath == '' ? '/' : contextPath}"><img src="${ contextPath }/resources/images/goodee_logo.png" width="100px"></a>
-			<!-- <a href="${contextPath == '' ? '/' : contextPath}"><img src="${contextPath}/images/goodee_logo.png" width="100px"></a> -->
-	</div>
-	<div class="col-5"></div>
-	<div class="col-4 d-flex justify-content-center align-items-center">
-	
 		
-		<c:choose>
-			<c:when test="${ empty loginUser }">
-		    <!-- case1. 로그인전 --> 
-		    <a href="${contextPath}/member/signup.do">회원가입</a> &nbsp;|&nbsp;
-		    <a href="#" data-toggle="modal" data-target="#loginModal">로그인</a> 
-	    </c:when>
-	    
-	    <c:otherwise>
-		    <!-- case2. 로그인후 -->
-		    <div>
-		    <img class="profile-img" src="${ contextPath }<c:out value='${loginUser.profileURL}' default='/resources/images/defaultProfile.png' />">&nbsp;
-		    <a href="${contextPath}/member/myinfo.do">${loginUser.userName}님</a> &nbsp;|&nbsp;
-		    <a href="${contextPath}/member/signout.do">로그아웃</a>
-		    </div>
-	    </c:otherwise>
-	  </c:choose>  
-	
-	</div>
+				<div class="d-flex">
+				<!-- header에 드롭다운 메뉴 안두기로 결정 -->
+				</div>
+
+
+
+				<div class="d-flex">
+
+						<!-- 첫번째 네모 네 개 아이콘 -->
+						<div class="dropdown d-none d-lg-inline-block">
+								<button type="button" class="btn header-item noti-icon waves-effect"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="icon-sm" data-feather="grid"></i>
+								</button>
+								<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+										<div class="px-lg-2">
+												<div class="row no-gutters">
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}images/brands/github.png" alt="Github">
+																		<span key="t-gitHub">GitHub</span>
+																</a>
+														</div>
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}/images/brands/bitbucket.png" alt="bitbucket">
+																		<span key="t-bitbucket">Bitbucket</span>
+																</a>
+														</div>
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}/images/brands/dribbble.png" alt="dribbble">
+																		<span key="t-dribbble">Dribbble</span>
+																</a>
+														</div>
+												</div>
+
+												<div class="row no-gutters">
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}/images/brands/dropbox.png" alt="dropbox">
+																		<span key="t-dropbox">Dropbox</span>
+																</a>
+														</div>
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}/images/brands/mail_chimp.png" alt="mail_chimp">
+																		<span key="t-mail-chimp">Mail Chimp</span>
+																</a>
+														</div>
+														<div class="col">
+																<a class="dropdown-icon-item" href="#">
+																		<img src="${contextPath}/images/brands/slack.png" alt="slack">
+																		<span key="t-slack">Slack</span>
+																</a>
+														</div>
+												</div>
+										</div>
+								</div>
+						</div>
+
+
+						<!-- 두번째 알람 아이콘 -->
+						<div class="dropdown d-inline-block">
+								<button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="icon-sm" data-feather="bell"></i>
+										<span class="noti-dot bg-danger"></span>
+								</button>
+								<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+										aria-labelledby="page-header-notifications-dropdown">
+										<div class="p-3">
+												<div class="row align-items-center">
+														<div class="col">
+																<h5 class="m-0 font-size-15" key="t-notifications"> Notifications </h5>
+														</div>
+														<div class="col-auto">
+																<a href="#!" class="small" key="t-mark-read"> Mark all as read</a>
+														</div>
+												</div>
+										</div>
+										<div data-simplebar style="max-height: 230px;">
+												<a href="" class="text-reset notification-item">
+														<div class="media">
+																<div class="avatar-xs mr-3">
+																		<span class="avatar-title bg-primary rounded-circle font-size-16">
+																				<i class="uil-shopping-basket"></i>
+																		</span>
+																</div>
+																<div class="media-body">
+																		<h6 class="mt-0 mb-1" key="t-order-placed">Your order is placed</h6>
+																		<div class="font-size-12 text-muted">
+																				<p class="mb-1" key="t-anguages-grammar">If several languages coalesce the grammar</p>
+																				<p class="mb-0" key="t-3-min-ago"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
+																		</div>
+																</div>
+														</div>
+												</a>
+												<a href="" class="text-reset notification-item">
+														<div class="media">
+																<img src="${contextPath}/images/users/avatar-3.jpg"
+																		class="mr-3 rounded-circle avatar-xs" alt="user-pic">
+																<div class="media-body">
+																		<h6 class="mt-0 mb-1" key="t-james-lemire">James Lemire</h6>
+																		<div class="font-size-12 text-muted">
+																				<p class="mb-1" key="t-simplified-English">It will seem like simplified English.</p>
+																				<p class="mb-0" key="t-1-hours-ago"><i class="mdi mdi-clock-outline"></i> 1 hours ago</p>
+																		</div>
+																</div>
+														</div>
+												</a>
+												<a href="" class="text-reset notification-item">
+														<div class="media">
+																<div class="avatar-xs mr-3">
+																		<span class="avatar-title bg-success rounded-circle font-size-16">
+																				<i class="uil-truck"></i>
+																		</span>
+																</div>
+																<div class="media-body">
+																		<h6 class="mt-0 mb-1" key="t-item-shipped">Your item is shipped</h6>
+																		<div class="font-size-12 text-muted">
+																				<p class="mb-1" key="t-several-grammar">If several languages coalesce the grammar</p>
+																				<p class="mb-0" key="t-3-min-ago"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
+																		</div>
+																</div>
+														</div>
+												</a>
+
+												<a href="" class="text-reset notification-item">
+														<div class="media">
+																<img src="${contextPath}/images/users/avatar-4.jpg"
+																		class="mr-3 rounded-circle avatar-xs" alt="user-pic">
+																<div class="media-body">
+																		<h6 class="mt-0 mb-1" key="t-salena-layfield">Salena Layfield</h6>
+																		<div class="font-size-12 text-muted">
+																				<p class="mb-1" key="t-skeptical-occidental">As a skeptical Cambridge friend of mine occidental.</p>
+																				<p class="mb-0" key="t-1-hours-ago"><i class="mdi mdi-clock-outline"></i> 1 hours ago</p>
+																		</div>
+																</div>
+														</div>
+												</a>
+										</div>
+										<div class="p-2 border-top">
+												<a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+														<i class="uil-arrow-circle-right mr-1"></i> <span key="t-view-more">View More..</span>
+												</a>
+										</div>
+								</div>
+						</div>
+
+
+
+						<!-- 세번째 마이페이지 아이콘 -->
+						<div class="dropdown d-inline-block">
+								<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<img class="rounded-circle header-profile-user" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/users/avatar-4.jpg' />">
+								</button>
+								<div class="dropdown-menu dropdown-menu-right">
+										<!-- item-->
+										<a class="dropdown-item" href="${contextPath }/user/profile/profile.do"><i class="uil uil-user-circle font-size-16 align-middle text-muted mr-1"></i> <span class="align-middle" key="t-view"> View Profile</span></a>
+										<a class="dropdown-item" href="#"><i class="uil uil-wallet font-size-16 align-middle mr-1 text-muted"></i> <span class="align-middle" key="t-my-wallet"> My Wallet</span></a>
+										<a class="dropdown-item d-block" href="#"><i class="uil uil-cog font-size-16 align-middle mr-1 text-muted"></i> <span class="align-middle" key="t-settings"> Settings</span> <span class="badge badge-soft-success badge-pill mt-1 ml-2">03</span></a>
+										<a class="dropdown-item" href="#"><i class="uil uil-lock-alt font-size-16 align-middle mr-1 text-muted"></i> <span class="align-middle" key="t-lock-screen"> Lock screen</span></a>
+										<a class="dropdown-item" href="${contextPath }/logout.do"><i class="uil uil-sign-out-alt font-size-16 align-middle mr-1 text-muted"></i> <span class="align-middle" key="t-sign-out"> Sign out</span></a>
+								</div>
+						</div>
+
+
+				</div>
+		</div>
 </header>
-<nav class="navbar m-3 navbar-expand-sm bg-dark navbar-dark d-flex justify-content-center">
-<ul class="navbar-nav">
-    <li class="nav-item">
-    <!-- <a class="nav-link" href="${contextPath}">Home</a> -->
-		<a class="nav-link" href="${contextPath == '' ? '/' : contextPath}">Home</a>
-		
-    </li>
-    <li class="nav-item">
-    <a class="nav-link" href="${contextPath}/notice/list.do">공지사항</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link" href="${contextPath}/board/list.do">일반게시판</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link" href="#">사진게시판</a>
-    </li>
-</ul>
-</nav>
+<!-- header 끝 -->
 
-<!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭시 보임) -->
-<div class="modal fade" id="loginModal">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-            <h4 class="modal-title">Login</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button> 
-        </div>
 
-        <form action="${contextPath}/member/signin.do" method="post">
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <label for="userId" class="mr-sm-2">ID :</label>
-                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId" required> <br>
-                <label for="userPwd" class="mr-sm-2">Password:</label>
-                <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="userPwd" name="userPwd" required>
-            </div>
-            
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">로그인</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-            </div>
-        </form>
-        </div>
-    </div>
-</div>
+
+
+
