@@ -84,9 +84,9 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <c:forEach var="category" items="${deptList}">
-			            		<option value="${category.deptNo}" ${category.deptNo == user.deptNo ? 'selected' : ''}>
-                    								${category.deptName}
+			            <c:forEach var="d" items="${deptList}">
+			            		<option value="${d.deptNo}" ${d.deptNo == user.deptNo ? 'selected' : ''}>
+                    								${d.deptName}
        								</option>
 			                <tr>
 			                    <td>${dept.deptNo}</td>

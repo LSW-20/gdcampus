@@ -17,29 +17,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/dept")
+@RequestMapping("/board")
 @RequiredArgsConstructor
 @Controller
 public class DeptController {
 
 	 private final DeptService deptService;
-
-    @GetMapping("/")
-    public String redirectToDeptList() {
-        return "redirect:/dept/list"; // 부서관리 페이지로 리다이렉트
-    }
-    
  
     // 부서 목록 조회
     @GetMapping("/dept/list")
-    public String listDept(Model model) {
+    public void listDept(Model model) {
         List<DeptDto> deptList = deptService.selectCategoryDeptDto();
         model.addAttribute("deptList", deptList);
-        return "dept/deptList"; // JSP 템플릿
+//        return "dept/deptList"; // JSP 템플릿
     }
 
     // 부서 추가
-    @PostMapping("/add")
+    @PostMapping("dept/add")
     public ResponseEntity<String> insertDept(@RequestParam String deptName) {
         DeptDto newDept = DeptDto.builder().deptName(deptName).createUser("/*로그인세션user*/").build();
         deptService.insertCategoryDept(newDept);

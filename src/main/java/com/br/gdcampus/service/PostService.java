@@ -14,19 +14,10 @@ public interface PostService {
      * 게시글 기능 관련 작성
      * @author 박한나
      */
-	//test
-//	int test(int num1, int num2);
-	
-    // 게시글 목록 조회 (페이징 처리)
-    int selectPostList();
-    List<PostDto> selectPostList(PageInfoDto pi); // 일부데이터만 조회할
-	
-    
-    
 
-    // 게시글 검색 조회 (키워드/부서/직급별 조회 - 페이징 처리)
-    // 검색 결과 결과가 총 몇개인지를 조회해야함.
-    int selectSearchListCount(Map<String, String> search);
+    // 게시글 목록 조회
+    List<PostDto> selectPostList();
+    
     // 게시글 등록
     int insertPost(PostDto p);
 

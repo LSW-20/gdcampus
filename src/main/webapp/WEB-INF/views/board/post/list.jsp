@@ -48,7 +48,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">학생 List</h4>
+                                    <h4 class="mb-0">게시판</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
@@ -61,15 +61,15 @@
                             </div>
                         </div>
                         <!-- end page title -->
-                        
-												<!--학생추가 모달 창 -->
-												<form action="${contextPath }/student/insertStu" method="POST" id="studentForm">
-												<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+                       
+												<!--게시판 추가 모달 창 -->
+												<form action="${contextPath }/board/post/list.do" method="POST" id="boardForm">
+												<div class="modal fade" id="addboardModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
 												    <div class="modal-dialog modal-dialog-centered">
 												        <div class="modal-content">
 												            <!-- 모달 헤더 -->
 												            <div class="modal-header">
-												                <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+												                <h5 class="modal-title" id="addPostModalLabel">Add Post</h5>
 												                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												                    <span aria-hidden="true">&times;</span>
 												                </button>
@@ -78,17 +78,16 @@
 												            <div class="modal-body">
 												                <!-- Select Fields 세로 정렬 -->
 												                <div class="form-group">
-												                    <label for="select1">학년</label>
-												                    <select class="form-control" id="grade" name="grade" required>
-												                        <option value="1">1</option>
-												                        <option value="2">2</option>
-												                        <option value="3">3</option>
-												                        <option value="4">4</option>
+												                    <label for="select1">게시판유형</label>
+												                    <select class="form-control" id="boardTypeNo" name="boardTypeNo" required>
+												                        <option value="1">공지사항</option>
+												                        <option value="2">자유게시판</option>
+												                        <option value="3">투표게시판</option>
 												                    </select>
 												                </div>
 												                <div class="form-group">
-												                    <label for="select2">학과</label>
-												                    <select class="form-control" id="dept" name="dept" required>
+												                    <label for="select2">제목</label>
+												                    <select class="form-control" id="postTitle" name="postTitle" required>
 												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
 												                        <option value="전자공학과">전자공학과</option>
 												                    </select>
@@ -142,7 +141,7 @@
 												                    </select>
 												                </div>
 												                <div class="form-group">
-												                    <label for="editDept">학과</label>
+												                    <label for="editDept">제목</label>
 												                    <select class="form-control" id="editDept" required>
 												                        <option value="컴퓨터공학과">컴퓨터공학과</option>
 												                        <option value="전자공학과">전자공학과</option>
@@ -209,40 +208,32 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
-                                            
-                                            <c:forEach var="s" items="${ stuList }">
-                                            			<tr>
-																								    <td>
-																								        <div class="custom-control custom-checkbox">
-																								            <input type="checkbox" class="custom-control-input" id="invoicecheck${s.stuNo}">
-																								            <label class="custom-control-label" for="invoicecheck${s.stuNo}"></label>
-																								        </div>
-																								    </td>
-																								    
-																								    <td>${ s.grade }</td>
-																								    <td>${ s.dept }</td>
-																								    <td>${ s.stuName }</td>
-																								    <td>
-																								        <c:choose>
-																								            <c:when test="${ s.status eq 1 }">재학</c:when>
-																								            <c:when test="${ s.status eq 2 }">휴학</c:when>
-																								            <c:when test="${ s.status eq 3 }">졸업</c:when>
-																								            <c:when test="${ s.status eq 4 }">제적</c:when>
-																								        </c:choose>
-																								    </td>
-																								    
-																								    <td>
-																								        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stu-no="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
-																						                <i class="uil uil-pen font-size-18"></i>
-																						            </a>
-																								        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-																								            <i class="uil uil-trash font-size-18"></i>
-																								        </a>
-																								    </td>
-																								</tr>
-
-																	          </c:forEach>
+	                                        <c:forEach var="p" items="${ postList }">
+	                                            			<tr>
+																									    <td>
+																									        <div class="custom-control custom-checkbox">
+																									            <input type="checkbox" class="custom-control-input" id="invoicecheck${p.postNo}">
+																									            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
+																									        </div>
+																									    </td>
+																									    
+																									    <td>${ p.postTitle }</td>
+																									    <td>${ p.registDate }</td>
+																									    <td>${ p.fileStatus }</td>
+																									    <td>${ p.count }</td>
+																									    <td>${ p.postTop }</td>
+																									    
+																									      
+																									    <td>
+																									        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stu-no="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
+																							                <i class="uil uil-pen font-size-18"></i>
+																							            </a>
+																									        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+																									            <i class="uil uil-trash font-size-18"></i>
+																									        </a>
+																									    </td>
+																									</tr>
+																		          </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

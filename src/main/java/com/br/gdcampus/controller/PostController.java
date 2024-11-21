@@ -6,61 +6,58 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 import com.br.gdcampus.service.PostService;
-import com.br.gdcampus.util.PagingUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-		/**
-		 * 게시글 목록 조회 요청
-		 */
+/**
+	 * 게시글 목록 조회 요청
+	 */
 
 @Slf4j
-@RequestMapping("/board")
+@RequestMapping("/board/post")
 @RequiredArgsConstructor
 @Controller
 public class PostController {
 
 	private final PostService postService; 
-	private final PagingUtil pageUtil;
 	
-//	@GetMapping("/post/test")
-//	public String test() {
-//		String str = "덧셈의 결과는 : "; 
-//		System.out.print("111");
-//		return "redirect:/";
-//	}
-//	
+	/**
+	 * 
+	 * 게시글 조회 페이지
+	 * @param currentPage
+	 * 
+	 */
+	
+	@GetMapping("/list")
+	public void postList(Model model) {
+		
+		
+		
+		List<PostDto> list = postService.selectPostList(); 
+		model.addAttribute("postList", list);
+		
+		
+	}
+	/*
+	 * @PostMapping("/list/insert") public String insertPost(@ModelAttribute
+	 * StudentDto p, RedirectAttributes rdAttributes) {
+	 * 
+	 * int result = postInsert(PostDto p);
+	 * 
+	 * return null;
+	 * 
+	 * 
+	 * }
+	 */
+
 	
 	
-	@GetMapping("/post/list.do")
-	public void postList(@RequestParam(value="page", defaultValue="1") int currentPage) {
-		
-		int listCount = postService.selectPostList();
-		
-		PageInfoDto pi = pageUtil.getPageInfoDto(listCount, currentPage, 5,5);
-		List<PostDto> list = postService.selectPostList(pi);
-		
-		// 페이징바에 5개씩 보이게 할거임
-		// 페이징바에 시작수/마지막 끝수 모든것들이 담겨있는페이지 infodto 필요함
-		
-		
-		}
-		
-		/*
-		 * @GetMapping("/post/detail.do") public void postdetail() {
-		 * 
-		 * postService.postdetail();
-		 * 
-		 * }
-		 */
-		 
+
+	 
 		
 }
 		

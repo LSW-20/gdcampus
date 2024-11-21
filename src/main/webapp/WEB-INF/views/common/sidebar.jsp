@@ -75,7 +75,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="#">공지게시판</a></li>
-												<li><a href="#">자유게시판</a></li>
+												<li><a href="${contextPath}/board/post/list">자유게시판</a></li>
 												<li><a href="#">투표게시판</a></li>
 										</ul>
 								</li>
@@ -288,7 +288,7 @@
 												<span class="menu-item">부서 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">부서 조회, 추가, 수정, 삭제</a></li>
+												<li><a href="${contextPath }/board/dept/list">부서 조회, 추가, 수정, 삭제</a></li>
 										</ul>
 								</li>
 
