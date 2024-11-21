@@ -88,7 +88,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalDto selectApprTodoDetail(Map<String, Object> params) {
 		ApprovalDto approval = apprDao.selectApprTodoDetail(params);
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
 		if(approval != null) {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
@@ -102,7 +102,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalDto selectApprUpcomingDetail(Map<String, Object> params) {
 		ApprovalDto approval = apprDao.selectApprUpcomingDetail(params);
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
 		if(approval != null) {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
@@ -118,7 +118,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 		ApprovalDto approval = apprDao.selectMyDocDetail(params);
 		
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
+		
 		if(approval != null) {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);

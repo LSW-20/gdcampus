@@ -42,9 +42,13 @@
             <result column="PRODUCT_PRICE" property="productPrice"/>
         </collection>
     </association>
-    
+
+    <!-- 결재선 정보는 selectApproversList 쿼리 결과를 매핑 -->
+    <collection property="approvers" column="APPR_NO" select="selectApproversList"/>       
+	</resultMap>
+	
 		<!-- 결재선 정보 collection 매핑 추가 -->
-		<collection property="approvers" ofType="ApprLineDto">
+		<resultMap id="apprLineResultMap" type="ApprLineDto">
 			<result column="LINE_NO" property="lineNo"/>
 			<result column="APPR_NO" property="apprNo"/>
 			<result column="USER_NO" property="userNo"/>
@@ -57,13 +61,10 @@
 			<result column="MODIFY_DATE" property="modifyDate"/>
 			<result column="MODIFY_USER" property="modifyUser"/>
 			
-			
-			<result column="USER_NAME" property="userName"/>
+ 			<result column="USER_NAME" property="userName"/>
 			<result column="DEPT_NAME" property="deptName"/>
-			<result column="RANK_NAME" property="rankName"/>
-		</collection>	    
-    		
-	</resultMap>
+			<result column="RANK_NAME" property="rankName"/> 
+		</resultMap>	 	
 	
 	<resultMap id="apprRefResultMap" type="ApprRefDto">
 		<result column="REF_NO" property="refNo"/>
@@ -277,12 +278,12 @@
 		  FROM T_APPROVAL A
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-          JOIN T_USER U
-            ON U.USER_NO = APPR_USER
-          JOIN T_RANK R 
-            ON R.RANK_NO = U.RANK_NO
-          JOIN T_DEPT D
-            ON D.DEPT_NO = U.DEPT_NO
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER
+      JOIN T_RANK R 
+        ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D
+        ON D.DEPT_NO = U.DEPT_NO
 		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
 		   AND L.USER_NO = #{userNo}      <!-- LOGINUSER -->
 		   AND CURR_ORDER &lt; LINE_ORDER   <!-- 현재결재순서  -->   
@@ -294,17 +295,19 @@
 	<select id="selectMyDocDetail" resultMap="approvalResultMap">
 		SELECT 
 		       APPR_NO
+		     , U.USER_NAME as USER_NAME
 		     , APPR_USER
-		     , DEPT_NO
+		     , APPR_TYPE 
+		     , A.DEPT_NO as DEPT_NO
 		     , APPR_DATE
 		     , APPR_CONTENT
 		     , APPR_STATUS
-		     , CREATE_DATE
-		     , MODIFY_DATE
-		     , UPDATE_USER
-		  FROM T_APPROVAL
+		     , A.CREATE_DATE as CREATE_DATE
+		  FROM T_APPROVAL A
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER		  
 		 WHERE APPR_USER = #{userNo}	
-  	   AND APPR_NO = #{apprNo}
+  	   AND A.APPR_NO = #{apprNo}
 	</select>	
 	
 	<!-- 결재문서 상세 -->
@@ -511,7 +514,7 @@
 	   )
 	</insert>	
 	
-	<select id="selectApproversList" resultMap="approvalResultMap">
+	<select id="selectApproversList" resultMap="apprLineResultMap">
 		SELECT LINE_NO
 		     , L.APPR_NO as APPR_NO
 		     , L.USER_NO as USER_NO
@@ -525,13 +528,13 @@
 		     , L.CREATE_DATE as CREATE_DATE
 		     , L.CREATE_USER as CREATE_USER
 		  FROM T_APPR_LINE L
-		  JOIN T_APPROVAL A
+		  LEFT JOIN T_APPROVAL A
 		    ON A.APPR_NO = L.APPR_NO
-		  JOIN T_USER U
+		  LEFT JOIN T_USER U
 		    ON L.USER_NO = U.USER_NO
-		  JOIN T_DEPT D
+		  LEFT JOIN T_DEPT D
 		    ON U.DEPT_NO = D.DEPT_NO
-		  JOIN T_RANK R
+		  LEFT JOIN T_RANK R
 		    ON U.RANK_NO = R.RANK_NO
 		 WHERE L.APPR_NO = #{apprNo}
 	</select>
