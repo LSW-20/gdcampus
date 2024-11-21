@@ -126,6 +126,7 @@
 						height: 270px; 
 						border-top: 1px solid black;
 						display: flex;
+						flex-direction: column;
 						justify-content: center; /* 가로 가운데 정렬 */
 						align-items: center; /* 세로 가운데 정렬 */
 				}
@@ -133,7 +134,8 @@
 
 				#modify-equip-table{
 						width: 400px;
-						height: 220px;
+						height: 200px;
+						margin-bottom: 10px;
 				}
 				#modify-equip-table td{
 						border: 1px solid black;
@@ -155,7 +157,7 @@
 				}
 				#modify-facility-table{
 						width: 400px;
-						height: 220px;
+						height: 200px;
 				}
 				#modify-facility-table td{
 						border: 1px solid black;
@@ -249,7 +251,7 @@
 
 										<!-- top-child2 시작 -->
 										<div id="top-child2">
-												<div id="top-child2-1">비품 수정창</div>
+												<div id="top-child2-1">비품 추가/수정창</div>
 
 												<div id="top-child2-2">
 														<div id="top-child2-2-1">
@@ -276,6 +278,8 @@
 																				<td>Lenovo ThinkPad X1 Carvon Gen 9</td>
 																		</tr>
 																</table>
+
+																<button>추가</button>
 														</div>
 												</div>
 										</div>

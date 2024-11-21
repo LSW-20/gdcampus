@@ -318,7 +318,7 @@
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/equipAndFacility/manageCategory">비품, 시설 카테고리 관리</a></li>
+												<li><a href="${contextPath }/equipmentAndFacility/manageCategory">비품, 시설 카테고리 관리</a></li>
 										</ul>
 								</li>
 

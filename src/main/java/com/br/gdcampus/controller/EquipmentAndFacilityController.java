@@ -7,17 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.br.gdcampus.service.UserService;
+import com.br.gdcampus.service.EquipmentAndFacilityService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/equipAndFacility")
+@RequestMapping("/equipmentAndFacility")
 @RequiredArgsConstructor
 @Controller
-public class EquipAndFacilityController {
+public class EquipmentAndFacilityController {
 
-	private final UserService userService;
+	private final EquipmentAndFacilityService equipmentAndFacilityService;
+	
 	private Logger logger = LoggerFactory.getLogger(ChatController.class);
 	
 	

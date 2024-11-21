@@ -45,6 +45,5 @@ public interface ChatService {
     
     // 채팅방 초대 - 상우
     // int inviteChatRoom(String[] userNo);
-
     
 }
