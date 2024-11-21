@@ -222,7 +222,17 @@ public class UserDao {
 	
 	/**
 	 * 직급여러행삭제
+	 * 미완성
 	 */
 	public int deleteRanks(List<Integer> rankNoList) {
 	    return sqlSession.delete("userMapper.deleteRanks", rankNoList);
-	}}
+	}
+	
+	/**
+	 * 회원탈퇴
+	 */
+	public int resignUser(String userNo) {
+		return sqlSession.update("userMapper.resignUser",userNo);
+	}
+}
+

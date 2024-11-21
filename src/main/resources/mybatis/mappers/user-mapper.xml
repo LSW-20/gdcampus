@@ -476,4 +476,10 @@
 	        #{rankNo}
 	    </foreach>
 	</delete>
+	<!-- 회원탈퇴 -->
+	<update id="resignUser">
+		update t_user
+			 set user_status = 'N'
+		 where user_no = #{userNo}
+	</update>
 </mapper>

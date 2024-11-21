@@ -30,7 +30,7 @@
         <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
 </head>
-<body data-sidebar="dark">
+<body data-topbar="dark" data-sidebar="dark">
 	<div id="layout-wrapper">
 		<!-- header 시작 -->
 		<jsp:include page="/WEB-INF/views/common/header.jsp" />

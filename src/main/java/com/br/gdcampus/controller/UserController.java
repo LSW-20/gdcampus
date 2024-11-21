@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -477,4 +480,44 @@ public class UserController {
 	    return response;
 	}
 	
+	/**
+	 * 회원탈퇴페이지
+	 *
+	*/
+	@GetMapping("/profile/resign.do")
+	public void resign() {}
+	
+	
+
+    @PostMapping("/resign.do")
+    public String resignBtn(String pwd, String userPwd, String userNo, RedirectAttributes rdAttributes, HttpSession session) {
+    	
+    	//비밀번호 미입력시
+		if(pwd == null || pwd.isEmpty()) {
+			rdAttributes.addFlashAttribute("alertMsg", "비밀번호를 입력해주세요.");
+            return "redirect:/user/profile/resign.do";
+        }
+		
+		//비밀번호가 일치했을 경우
+        if(bcryptPwdEncoder.matches(pwd,userPwd)) {
+        	int result = userService.resignUser(userNo);
+        	if (result > 0) {
+                session.invalidate();
+
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴가 완료되었습니다.");
+
+                return "redirect:/";
+            } else {
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴 처리에 실패하였습니다.");
+                return "redirect:/user/profile/resign.do";
+            }
+        	
+        //비밀번호가 틀렸을경우
+        }else {
+        	rdAttributes.addFlashAttribute("alertMsg", "비밀번호가 틀렸습니다.");
+            return "redirect:/user/profile/resign.do";
+        }
+	      
+    	
+    }
 }

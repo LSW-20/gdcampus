@@ -3,6 +3,8 @@ package com.br.gdcampus.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.RankDto;
 import com.br.gdcampus.dto.UserDto;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -307,6 +310,15 @@ public class UserServiceInpl implements UserService {
 	public int deleteRanks(List<Integer> rankNoList) {
 	    return userDao.deleteRanks(rankNoList);
 	}
+	
+	/**
+	 * 회원탈퇴
+	 */
+	@Override
+	public int resignUser(String userNo) {
+		return userDao.resignUser(userNo);
+	}
+	
 	
 	
 

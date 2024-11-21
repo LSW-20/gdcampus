@@ -44,4 +44,8 @@ public class MvcController {
 	    // 로그아웃 후 메인 페이지나 로그인 페이지로 리다이렉트
 	    return "redirect:/";  // 로그인 페이지로 리다이렉트 (예시)
 	}
+	@GetMapping("/test.do")
+	public void test() {
+		
+	}
 }
