@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.ClassDao;
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
@@ -94,6 +95,12 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public int updatePlanList(ClassDto c) {
 		return 0;
+	}
+
+	@Override
+	public List<CategoryDto> selectCategory(String string) {
+		// 학과 조회
+		return classDao.selectCategory(string);
 	}
 
 }

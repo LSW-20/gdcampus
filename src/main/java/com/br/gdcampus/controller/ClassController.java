@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
@@ -169,20 +170,35 @@ public class ClassController {
 	}
 	
 	/**교수측 신청폼으로 이동
-	 * @param yytt classNo의 앞부분(년도두자리+학기+_+교수의소속학과번호+_)
+	 * @param yytt classNo의 앞부분(년도두자리+학기+_)
 	 * @param limit 시수 제한
 	 * @param session 
 	 * @param model
 	 */
 	@GetMapping("/opning/prof/addForm.do")
 	public void classAddForm(String yytt, String limit, HttpSession session, Model model) {
-		//개설학기, 년도, limit값을 받아서 보내줘야함
+		//개설학기+년도, limit값, 모든학과, 로그인한 회원정보를 보내줘야함
 		log.debug("yytt : "+yytt);
 		log.debug("limit : "+limit);
+		
+		List<CategoryDto> deptList =  classService.selectCategory("T_ST_DEPT");
+		String deptName = null;
+		for(CategoryDto c : deptList) {
+			if(c.getStDeptNo().equals(((UserDto)session.getAttribute("loginUser")).getStDeptNo())) {
+				deptName = c.getDeptName();
+			}
+		}
 		
 		model.addAttribute("classCode", yytt);
 		model.addAttribute("limit", Integer.parseInt(limit));
 		model.addAttribute("user", ((UserDto)session.getAttribute("loginUser")));
+		model.addAttribute("deptList", deptList);
+		model.addAttribute("deptName", deptName);
+	}
+	
+	@PostMapping("opning/prof/regist.do")
+	public String registOpningForm(ClassDto c) {
+		return "redirect:/class/opning/prof/list.do";
 	}
 	
 }

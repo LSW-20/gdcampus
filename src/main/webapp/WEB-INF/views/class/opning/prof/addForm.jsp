@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html>
@@ -54,208 +55,262 @@
 					<div class="text-center">
 						<h3>강의 개설 신청서</h3>
 					</div>
-					<div class="float-right mb-5">
-						<p>신청일자 : ${c.applDate}</p>
-						<p>limit : ${limit}</p>
-						<p>classCode : ${classCode}</p>
-					</div>
-					<div class="mt-5 mb-3">
+					<form action="${contextPath }/class/opning/prof/regist.do" method="post" class="was-validated" id="addForm">
 						
-						<div class="table-responsive mb-4 ">
-							<p class="text-danger">*기본 정보가 일치하는지 확인해주세요</p>
+						<div class="float-right mb-5">
+							<c:set var="today" value="<%=new java.util.Date()%>" />
+							<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyy-MM-dd" /></c:set>
+							<p>신청일자 : ${date}</p>
+							<p>limit : ${limit}</p>
+							<p>classCode : ${classCode}</p>
+						</div>
+						<div class="mt-5 mb-3">
+							
+							<div class="table-responsive mb-4 ">
+								<p class="text-danger">*신청자 기본 정보</p>
+								<hr>
+								<table class="table table-bordered mb-0" style="table-layout: fixed">
+									<thead>
+										<tr class="">
+											<th width="15%" scope="col">신청자명</th>
+											<th width="15%" scope="col"class="text-primary">${ user.userName }</th>
+											<c:set var = "year" value = "${fn:substring(classCode, 0, 2)}" />
+	     									<c:set var = "term" value = "${fn:substring(classCode, 3, 4)}" />
+											<th width="20%" scope="col">개설년도</th>
+											<th width="20%" scope="col" class="text-primary">20${year}년도</th>
+											<th width="15%" scope="col">개설학기</th>
+											<th width="15%" scope="col" class="text-primary">${term}학기</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="">
+											<th>소속학과</th>
+											<th class="text-primary">${ deptName }</th>
+											<th>이메일</th>
+											<th class="text-primary">${user.email }</th>
+											<th>연락처</th>
+											<th class="text-primary">${user.phone eq null ? '미기입' : user.phone}</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+		
+						</div>
+						<hr>
+						<br>
+						<div class="mt-2 mb-5">
+							
+							<div class="m-3">
+							
+								<div class="form-group row">
+	                                <label for="example-text-input1" class="col-md-2 col-form-label">강의명</label>
+	                                <div class="col-md-5">
+	                                    <input required class="form-control" type="text" id="example-text-input1" name="classTitle">
+	                                </div>
+	                                
+	                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학과</label>
+	                                <div class="col-md-3">
+	                                   	<select class="custom-select" name="deptName" id="deptName">
+											<c:forEach var="category" items="${deptList}">
+	               								<option value="${category.deptNo}">
+	                   								${category.deptName}
+	               								</option>
+	           								</c:forEach>
+										</select>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="form-group row">
+	                                <label for="example-text-input1" class="col-md-2 col-form-label">강의유형</label>
+	                                <div class="col-md-5">
+	                                    <select class="custom-select" name="classType" id="classType">
+											<option value="전공선택">전공선택</option>
+	               							<option value="전공필수">전공필수</option>
+	               							<option value="교양선택">교양선택</option>
+	               							<option value="교양필수">교양필수</option>
+										</select>
+	                                </div>
+	                                
+	                                <label for="example-text-input2" class="col-md-2 col-form-label">진행방식</label>
+	                                <div class="col-md-3">
+	                                   <select class="custom-select" name="prgMethod" id="prgMethod">
+											<option value="대면">대면</option>
+	               							<option value="비대면">비대면</option>
+										</select>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="form-group row">
+	                                <label for="example-text-input1" class="col-md-2 col-form-label">시수</label>
+	                                <div class="col-md-5">
+	                                    <select class="custom-select" name="classHours" id="classHours">
+											<c:forEach var="i" begin="1" end="${limit }" >
+												<option value="${i }"><c:out value="${i}"></c:out>시간</option>
+											</c:forEach>
+										</select>
+	                                </div>
+	                                
+	                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학년</label>
+	                                <div class="col-md-3">
+		                                <select class="custom-select" name="targetGrade" id="taget">
+											<option value="1">1학년</option>
+		             						<option value="2">2학년</option>
+		             						<option value="3">3학년</option>
+		             						<option value="4">4학년</option>
+		             						<option value="5">전체</option>
+										</select>
+	                              	</div>                           
+	                            </div>    
+	                                                   
+							</div>
+		
+						</div>
+						
+						<hr>
+							<div class="form-group mt-4 mb-4">
+	                            <label>수업목표</label>
+	                            <div>
+	                                <textarea required class="form-control" rows="5" style="height: 131px;" name="classGoals"></textarea>
+	                            </div>
+	                        </div>
+						<hr>
+						<div class="form-group mt-4 mb-4">
+	                            <label>운영방안</label>
+	                            <div>
+	                                <textarea required class="form-control" rows="5" style="height: 131px;" name="operationPlan"></textarea>
+	                            </div>
+	                    </div>
+						<h5>평가방식</h5>
+						<div class=" mt-2 mb-4" >
 							<table class="table table-bordered mb-0" style="table-layout: fixed">
-								<thead>
-									<tr class="table-secondary">
-										<th width="15%" scope="col">신청자명</th>
-										<th width="15%" scope="col"class="text-primary">${ user.userName }</th>
-										<c:set var = "year" value = "${fn:substring(classCode, 0, 2)}" />
-     									<c:set var = "term" value = "${fn:substring(classCode, 3, 4)}" />
-										<th width="20%" scope="col">개설년도</th>
-										<th width="20%" scope="col" class="text-primary">20${year}년도</th>
-										<th width="15%" scope="col">개설학기</th>
-										<th width="15%" scope="col" class="text-primary">${term}학기</th>
-									</tr>
-								</thead>
-							</table>
-						</div>
-	
-					</div>
-					<hr>
-					<div class="mt-2 mb-3">
-						
-						<div class="m-3">
-						
-							<div class="form-group row">
-                                <label for="example-text-input1" class="col-md-2 col-form-label">강의명</label>
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" value=" " id="example-text-input1">
-                                </div>
-                                
-                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학과</label>
-                                <div class="col-md-3">
-                                    <input class="form-control" type="text" value=" " id="example-text-input2">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label for="example-text-input1" class="col-md-2 col-form-label">강의유형</label>
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" value=" " id="example-text-input1">
-                                </div>
-                                
-                                <label for="example-text-input2" class="col-md-2 col-form-label">진행방식</label>
-                                <div class="col-md-3">
-                                    <input class="form-control" type="text" value=" " id="example-text-input2">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label for="example-text-input1" class="col-md-2 col-form-label">시수</label>
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" value=" " id="example-text-input1">
-                                </div>
-                                
-                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학년</label>
-                                <div class="col-md-3">
-                                    <input class="form-control" type="text" value=" " id="example-text-input2">
-                              	</div>                           
-                            </div>    
-                                                   
-						</div>
-	
-					</div>
-					
-					<h5>수업목표</h5>
-					<hr>
-					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
-						${c.classGoals}
-					</div>
-					<h5>운영방안</h5>
-					<hr>
-					<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
-						${c.operationPlan}
-					</div>
-					<h5>평가방식</h5>
-					<div class=" mt-2 mb-4" >
-						<table class="table table-bordered mb-0" style="table-layout: fixed">
-							<tr class="table-secondary">
-								<th width="17%">중간고사</th>
-								<th width="17%">기말고사</th>
-								<th width="17%">실습/과제</th>
-								<th width="17%">출결</th>
-								<th width="17%">기타</th>
-								<th width="15%">합계</th>
-							</tr>
-							<tr style="background-color: #F2F2F2;">
-								<c:set var ="sum" value ="20" />
-									<td id="middle">
-										<c:forEach var="eva" items="${c.evaList}">
-											<c:if test="${eva.evaItem eq '중간고사' }">
-												<c:set var ="sum" value ="${sum + eva.allocation}"/>
-												${eva.allocation}
-											</c:if>
-										</c:forEach>
+								<tr class="table-secondary">
+									<th width="17%">중간고사</th>
+									<th width="17%">기말고사</th>
+									<th width="17%">실습/과제</th>
+									<th width="17%">출결(고정)</th>
+									<th width="17%">기타</th>
+									<th width="15%">합계</th>
+								</tr>
+								<tr style="background-color: #F2F2F2;">
+									<td>
+										<input type="number" class="allocation" id="middle">
 									</td>
-									<td id="final">
-										<c:forEach var="eva" items="${c.evaList}">
-											<c:if test="${eva.evaItem eq '기말고사' }">
-												<c:set var ="sum" value ="${sum + eva.allocation}"/>
-												${eva.allocation}
-											</c:if>
-										</c:forEach>
+									<td>
+										<input type="number" class="allocation" id="final">
 									</td>
-									<td id="work">
-										<c:forEach var="eva" items="${c.evaList}">
-											<c:if test="${eva.evaItem eq '실습/과제' }">
-												<c:set var ="sum" value ="${sum + eva.allocation}"/>
-												${eva.allocation}
-											</c:if>
-										</c:forEach>
+									<td>
+										<input type="number" class="allocation" id="work">
 									</td>
 									<td>20</td>
-									<td id="etc">
-										<c:forEach var="eva" items="${c.evaList}">
-											<c:if test="${eva.evaItem eq '기타' }">
-												<c:set var ="sum" value ="${sum + eva.allocation}"/>
-												${eva.allocation}
-											</c:if>
-										</c:forEach>
+									<td >
+										<input type="number" class="allocation" id="etc">
 									</td>
-									<td id="sum"><c:out value="${sum}"/></td>								
-	            			</tr>
-            			</table>
-					</div>
-					<h5>평가상세</h5>
-					<hr>
-					<div style="min-height:100px">
-						<table class="table mb-0" style="table-layout: fixed">
-							<c:forEach var="eva" items="${c.evaList}">
-								<tr class="table-secondary">
-									<th style="width:20%">${eva.evaItem}</th>
-									<td style="background-color: #F2F2F2;">${eva.evaDetail eq null or "" ? "미기입" : eva.evaDetail}</td>
-								</tr>
-							</c:forEach>
-						</table>
-					</div>
-					<h5>교재</h5>
-					<hr>
-					<div class=" mt-2 mb-4">
-						<table class="table mb-0" style="table-layout: fixed">
-							<tr class="table-secondary">
-								<th width="20%">주교재</th>
-								<td style="background-color: #F2F2F2;">${c.mainTextBook}</td>
-							</tr>
-							<tr class="table-secondary">
-								<th width="20%">참고서적</th>
-								<td style="background-color: #F2F2F2;">${c.refnBook eq null ? '' : c.refnBook}</td>
-							</tr>
-						</table>
-					</div>
-					<c:if test="${c.status eq '보완요청' or c.status  eq '반려' or  c.status  eq '취소' }">
-						<h5>${c.status} 사유</h5>
+									<td id="sum"></td>								
+		            			</tr>
+	            			</table>
+	            			<div class="d-flex flex-row-reverse text-danger">
+	            				<p id="allowMsg" class="mt-1"></p>
+	            			</div>
+						</div>
+						<h5>평가상세</h5>
 						<hr>
-						<div class=" bg-light container border mt-2 mb-4" style="min-height:100px">
-							${c.reason}
+						<div style="min-height:100px" id="detailBox">
+	
+						
+	
 						</div>
-					</c:if>
-					<div class="row"> 
-						<div class="col-8">
-							<div class="mt-1" id="reasonBox" hidden>
-								취소사유
-								<textarea required class="form-control" rows="5" id="reason"></textarea>
+						<h5>교재</h5>
+						<hr>
+						<div class=" mt-2 mb-4 row">
+							<div class="col">
+								<label>주교재</label>
+								<textarea required class="form-control" rows="2" style="height: 50px;" name="mainTextBook"></textarea>
+							</div>
+							<div class="col">
+								<label>참고서적</label>
+								<textarea class="form-control" rows="2" style="height: 50px;" name="refnBook"></textarea>
 							</div>
 						</div>
-						<div class="col-4">
-							<div class="float-sm-center">
-								
-								<div class="row mt-4">
-								<c:if test="${c.status eq '보완완료' or c.status  eq '접수'or c.status  eq '보완요청'or c.status }">
-									<div class="select col pl-0">							
-											<a class="btn btn-primary w-md mr-3 col" id="opStatus">신청 취소</a>
-										
-										</div>
-										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
-									</c:if>
-								</div>
-								
-								<div class="row mt-4">
-									<a class="btn btn-primary w-md mr-3 col" href="${contextPath }/class/opning/prof/list.do">목록</a>
-								</div>
-								<input type="hidden" value="${c.classCode }">
-							</div>
+						<div class="row mt-5 d-flex justify-content-center">
+							<a class="btn btn-primary w-md mr-3 col-2" href="${contextPath }/class/opning/prof/list.do">목록</a>
+							<a class="btn btn-primary w-md mr-3 col-2" id="registBtn">신청</a>
 						</div>
-					</div>
+						<input type="hidden" value="${c.classCode }">
+					</form>
 				</div>
 			</div>
 		</div>
 		<!-- main-content 끝 -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
-	    $('#opStatus').on('click', function() {
-	    	console.log('${c.evaList}');
-	    	$('#reason').val('');
-	    	$('#reasonBox').removeAttr('hidden');
+		var sum;
+		var allOk = false;
+		var detail = '';
+		
+		$('#registBtn').on('click', function(){
+			if(confirm('신청서를 제출하시겠습니까?')){
+				$("#addForm").submit();			
+				return false; 
+			}
+		})
+		
+	    $('.allocation').on('blur', function() {
+	    	$('#detailBox').html('');
+	    	detail = '';
+    		sum = 20;
+    		var no = 0;
+    		
+	    	$(".allocation").each(function(){
+	    		sum += Number($(this).val());
+	    		
+
+		    	console.log($(this).attr('id'));
+		    	
+		    	if($(this).val() != null && $(this).val() != ''){
+		    		
+		    		$(this).attr('name','evaList['+ no +'].allocation');
+		    		
+		    		detail += '<div class="form-group mt-4 mb-4">'
+		                   +  	'<label name="evaList['+ no +'].evaItem">';
+		             	   if($(this).attr('id') == 'middle'){
+		             		   detail += '중간고사';
+		             	   }else if($(this).attr('id') == 'final'){
+		             		   detail += '기말고사';
+		             	   }else if($(this).attr('id') == 'work'){
+		             		   detail += '실습/과제'; 
+		             	   }else{
+		             		   detail += '기타';
+		             	   };
+		            detail +='</label>'
+		             	   + 	'<div>'
+		             	   + 		'<textarea required class="form-control" rows="5" style="height: 80px;" id="'+$(this).attr('id')+'Dt" name="evaList['+ no++ +'].evaDetail"></textarea>'
+		       			   +	'</div>'
+		         		   + '</div>';
+					console.log(detail);
+		    	}else{
+		    		$(this).attr('name','');
+		    	}
+	    					    			    
+	    	})
+	    	
+	    	$('#detailBox').html(detail);
+	    	
+	    	$('#sum').html(sum);
+	    	
+	    	if(sum == 100){
+	    		allOk = true;
+	    		$('#allowMsg').html('');
+	    		$('#registBtn').attr('href','${contextPath}/class/opning/prof/regist.do');
+	    		$('#registBtn').addClass('btn-primary');
+	    	}else{
+	    		allOk = false;
+	    		$('#allowMsg').html('총점을 100으로 맞춰주세요');
+	    		$('#registBtn').removeClass('btn-primary');
+	    	}
+
 	    });
+	    
+	    
 		function fn_updateStatus(){
   			
   			if($('#reason').val() == ''){
@@ -287,6 +342,7 @@
   		}
 		</script>
 	</div>
+	
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 </body>
 </html>

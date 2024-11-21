@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
@@ -45,6 +46,9 @@ public class ClassDao {
 	}
 	public int selectSumClassTime(Map<String, String> search) {
 		return sqlSession.selectOne("classMapper.selectSumClassTime",search);
+	}
+	public List<CategoryDto> selectCategory(String category) {
+		return sqlSession.selectList("userMapper.selectCategory",category);
 	}
 
 	

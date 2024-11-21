@@ -182,24 +182,19 @@
 	<!-- 개설신청한 수업이 총 몇시수인지 조회 -->
 	<select id="selectSumClassTime" resultType="_int">
 		SELECT 
-	    	   NVL(SUM(C.CLASS_HOURS),0) AS SUM
-		  FROM 
-	    	   T_CLASS C
-		  JOIN 
-	    	   T_OPEN_APPL O
-			ON 
-	    	   C.CLASS_CODE = O.CLASS_CODE
-		 WHERE 
-		       O.STATUS IN ('접수','승인', '보완요청', '보완완료') 
-		   AND C.USER_NO = #{userNo}
-		   AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
-		   AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
-		 GROUP 
-		    BY SUBSTR(C.CLASS_CODE, 1, 2), 
-	           SUBSTR(C.CLASS_CODE, 4, 1), 
-	    	   C.USER_NO
-		 ORDER 
-		    BY SUBSTR(C.CLASS_CODE, 1, 2)
+	    	   NVL(SUM(CASE 
+	           		   WHEN O.STATUS IN ('접수', '승인', '보완요청', '보완완료')
+	                    AND C.USER_NO = #{userNo}
+	                    AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
+	                    AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
+	               	   THEN C.CLASS_HOURS 
+	               	   ELSE 0 
+	           			END), 0) AS SUM
+		 FROM 
+	    	  T_CLASS C
+		 LEFT JOIN 
+	    	  T_OPEN_APPL O
+	       ON C.CLASS_CODE = O.CLASS_CODE
 	</select>
 	<!-- 강의신청 수정(보완)/교수 -->
 
