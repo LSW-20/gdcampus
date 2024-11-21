@@ -401,6 +401,7 @@
 														})
 												}
 							        	
+							        	// 오른쪽 채팅방 영역에 채팅방 참여인원 표시하기
 							        	let allPeople = "";
 							        	userChatRoomList.forEach(function(UserChatRoomDto){
 							        		allPeople += UserChatRoomDto.userName + ", ";
@@ -409,7 +410,7 @@
 							        	$('#all-people').text(allPeople);
 							        	
 							        	
-							        	
+							        	// 메세지 불러와서 화면에 띄우기
 				        		    chatMessageList.forEach(function(messageDto) {
 												    
 				        		    		let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
