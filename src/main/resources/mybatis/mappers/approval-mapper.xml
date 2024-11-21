@@ -96,7 +96,7 @@
 	<!-- 결재대기문서함 -->
   <select id="selectApprTodoList" resultMap="approvalResultMap">
 		SELECT
-		       A.APPR_NO as APPR_USER
+		       A.APPR_NO as APPR_NO
 		     , APPR_USER
 		     , DEPT_NO
 		     , APPR_TYPE
@@ -243,6 +243,7 @@
 		     , APPR_STATUS
 		     , LINE_NO
 		     , L.USER_NO as USER_NO
+		     , CURR_ORDER
 		     , LINE_ORDER
 		     , LINE_STATUS
 		     , LINE_DATE
@@ -251,7 +252,7 @@
 		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
 		 WHERE USER_NO = #{userNo}    <!-- LOGINUSER 가져오거나 INTERCEPTOR추가하거나-->
-		   AND APPR_STATUS IN(2,3)    <!-- 승인,반려 -->
+		   AND LINE_ORDER = CURR_ORDER
 		   AND A.APPR_NO = #{apprNo}  <!-- 상세로 불러올 문서번호 요청 -->  
   </select>
   
