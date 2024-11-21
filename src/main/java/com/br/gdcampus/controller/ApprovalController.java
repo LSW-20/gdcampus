@@ -176,20 +176,24 @@ public class ApprovalController {
 	        if("기안서".equals(approval.getApprType())) {
 	            approval.setDraft(draft);
 	        } else if("품의서".equals(approval.getApprType())) {
-	            // 품목 리스트 처리
+	        	
+	        	System.out.println("Controller 품의서 데이터: " + approval.getPurchDraft());
+
+	        	List<PurchaseHistoryDto> items = new ArrayList<>();
+	        	// 품목 리스트 처리
 	            if(productNos != null && !productNos.isEmpty()) {
-	                List<PurchaseHistoryDto> items = new ArrayList<>();
 	                for(int i=0; i<productNos.size(); i++) {
-	                    items.add(PurchaseHistoryDto.builder()
+	                    PurchaseHistoryDto item = PurchaseHistoryDto.builder()
 	                            .productNo(productNos.get(i))
 	                            .productName(productNames.get(i))
 	                            .productUnit(productUnits.get(i))
 	                            .productAmt(productAmts.get(i))
 	                            .productPrice(productPrices.get(i))
-	                            .build());
+	                            .build();
+	                    items.add(item);
 	                }
-	                purchDraft.setPurchaseItems(items);
 	            }
+	            purchDraft.setPurchaseItems(items);
 	            approval.setPurchDraft(purchDraft);
 	        }
 
