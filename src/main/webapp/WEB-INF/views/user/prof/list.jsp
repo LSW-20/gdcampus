@@ -56,10 +56,9 @@
 								</div>
 								<!-- 체크박스가 눌렸을때만 보이게 -->
 								<div class="search-box ml-2">
-									<div class="position-relative">
-										<a href="#" class="btn btn-danger waves-effect waves-light">
-										<i class="uil-minus mr-2"></i> 퇴사처리</a>
-									</div>
+									<button id="delBtn" class="btn btn-danger waves-effect waves-light" style="display: none;" type="button">
+    									<i class="uil-minus mr-2"></i> 퇴사처리
+									</button>
 								</div>
 
 							</div>
@@ -105,15 +104,12 @@
 						</div>
 						<!-- end row -->
 						<div class="table-responsive custom-table mb-4 ">
-							<table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+							<table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" 
+								   style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;" id="tableContent">
 								<thead>
 									<tr class="bg-transparent">
 										<th scope="col" style="width: 50px;">
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input"
-													id="checkAll"> <label class="custom-control-label"
-													for="checkAll"></label>
-											</div>
+	
 										</th>
 										<th scope="col">사원번호</th>
 										<th scope="col">교수명</th>
@@ -162,6 +158,9 @@
 		});
 	    
 	    function listDo(page){
+	    	
+	    	 $('#delBtn').css('display', 'none');
+	    	
 	        $.ajax({
 	            url: '${contextPath}/user/prof/listContent.do', 
 	            data: 
@@ -185,13 +184,22 @@
 	                userList.forEach(function(user) {
 	                	
 	                	var status = user.userStatus === 'Y' ? '재직' : '퇴직';	             
-
-	                	tbody += '<tr>'
-	                             +'<th scope="row">'
-	                             +   '<div class="custom-control custom-checkbox">'
-	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+'">'
-	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
-	                             +   '</div>'
+						
+	                	if(status == '퇴직'){
+	                		tbody += '<tr class="table-secondary">';
+	                	}else{
+	                		tbody += '<tr>';
+	                	}
+	                	
+	                	tbody +=    '<th scope="row">'
+	                             +   '<div class="custom-control custom-checkbox">';
+	                             
+	                     		 if(status == '재직'){
+	                    			tbody +=       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+'" value="'+user.userNo+'">'
+	                    			      +				'<label class="custom-control-label" for="contacusercheck'+num+'"></label>';
+	                     		 }
+	                     		 
+	                    tbody +=     '</div>'
 	                             +'</th>'
 	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/user/prof/detail.do?userNo=' + user.userNo + '\';">'+user.userNo+'</td>'
 	                             +'<td>'+user.userName+'</td>'
@@ -232,8 +240,49 @@
 	            }
 	        });    	
 	    }
-	</script>
 
+	
+	    $(document).ready(function () {
+	        $('#tableContent').on('click', ':checkbox', function () {
+	            if ($(':checkbox:checked').length >= 1) {
+	                $('#delBtn').css('display', '');
+	            } else {
+	                $('#delBtn').css('display', 'none');
+	            }
+	        });
+
+	        $('#delBtn').click(function (evt) {
+	        	 evt.preventDefault();
+	            const count = $(':checkbox:checked').length;
+	            if (confirm(count + '명의 회원을 탈퇴처리 하시겠습니까?')) {
+	                let arr = [];
+	                $(":checkbox:checked").each(function () {
+	                    arr.push($(this).val());
+	               		console.log(arr);
+	                });
+	                $.ajax({
+	                    url: '${contextPath}/user/deleteUser.do',
+	                    method: 'POST',
+	                    data: { delUser: JSON.stringify(arr) },
+	                    success: function (res) {
+	                    	if(res == 'SUCCESS'){
+	                    		alert(count + "명의 회원이 성공적으로 탈퇴 처리되었습니다.");
+	 	                        location.reload();
+	                    	}else{
+	                    		 alert("탈퇴처리에 실패하였습니다.");
+	                    	}
+	                 
+	                    },
+	                    error: function (e) {
+	                        alert(e,"탈퇴처리에 실패하였습니다.");
+	                    }
+	                });
+	            }
+	        });
+	    });
+
+		
+	</script>
 
 
 	</div>

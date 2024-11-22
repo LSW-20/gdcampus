@@ -266,7 +266,7 @@
 		  WHERE USER_NO = #{userNo}
 	</update>
 	<!-- 퇴직 처리 -->
-	<update id="e">
+	<update id="deleteUser">
 		UPDATE T_USER
 	       SET LEAVE_DATE = to_date(SYSDATE,'RR/MM/DD')
 	     , USER_STATUS = 'N'

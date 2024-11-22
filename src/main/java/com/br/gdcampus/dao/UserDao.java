@@ -71,6 +71,10 @@ public class UserDao {
 		return sqlSession.insert("userMapper.insertProf",user);
 	}
 	
+	public int deleteUser(Map<String, String> delInfo) {
+		return sqlSession.delete("userMapper.deleteUser",delInfo);
+	}
+	
 	//--------------------------------------인사팀 끝----------------------------------------------
 			
 	/**

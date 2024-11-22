@@ -36,7 +36,7 @@ public interface UserService {
 	int updateProf(UserDto user);
 		
 	//직원 퇴사처리
-	int deleteUser(String loginUserNo, String userNo);
+	int deleteUser(Map<String, String> delInfo);
 	//비밀번호 초기화
 	int PwdReset(UserDto user);
 	//카테고리 조회
