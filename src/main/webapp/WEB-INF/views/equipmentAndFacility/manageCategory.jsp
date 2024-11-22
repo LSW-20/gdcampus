@@ -148,7 +148,7 @@
 				}
 
 				.modal-content {
-						 width: 600px !important; 
+						width: 600px !important; 
 				}
 				#modify-facility-table-div{
 						display: flex;
@@ -162,6 +162,10 @@
 				#modify-facility-table td{
 						border: 1px solid black;
 						padding-left: 10px;
+				}
+
+				#equipmentSelectDiv, #facilitySelectDiv{
+						display: none;
 				}
 		</style>
 
@@ -208,12 +212,12 @@
 														<span class="large-name">구분</span> &nbsp;&nbsp;
 
 														<span class="radio-or-select">
-																<input type="radio" id="" name="" value="" checked>
-																<label for="">전체</label> &nbsp;&nbsp;
-																<input type="radio" id="" name="" value="">
-																<label for="">비품</label> &nbsp;&nbsp;
-																<input type="radio" id="" name="" value="">
-																<label for="">시설</label> &nbsp;&nbsp;
+																<input type="radio" id="all" name="classification" value="all" onclick="radioSelect('all')">
+																<label for="all">전체</label> &nbsp;&nbsp;
+																<input type="radio" id="equipment" name="classification" value="equipment" onclick="radioSelect('equipment')">
+																<label for="equipment">비품</label> &nbsp;&nbsp;
+																<input type="radio" id="facility" name="classification" value="facility" onclick="radioSelect('facility')">
+																<label for="facility">시설</label> &nbsp;&nbsp;
 														</span>
 
 												</div>
@@ -224,22 +228,14 @@
 
 														<span class="radio-or-select">
 																<span id="equipmentSelectDiv">
-																		<select name="">
-																				<option value="" selected>비품 전체</option>
-																				<option value="">노트북</option>
-																				<option value="">키보드</option>
-																				<option value="">마우스</option>
-																				<option value="">의자</option>
+																		<select name="equipment">
+																				<option selected>비품 전체</option>
 																		</select>
 																</span>
 
 																<span id="facilitySelectDiv">
-																		<select name="">
-																				<option value="" selected>시설 전체</option>
-																				<option value="">회의실</option>
-																				<option value="">강당</option>
-																				<option value="">휴게실</option>
-																				<option value="">연구실</option>
+																		<select name="facility">
+																				<option selected>시설 전체</option>
 																		</select>
 																</span>
 														</span>
@@ -419,6 +415,44 @@
 		<!-- main-content 끝 -->
 
 
+		<script>
+			function radioSelect(selection) {
+					if (selection === 'all') {
+							$("#equipmentSelectDiv, #facilitySelectDiv").show();
+							loadOptions('equipment');
+							loadOptions('facility');
+					} else if (selection === 'equipment') {
+							$("#equipmentSelectDiv").show();
+							$("#facilitySelectDiv").hide();
+							loadOptions('equipment');
+					} else if (selection === 'facility') {
+							$("#facilitySelectDiv").show();
+							$("#equipmentSelectDiv").hide();
+							loadOptions('facility');
+					}
+			}
+	
+			function loadOptions(category) {
+					$.ajax({
+							url: '/equipmentAndFacility/selectCategory', 
+							type: 'GET',
+							data: { category: category },
+
+							dataType: 'json',
+							success: function(data) {
+									let target = type === 'equipment' ? $("#equipmentSelectDiv select") : $("#facilitySelectDiv select");
+									target.empty(); // 기존 옵션 제거
+									target.append('<option selected>' + (type === 'equipment' ? '비품 전체' : '시설 전체') + '</option>'); // 정적 값 추가
+									data.forEach(function(item) { 
+											target.append('<option>' + item + '</option>');
+									});
+							},
+							error: function() {
+									alert('옵션을 불러오는 중 오류가 발생했습니다.');
+							}
+					});
+			}
+	</script>
 
 
 	</div>

@@ -23,7 +23,7 @@ public class EquipmentAndFacilityController {
 	
 	
 	/**
-	 * 비품, 시설 카테고리 관리 페이지(manageCategory.jsp)로 이동시키는 메소드
+	 * 비품, 시설 관리 페이지(manageCategory.jsp)로 이동시키는 메소드
 	 * author : 상우
 	 */
 	@GetMapping("/manageCategory")
@@ -31,4 +31,9 @@ public class EquipmentAndFacilityController {
 		
 	}
 	
+	
+	/**
+	 * 비품, 시설 카테고리 조회
+	 * author : 상우
+	 */
 }

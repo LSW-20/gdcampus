@@ -313,14 +313,12 @@
 								</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/equipmentAndFacility/manageCategory" class="waves-effect">
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/equipmentAndFacility/manageCategory">비품, 시설 카테고리 관리</a></li>
-										</ul>
 								</li>
+								
 
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
