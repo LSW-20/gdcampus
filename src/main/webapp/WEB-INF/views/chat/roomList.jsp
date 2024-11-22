@@ -487,11 +487,26 @@
 							}
 							
 							// 나가기버튼 클릭시 alert로 다시 한번 묻고, yes시 채팅방 나가기.
-							function exitRoom(){
-					        if ( confirm("정말로 채팅방을 나가시겠습니까?") ) {
-					        		let roomNo = $("#room-no").text();
-					            location.href = '/chat/exitRoom?roomNo=' + roomNo;
-					        }
+							function exitRoom() {
+									if (confirm("정말로 채팅방을 나가시겠습니까?")) {
+											var roomNo = $("#room-no").text();
+
+											// jQuery로 폼을 생성
+											var $form = $('<form>', {
+													'method': 'POST',
+													'action': '/chat/exitRoom' 
+											});
+
+											var $input = $('<input>', {
+													'type': 'hidden',
+													'name': 'roomNo',
+													'value': roomNo
+											});
+
+											$form.append($input);
+											$('body').append($form);
+											$form.submit();
+									}
 							}
 							
 							</script>
