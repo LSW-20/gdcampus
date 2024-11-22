@@ -19,18 +19,18 @@
         ORDER BY DEPT_NO
     </select>
 
-    <insert id="insertDept" parameterType="com.br.gdcampus.dto.DeptDto">
-        INSERT INTO DEPT (DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER)
-        VALUES (#{deptNo}, #{deptName}, SYSDATE, #{createUser})
+    <insert id="insertCategoryDept">
+        INSERT INTO T_DEPT (DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER)
+        VALUES (SEQ_DNO.NEXTVAL, #{deptName}, SYSDATE, #{createUser})
     </insert>
 
-    <update id="updateDept" parameterType="com.br.gdcampus.dto.DeptDto">
-        UPDATE DEPT
+    <update id="updateDept">
+        UPDATE T_DEPT
         SET DEPT_NAME = #{deptName}, MODIFY_DATE = SYSDATE, MODIFY_USER = #{modifyUser}
         WHERE DEPT_NO = #{deptNo}
     </update>
 
-    <delete id="deleteDept" parameterType="string">
-        DELETE FROM DEPT WHERE DEPT_NO = #{deptNo}
+    <delete id="deleteCategoryDept">
+        DELETE FROM T_DEPT WHERE DEPT_NO = #{deptNo}
     </delete>
 </mapper>

@@ -50,55 +50,53 @@
 		<div class="main-content">
 			<div class="page-content">
 
-				<div class="col-lg-12">
-					<div class="mt-4">
-						<h5 class=" mb-4">
-							<i class="mdi mdi-arrow-right text-primary mr-1"></i> 상세정보
-						</h5>
-						
-						<div class="mt-4 row d-flex justify-content-end">
-							<button type="button" class="btn btn-primary w-md" onclick="fn_resetPwd()">비밀번호 초기화</button>
-						</div>
-						
-						<form action="${contextPath}/board/category/deptDetail.do" method="post">
-						<input type="hidden" name="userNo" value="${user.userNo}">
-						<br><hr>	
-							<div class="row mt-5">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="formrow-firstname-input">아이디</label> <span style="font-size: 10px">(수정불가)</span>
-										<input type="text" class="form-control" id="userId" name="userId" value="${user.userId }" readonly>
-									</div>
-								</div>
-							</div>
-						</form>	
-			<div>
-			    <h1>부서 목록</h1>
-			    <table border="1">
-			        <thead>
-			            <tr>
-			                <th>부서 번호</th>
-			                <th>부서 이름</th>
-			                <th>생성자</th>
-			                <th>수정자</th>
-			            </tr>
-			        </thead>
-			        <tbody>
-			            <c:forEach var="d" items="${deptList}">
-			            		<option value="${d.deptNo}" ${d.deptNo == user.deptNo ? 'selected' : ''}>
-                    								${d.deptName}
-       								</option>
-			                <tr>
-			                    <td>${dept.deptNo}</td>
-			                    <td>${dept.deptName}</td>
-			                    <td>${dept.createUser}</td>
-			                    <td>${dept.modifyUser}</td>
-			                </tr>
-			            </c:forEach>
-			        </tbody>
-			    </table>
+
+				    <h1>부서 목록</h1>
+				    <table border="1">
+				        <thead>
+				            <tr>
+				                <th>부서 번호</th>
+				                <th>부서 이름</th>
+				                <th>생성일</th>
+				                <th>생성자</th>
+				                <th>수정일</th>
+				                <th>수정자</th>
+				                <th></th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <c:forEach var="d" items="${deptList}">
+				                <tr>
+				                    <td>${d.deptNo}</td>
+				                    <td>${d.deptName}</td>
+				                    <td>${d.createDate}</td>
+				                    <td>${d.createUser}</td>
+				                    <td>${d.modifyDate }</td>
+				                    <td>${d.modifyUser}</td>
+				                    <td>
+				                    	<form action="${contextPath}/board/dept/delete" method="post">
+				                    		<input type="hidden" name="deptNo" value="${d.deptNo}">
+				                    		<button type="submit">삭제</button>
+				                    	</form>
+				                    </td>
+				                </tr>
+				            </c:forEach>
+				         </tbody>
+				     </table>
+				     
+				     <br><br><br>
+				     
+				     <div>
+				     		<form action="${contextPath}/board/dept/add" method="post"> 
+				     				<input type="text" placeholder="부서 이름 입력" name="deptName" required>
+				     				<button type='submit'>부서 추가</button>
+				     		</form>
+				     </div>
+				     
 			   
+			   </div>
 			</div>
 		</div>
+		
 </body>
 </html>

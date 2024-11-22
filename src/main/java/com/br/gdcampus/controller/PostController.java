@@ -35,16 +35,14 @@ public class PostController {
 	@GetMapping("/list")
 	public void postList(Model model) {
 		
-		
-		
 		List<PostDto> list = postService.selectPostList(); 
 		model.addAttribute("postList", list);
 		
-		
 	}
+	
 	/*
-	 * @PostMapping("/list/insert") public String insertPost(@ModelAttribute
-	 * StudentDto p, RedirectAttributes rdAttributes) {
+	 * @PostMapping("/list/insert") 
+	 * public String insertPost(@ModelAttribute StudentDto p, RedirectAttributes rdAttributes) {
 	 * 
 	 * int result = postInsert(PostDto p);
 	 * 
