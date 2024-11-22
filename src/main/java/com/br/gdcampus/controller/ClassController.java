@@ -201,7 +201,7 @@ public class ClassController {
 	 * @param c 저장할 데이터가 담긴 ClassDto객체
 	 * @return 목록페이지로 redirect
 	 */
-	@PostMapping("opning/prof/regist.do")
+	@PostMapping("/opning/prof/regist.do")
 	public String registOpningForm(ClassDto c, RedirectAttributes rdAttributes) {
 		log.debug("ClassDto : "+c);
 		
@@ -216,4 +216,11 @@ public class ClassController {
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
+	@GetMapping("/opning/prof/modifyForm.do")
+	public void modifyForm(String classCode, Model model) {
+		ClassDto c = classService.selectStaffOpningDetail(classCode);
+		log.debug("{}",c);
+		model.addAttribute("c", c);
+		model.addAttribute("deptList", classService.selectCategory("T_ST_DEPT"));
+	}
 }
