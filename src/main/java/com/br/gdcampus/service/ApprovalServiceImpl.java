@@ -64,14 +64,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.selectMyDocList(pi, params);
 	}
 
+	//내결재함 페이징
 	@Override
 	public int selectMyApprovedListCount(String userNo) {
-		return 0;
+		return apprDao.selectMyApprovedListCount(userNo);
 	}
 
+	//내결재함 리스트
 	@Override
-	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, String userNo) {
-		return null;
+	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params) {
+		return apprDao.selectMyApprovedList(pi,params);
 	}
 
 	@Override
@@ -159,7 +161,27 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public ApprovalDto selectMyApprovedDetail(Map<String, Object> params) {
-		return null;
+		ApprovalDto approval = apprDao.selectMyApprovedDetail(params);
+		
+		String apprNo = (String)params.get("apprNo");
+		System.out.println("가져올apprNo : "+apprNo);
+		
+		if(approval != null) {
+			
+			//결재선조회
+			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
+			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
+		}
+		return approval;
 	}
 
 	//기안문서>진행중>최근순5개
