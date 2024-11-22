@@ -15,15 +15,15 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class AttachDto {
+public class FacilityDto {
 
-	private String fileNo;
-	private String equipNo;
-	private String apprNo;
-	private String filePath;
-	private String filesystemName;
-	private String originalName;
-	private Date uploadDate;
-	private String refType;
+	private String facilityNo;
+	private String facilityName;
+	private String facilityCategory;
+	private Date createDateTime;
+	private String createUser;
+	private Date updateDateTime;
+	private String updateUser;
+	private String status;
 	
 }

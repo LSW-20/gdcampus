@@ -64,7 +64,7 @@
 
 
 	<!-- (상우) 채팅방 번호로 채팅방 인원수 조회 -->
-	<select id="selectChatRoomPeopleCount" resultType="_int">
+	<select id="selectChatRoomPeopleCount" resultType="int">
 		select 
 					 COUNT(*)
 		  from T_USER_CHAT_ROOM
