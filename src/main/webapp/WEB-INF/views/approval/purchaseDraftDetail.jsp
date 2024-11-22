@@ -21,7 +21,7 @@
                 </tr>
                 <tr>
                     <th>문서번호</th>
-                    <td>${approval.apprNo}</td>
+                    <td>${approval.apprNo}<input type="hidden" value="${approval.apprStatus}" name="apprStatus"></td>
                 </tr>
             </table>
         </div>
@@ -231,14 +231,14 @@
 </style> -->
 
 <script>
-function approveDocument() {
-    if(confirm('해당 문서를 승인하시겠습니까?')) {
+/* function approveDocument() {
+    if(confirm('해당 문서를 승인하시겠습니까?DraftDetail.jsp')) {
         $.ajax({
             url: '${contextPath}/approval/approve',
             type: 'POST',
             data: {
                 apprNo: '${approval.apprNo}',
-                userNo: '${loginUser.userNo}'
+                apprStatus: '${approval.apprStatus}'
             },
             success: function(response) {
                 if(response.success) {
@@ -253,7 +253,7 @@ function approveDocument() {
 }
 
 function rejectDocument() {
-    const reason = prompt('반려 사유를 입력해주세요.');
+    const lineReason = prompt('반려 사유를 입력해주세요.');
     if(reason) {
         $.ajax({
             url: '${contextPath}/approval/reject',
@@ -261,7 +261,7 @@ function rejectDocument() {
             data: {
                 apprNo: '${approval.apprNo}',
                 userNo: '${loginUser.userNo}',
-                reason: reason
+                lineReason: lineReason
             },
             success: function(response) {
                 if(response.success) {
@@ -273,5 +273,5 @@ function rejectDocument() {
             }
         });
     }
-}
+} */
 </script>

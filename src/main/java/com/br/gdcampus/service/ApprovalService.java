@@ -98,9 +98,17 @@ public interface ApprovalService {
 	//결재선 추가
 	int insertApprovalLine(ApprLineDto line);
 
-	int processApprove(String apprNo, String userNo);
+	//이번차례인지확인
+	int isCurrentOrder(Map<String, Object> params);
+
+	//결재통합메소드
+	int processApprove(String apprNo, String userNo, String apprStatus);
 	
+	//반려통합메소드
 	int processReject(String apprNo, String userNo, String lineReason);
+	
+	//진행중으로변경
+	int updateApprStatusToProgress(String apprNo);
 	
 	//글삭제
 	

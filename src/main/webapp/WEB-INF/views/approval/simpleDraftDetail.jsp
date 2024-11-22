@@ -21,7 +21,7 @@
                 </tr>
                 <tr>
                     <th>문서번호</th>
-                    <td>${approval.apprNo}</td>
+                    <td>${approval.apprNo}<input type="hidden" value="${approval.apprStatus}" name="apprStatus"></td>
                 </tr>
             </table>
         </div>

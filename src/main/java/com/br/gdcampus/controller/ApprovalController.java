@@ -254,12 +254,12 @@ public class ApprovalController {
 	
 	@PostMapping("/approve")
 	@ResponseBody
-	public Map<String,Object> approveDocument(@RequestParam String apprNo, HttpSession session){
+	public Map<String,Object> approveDocument(@RequestParam String apprNo,@RequestParam String apprStatus, HttpSession session){
 		Map<String,Object> response = new HashMap<>();
 		
 		try {
 			String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
-			int result = apprService.processApprove(apprNo,userNo);//결재통합
+			int result = apprService.processApprove(apprNo,userNo,apprStatus);//결재통합
 			response.put("success", result > 0);
 		}catch(Exception e) {
 			log.error("승인 중 오류 발생",e);

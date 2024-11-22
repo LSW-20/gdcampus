@@ -345,12 +345,13 @@
         
         // 결재 승인
         function approveDoc() {
-            if(confirm('결재하시겠습니까?')) {
+            if(confirm('결재하시겠습니까?-detail.jsp')) {
                 $.ajax({
                     url: '${contextPath}/approval/approve',
                     type: 'POST',
                     data: { 
                         apprNo: '${approval.apprNo}'
+                       ,apprStatus: '${approval.apprStatus}'
                     },
                     success: function(result) {
                         if(result.success) {
@@ -366,14 +367,14 @@
         
         // 결재 반려
         function rejectDoc() {
-            const reason = prompt('반려 사유를 입력해주세요.');
-            if(reason) {
+            const reason = prompt('반려 사유를 입력해주세요.(선택사항)');
+            if(reason !== null) {
                 $.ajax({
                     url: '${contextPath}/approval/reject',
                     type: 'POST',
                     data: { 
                         apprNo: '${approval.apprNo}',
-                        reason: reason
+                        lineReason: reason
                     },
                     success: function(result) {
                         if(result.success) {

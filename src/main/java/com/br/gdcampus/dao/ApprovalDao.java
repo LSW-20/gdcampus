@@ -198,10 +198,13 @@ public class ApprovalDao {
 	public int updateNextOrder(String apprNo) {
 		return sqlSession.update("approvalMapper.updateNextOrder",apprNo);
 	}
-	
-	
-	
-	
-	
+
+	public int isCurrentOrder(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.isCurrentOrder",params);
+	}
+
+	public int updateApprStatusToProgress(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprStatusToProgress",apprNo);
+	}
 
 }

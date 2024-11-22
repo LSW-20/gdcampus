@@ -301,16 +301,39 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.insertApprovalLine(line);
 	}
 	
+	@Override
+	public int isCurrentOrder(Map<String, Object> params) {
+		return apprDao.isCurrentOrder(params);
+	}
+	
+	@Override
+	public int updateApprStatusToProgress(String apprNo) {
+		return apprDao.updateApprStatusToProgress(apprNo);
+	}
+	
 	//승인통합메소드
-	public int processApprove(String apprNo, String userNo) {
+	public int processApprove(String apprNo, String userNo, String apprStatus) {
 		Map<String,Object> params = new HashMap<>();
 		params.put("apprNo", apprNo);
 		params.put("userNo", userNo);
+		System.out.println("0대기 | 1진행 | 2승인 | 3반려 : "+ apprStatus);
+		params.put("apprStatus", apprStatus);
+		
+		//현재 결재 순서인지 체크
+		int isCurrentOrder = apprDao.isCurrentOrder(params);
+		if(isCurrentOrder == 0) {
+			System.out.println("현재 결재순서가 아님. return 0처리");
+			return 0;
+		}
 		
 		//결재선승인처리
 		int result = updateLineAgree(params);
 		
 		if(result > 0) {
+			if(apprStatus.equals("0")) {
+				//대기라면 진행중으로변경
+				apprDao.updateApprStatusToProgress(apprNo);
+			}
 			int isLast = isLastOrder(params);
 			if(isLast > 0) { //다음결재자가 존재
 				result = updateNextOrder(apprNo);
@@ -341,6 +364,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 		
 		return result;
 	}
+
+
+
 	
 	
 }

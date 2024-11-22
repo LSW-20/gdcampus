@@ -125,7 +125,9 @@
 		    ON A.APPR_NO = L.APPR_NO
 		 WHERE APPR_STATUS IN(0,1)					<!-- 진행중 -->
 		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
-		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->  
+		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->
+		 ORDER
+		    BY APPR_DATE DESC 
   </select>
   
   <!-- 결재예정문서 페이징 -->
@@ -436,7 +438,7 @@
 		  , SYSDATE
 		  , #{apprTitle}
 		  , #{apprContent}
-		  , 2
+		  , 1
 		  , 0
 		  , SYSDATE
 		  , #{apprUser}
@@ -609,19 +611,27 @@
 	<update id="updateLineAgree">
     UPDATE T_APPR_LINE
        SET LINE_STATUS = 1  <!-- 승인 -->
-         , LINE_DATE = SYSDATE
+         , LINE_DATE = SYSDATE      
      WHERE APPR_NO = #{apprNo}
        AND USER_NO = #{userNo}	
 	</update>
-	
+
+	<update id="updateApprStatusToProgress">
+    UPDATE T_APPROVAL
+       SET APPR_STATUS = 1  <!-- 진행중 -->
+     WHERE APPR_NO = #{apprNo}
+       AND APPR_STATUS = 0  <!-- 대기중 -->	
+	</update>
+
 	<!-- 결재선이 진행하는 반려 처리 -->
 	<update id="updateLineReject">
     UPDATE T_APPR_LINE
        SET LINE_STATUS = 2  <!-- 반려 -->
          , LINE_DATE = SYSDATE
-         , LINE_REASON = #{lineReason}
+         <if test="lineReason != null">
+         , LINE_REASON = #{lineReason}         
+         </if>
      WHERE APPR_NO = #{apprNo}
-       AND USER_NO = #{userNo}	
 	</update>
 	
 	<!-- 문서 승인 상태 변환 -->
@@ -638,5 +648,15 @@
      WHERE APPR_NO = #{apprNo}		
 	</update>
 	
+	<!-- 현재 순서인가 확인 -->
+	<select id="isCurrentOrder" resultType="_int">
+		SELECT COUNT(A.APPR_NO)
+		  FROM T_APPROVAL A
+		  JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE A.APPR_NO = #{apprNo}
+		   AND L.USER_NO = #{userNo}
+		   AND L.LINE_ORDER = A.CURR_ORDER	
+	</select>
 	
 </mapper>
