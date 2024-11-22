@@ -144,7 +144,7 @@
             cursor: pointer;
         }
         #purchInfo input{
-        	width:300px;
+        	width:100%;
         }
         #productNo {
         	width: 30px;
@@ -237,6 +237,10 @@
     </div>
 		
 		<table id="purchInfo" border="1" width="955px">
+      <tr>
+          <th>제목</th>
+          <td colspan="3"><input type="text" class="appr-title" name="apprTitle"></td>
+      </tr>		
 			<tr>
 				<th>담당부서</th>
 				<td><input type="text" name="purchDept"></td>
@@ -268,9 +272,9 @@
                 <td><input type="text" style="width: 90%;" name="productName"></td>
                 <td><input type="text" style="width: 90%;" name="productUnit"></td>
                 <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productAmt"></td>
-                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productPriceOne"></td>
+                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productPrice"></td>
                 <td class="amount" >0
-	                <input type="hidden" name="productPrice" value="0">
+	                <input type="hidden" name="productPerPrice" value="0">
                 </td>
             </tr>
         </tbody>
@@ -294,16 +298,15 @@
             const nextProductNo = tbody.getElementsByTagName('tr').length + 1;  // 다음 품번
             const newRow = tbody.insertRow();
             console.log('다음 품번:', nextProductNo);  // 품번이 제대로 계산되는지 확인
-            newRow.innerHTML = `
-                <td><input type="text" style="width: 90%;" name="productNo" value="${nextProductNo}" readonly></td>
-                <td><input type="text" style="width: 90%;" name="productName"></td>
-                <td><input type="text" style="width: 90%;" name="productUnit"></td>
-                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productAmt"></td>
-                <td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productPrice"></td>
-                <td class="amount">0
-                    <input type="hidden" name="productPrice" value="0">
-                </td>
-            `;
+            newRow.innerHTML = 
+                '<td><input type="text" style="width: 90%;" name="productNo" value="' + nextProductNo + '" readonly></td>' +
+                '<td><input type="text" style="width: 90%;" name="productName"></td>' +
+                '<td><input type="text" style="width: 90%;" name="productUnit"></td>' +
+                '<td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productAmt"></td>' +
+                '<td><input type="number" style="width: 90%;" onchange="calculateAmount(this)" name="productPrice"></td>' +
+                '<td class="amount">0' +
+                '    <input type="hidden" name="productPerPrice" value="0">' +
+                '</td>';
             console.log('추가된 행의 품번:', newRow.querySelector('input[name="productNo"]').value);
 
 
@@ -325,7 +328,7 @@
             
             //금액표시 및 hidden input값 설정
             row.cells[5].childNodes[0].nodeValue = amount;  // 텍스트 노드 업데이트
-            row.cells[5].querySelector('input[name="productPrice"]').value = amount;  // hidden input 업데이트
+            row.cells[5].querySelector('input[name="productPerPrice"]').value = amount;  // hidden input 업데이트
             
             calculateTotal();
         }

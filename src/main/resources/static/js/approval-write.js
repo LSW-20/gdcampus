@@ -155,7 +155,7 @@ const ApprovalModal = {
 			userName: li.querySelector('span').textContent.split(']')[1].trim().split(' ')[0],
 			rankName: li.getAttribute('data-rank'),
 			deptName: li.getAttribute('data-dept'),
-			lineOrder: index + 2
+			lineOrder: index + 1
 		}));
 
 		if (approvers.length === 0) {
@@ -179,7 +179,7 @@ const ApprovalModal = {
 				<tr class="approvalHeader">
 					<th width="100%">${index+1}차결재</th>
 					<input type="hidden" name="approvers[${index}].userNo" value="${approver.userNo}">
-					<input type="hidden" name="approvers[${index}].lineOrder" value="${index+2}">
+					<input type="hidden" name="approvers[${index}].lineOrder" value="${index+1}">
 					<input type="hidden" name="approvers[${index}].createUser" value=${approver.userNo}					
 				</tr>
 				<tr class="approvalStamp">

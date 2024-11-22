@@ -150,9 +150,9 @@
                         <button class="${param.status eq '3' ? 'active' : ''}" data-status="3">반려</button>
                     </div>
                     
-                    <table class="approval-table">
+                    <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                         <thead>
-                            <tr>
+                            <tr class="bg-transparent">
                                 <th>기안일</th>
                                 <th>결재 양식</th>
                                 <th>제목</th>
@@ -201,7 +201,7 @@
                     </table>
                     
                     <!-- 페이징 -->
-                    
+<%--                     
 								      <ul id="paging_area" class="pagination d-flex justify-content-center">
 								          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
 								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage-1}">Prev</a>
@@ -217,12 +217,24 @@
 								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage+1}">Next</a>
 								          </li>
 								      </ul>
-                    
+ --%>                    
+ 
+ 
                 </div>
             </div>
         </div>
     </div>
 
+        <!-- Required datatable js -->
+        <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        
+        <!-- Responsive examples -->
+        <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- init js -->
+        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
     <script>
     	//tab메뉴 클릭 이벤트 처리
     	document.querySelectorAll('.tab-menu button').forEach(button =>{

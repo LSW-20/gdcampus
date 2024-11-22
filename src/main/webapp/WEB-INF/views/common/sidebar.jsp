@@ -147,8 +147,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath}/user/staff/list.do">사원 관리</a></li>
-												<li><a href="#">교수 관리</a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/user/prof/list.do">교수 관리</a></li>
 										</ul>
 								</li>
 
@@ -298,7 +297,10 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">직급 카테고리 관리</a></li>
+
+												<li><a href="${contextPath }/user/profile/rank.do">직급 조회, 추가, 수정, 삭제</a></li>
+
+
 										</ul>
 								</li>
 								

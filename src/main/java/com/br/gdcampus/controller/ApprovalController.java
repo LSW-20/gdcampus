@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.br.gdcampus.dto.ApprLineDto;
 import com.br.gdcampus.dto.ApprovalDto;
 import com.br.gdcampus.dto.DraftDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -176,20 +175,24 @@ public class ApprovalController {
 	        if("기안서".equals(approval.getApprType())) {
 	            approval.setDraft(draft);
 	        } else if("품의서".equals(approval.getApprType())) {
-	            // 품목 리스트 처리
+	        	
+	        	System.out.println("Controller 품의서 데이터: " + approval.getPurchDraft());
+
+	        	List<PurchaseHistoryDto> items = new ArrayList<>();
+	        	// 품목 리스트 처리
 	            if(productNos != null && !productNos.isEmpty()) {
-	                List<PurchaseHistoryDto> items = new ArrayList<>();
 	                for(int i=0; i<productNos.size(); i++) {
-	                    items.add(PurchaseHistoryDto.builder()
+	                    PurchaseHistoryDto item = PurchaseHistoryDto.builder()
 	                            .productNo(productNos.get(i))
 	                            .productName(productNames.get(i))
 	                            .productUnit(productUnits.get(i))
 	                            .productAmt(productAmts.get(i))
 	                            .productPrice(productPrices.get(i))
-	                            .build());
+	                            .build();
+	                    items.add(item);
 	                }
-	                purchDraft.setPurchaseItems(items);
 	            }
+	            purchDraft.setPurchaseItems(items);
 	            approval.setPurchDraft(purchDraft);
 	        }
 
@@ -241,14 +244,45 @@ public class ApprovalController {
 		if(approval == null) {
 			throw new RuntimeException("문서를 찾을 수 없음");
 		}
-		System.out.println("controller에 가져온 결재선 : "+ approval.getApprovers());
+		System.out.println("### approval" + approval);
+		System.out.println("### approval의 approvers : "+ approval.getApprovers());
 		model.addAttribute("approval",approval);
 		model.addAttribute("type",type);
 		
 		return "/approval/detail";
 	}
 	
+	@PostMapping("/approve")
+	@ResponseBody
+	public Map<String,Object> approveDocument(@RequestParam String apprNo,@RequestParam String apprStatus, HttpSession session){
+		Map<String,Object> response = new HashMap<>();
+		
+		try {
+			String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+			int result = apprService.processApprove(apprNo,userNo,apprStatus);//결재통합
+			response.put("success", result > 0);
+		}catch(Exception e) {
+			log.error("승인 중 오류 발생",e);
+			response.put("success", false);
+		}
+		
+		return response;
+	}
 	
+	@PostMapping("/reject")
+	@ResponseBody
+	public Map<String, Object> rejectDocument(@RequestParam String apprNo, @RequestParam String lineReason, HttpSession session){
+		Map<String,Object> response = new HashMap<>();
+		try {
+			String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+			int result = apprService.processReject(apprNo, userNo, lineReason);
+			 response.put("success", result > 0);
+		}catch(Exception e) {
+			log.error("반려 처리 중 오류 발생",e);
+	        response.put("success", false);
+		}
+	    return response;
+	}
 	
 	
 	
