@@ -111,8 +111,8 @@ public class UserServiceInpl implements UserService {
 	 * 
 	 */
 	@Override
-	public int deleteUser(String loginUserNo, String userNo) {
-		return 0;
+	public 	int deleteUser(Map<String, String> delInfo) {
+		return userDao.deleteUser(delInfo);
 	}
 
 	/**

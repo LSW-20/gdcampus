@@ -308,6 +308,35 @@ public class UserController {
 			
 			return "redirect:/user/prof/list.do";
 		}
+		
+		/**인사팀 사원,교수 삭제 요청(상태를 N으로)
+		 * @param delUser 삭제할 사원의 사번이 담긴 배열
+		 * @param session
+		 * @return 성공 실패 여부
+		 */
+		@ResponseBody
+		@PostMapping("/deleteUser.do")
+		public String deleteUser(String delUser, HttpSession session) {
+			
+			log.debug("delUser : "+ delUser);
+			delUser=delUser.replace("\"", "").replace("[", "").replace("]", "");
+			
+			String[] delUsers = delUser.split(",");
+			String updateUser = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+			int result = 0;
+			
+			for(String userNo : delUsers) {
+				Map<String, String> delInfo = new HashMap<>();
+				delInfo.put("userNo", userNo);
+				delInfo.put("updateUser", updateUser);
+				result += userService.deleteUser(delInfo);
+			}
+			if(result == delUsers.length) {
+				return "SUCCESS";
+			}else {
+				return "FAIL";
+			}
+		}
 	
 	//------------------------------인사팀 끝--------------------------------------
 		

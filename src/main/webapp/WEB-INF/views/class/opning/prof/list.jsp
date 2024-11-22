@@ -266,9 +266,15 @@
 	                classList.forEach(function(cla) {
 	                  
 
-	                	tbody += '<tr>'
-	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/prof/detail.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>'
-	                             +'<td>'+cla.classTitle+'</td>'
+	                	tbody += '<tr>';
+	                	
+	                	if(cla.status == '보완요청' ){
+	                		tbody +=	'<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/prof/modifyForm.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>';
+	                	}else{
+	                		tbody +=	'<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/prof/detail.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>';
+	                	}
+	                	
+	                	tbody +=  '<td>'+cla.classTitle+'</td>'
 	                             +'<td>'+cla.applDate+'</td>';
 	                             
 	                    if(cla.modifyDate != null){
