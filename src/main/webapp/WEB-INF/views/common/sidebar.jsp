@@ -173,7 +173,7 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/student/student.do" class="waves-effect">
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
@@ -282,36 +282,24 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">부서 카테고리 관리</a></li>
-										</ul>
 								</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/user/profile/rank.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="minus-square"></i>
 												<span class="menu-item">직급 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-
-												<li><a href="${contextPath }/user/profile/rank.do">직급 조회, 추가, 수정, 삭제</a></li>
-
-
-										</ul>
 								</li>
 								
 									<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">게시판 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">게시판 카테고리 관리</a></li>
-										</ul>
 								</li>
 
 								<li>

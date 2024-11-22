@@ -63,6 +63,7 @@
                             </div>
                         </div>
                         <!-- end page title -->
+                        <div style="display: flex; justify-content: center; align-items: center; height: 50vh;">
                         <div class="col-xl-3">
 												<div class="card">
                                 	<div class="card-body">
@@ -97,20 +98,6 @@
                 <!-- End Page-content -->
 
                 
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Drezon.
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-right d-none d-sm-block">
-                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
             </div>
             <!-- end main content-->
         </div>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -68,8 +69,6 @@
                         </div>
                         <!-- end page title -->
 
-                        <div class="row">
-                            <div class="col-xl-3">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="dropdown float-right">
@@ -100,9 +99,12 @@
 	                                            	<c:when test="${ not empty loginUser.deptNo}">
 	                                            	 ${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
 	                                            	</c:when>
-	                                            	<c:otherwise>
-	                                            	${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
-	                                            	</c:otherwise>
+    																						<c:when test="${fn:contains(loginUser.userNo, 'A')}">
+	                                            	관리자
+	                                            	</c:when>
+	                                            	<c:when test="${fn:contains(loginUser.userNo, 'C')}">
+	                                            	교수
+	                                            	</c:when>
 	                                            </c:choose>
                                             </p>
                                         </div>
@@ -206,20 +208,6 @@
                 <!-- End Page-content -->
 
                 
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Drezon.
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-right d-none d-sm-block">
-                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
             </div>
             <!-- end main content-->
         </div>
