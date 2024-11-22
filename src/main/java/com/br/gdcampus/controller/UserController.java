@@ -179,6 +179,11 @@ public class UserController {
 			return "redirect:/user/staff/list.do";
 		}
 		
+		/**인사팀 비밀번호 초기화
+		 * @param user
+		 * @param session
+		 * @return
+		 */
 		@ResponseBody
 		@PostMapping("/resetPwd.do")
 		public String replyInsert(UserDto user, HttpSession session) {
@@ -188,6 +193,122 @@ public class UserController {
 			int result = userService.PwdReset(user);
 			return result > 0 ? "SUCCESS" : "FAIL";
 		}
+		/**
+		 * 인사팀 교수 리스트 조회 요청
+		 */
+		@GetMapping("/prof/list.do")
+		public void profList(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 리스트(테이블 안 내용) 조회 요청
+		 * @param currentPage 
+		 * @param dept 부서번호
+		 * @param rank 직급번호
+		 * @param keyword 검색어
+		 * @return
+		 */
+		@ResponseBody
+		@GetMapping(value="/prof/listContent.do", produces="application/json")
+		public Map<String,Object> profListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+				,String dept,String keyword) {
+			
+			Map<String, Object> res = new HashMap<>();
+			Map<String,String> search = new HashMap<>();
+			
+			search.put("dept", dept);
+			search.put("keyword", keyword);
+			
+			int listCount = userService.selectProfListCount(search);
+			PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+			List<UserDto> list = userService.selectProfList(search, pi);
+			
+			res.put("userList", list);
+			res.put("pi", pi);
+			return res;
+		}
+		
+		/**인사팀 교수 상세페이지 요청
+		 * @param userNo 조회할 사원의 사번
+		 * @param model
+		 */
+		@GetMapping("/prof/detail.do") 
+		public void profDetail(String userNo, Model model) {
+			
+			UserDto user =  userService.selectProf(userNo);
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("user", user);
+		    
+		    log.debug("user : {}",user);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 정보 수정
+		 * @param user 수정할 직원
+		 * @param rdAttributes 
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/prof/update.do")
+		public String updateProf(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("updateUser : {}", user);
+			int result = userService.updateProf(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/prof/detail.do?userNo=" + user.getUserNo();
+		}
+		
+		/**
+		 * 인사팀 교수 추가페이지
+		 */
+		@GetMapping("/prof/addForm.do")
+		public void profAddForm(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 추가 요청
+		 * @param user 추가할 직원
+		 * @param rdAttributes
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/prof/insert.do")
+		public String insertProf(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("insertUser : {}", user);
+			int result = userService.insertProf(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 추가되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","신규회원 생성에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/prof/list.do";
+		}
+	
 	//------------------------------인사팀 끝--------------------------------------
 		
 	//로그인(메인)

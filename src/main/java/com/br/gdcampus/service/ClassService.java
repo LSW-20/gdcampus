@@ -3,6 +3,7 @@ package com.br.gdcampus.service;
 import java.util.List;
 import java.util.Map;
 
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
@@ -28,6 +29,8 @@ public interface ClassService {
 	int updateOpningStatus(ClassDto c);
 	// 개설강의 총 시수 조회(교수측)
 	int selectSumClassTime(Map<String, String> search);
+	// 개설상의 등록
+	int insertClass(ClassDto c);
 	
 	
 //--------------------------------------개설신청 끝----------------------------------------------	
@@ -46,6 +49,8 @@ public interface ClassService {
 	ClassDto selectPlanList(String classCode);
 	// 수업계획서 수정
 	int updatePlanList(ClassDto c);
+	// 학과 조회 
+	List<CategoryDto> selectCategory(String string);
 		
 //---------------------------------------내강의 끝---------------------------------------------
 	
