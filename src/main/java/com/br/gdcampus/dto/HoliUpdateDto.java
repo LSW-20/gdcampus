@@ -1,6 +1,6 @@
 package com.br.gdcampus.dto;
 
-import java.sql.Date;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,15 +15,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class AttachDto {
+public class HoliUpdateDto {
+	private String userNo;
+    private int holiCount;
+    private int holiType;
 
-	private String fileNo;
-	private String equipNo;
-	private String apprNo;
-	private String filePath;
-	private String filesystemName;
-	private String originalName;
-	private Date uploadDate;
-	private String refType;
-	
 }

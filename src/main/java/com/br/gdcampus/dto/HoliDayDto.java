@@ -9,21 +9,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 수업 평가방식 관련 dto
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
-public class AttachDto {
+public class HoliDayDto {
 
-	private String fileNo;
-	private String equipNo;
-	private String apprNo;
-	private String filePath;
-	private String filesystemName;
-	private String originalName;
-	private Date uploadDate;
-	private String refType;
-	
+	private int holiNo ;
+	private String userNO ;
+	private Date holiDate ;
+	private int holiUsed;
+	private int holiRemain;
+	private int maxDays;
+	private Date holiCreate;
+
 }

@@ -55,7 +55,7 @@
 												<span class="menu-item">근태 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">나의 근태 현황</a></li>
+												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
 												<li><a href="#">휴가 신청</a></li>
 										</ul>
 								</li>
@@ -215,9 +215,9 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/approval/approved" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="inbox"></i>
-												<span class="menu-item">결재 수신 문서함</span>
+												<span class="menu-item">내 결재함</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="#"></a></li>
@@ -315,14 +315,12 @@
 								</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/equipmentAndFacility/manage" class="waves-effect">
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/equipAndFacility/manageCategory">비품, 시설 카테고리 관리</a></li>
-										</ul>
 								</li>
+								
 
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">

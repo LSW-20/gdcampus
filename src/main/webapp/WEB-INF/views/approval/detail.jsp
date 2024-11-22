@@ -234,6 +234,11 @@
                                 <c:when test="${type eq 'upcoming'}">
                                     <button type="button" class="action-button" disabled>결재 예정</button>
                                 </c:when>
+                                
+                                <%-- 내결재함 --%>
+                                <c:when test="${type eq 'approved'}">
+                                	<button type="button" class="action-button" disabled>결재 완료</button>
+                                </c:when>
                             </c:choose>
                             <button type="button" class="action-button" onclick="history.back()">목록</button>
                         </div>
