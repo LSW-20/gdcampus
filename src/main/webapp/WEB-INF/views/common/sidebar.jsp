@@ -215,9 +215,9 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/approval/approved" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="inbox"></i>
-												<span class="menu-item">결재 수신 문서함</span>
+												<span class="menu-item">내 결재함</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="#"></a></li>

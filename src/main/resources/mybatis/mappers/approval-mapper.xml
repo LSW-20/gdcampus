@@ -222,7 +222,25 @@
 		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
 		 WHERE USER_NO = #{userNo}  <!-- LOGINUSER -->
-		   AND APPR_STATUS IN(2,3)  	
+		 <choose>
+		 		<when test="status != null and status !=''">
+		 			AND APPR_STATUS = #{status}
+		 		</when>
+		 		<when test="status==null">
+		 			AND APPR_STATUS IN(2,3)
+		 		</when>
+		 </choose>		 
+		  
+  </select>
+  
+  <select id="selectMyApprovedListCount" resultType="_int">
+		SELECT 
+		       COUNT(A.APPR_NO)
+		  FROM T_APPROVAL A
+		  LEFT JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE USER_NO = #{userNo}  <!-- LOGINUSER -->
+		   AND APPR_STATUS IN(2,3)   
   </select>
   
   <!-- 참조/열람대기문서함 -->
@@ -317,6 +335,7 @@
 		     , A.DEPT_NO as DEPT_NO
 		     , APPR_DATE
 		     , APPR_CONTENT
+		     , APPR_TITLE
 		     , APPR_STATUS
 		     , A.CREATE_DATE as CREATE_DATE
 		  FROM T_APPROVAL A
@@ -330,26 +349,31 @@
 	
 	<!-- 결재문서 상세 -->
 	<select id="selectMyApprovedDetail" resultMap="approvalResultMap">
-		SELECT 
-		       A.APPR_NO as APPR_NO
-		     , APPR_USER
-		     , DEPT_NO
-		     , APPR_TYPE
-		     , APPR_DATE
-		     , APPR_TITLE
-		     , APPR_CONTENT
-		     , APPR_STATUS
-		     , LINE_NO
-		     , USER_NO 
-		     , LINE_ORDER
-		     , LINE_STATUS
-		     , LINE_DATE
-		     , LINE_REASON
-		  FROM T_APPROVAL A
-		  LEFT JOIN T_APPR_LINE L
-		    ON A.APPR_NO = L.APPR_NO
-		 WHERE USER_NO = #{userNo}  <!-- LOGINUSER -->
-		   AND APPR_STATUS IN(2,3)
+		SELECT A.APPR_NO as APPR_NO 
+		     , APPR_USER 
+		     , U.USER_NAME as USER_NAME     
+		     , A.DEPT_NO as DEPT_NO
+		     , D.DEPT_NAME as DEPT_NAME		
+		     , A.CREATE_DATE as CREATE_DATE
+		     , APPR_TYPE 
+		     , APPR_DATE 
+		     , APPR_TITLE 
+		     , APPR_CONTENT 
+		     , APPR_STATUS 
+		     , CURR_ORDER 
+		     , LINE_NO 
+		     , L.USER_NO 
+		     , LINE_ORDER 
+		     , LINE_STATUS 
+		  FROM T_APPROVAL A 
+		  JOIN T_APPR_LINE L 
+		    ON A.APPR_NO = L.APPR_NO 
+		  JOIN T_USER U
+		    ON U.USER_NO = APPR_USER
+		  JOIN T_DEPT D
+		    ON D.DEPT_NO = U.DEPT_NO    
+		 WHERE APPR_STATUS IN(2,3) 
+		   AND L.USER_NO = #{userNo}
 		   AND A.APPR_NO = #{apprNo}	
 	</select>	
 
