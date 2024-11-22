@@ -9,11 +9,11 @@
             <table>
                 <tr>
                     <th width="30%">기안자</th>
-                    <td>${approval.apprUser}</td>
+                    <td>${approval.userName}</td>
                 </tr>
                 <tr>
                     <th>소속</th>
-                    <td>${approval.deptNo == 1 ? "인사" : "교무"}</td>
+                    <td>${approval.deptName}</td>
                 </tr>
                 <tr>
                     <th>기안일</th>
@@ -21,92 +21,132 @@
                 </tr>
                 <tr>
                     <th>문서번호</th>
-                    <td>${approval.apprNo}</td>
+                    <td>${approval.apprNo}<input type="hidden" value="${approval.apprStatus}" name="apprStatus"></td>
                 </tr>
             </table>
         </div>
         
-<!-- 결재선 테이블 영역 -->
-<div class="approval-line">
-    <!-- 기안자 결재선 테이블 -->
-    <table id="apprUserLineTable">
-        <tr class="approvalHeader">
-            <th width="100%">기안</th>
-        </tr>
-        <tr class="approvalStamp">
-            <td>
-                <div class="stamp approved">승인</div>
-                ${approval.userName} ${approval.rankName}
-            </td>
-        </tr>
-        <tr class="approvalDate">
-            <td><fmt:formatDate value="${approval.apprDate}" pattern="yyyy-MM-dd"/></td>
-        </tr>
-    </table>
-
-    <!-- 결재자 테이블 영역 -->
-    <div id="approvalTablesContainer">
-        <c:forEach items="${approval.approvers}" var="approver" varStatus="status">
-            <table class="approvalLineTable">
-                <tr class="approvalHeader">
-                    <th width="100%">${status.count}차결재</th>
+        <!-- 결재선 영역 -->
+        <div class="approval-line">
+            <!-- 기안자 결재선 테이블 -->
+            <table id="apprUserLineTable">
+                <tr>
+                    <th width="100%">기안</th>
                 </tr>
-                <tr class="approvalStamp">
+                <tr>
                     <td>
-                        <c:choose>
-                            <c:when test="${approver.lineStatus == 1}">
-                                <div class="stamp approved">승인</div>
-                            </c:when>
-                            <c:when test="${approver.lineStatus == 2}">
-                                <div class="stamp rejected">반려</div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="stamp pending">대기</div>
-                            </c:otherwise>
-                        </c:choose>
-                        ${approver.userName} ${approver.rankName}
+                        <div class="stamp approved">승인</div>
+                         ${loginUser.userName} ${loginUser.rankName}
                     </td>
                 </tr>
                 <tr class="approvalDate">
-                    <td>
-                        <fmt:formatDate value="${approver.lineDate}" pattern="yyyy-MM-dd"/>
-                    </td>
+                    <td><fmt:formatDate value="${approval.apprDate}" pattern="yyyy-MM-dd"/></td>
                 </tr>
             </table>
-        </c:forEach>
+
+            <!-- 결재자 테이블 영역 -->
+            <div id="approvalTablesContainer">
+                <c:forEach items="${approval.approvers}" var="approver" varStatus="status">
+                    <table class="approvalLineTable">
+                        <tr>
+                            <th width="100%">${status.count}차결재</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${approver.lineStatus == 1}">
+                                        <div class="stamp approved">승인</div>
+                                    </c:when>
+                                    <c:when test="${approver.lineStatus == 2}">
+                                        <div class="stamp rejected">반려</div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="stamp pending">대기</div>
+                                    </c:otherwise>
+                                </c:choose>
+                                ${approver.userName} ${approver.rankName}
+                            </td>
+                        </tr>
+                        <tr class="approvalDate">
+                            <td>
+                                <fmt:formatDate value="${approver.lineDate}" pattern="yyyy-MM-dd"/>
+                                <c:if test="${type eq 'myDoc' && approval.apprStatus eq '0'}">
+                                    <button type="button" class="approver-edit-btn" style="display: none;" 
+                                            onclick="ApprovalModal.show()">결재선 수정</button>
+                                </c:if>
+                            </td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </div>
+        </div>
     </div>
+
+    <!-- 문서 내용 -->
+    <form id="docForm">
+        <input type="hidden" name="apprType" value="기안서"/>
+        <table>
+            <tr>
+                <th width="20%">시행일자</th>
+                <td width="30%">
+                    <input type="date" name="enforceDate" value="<fmt:formatDate value='${approval.draft.enforceDate}' pattern='yyyy-MM-dd'/>" readonly />
+                </td>
+                <th width="20%">협조부서</th>
+                <td width="30%">
+                    <input type="text" name="coopDept" value="${approval.draft.coopDept}" readonly />
+                </td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td colspan="3">
+                    <input type="text" class="appr-title" name="apprTitle" value="${approval.apprTitle}" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="content-area">
+                    <textarea id="summernote" name="apprContent" readonly>${approval.apprContent}</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 
-<!-- 관련 스타일 추가 -->
-<style>
-    #apprUserLineTable {
-        width: 126px;  /* js와 동일한 너비 */
-        margin-left: -140px; /* js와 동일한 위치 조정 */
-        table-layout: fixed;
-        border-collapse: collapse;
+<%-- <style>
+    .approval-form {
+        width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
     }
     
-    #approvalTablesContainer {
+    .form-header {
         display: flex;
-        gap: 0px;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .approval-line {
+        display: flex;
+        gap: 10px;
+    }
+    
+    #apprUserLineTable {
+        width: 126px;
+        margin-left: -140px;
+        table-layout: fixed;
+        border-collapse: collapse;
     }
     
     .approvalLineTable {
-        width: 126px;  /* js와 동일한 너비 */
+        width: 126px;
         table-layout: fixed;
         border-collapse: collapse;
-    }
-    
-    .approvalHeader, 
-    .approvalDate {
-        height: 36.5px;
     }
     
     .stamp {
         width: 50px;
         height: 50px;
         margin: 5px auto;
-        border: 2px solid;
+        border: 2px solid #000;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -128,16 +168,47 @@
         border-color: #ccc;
         color: #ccc;
     }
-</style>
-
-<script>
-function approveDocument() {
-    if(confirm('해당 문서를 승인하시겠습니까?')) {
-        // 승인 처리 로직
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
-}
-
-function rejectDocument() {
-    // 반려 사유 입력 모달 표시 등의 로직
-}
-</script>
+    
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    
+    .content-area {
+        min-height: 300px;
+        text-align: left;
+    }
+    
+    input[type="text"],
+    input[type="date"] {
+        width: 90%;
+        padding: 5px;
+    }
+    
+    input[readonly] {
+        background-color: #f8f9fa;
+    }
+</style>
+    <!-- Summernote JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+	
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            width: 900,
+            height:300,
+            toolbar: [],
+            disable: true
+        });
+        $('#summernote').summernote('disable');
+    });
+</script> --%>
