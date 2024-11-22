@@ -1,12 +1,27 @@
 package com.br.gdcampus.service;
 
-import java.util.Map;
+import java.util.List;
+
+import com.br.gdcampus.dto.EquipmentDto;
+import com.br.gdcampus.dto.PageInfoDto;
 
 public interface EquipmentAndFacilityService {
 
-	// 전체 비품, 시설 목록 조회 - 상우
-	//Map<String, Object> selectEquipAndFacilityList();
+	// 비품 카테고리 조회 - 상우
+	List<String> selectEquipmentCategory();
+
+	// 시설 카테고리 조회 - 상우
+	List<String> selectFacilityCategory();
+
+	// 비품 목록 조회(페이징 처리)
+	// int selectEquipmentListCount();
+	// List<EquipmentDto> selectEquipmentList(PageInfoDto pi, String equipment);
+	  
+	// 시설 목록 조회(페이징 처리)
+	// int selectFacilityListCount();
+	// List<FacilityDto> selectFacilityList(PageInfoDto pi, String facility);
 	
+
 	// 비품 추가 - 상우
 	//int insertEquip(Map<String, Object> map); // BoardDto board, AttachDto attach
 	

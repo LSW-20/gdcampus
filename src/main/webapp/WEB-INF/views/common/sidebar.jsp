@@ -315,7 +315,7 @@
 								</li>
 
 								<li>
-										<a href="${contextPath }/equipmentAndFacility/manageCategory" class="waves-effect">
+										<a href="${contextPath }/equipmentAndFacility/manage" class="waves-effect">
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>

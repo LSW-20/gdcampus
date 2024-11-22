@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="equipmentAndFacilityMapper">
 
+
+
+
+
+
+
+
+
+	<!-- (상우) 비품 카테고리 조회 -->
+	<select id="selectEquipmentCategory" resultType="String">
+		select DISTINCT EQUIP_CATEGORY
+	  	from T_EQUIPMENT
+	</select>
+	
+	<!-- (상우) 시설 카테고리 조회 -->
+	<select id="selectFacilityCategory" resultType="String">
+		select DISTINCT FACILITY_CATEGORY
+		  from T_FACILITY
+	</select>
+	
 </mapper>
