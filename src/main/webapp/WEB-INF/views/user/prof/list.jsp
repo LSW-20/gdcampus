@@ -43,14 +43,14 @@
 				<div class="container-fluid mt-5">
 					<div class="row mb-2">
 						<div class="col-md-6">
-							<h2>행정직원 목록</h2>
+							<h2>교수 목록</h2>
 						</div>
 						<div class="col-md-6">
 							<div class="form-inline float-md-right mb-3">
 								<div class="search-box ml-2">
 									<div class="position-relative">
-										<a href="${contextPath}/user/staff/addForm.do" class="btn btn-success waves-effect waves-light"><i
-											class="mdi mdi-plus mr-2"></i> 사원 추가</a>
+										<a href="${contextPath}/user/prof/addForm.do" class="btn btn-success waves-effect waves-light"><i
+											class="mdi mdi-plus mr-2"></i> 교수 추가</a>
 
 									</div>
 								</div>
@@ -74,7 +74,7 @@
 										<select class="custom-select" name="dept" id="dept">
 											<option value="all">전체</option>
 											<c:forEach var="category" items="${deptList}">
-                								<option value="${category.deptNo}">
+                								<option value="${category.stDeptNo}">
                     								${category.deptName}
                 								</option>
             								</c:forEach>
@@ -84,16 +84,7 @@
 							</div>
 							<div class="col-md-2">
 								<div class="mb-3">
-									<div class="select">
-										<select class="custom-select" name="rank" id="rank">
-											<option value="all">전체</option>
-											<c:forEach var="category" items="${rankList}">
-                								<option value="${category.rankNo}">
-                    								${category.rankName}
-                								</option>
-            								</c:forEach>
-										</select>
-									</div>
+									
 								</div>
 							</div>
 
@@ -103,7 +94,7 @@
 										<div class="position-relative">
 											<input type="text" id="search"
 												class="form-control rounded bg-light border-0"
-												placeholder="사원명"> <i
+												placeholder="교수명"> <i
 												class="mdi mdi-magnify search-icon"></i>
 										</div>
 									</div>
@@ -125,9 +116,8 @@
 											</div>
 										</th>
 										<th scope="col">사원번호</th>
-										<th scope="col">사원명</th>
-										<th scope="col">부서</th>
-										<th scope="col">직책</th>
+										<th scope="col">교수명</th>
+										<th scope="col">소속학과</th>
 										<th scope="col">상태</th>
 									</tr>
 								</thead>
@@ -173,11 +163,10 @@
 	    
 	    function listDo(page){
 	        $.ajax({
-	            url: '${contextPath}/user/staff/listContent.do', 
+	            url: '${contextPath}/user/prof/listContent.do', 
 	            data: 
 	            {
 					dept: $("#dept").val(),
-					rank: $('#rank').val(),
 					keyword:$('#search').val(),
 					page: page
 					
@@ -204,10 +193,9 @@
 	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
 	                             +   '</div>'
 	                             +'</th>'
-	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/user/staff/detail.do?userNo=' + user.userNo + '\';">'+user.userNo+'</td>'
+	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/user/prof/detail.do?userNo=' + user.userNo + '\';">'+user.userNo+'</td>'
 	                             +'<td>'+user.userName+'</td>'
-	                             +'<td>'+user.deptNo+'</td>'
-	                             +'<td>'+user.rankNo+'</td>'                          
+	                             +'<td>'+user.stDeptNo+'</td>'                     
 	                             +'<td>'+status+'</td>'
 	                             +'</tr>'
 	                    ;

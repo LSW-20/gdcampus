@@ -8,6 +8,8 @@ import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.RankDto;
 import com.br.gdcampus.dto.UserDto;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * 인사팀 회원관리 서비스(김하늘)
  */
@@ -83,5 +85,7 @@ public interface UserService {
 	//직급삭제
 	int deleteRank(int rankNo);
 	//직급여러행삭제
-	int deleteRanks(List<Integer> rankNoList);
+	boolean deleteRanks(List<Integer> rankNoList);
+	//회원탈퇴
+	int resignUser(String userNo);
 }

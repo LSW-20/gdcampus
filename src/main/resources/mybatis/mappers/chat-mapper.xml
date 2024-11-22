@@ -14,6 +14,7 @@
 	
 	<resultMap id="userChatRoomResultMap" type="UserChatRoomDto">
 		<result column="USER_NO" property="userNo"/>
+		<result column="USER_NAME" property="userName"/>
 		<result column="ROOM_NO" property="roomNo"/>
 		<result column="JOIN_TIME" property="joinTime"/>
 		<result column="JOIN_YN" property="joinYN"/>	
@@ -48,6 +49,19 @@
 											)
 	</select>
 
+	<!-- (상우) 현재 채팅방(1개)에 대한 정보 조회 -->
+	<select id="selectChatRoomOne" resultMap="chatRoomResultMap">
+		select 
+					 ROOM_NO
+		     , ROOM_NAME
+		     , ROOM_TYPE
+				 , CREATE_DATETIME
+				 , CREATE_USER
+			   , STATUS
+			from T_CHAT_ROOM    
+ 	   where ROOM_NO = #{roomNo}
+	</select>
+
 
 	<!-- (상우) 채팅방 번호로 채팅방 인원수 조회 -->
 	<select id="selectChatRoomPeopleCount" resultType="_int">
@@ -63,10 +77,12 @@
 	<select id="selectUserChatRoomList" resultMap="userChatRoomResultMap">
 		select 
 					 USER_NO
+				 , USER_NAME
 				 , ROOM_NO
 				 , JOIN_TIME
 				 , JOIN_YN
 		  from T_USER_CHAT_ROOM
+		  join T_USER USING (USER_NO)
 		 where ROOM_NO = #{roomNo} 	 
 		   and JOIN_YN = 'Y'
 	</select>
