@@ -21,12 +21,23 @@
 		<result column="DEPT_NAME" property="deptName"/>
 		<result column="RANK_NAME" property="rankName"/>		
 		
-    <!-- 문서 타입별 association(1 : 1) 매핑 추가 -->
-    <association property="draft" javaType="DraftDto">
-        <result column="ENFORCE_DATE" property="enforceDate"/>
-        <result column="COOP_DEPT" property="coopDept"/>
-    </association>		
-    <association property="purchDraft" javaType="PurchaseDraftDto">
+	
+
+
+    <!-- 결재선 정보는 selectApproversList 쿼리 결과를 매핑 -->
+    <collection property="approvers" column="APPR_NO" select="selectApproversList"/>       
+    <collection property="draft" column="APPR_NO" select="selectSimpleDraftDetail"/>       
+    <collection property="purchDraft" column="APPR_NO" select="selectPurchDraftDetail"/>       
+	</resultMap>
+	
+	
+   <!-- 문서 타입별 (1 : 1) 매핑 추가 -->
+   <resultMap id="draftResultMap" type="DraftDto">
+       <result column="ENFORCE_DATE" property="enforceDate"/>
+       <result column="COOP_DEPT" property="coopDept"/>
+   </resultMap>		
+	
+    <resultMap id="purchResultMap" type="PurchaseDraftDto">
         <result column="PURCH_DEPT" property="purchDept"/>
         <result column="PURCH_EMP_NAME" property="purchEmpName"/>
         <result column="PURCH_PURPOSE" property="purchPurpose"/>
@@ -41,29 +52,28 @@
             <result column="PRODUCT_AMT" property="productAmt"/>
             <result column="PRODUCT_PRICE" property="productPrice"/>
         </collection>
-    </association>
-    
-		<!-- 결재선 정보 collection 매핑 추가 -->
-		<collection property="approvers" ofType="ApprLineDto">
-			<result column="LINE_NO" property="lineNo"/>
-			<result column="APPR_NO" property="apprNo"/>
-			<result column="USER_NO" property="userNo"/>
-			<result column="LINE_ORDER" property="lineOrder"/>
-			<result column="LINE_STATUS" property="lineStatus"/>
-			<result column="LINE_DATE" property="lineDate"/>
-			<result column="LINE_REASON" property="lineReason"/>
-			<result column="CREATE_DATE" property="createDate"/>
-			<result column="CREATE_USER" property="createUser"/>
-			<result column="MODIFY_DATE" property="modifyDate"/>
-			<result column="MODIFY_USER" property="modifyUser"/>
-			
-			
+    </resultMap>	
+	
+	<!-- 결재선 정보 collection 매핑 추가 -->
+	<resultMap id="apprLineResultMap" type="ApprLineDto">
+		<result column="LINE_NO" property="lineNo"/>
+		<result column="APPR_NO" property="apprNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="LINE_ORDER" property="lineOrder"/>
+		<result column="LINE_STATUS" property="lineStatus"/>
+		<result column="LINE_DATE" property="lineDate"/>
+		<result column="LINE_REASON" property="lineReason"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="MODIFY_USER" property="modifyUser"/>
+		
 			<result column="USER_NAME" property="userName"/>
-			<result column="DEPT_NAME" property="deptName"/>
-			<result column="RANK_NAME" property="rankName"/>
-		</collection>	    
-    		
-	</resultMap>
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="RANK_NAME" property="rankName"/> 
+	</resultMap>	 	
+	
+	
 	
 	<resultMap id="apprRefResultMap" type="ApprRefDto">
 		<result column="REF_NO" property="refNo"/>
@@ -95,7 +105,7 @@
 	<!-- 결재대기문서함 -->
   <select id="selectApprTodoList" resultMap="approvalResultMap">
 		SELECT
-		       A.APPR_NO as APPR_USER
+		       A.APPR_NO as APPR_NO
 		     , APPR_USER
 		     , DEPT_NO
 		     , APPR_TYPE
@@ -113,9 +123,11 @@
 		  FROM T_APPROVAL A
 		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE APPR_STATUS = 1					<!-- 진행중 -->
+		 WHERE APPR_STATUS IN(0,1)					<!-- 진행중 -->
 		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
-		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->  
+		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->
+		 ORDER
+		    BY APPR_DATE DESC 
   </select>
   
   <!-- 결재예정문서 페이징 -->
@@ -234,7 +246,8 @@
 		SELECT 
 		       A.APPR_NO AS APPR_NO
 		     , APPR_USER
-		     , DEPT_NO
+		     , U.USER_NAME as USER_NAME
+		     , A.DEPT_NO as DEPT_NO
 		     , APPR_TYPE
 		     , APPR_DATE
 		     , APPR_TITLE
@@ -242,15 +255,18 @@
 		     , APPR_STATUS
 		     , LINE_NO
 		     , L.USER_NO as USER_NO
+		     , CURR_ORDER
 		     , LINE_ORDER
 		     , LINE_STATUS
 		     , LINE_DATE
 		     , LINE_REASON
 		  FROM T_APPROVAL A
-		  LEFT JOIN T_APPR_LINE L
+		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE USER_NO = #{userNo}    <!-- LOGINUSER 가져오거나 INTERCEPTOR추가하거나-->
-		   AND APPR_STATUS IN(2,3)    <!-- 승인,반려 -->
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER		    
+		 WHERE L.USER_NO = #{userNo}    <!-- LOGINUSER 가져오거나 INTERCEPTOR추가하거나-->
+		   AND LINE_ORDER = CURR_ORDER
 		   AND A.APPR_NO = #{apprNo}  <!-- 상세로 불러올 문서번호 요청 -->  
   </select>
   
@@ -277,12 +293,12 @@
 		  FROM T_APPROVAL A
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-          JOIN T_USER U
-            ON U.USER_NO = APPR_USER
-          JOIN T_RANK R 
-            ON R.RANK_NO = U.RANK_NO
-          JOIN T_DEPT D
-            ON D.DEPT_NO = U.DEPT_NO
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER
+      JOIN T_RANK R 
+        ON R.RANK_NO = U.RANK_NO
+      JOIN T_DEPT D
+        ON D.DEPT_NO = U.DEPT_NO
 		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
 		   AND L.USER_NO = #{userNo}      <!-- LOGINUSER -->
 		   AND CURR_ORDER &lt; LINE_ORDER   <!-- 현재결재순서  -->   
@@ -294,17 +310,22 @@
 	<select id="selectMyDocDetail" resultMap="approvalResultMap">
 		SELECT 
 		       APPR_NO
+		     , U.USER_NAME as USER_NAME
 		     , APPR_USER
-		     , DEPT_NO
+         , D.DEPT_NAME as DEPT_NAME		     
+		     , APPR_TYPE 
+		     , A.DEPT_NO as DEPT_NO
 		     , APPR_DATE
 		     , APPR_CONTENT
 		     , APPR_STATUS
-		     , CREATE_DATE
-		     , MODIFY_DATE
-		     , UPDATE_USER
-		  FROM T_APPROVAL
+		     , A.CREATE_DATE as CREATE_DATE
+		  FROM T_APPROVAL A
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER
+      JOIN T_DEPT D
+        ON D.DEPT_NO = U.DEPT_NO        		  
 		 WHERE APPR_USER = #{userNo}	
-  	   AND APPR_NO = #{apprNo}
+  	   AND A.APPR_NO = #{apprNo}
 	</select>	
 	
 	<!-- 결재문서 상세 -->
@@ -417,7 +438,7 @@
 		  , SYSDATE
 		  , #{apprTitle}
 		  , #{apprContent}
-		  , 2
+		  , 1
 		  , 0
 		  , SYSDATE
 		  , #{apprUser}
@@ -466,7 +487,7 @@
 	</insert>
 	
 	<!-- 품의서 등록 -->
-	<insert id="insertPurchDraft">
+	<insert id="insertPurchaseDraft">
 	   INSERT 
 	     INTO T_PURCH_DRAFT 
 	   (
@@ -511,7 +532,8 @@
 	   )
 	</insert>	
 	
-	<select id="selectApproversList" resultMap="approvalResultMap">
+	<!-- 결재선조회 -->
+	<select id="selectApproversList" resultMap="apprLineResultMap">
 		SELECT LINE_NO
 		     , L.APPR_NO as APPR_NO
 		     , L.USER_NO as USER_NO
@@ -525,15 +547,116 @@
 		     , L.CREATE_DATE as CREATE_DATE
 		     , L.CREATE_USER as CREATE_USER
 		  FROM T_APPR_LINE L
-		  JOIN T_APPROVAL A
+		  LEFT JOIN T_APPROVAL A
 		    ON A.APPR_NO = L.APPR_NO
-		  JOIN T_USER U
+		  LEFT JOIN T_USER U
 		    ON L.USER_NO = U.USER_NO
-		  JOIN T_DEPT D
+		  LEFT JOIN T_DEPT D
 		    ON U.DEPT_NO = D.DEPT_NO
-		  JOIN T_RANK R
+		  LEFT JOIN T_RANK R
 		    ON U.RANK_NO = R.RANK_NO
 		 WHERE L.APPR_NO = #{apprNo}
+	</select>
+	
+	<!-- 기안서상세데이터불러오기 -->
+	<select id="selectSimpleDraftDetail" resultMap="draftResultMap">
+		SELECT APPR_NO
+		     , ENFORCE_DATE
+		     , COOP_DEPT
+		  FROM T_DRAFT
+		 WHERE APPR_NO = #{apprNo}
+	</select>	
+	
+	<!-- 품의서내용 -->
+	<select id="selectPurchDraftDetail" resultMap="purchResultMap">
+		SELECT PD.APPR_NO as APPR_NO
+		     , PURCH_DEPT
+		     , PURCH_EMP_NAME
+		     , PURCH_PURPOSE
+		     , PURCH_DEADLINE
+		     , PURCH_TOTAL
+		     
+		     , PRODUCT_NO
+		     , PRODUCT_NAME
+		     , PRODUCT_UNIT
+		     , PRODUCT_AMT
+		     , PRODUCT_PRICE     
+		  FROM T_PURCH_DRAFT PD
+		 RIGHT JOIN T_PURCH_HISTORY PH
+		    ON PD.APPR_NO = PH.APPR_NO
+		 WHERE PD.APPR_NO = #{apprNo}
+	</select>
+	
+	<!-- 마지막결재자인가? -->
+	<select id="isLastOrder" resultType="_int">
+    SELECT COUNT(LINE_NO)
+      FROM T_APPR_LINE
+     WHERE APPR_NO = #{apprNo}
+       AND LINE_ORDER > (
+           SELECT LINE_ORDER 
+             FROM T_APPR_LINE 
+            WHERE APPR_NO = #{apprNo} 
+              AND USER_NO = #{userNo}
+       )	
+	</select>
+	
+	<!-- 다음결재자 순서 변경 -->
+	<update id="updateNextOrder">
+    UPDATE T_APPROVAL
+       SET CURR_ORDER = CURR_ORDER + 1
+     WHERE APPR_NO = #{apprNo}	
+	</update>
+
+	<!-- 결재선이 진행하는 승인처리 -->
+	<update id="updateLineAgree">
+    UPDATE T_APPR_LINE
+       SET LINE_STATUS = 1  <!-- 승인 -->
+         , LINE_DATE = SYSDATE      
+     WHERE APPR_NO = #{apprNo}
+       AND USER_NO = #{userNo}	
+	</update>
+
+	<update id="updateApprStatusToProgress">
+    UPDATE T_APPROVAL
+       SET APPR_STATUS = 1  <!-- 진행중 -->
+     WHERE APPR_NO = #{apprNo}
+       AND APPR_STATUS = 0  <!-- 대기중 -->	
+	</update>
+
+	<!-- 결재선이 진행하는 반려 처리 -->
+	<update id="updateLineReject">
+    UPDATE T_APPR_LINE
+       SET LINE_STATUS = 2  <!-- 반려 -->
+         , LINE_DATE = SYSDATE
+         <if test="lineReason != null">
+         , LINE_REASON = #{lineReason}         
+         </if>
+     WHERE APPR_NO = #{apprNo}
+	</update>
+	
+	<!-- 문서 승인 상태 변환 -->
+	<update id="updateApprAgree">
+    UPDATE T_APPROVAL
+       SET APPR_STATUS = 2  <!-- 승인 -->
+     WHERE APPR_NO = #{apprNo}	
+	</update>
+
+	<!-- 문서 반려 상태 변환 -->
+	<update id="updateApprReject">
+    UPDATE T_APPROVAL
+       SET APPR_STATUS = 3  <!-- 반려 -->
+     WHERE APPR_NO = #{apprNo}		
+	</update>
+	
+	<!-- 현재 순서인가 확인 -->
+	<select id="isCurrentOrder" resultType="_int">
+		SELECT COUNT(A.APPR_NO)
+		  FROM T_APPROVAL A
+		  JOIN T_APPR_LINE L
+		    ON A.APPR_NO = L.APPR_NO
+		 WHERE A.APPR_NO = #{apprNo}
+		   AND L.USER_NO = #{userNo}
+		   AND L.LINE_ORDER = A.CURR_ORDER	
 	</select>
 	
 </mapper>

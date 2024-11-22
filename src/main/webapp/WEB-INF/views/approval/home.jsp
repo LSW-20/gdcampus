@@ -192,7 +192,7 @@
                 success: function(response) {
                     const todoDocsHtml = response.docs.map(doc => `
                         <div class="doc-item">
-                            <a href="${contextPath}/approval/todo/\${doc.apprNo}" class="doc-link">
+                            <a href="${contextPath}/approval/detail/${appr.apprNo}?type=myDoc" class="doc-link">
                                 \${doc.apprTitle}
                             </a>
                             <span class="doc-date">\${formatDate(doc.apprDate)}</span>
