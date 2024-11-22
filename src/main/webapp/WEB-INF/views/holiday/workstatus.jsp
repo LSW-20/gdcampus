@@ -240,33 +240,6 @@
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col-7">
-                                                <table id="data-table" class="table">
-    <thead>
-        <tr>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Ajax 요청으로 추가된 데이터가 여기에 삽입됩니다 -->
-        ${loginUser.userNo}
-    </tbody>
-</table>
-                                                    </div>
-                                                    <div class="col-5">
-                                                        <div>
-                                                            <div class="apex-charts" id="sparkline-chart-1"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row align-items-center">
-                                                    <div class="col-7">
                                                         <h4 class="mb-1">15</h4>
                                                         <p class="text-muted mb-4">Pending Projects</p>
                                                         <p class="text-muted mb-0"><i class="icon-xs text-danger mr-2" data-feather="trending-down"></i>30.12%</p>
@@ -299,154 +272,28 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="float-right">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle btn btn-light" href="#" id="dropdownMenuButton5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="font-weight-semibold">Sort By:</span> <span class="text-muted">Yearly<i class="mdi mdi-chevron-down ml-1"></i></span>
-                                                </a>
-            
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5">
-                                                    <a class="dropdown-item" href="#">Monthly</a>
-                                                    <a class="dropdown-item" href="#">Yearly</a>
-                                                    <a class="dropdown-item" href="#">Weekly</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h4 class="card-title mb-5">Productivity</h4>
-                                        <div>
-                                            <div class="apex-charts" id="column-chart-1"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-8">
+                               <!-- 근무일정 -->
+                                <div class="col-xl-4">
                                         <div class="card">
                                             <div class="card-body">
-                                                <div class="float-right">
-                                                    <div class="dropdown">
-                                                        <a class="btn-link text-muted dropdown-toggle arrow-none" href="#" role="button" id="dropdownMenuLink-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="icon-sm" data-feather="more-horizontal"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-2">
-                                                            <a class="dropdown-item" href="#"><i class="icon-xs icon mr-2" data-feather="refresh-cw"></i> Refresh</a>
-                                                            <a class="dropdown-item" href="#"><i class="icon-xs icon mr-2" data-feather="edit"></i> Edit</a>
-                                                            <a class="dropdown-item" href="#"><i class="icon-xs icon mr-2" data-feather="activity"></i> Action</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item text-danger" href="#"><i class="icon-xs icon mr-2" data-feather="trash-2"></i> Delete</a>
-                                                        </div>
-                                                    </div>
+                                                <div class="row align-items-center">
+													    <div class="col-12">
+													    <table id="data-table" class="table" style="text-align: center; width: 100%;">
+													        <thead>
+													            <tr>
+													                <th colspan="3"><b>근무 시간</b></th>
+													            </tr>
+													            <tr>
+													               <td>근무일수 &nbsp| 총 근무시간  &nbsp| 근무일수</td> 
+													         
+													            </tr>
+													        </thead>
+													        <tbody>
+													            <!-- Ajax 요청으로 추가된 데이터가 여기에 삽입됩니다 -->
+													        </tbody>
+													    </table>
+													</div>
                                                 </div>
-                                                <h4 class="card-title mb-4">Tasks</h4>
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-nowrap mb-0">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">Subject</th>
-                                                            <th scope="col">Priority</th>
-                                                            <th scope="col">Status</th>
-                                                            <th scope="col">Date</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck1">
-                                                                    <label class="custom-control-label" for="ordercheck1">UI/UX Design</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>In Progress</td>
-                                                            <td><span class="badge badge-soft-warning">Panding</span></td>
-                                                            <td>01/11/2020</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck2">
-                                                                    <label class="custom-control-label" for="ordercheck2">Admin Template</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>In progress</td>
-                                                            <td><span class="badge badge-soft-primary">Active</span></td>
-                                                            <td>05/11/2020</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck3">
-                                                                    <label class="custom-control-label" for="ordercheck3">Landing Page</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>Done</td>
-                                                            <td><span class="badge badge-soft-success">Complate</span></td>
-                                                            <td>10/11/2020</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck4">
-                                                                    <label class="custom-control-label" for="ordercheck4">Graphic Design</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>In progress</td>
-                                                            <td><span class="badge badge-soft-warning">Panding</span></td>
-                                                            <td>15/11/2020</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck5">
-                                                                    <label class="custom-control-label" for="ordercheck5">Sketch Design</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>Done</td>
-                                                            <td><span class="badge badge-soft-success">Complate</span></td>
-                                                            <td>20/11/2020</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" id="ordercheck5">
-                                                                    <label class="custom-control-label" for="ordercheck5">Sketch Design</label>
-                                                                </div>
-                                                            </td>
-                                                            <td>Done</td>
-                                                            <td><span class="badge badge-soft-success">Complate</span></td>
-                                                            <td>20/11/2020</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h4 class="card-title mb-4">Recent Activity</h4>
-                                                <ol class="activity-feed mb-0 pl-2" data-simplebar style="max-height: 316px;">
-                                                    <li class="feed-item">
-                                                        <p class="text-muted mb-1 font-size-13 py-1 px-2 bg-light border rounded d-inline-block">Today : 12:20 pm</p>
-                                                        <p class="mt-1 mb-0">Andrei Coman magna sed porta finibus, risus posted a new article: <span class="text-primary">Forget UX Rowland</span></p>
-                                                    </li>
-                                                    <li class="feed-item">
-                                                        <p class="text-muted mb-1 font-size-13 py-1 px-2 bg-light border rounded d-inline-block">22 Jul, 2020</p>
-                                                        <p class="mt-0 mb-0">Andrei Coman posted a new article: <span class="text-primary">Designer Alex</span></p>
-                                                    </li>
-                                                    <li class="feed-item">
-                                                        <p class="text-muted mb-1 font-size-13 py-1 px-2 bg-light border rounded d-inline-block">18 Jul, 2020</p>
-                                                        <p class="mt-0 mb-0">Zack Wetass, sed porta finibus, risus Chris Wallace Commented <span class="text-primary"> Developer Moreno</span></p>
-                                                    </li>
-                                                    <li class="feed-item">
-                                                        <p class="text-muted mb-1 font-size-13 py-1 px-2 bg-light border rounded d-inline-block">10 Jul, 2020</p>
-                                                        <p class="mt-0 mb-0">Zack Wetass, Chris combined Commented <span class="text-primary">UX Murphy</span></p>
-                                                    </li>
-                                                </ol>
                                             </div>
                                         </div>
                                     </div>
@@ -554,7 +401,7 @@
                 data: { userNo: userNo }, // 데이터를 컨트롤러로 전달
                 success: function (status) {
                     // 데이터를 테이블의 tbody에 추가
-                    const tbody = '<tr><td>' + status.arDate + '</td></tr>';
+                    const tbody = '<tr><td>' + status.arDate +"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   |   " + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +status.arTime +  " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp | &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + status.arAv + '</td></tr>';
                     $('#data-table tbody').append(tbody); // 테이블 ID가 'data-table'인 경우
                 },
                 error: function (xhr, status, error) {
