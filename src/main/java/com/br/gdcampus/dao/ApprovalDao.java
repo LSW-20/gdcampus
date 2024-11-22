@@ -207,4 +207,18 @@ public class ApprovalDao {
 		return sqlSession.update("approvalMapper.updateApprStatusToProgress",apprNo);
 	}
 
+	public int selectMyApprovedListCount(String userNo) {
+		return sqlSession.selectOne("approvalMapper.selectMyApprovedListCount",userNo);
+	}
+
+	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1)*pi.getBoardLimit(),pi.getBoardLimit());
+		
+		return sqlSession.selectList("approvalMapper.selectMyApprovedList",params,rowBounds);
+	}
+
+	public ApprovalDto selectMyApprovedDetail(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.selectMyApprovedDetail",params);
+	}
+
 }

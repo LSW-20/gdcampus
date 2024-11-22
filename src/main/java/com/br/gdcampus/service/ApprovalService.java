@@ -38,7 +38,7 @@ public interface ApprovalService {
 	
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
 	int selectMyApprovedListCount(String userNo);
-	List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, String userNo);
+	List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params);
 	
 	//참조/열람대기문서 조회 T_APPR_REF userNo == loginUser
 	int selectApprViewerListCount(String userNo);
