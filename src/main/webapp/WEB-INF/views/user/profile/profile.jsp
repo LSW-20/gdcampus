@@ -95,13 +95,13 @@
                                             <h5 class="mt-4 mb-2">${loginUser.userName }</h5>
                                             <p class="text-muted">
 	                                            <i class="icon-xs mr-1 icon" data-feather="monitor"></i> 
-	                                            
-	                                            
+	                                          
 	                                            <c:choose>
 	                                            	<c:when test="${ not empty loginUser.deptNo}">
 	                                            	 ${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
 	                                            	</c:when>
 	                                            	<c:otherwise>
+	                                            	${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
 	                                            	</c:otherwise>
 	                                            </c:choose>
                                             </p>

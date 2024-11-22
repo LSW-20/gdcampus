@@ -284,13 +284,13 @@ public class UserController {
 	}//modifyProfile
 	
 	//아이디찾기이동(이메일인증페이지)
-	@GetMapping("/profile/idSearch.do")
+	@GetMapping("/login/idSearch.do")
 	public void idSearch() {
 		
 	}
 	
 	//비번찾기이동(이메일인증페이지)
-	@GetMapping("/profile/pwdSearch.do")
+	@GetMapping("/login/pwdSearch.do")
 	public void pwdSearch() {
 		
 	}
@@ -314,7 +314,7 @@ public class UserController {
 	
 		if(user != null) {
 			 session.setAttribute("ID", user.getUserId());
-			 request.getRequestDispatcher("/WEB-INF/views/user/profile/idResult.jsp").forward(request, response);
+			 request.getRequestDispatcher("/WEB-INF/views/user/login/idResult.jsp").forward(request, response);
 		}else {
 			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
 			    out.println("<script>history.back();</script>");
@@ -342,7 +342,7 @@ public class UserController {
 	    
 	    if (user != null) {
 	    	session.setAttribute("user", user);
-			 request.getRequestDispatcher("/WEB-INF/views/user/profile/pwdChange.jsp").forward(request, response);
+			 request.getRequestDispatcher("/WEB-INF/views/user/login/pwdChange.jsp").forward(request, response);
 		}else {
 			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
 			    out.println("<script>history.back();</script>");

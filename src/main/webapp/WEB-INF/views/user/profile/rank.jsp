@@ -160,27 +160,27 @@
 											
 											<!-- 직급선택삭제모달 -->
 												<div class="modal fade" id="selectConfirmModal" tabindex="-1" aria-labelledby="selectConfirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <!-- 모달 헤더 -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- 모달 본문 -->
-            <div class="modal-body">
-                <p>선택한 항목들을 삭제하시겠습니까?</p>
-            </div>
-            <!-- 모달 푸터 -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete" onclick="deleteSelectedRanks()">삭제</button>
-            </div>
-        </div>
-    </div>
-</div>
+											    <div class="modal-dialog modal-dialog-centered">
+											        <div class="modal-content">
+											            <!-- 모달 헤더 -->
+											            <div class="modal-header">
+											                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+											                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											                    <span aria-hidden="true">&times;</span>
+											                </button>
+											            </div>
+											            <!-- 모달 본문 -->
+											            <div class="modal-body">
+											                <p>선택한 항목들을 삭제하시겠습니까?</p>
+											            </div>
+											            <!-- 모달 푸터 -->
+											            <div class="modal-footer">
+											                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+											                <button type="button" class="btn btn-danger" id="confirmDelete" onclick="deleteSelectedRanks()">삭제</button>
+											            </div>
+											        </div>
+											    </div>
+											</div>
 												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                        

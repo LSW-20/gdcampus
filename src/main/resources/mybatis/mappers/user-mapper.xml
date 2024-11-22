@@ -36,13 +36,13 @@
 <!-- 부서 매핑 -->
 <resultMap id="deptList" type="DeptDto">
     <result column="dept_no" property="deptNo"/>
-    <result column="dept_name" property="deptName"/>
+    <result column="dn" property="deptName"/>
 </resultMap>
 
 <!-- 직급 매핑 -->
 <resultMap id="rankList" type="RankDto">
     <result column="rank_no" property="rankNo"/>
-    <result column="rank_name" property="rankName"/>
+    <result column="rn" property="rankName"/>
 </resultMap>
 	
 	<resultMap id="categoryResultMap" type="CategoryDto">
@@ -431,7 +431,7 @@
 	</update>
 	<!-- 직급 조회 -->
 	<select id="selectRank" resultMap="rankList">
-		select *
+		select rank_no, rank_name as rn
 			from t_rank
 	</select>
 	<!-- 직급 추가 -->
@@ -439,7 +439,7 @@
 		insert 
 			into t_rank
 					 (
-					 	 rank_no
+					 	 rank_no 
 					 , create_date
 					 , create_user
 					 , modify_date

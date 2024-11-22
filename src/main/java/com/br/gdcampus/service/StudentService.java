@@ -17,4 +17,7 @@ public interface StudentService {
 	
 	//학생 삭제
 	int deleteStu(int stuNo);
+	
+	//여러행 삭제
+	boolean deleteStus(List<Integer> stuNoList);
 }
