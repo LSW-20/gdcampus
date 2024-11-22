@@ -43,6 +43,9 @@ public class ClassDao {
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
 		return sqlSession.selectList("classMapper.selectProfOpningList",search,rowBounds);
 	}
+	public int selectSumClassTime(Map<String, String> search) {
+		return sqlSession.selectOne("classMapper.selectSumClassTime",search);
+	}
 
 	
 //--------------------------------------개설신청 끝----------------------------------------------

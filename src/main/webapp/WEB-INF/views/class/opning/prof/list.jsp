@@ -58,8 +58,50 @@
 							<div class="form-inline float-md-right mb-3">
 								<div class="search-box ml-2">
 									<div class="position-relative">
-										<a href="${contextPath}/class/opning/prof/addForm.do" class="btn btn-success waves-effect waves-light"><i
-											class="mdi mdi-plus mr-2"></i> 개설신청</a>
+										<button type="button" id="addBtn" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#myModal">개설신청</button>
+										<!-- 모달 시작 -->
+		
+										<div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog">
+										    <div class="modal-dialog">
+										        <div class="modal-content">
+										            <div class="modal-header">
+										                <h5 class="modal-title" id="myModalLabel"><span id="year"></span>년도 신청현황</h5>
+										                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal">
+										                    <span aria-hidden="true">×</span>
+										                </button>
+										            </div>
+										            <div class="modal-body">
+										                <!-- 모달 내용 -->
+										                <table class="table table-centered table-nowrap table-check mb-0" style="table-layout: fixed">
+										                	<tr>
+										                		<td>
+										                			<div class="custom-control custom-radio">
+				                                                        <input type="radio" id="term1" name="customRadio" class="custom-control-input" value="1">
+				                                                        <label class="custom-control-label" for="term1">1학기</label>
+				                                                    </div>
+										                		</td>
+										                		<td><div id="content1"></div></td>
+										                	</tr>
+										                	<tr>
+										                		<td>
+										                			<div class="custom-control custom-radio ">
+				                                                        <input type="radio" id="term2" name="customRadio" class="custom-control-input" value="2">
+				                                                        <label class="custom-control-label" for="term2">2학기</label>
+				                                                    </div>
+										                		</td>
+										                		<td><div id="content2"></div></td>
+										                	</tr>
+										                </table>
+										            </div>
+										            <div class="modal-footer">
+										            	<div id="checkMsg" style="color: red; font-size: 12px; text-align:left;"></div>
+										                <button type="button" class="btn btn-light" data-dismiss="modal">취소</button>
+										                <button type="button" class="btn btn-primary" disabled id="addFormBtn">개설신청</button>
+										            </div>
+										        </div>
+										    </div>
+										</div>
+										<!-- 모달 끝 -->
 									</div>
 								</div>
 							</div>
@@ -138,6 +180,63 @@
 		<!-- main-content 끝 -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
+		var sum1;
+		var sum2;
+		var yy;
+		var limit;
+		var num;
+		var resultTerm;
+		$('#addBtn').on('click', function(evt) {
+	        //두개 다 조회해와서 내용 만들어줌 년도만 가지고 가서 1학기 2학기 둘다 구해옴
+			var date = new Date();
+			var oneYearLater = new Date(date.setFullYear(date.getFullYear() + 1));
+		    var year = oneYearLater.getFullYear();
+		    var year = String(year);
+		    yy = year.substring(2,4);	
+		    $('#year').html(yy);
+		    
+		    $.ajax({
+				url: '${contextPath}/class/opning/prof/sum.do',
+				type: 'get',
+				data: {
+					yy : yy,
+				},
+				success: function(res){
+					sum1 = res.sum1;
+					sum2 = res.sum2;
+					$('#content1').html(sum1+'시간');
+					$('#content2').html(sum2+'시간');
+					
+				}
+			})
+	    });
+		
+		$('input[name="customRadio"]').on('change', function(evt) {	      
+		    //만약 눌린 값이 21보다 작으면 addFormBtn 활성화, limit구해서 갱신
+		    resultTerm = $(this).val();
+		    num = $(this).val() == 1 ? sum1 : sum2;
+		    
+		    if(num>=21){
+		    	$('#addFormBtn').attr('disabled','');
+		    	$('#checkMsg').html('총 수업시수가 21시간 이상 신청하실 수 없습니다.');
+		    }else if(num==20){
+		    	$('#addFormBtn').removeAttr('disabled');
+		    	limit = 1;
+		    }else if(num==19){
+		    	$('#addFormBtn').removeAttr('disabled');
+		    	limit = 2;
+		    }else{
+		    	$('#addFormBtn').removeAttr('disabled');
+		    	limit = 3;
+		    }
+	    });
+		
+		$('#addFormBtn').on('click', function(evt) {
+			yytt = yy+'0'+resultTerm+'_';
+			location.href = '${contextPath}/class/opning/prof/addForm.do?limit='+limit+'&yytt='+yytt;
+	    });
+		
+	
 		$(document).ready(function() {
 			
 		    listDo(1);
@@ -223,9 +322,6 @@
 	        });    	
 	    }
 	</script>
-
-
-
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
 </body>

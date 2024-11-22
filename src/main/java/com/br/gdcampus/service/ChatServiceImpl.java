@@ -179,6 +179,17 @@ public class ChatServiceImpl implements ChatService {
 	public List<MessageDto> recentMessage() {
 		return chatDao.recentMessage();
 	}
+
+
+	/**
+	 * 현재 채팅방(1개)에 대한 정보 조회
+	 * author : 상우
+	 * reutrn 현재 채팅방 객체
+	 */
+	@Override
+	public ChatRoomDto selectChatRoomOne(String roomNo) {
+		return chatDao.selectChatRoomOne(roomNo);
+	}
 	
 	
 
