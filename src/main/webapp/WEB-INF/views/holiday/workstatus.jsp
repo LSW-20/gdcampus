@@ -19,7 +19,19 @@
         <link href="${contextPath }/css/icons.min.css" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="${contextPath }/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+<style>
+.icon-table {
+    width: 100%;
+    text-align: center;
+}
+.icon-table td {
+    padding: 10px;
+}
+.icon-large {
+    font-size: 48px; /* 아이콘 크기 지정 */
+}
 
+</style>
     </head>
  <body data-topbar="dark" data-sidebar="dark">
 
@@ -298,9 +310,31 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 출근/퇴근 -->
+                                  <div class="card">
+																					    <div class="card-body">
+																					        <h4 class="card-title mb-4">근무체크</h4>
+																					        <table class="icon-table">
+																					            <tr>
+																					                <td><i class="mdi mdi-account-arrow-left icon-large"></i></td>
+																					                <td><i class="mdi mdi-account-arrow-right icon-large"></i></td>
+																					            </tr>
+																					            <tr>
+																					            	<td>출근하기</td>
+																					            	<td>퇴근하기</td>
+																					            </tr>
+																					            
+																					        </table>
+																					    </div>
+																					</div>
+                                        <hr>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- end row -->
+                        
+                        
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
