@@ -50,6 +50,27 @@ public class UserDao {
 		return sqlSession.update("userMapper.PwdReset",user);
 	}
 	
+	public int selectProfListCount(Map<String, String> search) {
+		return sqlSession.selectOne("userMapper.selectProfListCount",search);
+	}
+
+	public List<UserDto> selectProfList(Map<String, String> search, PageInfoDto pi) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
+		return sqlSession.selectList("userMapper.selectProfList",search,rowBounds);
+	}
+
+	public UserDto selectProf(String userNo) {
+		return sqlSession.selectOne("userMapper.selectProf",userNo);
+	}
+	
+	public int updateProf(UserDto user) {
+		return sqlSession.update("userMapper.updateProf",user);
+	}
+
+	public int insertProf(UserDto user) {
+		return sqlSession.insert("userMapper.insertProf",user);
+	}
+	
 	//--------------------------------------인사팀 끝----------------------------------------------
 			
 	/**
@@ -237,5 +258,6 @@ public class UserDao {
 	public int resignUser(String userNo) {
 		return sqlSession.update("userMapper.resignUser",userNo);
 	}
+
 }
 
