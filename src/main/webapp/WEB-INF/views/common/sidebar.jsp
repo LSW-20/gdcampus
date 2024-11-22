@@ -191,74 +191,28 @@
 								<li class="menu-title">전자결재</li>
 
 								<li>
-										<a href="${contextPath}/approval/home" class="has-arrow waves-effect">
+										<a href= "${contextPath}/approval/home" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="check"></i>
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
+												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
+												<li><a href="${contextPath}/approval/home"></a></li> 
+												
 										</ul>
 								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/todo" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="columns"></i>
-												<span class="menu-item">결재 대기 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/approved" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="inbox"></i>
-												<span class="menu-item">내 결재함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
+
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="eye"></i>
-												<span class="menu-item">결재 참조/열람함</span>
+												<i class="icon nav-icon" data-feather="inbox"></i>
+												<span class="menu-item">개인 문서함</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/approved">내 결재함</a></li>
+												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/upComing" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="clipboard"></i>
-												<span class="menu-item">결재 예정 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/myDoc" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="file-text"></i>
-												<span class="menu-item">기안문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-										</ul>
-								</li>								
+								</li>							
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="edit-3"></i>
