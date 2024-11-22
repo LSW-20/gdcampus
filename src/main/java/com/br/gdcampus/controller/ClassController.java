@@ -216,7 +216,7 @@ public class ClassController {
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
-	@GetMapping("/opning/prof/modifyForm.do")
+	@GetMapping("/opning/prof/modifyForm.do" )
 	public void modifyForm(String classCode, Model model) {
 		ClassDto c = classService.selectStaffOpningDetail(classCode);
 		log.debug("{}",c);
