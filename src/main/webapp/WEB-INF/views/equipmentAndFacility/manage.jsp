@@ -298,61 +298,60 @@
 														</tr>
 												</thead>
 												<tbody>
-														<tr>
-															<td><input type="checkbox" class="delete-checkboxes"></td>
-															<td>비품</td>
-															<td>노트북</td>
-															<td>NT02</td>
-															<td class="left-align">MacBook Pro 13</td>
-															<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-														</tr>
-														<tr>
-															<td><input type="checkbox" class="delete-checkboxes"></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td class="left-align"></td>
-															<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-														</tr>
-														<tr>
-															<td><input type="checkbox" class="delete-checkboxes"></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td class="left-align"></td>
-															<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-														</tr>
-														<tr>
-															<td><input type="checkbox" class="delete-checkboxes"></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td class="left-align"></td>
-															<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-														</tr>
-														<tr>
-															<td><input type="checkbox" class="delete-checkboxes"></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td class="left-align"></td>
-															<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-														</tr>
+
+														<c:choose>
+																<c:when test="${ empty responseMap }">
+																		<tr>
+																				<td colspan="6">조회된 게시글이 없습니다.</td>
+																		</tr>
+																</c:when>
+																<c:otherwise>
+																		<c:forEach var="dto" items="${ responseMap.list }">
+																				<c:if test="${responseMap.category == '비품'}">
+																					<tr>
+																							<td><input type="checkbox" class="delete-checkboxes"></td>
+																							<td>비품</td>
+																							<td>${ dto.equipCategory }</td>
+																							<td>${ dto.equipNo }</td>
+																							<td>${ dto.equipName }</td>
+																							<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																					</tr>
+																				</c:if>
+																				<c:if test="${responseMap.category == '시설'}">
+																					<tr>
+																							<td><input type="checkbox" class="delete-checkboxes"></td>
+																							<td>시설</td>
+																							<td>${ dto.facilityCategory }</td>
+																							<td>${ dto.facilityNo }</td>
+																							<td>${ dto.facilityName }</td>
+																							<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																					</tr>
+																				</c:if>
+																		</c:forEach>
+																</c:otherwise>
+														</c:choose>
+
 												</tbody>		
 										</table>
 								</div>
 
 								<br><br>
-								<ul class="pagination d-flex justify-content-center text-dark">
-									<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
-									<li class="page-item active"><a class="page-link" href="">1</a></li>
-									<li class="page-item"><a class="page-link" href="">2</a></li>
-									<li class="page-item"><a class="page-link" href="">3</a></li>
-									<li class="page-item"><a class="page-link" href="">4</a></li>
-									<li class="page-item"><a class="page-link" href="">5</a></li>
-									<li class="page-item"><a class="page-link" href="">Next</a></li>
-								</ul>
 
+								<ul class="pagination d-flex justify-content-center">
+               
+										<li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
+												<a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${pi.currentPage-1}">Previous</a>
+										</li>
+									
+										<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+												<li class="page-item ${ pi.currentPage == p ? 'active' : '' }"><a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${ p }">${ p }</a></li>
+										</c:forEach>
+									
+										<li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
+												<a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${pi.currentPage+1}">Next</a>
+										</li>
+						 
+								</ul>
 
 
 							<!-- 시설 수정 modal -->
