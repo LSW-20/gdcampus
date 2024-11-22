@@ -18,7 +18,7 @@
 				}	
 
 				.radio-or-select{
-						width: 200px;
+						width: 120px;
 						/* border: 1px solid red; */
 						display: inline-block;
 						margin-left: 10px;
@@ -212,8 +212,6 @@
 														<span class="large-name">구분</span> &nbsp;&nbsp;
 
 														<span class="radio-or-select">
-																<input type="radio" id="all" name="classification" value="all" onclick="radioSelect('all')">
-																<label for="all">전체</label> &nbsp;&nbsp;
 																<input type="radio" id="equipment" name="classification" value="equipment" onclick="radioSelect('equipment')">
 																<label for="equipment">비품</label> &nbsp;&nbsp;
 																<input type="radio" id="facility" name="classification" value="facility" onclick="radioSelect('facility')">
@@ -224,23 +222,23 @@
 
 												<br>
 												<div id="categorization">
-														<span class="large-name">분류</span> &nbsp;&nbsp;
+														<form action="${contextPath}/equipmentAndFacility/selectList" method="get" id="select-form">
+																<span class="large-name">분류</span> &nbsp;&nbsp;
 
-														<span class="radio-or-select">
-																<span id="equipmentSelectDiv">
-																		<select name="equipment">
-																				<option selected>비품 전체</option>
-																		</select>
+																<span class="radio-or-select">
+																		<span id="equipmentSelectDiv">
+																				<select name="equipment">
+
+																				</select>
+																		</span>
+
+																		<span id="facilitySelectDiv">
+																				<select name="facility">
+
+																				</select>
+																		</span>
 																</span>
-
-																<span id="facilitySelectDiv">
-																		<select name="facility">
-																				<option selected>시설 전체</option>
-																		</select>
-																</span>
-														</span>
-
-														<button type="button">검색</button>
+														</form>		
 												</div>
 										</div>
 										<!-- top-child1 끝 -->
@@ -417,18 +415,14 @@
 
 		<script>
 			function radioSelect(selection) {
-					if (selection === 'all') {
-							$("#equipmentSelectDiv, #facilitySelectDiv").show();
-							loadOptions('equipment');
-							loadOptions('facility');
-					} else if (selection === 'equipment') {
+					if (selection === 'equipment') {
 							$("#equipmentSelectDiv").show();
 							$("#facilitySelectDiv").hide();
-							loadOptions('equipment');
+							loadOptions('비품');
 					} else if (selection === 'facility') {
 							$("#facilitySelectDiv").show();
 							$("#equipmentSelectDiv").hide();
-							loadOptions('facility');
+							loadOptions('시설');
 					}
 			}
 	
@@ -438,14 +432,29 @@
 							type: 'GET',
 							data: { category: category },
 
-							dataType: 'json',
-							success: function(data) {
-									let target = type === 'equipment' ? $("#equipmentSelectDiv select") : $("#facilitySelectDiv select");
-									target.empty(); // 기존 옵션 제거
-									target.append('<option selected>' + (type === 'equipment' ? '비품 전체' : '시설 전체') + '</option>'); // 정적 값 추가
-									data.forEach(function(item) { 
-											target.append('<option>' + item + '</option>');
+
+							dataType: 'json', // 컨트롤러가 JSON을 반환하도록 설정된 경우 사실 생략 가능
+							success: function(resData) {
+									console.log('응답 데이터:', resData);
+
+									const category = resData.category; // "비품" 또는 "시설"
+									const list = resData.list; // List<String> 형태의 카테고리
+									let targetSelect;
+
+									if (category === '비품') {
+											targetSelect = "#equipmentSelectDiv select";
+											$(targetSelect).empty().append('<option selected>비품 전체</option>');
+									} else if (category === '시설') {
+											targetSelect = "#facilitySelectDiv select";
+											$(targetSelect).empty().append('<option selected>시설 전체</option>');
+									}
+
+									list.forEach(function(item) {
+										$(targetSelect).append('<option>' + item + '</option>');
 									});
+
+									$('#select-form button[type="submit"]').remove();  // 기존 버튼 삭제
+									$('#select-form').append('<button type="submit">검색</button>'); // 새 버튼 추가
 							},
 							error: function() {
 									alert('옵션을 불러오는 중 오류가 발생했습니다.');
