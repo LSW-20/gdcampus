@@ -138,7 +138,7 @@
                             <ul class="doc-list">
                                 <c:forEach items="${inProgressDocs}" var="doc">
                                     <li class="doc-item">
-                                        <a href="${contextPath}/approval/detail/${doc.apprNo}" class="doc-link">
+                                        <a href="${contextPath}/approval/detail/${doc.apprNo}?type=myDoc" class="doc-link">
                                             ${doc.apprTitle}
                                         </a>
                                         <span class="doc-date">
@@ -158,7 +158,7 @@
                             <ul class="doc-list">
                                 <c:forEach items="${completedDocs}" var="doc">
                                     <li class="doc-item">
-                                        <a href="${contextPath}/approval/detail/${doc.apprNo}" class="doc-link">
+                                        <a href="${contextPath}/approval/detail/${doc.apprNo}?type=myDoc" class="doc-link">
                                             ${doc.apprTitle}
                                         </a>
                                         <span class="doc-date">
@@ -192,7 +192,7 @@
                 success: function(response) {
                     const todoDocsHtml = response.docs.map(doc => `
                         <div class="doc-item">
-                            <a href="${contextPath}/approval/todo/\${doc.apprNo}" class="doc-link">
+                            <a href="${contextPath}/approval/detail/\${doc.apprNo}?type=todo" class="doc-link">
                                 \${doc.apprTitle}
                             </a>
                             <span class="doc-date">\${formatDate(doc.apprDate)}</span>

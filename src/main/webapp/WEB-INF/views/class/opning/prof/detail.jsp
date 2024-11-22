@@ -98,7 +98,7 @@
 										<th width="15%" scope="col">시수</th>
 										<td width="15%" scope="col">${ c.classHours}</td>
 										<th width="20%" scope="col">대상학년</th>
-										<td width="20%" scope="col">${c.targetGrade} 학년</td>
+										<td width="20%" scope="col">${c.targetGrade eq 5 ? '전체' : c.targetGrade} 학년</td>
 									</tr>
 								</thead>
 							</table>
@@ -215,7 +215,7 @@
 											<a class="btn btn-primary w-md mr-3 col" id="opStatus">신청 취소</a>
 										
 										</div>
-										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();">저장</button>
+										<button type="button" class="btn btn-primary w-md mr-3 col" onclick="fn_updateStatus();" disabled id="okBtn">저장</button>
 									</c:if>
 								</div>
 								
@@ -236,6 +236,7 @@
 	    	console.log('${c.evaList}');
 	    	$('#reason').val('');
 	    	$('#reasonBox').removeAttr('hidden');
+	    	$('#okBtn').removeAttr("disabled");
 	    });
 		function fn_updateStatus(){
   			

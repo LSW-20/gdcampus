@@ -123,9 +123,9 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <table class="approval-table">
+                            <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                 <thead>
-                                    <tr>
+                                    <tr class="bg-transparent">
                                         <th>기안일</th>
                                         <th>결재양식</th>
                                         <th>제목</th>
@@ -150,7 +150,7 @@
                                 </tbody>
                             </table>
                             
-                            <!-- 페이징 처리 -->
+<%--                             <!-- 페이징 처리 -->
                             <ul id="paging_area" class="pagination d-flex justify-content-center">
                                 <li class="page-item ${pi.currentPage == 1 ? 'disabled' : ''}">
                                     <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage-1}">Prev</a>
@@ -165,7 +165,7 @@
                                 <li class="page-item ${pi.currentPage == pi.maxPage || pi.endPage == 0 ? 'disabled' : ''}">
                                     <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage+1}">Next</a>
                                 </li>
-                            </ul>
+                            </ul> --%>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -174,5 +174,16 @@
         <!-- main-content 끝 -->
     </div>
     <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+        <!-- Required datatable js -->
+        <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        
+        <!-- Responsive examples -->
+        <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- init js -->
+        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
+    
 </body>
 </html>

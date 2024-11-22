@@ -247,7 +247,7 @@ public class ChatController {
 	 * 채팅방 나가기
 	 * author : 상우
 	 */
-	@GetMapping("/exitRoom")
+	@PostMapping("/exitRoom")
 	public String exitRoom(HttpSession session, String roomNo, RedirectAttributes ra) {
 		
 		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();

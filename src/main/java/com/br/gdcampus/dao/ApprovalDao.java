@@ -162,7 +162,63 @@ public class ApprovalDao {
 	public List<ApprLineDto> selectApproversList(String apprNo) {
 		return sqlSession.selectList("approvalMapper.selectApproversList",apprNo);
 	}
-	
-	
+
+	public DraftDto selectSimpleDraftDetail(String apprNo) {
+		return sqlSession.selectOne("approvalMapper.selectSimpleDraftDetail",apprNo);
+	}
+
+	public PurchaseDraftDto selectPurchDraftDetail(String apprNo) {
+		return sqlSession.selectOne("approvalMapper.selectPurchDraftDetail",apprNo);
+	}
+
+	public List<PurchaseHistoryDto> selectPurchHistoryDetail(String apprNo) {
+		return sqlSession.selectList("approvalMapper.selectPurchHistoryDetail",apprNo);
+	}
+
+	public int updateLineAgree(Map<String, Object> params) {
+		return sqlSession.update("approvalMapper.updateLineAgree",params);
+	}
+
+	public int updateLineReject(Map<String, Object> params) {
+		return sqlSession.update("approvalMapper.updateLineReject",params);
+	}
+
+	public int updateApprAgree(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprAgree",apprNo);
+	}
+
+	public int updateApprReject(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprReject",apprNo);
+	}
+
+	public int isLastOrder(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.isLastOrder",params);
+	}
+
+	public int updateNextOrder(String apprNo) {
+		return sqlSession.update("approvalMapper.updateNextOrder",apprNo);
+	}
+
+	public int isCurrentOrder(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.isCurrentOrder",params);
+	}
+
+	public int updateApprStatusToProgress(String apprNo) {
+		return sqlSession.update("approvalMapper.updateApprStatusToProgress",apprNo);
+	}
+
+	public int selectMyApprovedListCount(String userNo) {
+		return sqlSession.selectOne("approvalMapper.selectMyApprovedListCount",userNo);
+	}
+
+	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage()-1)*pi.getBoardLimit(),pi.getBoardLimit());
+		
+		return sqlSession.selectList("approvalMapper.selectMyApprovedList",params,rowBounds);
+	}
+
+	public ApprovalDto selectMyApprovedDetail(Map<String, Object> params) {
+		return sqlSession.selectOne("approvalMapper.selectMyApprovedDetail",params);
+	}
 
 }

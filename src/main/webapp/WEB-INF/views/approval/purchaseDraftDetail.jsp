@@ -9,7 +9,7 @@
             <table>
                 <tr>
                     <th width="30%">기안자</th>
-                    <td>${approval.apprUser}</td>
+                    <td>${approval.userName}</td>
                 </tr>
                 <tr>
                     <th>소속</th>
@@ -21,7 +21,7 @@
                 </tr>
                 <tr>
                     <th>문서번호</th>
-                    <td>${approval.apprNo}</td>
+                    <td>${approval.apprNo}<input type="hidden" value="${approval.apprStatus}" name="apprStatus"></td>
                 </tr>
             </table>
         </div>
@@ -113,8 +113,8 @@
                     <td>${item.productName}</td>
                     <td>${item.productUnit}</td>
                     <td>${item.productAmt}</td>
-                    <td>${item.productPriceOne}</td>
                     <td>${item.productPrice}</td>
+                    <td>${item.productAmt * item.productPrice}</td>
                 </tr>
             </c:forEach>
         </tbody>
@@ -137,7 +137,7 @@
     <div class="button-area" style="margin-top: 20px; text-align: center;">
         <c:choose>
             <%-- 결재 대기 문서함 --%>
-            <c:when test="${param.type eq 'todo' && approval.currOrder eq approver.lineOrder}">
+            <c:when test="${param.type eq 'todo'}">
                 <button type="button" class="btn btn-primary" onclick="approveDocument()">결재</button>
                 <button type="button" class="btn btn-danger" onclick="rejectDocument()">반려</button>
             </c:when>
@@ -150,7 +150,7 @@
     </div>
 </div>
 
-<style>
+<!-- <style>
     .purchase-form {
         width: 1000px;
         margin: 0 auto;
@@ -228,17 +228,17 @@
         padding: 8px;
         text-align: center;
     }
-</style>
+</style> -->
 
 <script>
-function approveDocument() {
-    if(confirm('해당 문서를 승인하시겠습니까?')) {
+/* function approveDocument() {
+    if(confirm('해당 문서를 승인하시겠습니까?DraftDetail.jsp')) {
         $.ajax({
             url: '${contextPath}/approval/approve',
             type: 'POST',
             data: {
                 apprNo: '${approval.apprNo}',
-                userNo: '${loginUser.userNo}'
+                apprStatus: '${approval.apprStatus}'
             },
             success: function(response) {
                 if(response.success) {
@@ -253,7 +253,7 @@ function approveDocument() {
 }
 
 function rejectDocument() {
-    const reason = prompt('반려 사유를 입력해주세요.');
+    const lineReason = prompt('반려 사유를 입력해주세요.');
     if(reason) {
         $.ajax({
             url: '${contextPath}/approval/reject',
@@ -261,7 +261,7 @@ function rejectDocument() {
             data: {
                 apprNo: '${approval.apprNo}',
                 userNo: '${loginUser.userNo}',
-                reason: reason
+                lineReason: lineReason
             },
             success: function(response) {
                 if(response.success) {
@@ -273,5 +273,5 @@ function rejectDocument() {
             }
         });
     }
-}
+} */
 </script>

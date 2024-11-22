@@ -182,25 +182,89 @@
 	<!-- 개설신청한 수업이 총 몇시수인지 조회 -->
 	<select id="selectSumClassTime" resultType="_int">
 		SELECT 
-	    	   NVL(SUM(C.CLASS_HOURS),0) AS SUM
-		  FROM 
-	    	   T_CLASS C
-		  JOIN 
-	    	   T_OPEN_APPL O
-			ON 
-	    	   C.CLASS_CODE = O.CLASS_CODE
-		 WHERE 
-		       O.STATUS IN ('접수','승인', '보완요청', '보완완료') 
-		   AND C.USER_NO = #{userNo}
-		   AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
-		   AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
-		 GROUP 
-		    BY SUBSTR(C.CLASS_CODE, 1, 2), 
-	           SUBSTR(C.CLASS_CODE, 4, 1), 
-	    	   C.USER_NO
-		 ORDER 
-		    BY SUBSTR(C.CLASS_CODE, 1, 2)
+	    	   NVL(SUM(CASE 
+	           		   WHEN O.STATUS IN ('접수', '승인', '보완요청', '보완완료')
+	                    AND C.USER_NO = #{userNo}
+	                    AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
+	                    AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
+	               	   THEN C.CLASS_HOURS 
+	               	   ELSE 0 
+	           			END), 0) AS SUM
+		 FROM 
+	    	  T_CLASS C
+		 LEFT JOIN 
+	    	  T_OPEN_APPL O
+	       ON C.CLASS_CODE = O.CLASS_CODE
 	</select>
+	<insert id="insertClass">
+		INSERT 
+		  INTO T_CLASS 
+		     ( 
+		       CLASS_CODE
+		     , USER_NO
+		     , CLASS_TITLE
+		     , CLASS_TYPE
+		     , PRG_METHOD
+		     , TARGET_GRADE
+		     , CLASS_HOURS
+		     , CLASS_GOALS
+		     , OPERATION_PLAN
+		     , MAIN_TEXTBOOK
+		     , REFN_BOOK
+		     , CONFIRM_YN
+		     ) 
+		VALUES 
+		     (
+		       #{classCode} || '_' || LPAD(SEQ_CNO.NEXTVAL,3,0)
+		     , #{userNo}
+		     , #{classTitle}
+		     , #{classType}
+		     , #{prgMethod}
+		     , #{targetGrade}
+		     , #{classHours}
+		     , #{classGoals}
+		     , #{operationPlan}
+		     , #{mainTextBook}
+		     , #{refnBook}
+		     , 'N'
+		     )
+	</insert>
+	<insert id="insertOpning">
+		INSERT 
+		  INTO T_OPEN_APPL 
+		     ( 
+		       CLASS_CODE
+		     , STATUS
+		     , APPL_DATE
+		     , DEL_YN
+		     ) 
+		VALUES 
+		    (
+		      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+		    , '접수'
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    , 'N'
+		    )
+	</insert>
+	<insert id="insertEva">
+	INSERT 
+	  INTO T_EVA_METHOD 
+	     ( 
+	       CLASS_CODE
+	     , EVA_ITEM
+	     , ALLOCATION
+	     , EVA_DETAIL
+	     , CREATE_DATE
+	     ) 
+	VALUES 
+	    ( 
+	      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+	    , #{evaItem}
+	    , #{allocation}
+	    , #{evaDetail}
+	    , to_date(SYSDATE,'RR/MM/DD')
+	    )
+	</insert>
 	<!-- 강의신청 수정(보완)/교수 -->
 
 	

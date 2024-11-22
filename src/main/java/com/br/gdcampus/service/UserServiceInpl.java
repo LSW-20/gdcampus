@@ -69,7 +69,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int selectProfListCount(Map<String, String> search) {
-		return 0;
+		return userDao.selectProfListCount(search);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public List<UserDto> selectProfList(Map<String, String> search, PageInfoDto pi) {
-		return null;
+		return userDao.selectProfList(search, pi);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public UserDto selectProf(String userNo) {
-		return null;
+		return userDao.selectProf(userNo);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int insertProf(UserDto user) {
-		return 0;
+		return userDao.insertProf(user);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class UserServiceInpl implements UserService {
 	 */
 	@Override
 	public int updateProf(UserDto user) {
-		return 0;
+		return userDao.updateProf(user);
 	}
 
 	/**
@@ -111,8 +111,8 @@ public class UserServiceInpl implements UserService {
 	 * 
 	 */
 	@Override
-	public int deleteUser(String loginUserNo, String userNo) {
-		return 0;
+	public 	int deleteUser(Map<String, String> delInfo) {
+		return userDao.deleteUser(delInfo);
 	}
 
 	/**
