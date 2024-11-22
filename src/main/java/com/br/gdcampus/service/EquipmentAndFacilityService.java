@@ -3,6 +3,7 @@ package com.br.gdcampus.service;
 import java.util.List;
 
 import com.br.gdcampus.dto.EquipmentDto;
+import com.br.gdcampus.dto.FacilityDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
 public interface EquipmentAndFacilityService {
@@ -14,12 +15,12 @@ public interface EquipmentAndFacilityService {
 	List<String> selectFacilityCategory();
 
 	// 비품 목록 조회(페이징 처리)
-	// int selectEquipmentListCount();
-	// List<EquipmentDto> selectEquipmentList(PageInfoDto pi, String equipment);
+	int selectEquipmentListCount(); // 비품 목록 전체 개수 조회
+	List<EquipmentDto> selectEquipmentList(PageInfoDto pi, String equipment); 
 	  
 	// 시설 목록 조회(페이징 처리)
-	// int selectFacilityListCount();
-	// List<FacilityDto> selectFacilityList(PageInfoDto pi, String facility);
+	int selectFacilityListCount(); // 시설 목록 전체 개수 조회
+	List<FacilityDto> selectFacilityList(PageInfoDto pi, String facility); 
 	
 
 	// 비품 추가 - 상우
