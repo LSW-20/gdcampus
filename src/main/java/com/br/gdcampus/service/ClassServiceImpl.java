@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.ClassDao;
+import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
@@ -45,6 +46,19 @@ public class ClassServiceImpl implements ClassService {
 	public int selectSumClassTime(Map<String, String> search) {
 		return classDao.selectSumClassTime(search);
 	}
+	@Override
+	public int insertClass(ClassDto c) {
+		int result= 1;
+		if(result == classDao.insertClass(c)) {
+			if(result == classDao.insertOpning(c)) {
+				if(result == classDao.insertEva(c)) {
+					return 1;
+				};
+			};
+		};
+		return -1;
+	}
+
 	@Override
 	public ClassDto selectProfOpningDetail(String classCode) {
 		return null;
@@ -94,6 +108,12 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public int updatePlanList(ClassDto c) {
 		return 0;
+	}
+
+	@Override
+	public List<CategoryDto> selectCategory(String string) {
+		// 학과 조회
+		return classDao.selectCategory(string);
 	}
 
 }
