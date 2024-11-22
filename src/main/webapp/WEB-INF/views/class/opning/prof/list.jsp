@@ -208,12 +208,15 @@
 		    	$('#checkMsg').html('총 수업시수가 21시간 이상 신청하실 수 없습니다.');
 		    }else if(num==20){
 		    	$('#addFormBtn').removeAttr('disabled');
+		    	$('#checkMsg').html('');
 		    	limit = 1;
 		    }else if(num==19){
 		    	$('#addFormBtn').removeAttr('disabled');
+		    	$('#checkMsg').html('');
 		    	limit = 2;
 		    }else{
 		    	$('#addFormBtn').removeAttr('disabled');
+		    	$('#checkMsg').html('');
 		    	limit = 3;
 		    }
 	    });

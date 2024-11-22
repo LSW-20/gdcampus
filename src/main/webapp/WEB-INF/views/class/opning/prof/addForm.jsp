@@ -310,41 +310,11 @@
 	    		$('#allowMsg').html('');
 	    	}else{
 	    		allOk = false;
-	    		$('#allowMsg').html('총점을 100으로 맞춰주세요');
+	    		$('#allowMsg').html('합계 100점이 되어야합니다.');
 	    	}
 
 	    });
 	    
-	    
-		function fn_updateStatus(){
-  			
-  			if($('#reason').val() == ''){
-  				alert('사유를 작성해주십시오.');
-  				return;
-  			}  				
-
-  			
-  			if(confirm('신청서를 취소 처리하시겠습니까?')){
-  				
-				$.ajax({
-					url: '${contextPath}/class/opning/staff/update.do',
-					type: 'post',
-					data: {
-						reason : $('#reason').val(),
-						status : '취소',
-						classCode : '${c.classCode}'
-					},
-					success: function(res){
-						if(res == "SUCCESS"){
-							location.reload('${c.classCode}');
-						}else{
-							alert("처리에 실패하였습니다.");
-						}
-					}
-				})
-  			
-  			}
-  		}
 		</script>
 	</div>
 	
