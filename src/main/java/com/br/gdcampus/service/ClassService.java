@@ -29,6 +29,8 @@ public interface ClassService {
 	int updateOpningStatus(ClassDto c);
 	// 개설강의 총 시수 조회(교수측)
 	int selectSumClassTime(Map<String, String> search);
+	// 개설상의 등록
+	int insertClass(ClassDto c);
 	
 	
 //--------------------------------------개설신청 끝----------------------------------------------	

@@ -112,7 +112,7 @@
 	                                <div class="col-md-3">
 	                                   	<select class="custom-select" name="deptName" id="deptName">
 											<c:forEach var="category" items="${deptList}">
-	               								<option value="${category.deptNo}">
+	               								<option value="${category.stDeptNo}">
 	                   								${category.deptName}
 	               								</option>
 	           								</c:forEach>
@@ -233,9 +233,10 @@
 						</div>
 						<div class="row mt-5 d-flex justify-content-center">
 							<a class="btn btn-primary w-md mr-3 col-2" href="${contextPath }/class/opning/prof/list.do">목록</a>
-							<a class="btn btn-primary w-md mr-3 col-2" id="registBtn">신청</a>
+							<button class="btn btn-primary w-md mr-3 col-2" id="registBtn">신청</button>
 						</div>
-						<input type="hidden" value="${c.classCode }">
+						<input type="hidden" value="${classCode }" name="classCode">
+						<input type="hidden" value="${user.userNo}" name="userNo">
 					</form>
 				</div>
 			</div>
@@ -248,9 +249,12 @@
 		var detail = '';
 		
 		$('#registBtn').on('click', function(){
+			if(allOk == false){
+				alert('평가방식이 잘못 작성되었습니다');
+				return;
+			}
 			if(confirm('신청서를 제출하시겠습니까?')){
-				$("#addForm").submit();			
-				return false; 
+				return true;
 			}
 		})
 		
@@ -269,19 +273,23 @@
 		    	if($(this).val() != null && $(this).val() != ''){
 		    		
 		    		$(this).attr('name','evaList['+ no +'].allocation');
+		    		var evaItem;
 		    		
-		    		detail += '<div class="form-group mt-4 mb-4">'
-		                   +  	'<label name="evaList['+ no +'].evaItem">';
-		             	   if($(this).attr('id') == 'middle'){
-		             		   detail += '중간고사';
-		             	   }else if($(this).attr('id') == 'final'){
-		             		   detail += '기말고사';
-		             	   }else if($(this).attr('id') == 'work'){
-		             		   detail += '실습/과제'; 
-		             	   }else{
-		             		   detail += '기타';
-		             	   };
-		            detail +='</label>'
+		    		if($(this).attr('id') == 'middle'){
+		    			evaItem = '중간고사';
+             	    }else if($(this).attr('id') == 'final'){
+             	    	evaItem = '기말고사';
+             	    }else if($(this).attr('id') == 'work'){
+             	    	evaItem = '실습/과제'; 
+             	    }else{
+             	    	evaItem = '기타';
+             	    };
+		    		
+		    		detail +='<div class="form-group mt-4 mb-4">'
+		                   +  	'<label>'
+		                   +     	evaItem
+		                   +	'</label>'
+		                   +	'<input type="hidden" name="evaList['+ no +'].evaItem" value="'+evaItem+'">'
 		             	   + 	'<div>'
 		             	   + 		'<textarea required class="form-control" rows="5" style="height: 80px;" id="'+$(this).attr('id')+'Dt" name="evaList['+ no++ +'].evaDetail"></textarea>'
 		       			   +	'</div>'
@@ -300,12 +308,9 @@
 	    	if(sum == 100){
 	    		allOk = true;
 	    		$('#allowMsg').html('');
-	    		$('#registBtn').attr('href','${contextPath}/class/opning/prof/regist.do');
-	    		$('#registBtn').addClass('btn-primary');
 	    	}else{
 	    		allOk = false;
 	    		$('#allowMsg').html('총점을 100으로 맞춰주세요');
-	    		$('#registBtn').removeClass('btn-primary');
 	    	}
 
 	    });

@@ -196,6 +196,75 @@
 	    	  T_OPEN_APPL O
 	       ON C.CLASS_CODE = O.CLASS_CODE
 	</select>
+	<insert id="insertClass">
+		INSERT 
+		  INTO T_CLASS 
+		     ( 
+		       CLASS_CODE
+		     , USER_NO
+		     , CLASS_TITLE
+		     , CLASS_TYPE
+		     , PRG_METHOD
+		     , TARGET_GRADE
+		     , CLASS_HOURS
+		     , CLASS_GOALS
+		     , OPERATION_PLAN
+		     , MAIN_TEXTBOOK
+		     , REFN_BOOK
+		     , CONFIRM_YN
+		     ) 
+		VALUES 
+		     (
+		       #{classCode} || '_' || LPAD(SEQ_CNO.NEXTVAL,3,0)
+		     , #{userNo}
+		     , #{classTitle}
+		     , #{classType}
+		     , #{prgMethod}
+		     , #{targetGrade}
+		     , #{classHours}
+		     , #{classGoals}
+		     , #{operationPlan}
+		     , #{mainTextBook}
+		     , #{refnBook}
+		     , 'N'
+		     )
+	</insert>
+	<insert id="insertOpning">
+		INSERT 
+		  INTO T_OPEN_APPL 
+		     ( 
+		       CLASS_CODE
+		     , STATUS
+		     , APPL_DATE
+		     , DEL_YN
+		     ) 
+		VALUES 
+		    (
+		      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+		    , '접수'
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    , 'N'
+		    )
+	</insert>
+	<insert id="insertEva">
+	INSERT 
+	  INTO T_EVA_METHOD 
+	     ( 
+	       CLASS_CODE
+	     , EVA_ITEM
+	     , ALLOCATION
+	     , EVA_DETAIL
+	     , CREATE_DATE
+	     ) 
+	VALUES 
+	    ( 
+	      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+	    , #{evaItem}
+	    , #{allocation}
+	    , #{evaDetail}
+	    , to_date(SYSDATE,'RR/MM/DD')
+	    )
+	</insert>
 	<!-- 강의신청 수정(보완)/교수 -->
 
 	

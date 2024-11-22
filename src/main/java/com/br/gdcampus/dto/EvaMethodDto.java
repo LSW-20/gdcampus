@@ -18,6 +18,7 @@ import lombok.ToString;
 @Builder
 public class EvaMethodDto {
 
+	private String classCode;
 	private String evaItem;
 	private int allocation;
 	private String evaDetail;

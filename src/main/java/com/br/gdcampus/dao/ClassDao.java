@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
+import com.br.gdcampus.dto.EvaMethodDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,25 @@ public class ClassDao {
 	}
 	public List<CategoryDto> selectCategory(String category) {
 		return sqlSession.selectList("userMapper.selectCategory",category);
+	}
+	public int insertClass(ClassDto c) {
+		return sqlSession.insert("classMapper.insertClass",c);
+	}
+	public int insertOpning(ClassDto c) {
+		return sqlSession.insert("classMapper.insertOpning",c);
+	}
+	public int insertEva(ClassDto c) {
+		List<EvaMethodDto> evaList = c.getEvaList();
+		int sum = 0;
+		for(EvaMethodDto e : evaList) {
+			e.setClassCode(c.getClassCode());
+			sum += sqlSession.insert("classMapper.insertEva",e);
+		};
+		if(sum == evaList.size()) {
+			return 1;
+		}else {
+			return -1;
+		}
 	}
 
 	

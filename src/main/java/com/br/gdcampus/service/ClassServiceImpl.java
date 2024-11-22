@@ -47,6 +47,19 @@ public class ClassServiceImpl implements ClassService {
 		return classDao.selectSumClassTime(search);
 	}
 	@Override
+	public int insertClass(ClassDto c) {
+		int result= 1;
+		if(result == classDao.insertClass(c)) {
+			if(result == classDao.insertOpning(c)) {
+				if(result == classDao.insertEva(c)) {
+					return 1;
+				};
+			};
+		};
+		return -1;
+	}
+
+	@Override
 	public ClassDto selectProfOpningDetail(String classCode) {
 		return null;
 	}

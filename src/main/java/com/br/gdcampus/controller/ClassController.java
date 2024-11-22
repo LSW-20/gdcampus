@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
@@ -196,9 +197,22 @@ public class ClassController {
 		model.addAttribute("deptName", deptName);
 	}
 	
+	/**교수측 개설신청(db insert)
+	 * @param c 저장할 데이터가 담긴 ClassDto객체
+	 * @return 목록페이지로 redirect
+	 */
 	@PostMapping("opning/prof/regist.do")
-	public String registOpningForm(ClassDto c) {
+	public String registOpningForm(ClassDto c, RedirectAttributes rdAttributes) {
 		log.debug("ClassDto : "+c);
+		
+		c.setClassCode(c.getClassCode() + c.getDeptName());
+		
+		int result = classService.insertClass(c);
+		if(result == 1) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 등록되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg","등록에 실패하였습니다.");
+		}
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
