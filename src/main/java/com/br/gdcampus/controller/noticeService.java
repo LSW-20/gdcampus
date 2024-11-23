@@ -1,23 +1,17 @@
-package com.br.gdcampus.service;
+package com.br.gdcampus.controller;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.br.gdcampus.dao.NoticeDao;
 import com.br.gdcampus.dto.NoticeDto;
+import com.br.gdcampus.service.NoticeService;
 
-import lombok.RequiredArgsConstructor;
+public class noticeService implements NoticeService {
 
-@Service
-@RequiredArgsConstructor
-public class NoticeServiceImpl implements NoticeService {
-
-	 private final NoticeDao noticeDao;
-	 
 	@Override
-	public List<NoticeDto> selectNoticeList() {
-		return noticeDao.selectNoticeList();
+	public List<NoticeDao> selectNoticeList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

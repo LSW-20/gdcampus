@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+	    <!-- 결과 매핑 -->
+   <resultMap id="noticeResultMap" type="NoticeDto">
+			<result column="POST_NO" property="postNo" />
+			<result column="board_type_no" property="boardTypeNo" />
+			<result column="user_no" property="userNo" />
+			<result column="POST_TITLE" property="postTitle" />
+			<result column="POST_CONTENT" property="postContent" />
+			<result column="REGIST_DATE" property="registDate" />
+			<result column="FILE_STATUS" property="fileStatus" />
+			<result column="COUNT" property="count" />
+			<result column="POST_TOP" property="postTop" />
+			<result column="modify_date" property="modifyDate" />
+			<result column="modify_user" property="modifyUser" />
+	</resultMap>
+	
+		<!-- 게시글 목록 조회 -->
+	<select id="selectNoticeList" resultMap="noticeResultMap">
+		select 
+      POST_NO
+    , POST_TITLE
+    , REGIST_DATE
+    , FILE_STATUS
+    , "COUNT" as count 
+    , POST_TOP
+  from
+      t_post
+	</select>
+	
+</mapper>
