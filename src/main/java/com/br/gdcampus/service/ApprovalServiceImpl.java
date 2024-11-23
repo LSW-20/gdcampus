@@ -1,5 +1,6 @@
 package com.br.gdcampus.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,14 +64,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.selectMyDocList(pi, params);
 	}
 
+	//내결재함 페이징
 	@Override
 	public int selectMyApprovedListCount(String userNo) {
-		return 0;
+		return apprDao.selectMyApprovedListCount(userNo);
 	}
 
+	//내결재함 리스트
 	@Override
-	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, String userNo) {
-		return null;
+	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params) {
+		return apprDao.selectMyApprovedList(pi,params);
 	}
 
 	@Override
@@ -88,11 +91,20 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalDto selectApprTodoDetail(Map<String, Object> params) {
 		ApprovalDto approval = apprDao.selectApprTodoDetail(params);
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
 		if(approval != null) {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
@@ -102,11 +114,20 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalDto selectApprUpcomingDetail(Map<String, Object> params) {
 		ApprovalDto approval = apprDao.selectApprUpcomingDetail(params);
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
 		if(approval != null) {
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
@@ -118,18 +139,49 @@ public class ApprovalServiceImpl implements ApprovalService {
 		ApprovalDto approval = apprDao.selectMyDocDetail(params);
 		
 		String apprNo = (String)params.get("apprNo");
-		System.out.println("결재할 결재선 apprNo : "+apprNo);
+		System.out.println("가져올apprNo : "+apprNo);
+		
 		if(approval != null) {
+			
 			//결재선조회
 			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
 			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
 		}
 		return approval;
 	}
 
 	@Override
 	public ApprovalDto selectMyApprovedDetail(Map<String, Object> params) {
-		return null;
+		ApprovalDto approval = apprDao.selectMyApprovedDetail(params);
+		
+		String apprNo = (String)params.get("apprNo");
+		System.out.println("가져올apprNo : "+apprNo);
+		
+		if(approval != null) {
+			
+			//결재선조회
+			List<ApprLineDto> approvers = apprDao.selectApproversList(apprNo);
+			approval.setApprovers(approvers);
+			
+			//문서종류별 상세 내용 조회
+			if(approval.getApprType().equals("기안서")) {
+				DraftDto draft = apprDao.selectSimpleDraftDetail(apprNo);
+				approval.setDraft(draft);
+			}else if(approval.getApprType().equals("품의서")) {
+				PurchaseDraftDto purchDraft = apprDao.selectPurchDraftDetail(apprNo);
+				approval.setPurchDraft(purchDraft);
+			}
+		}
+		return approval;
 	}
 
 	//기안문서>진행중>최근순5개
@@ -172,7 +224,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 		//문서타입따라 다르게 문서 등록
 		if("기안서".equals(approval.getApprType())) {
 			DraftDto draft = approval.getDraft();
-			System.out.println("draft : "+draft);
+//			System.out.println("draft : "+draft);
 			if(draft != null) {
 				result = apprDao.insertSimpleDraft(draft);
 				if(result == 0) {
@@ -182,6 +234,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 			}
 		} else if("품의서".equals(approval.getApprType())) {
 			PurchaseDraftDto purchDraft = approval.getPurchDraft();
+			System.out.println("ServiceImple purchDraft : "+purchDraft);
 			if(purchDraft != null) {
 				result = apprDao.insertPurchaseDraft(purchDraft);
 				if(result == 0) {
@@ -189,6 +242,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 				}
 				
 				List<PurchaseHistoryDto> purchaseItems = purchDraft.getPurchaseItems();
+				System.out.println("ServiceImpl items : " + purchaseItems);
 				if(purchaseItems != null) {
 					for(PurchaseHistoryDto item : purchaseItems) {
 						result = apprDao.insertPurchaseHistory(item);
@@ -220,28 +274,121 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int updateNextOrder(ApprovalDto approval) {
-		return 0;
+	public List<ApprLineDto> selectApproversList(String apprNo) {
+		return apprDao.selectApproversList(apprNo);
 	}
 
 	@Override
-	public int updateAppAgree(ApprLineDto apprLine) {
-		return 0;
+	public DraftDto selectSimpleDraftDetail(String apprNo) {
+		return apprDao.selectSimpleDraftDetail(apprNo);
 	}
 
 	@Override
-	public int updateAject(ApprLineDto apprLine) {
-		return 0;
+	public PurchaseDraftDto selectPurchDraftDetail(String apprNo) {
+		return apprDao.selectPurchDraftDetail(apprNo);
+	}
+
+	@Override
+	public int updateLineAgree(Map<String, Object> params) {
+		return apprDao.updateLineAgree(params);
+	}
+
+	@Override
+	public int updateLineReject(Map<String, Object> params) {
+		return apprDao.updateLineReject(params);
+	}
+
+	@Override
+	public int updateApprAgree(String apprNo) {
+		return apprDao.updateApprAgree(apprNo);
+	}
+	
+	@Override
+	public int updateApprReject(String apprNo) {
+		return apprDao.updateApprReject(apprNo);
+	}
+
+	@Override
+	public int isLastOrder(Map<String, Object> params) {
+		return apprDao.isLastOrder(params);
+	}
+
+	@Override
+	public int updateNextOrder(String apprNo) {
+		return apprDao.updateNextOrder(apprNo);
 	}
 
 	@Override
 	public int insertApprovalLine(ApprLineDto line) {
 		return apprDao.insertApprovalLine(line);
 	}
-
+	
 	@Override
-	public List<ApprLineDto> selectApproversList(String apprNo) {
-		return apprDao.selectApproversList(apprNo);
+	public int isCurrentOrder(Map<String, Object> params) {
+		return apprDao.isCurrentOrder(params);
+	}
+	
+	@Override
+	public int updateApprStatusToProgress(String apprNo) {
+		return apprDao.updateApprStatusToProgress(apprNo);
+	}
+	
+	//승인통합메소드
+	public int processApprove(String apprNo, String userNo, String apprStatus) {
+		Map<String,Object> params = new HashMap<>();
+		params.put("apprNo", apprNo);
+		params.put("userNo", userNo);
+		System.out.println("0대기 | 1진행 | 2승인 | 3반려 : "+ apprStatus);
+		params.put("apprStatus", apprStatus);
+		
+		//현재 결재 순서인지 체크
+		int isCurrentOrder = apprDao.isCurrentOrder(params);
+		if(isCurrentOrder == 0) {
+			System.out.println("현재 결재순서가 아님. return 0처리");
+			return 0;
+		}
+		
+		//결재선승인처리
+		int result = updateLineAgree(params);
+		
+		if(result > 0) {
+			if(apprStatus.equals("0")) {
+				//대기라면 진행중으로변경
+				apprDao.updateApprStatusToProgress(apprNo);
+			}
+			int isLast = isLastOrder(params);
+			if(isLast > 0) { //다음결재자가 존재
+				result = updateNextOrder(apprNo);
+			}else {//마지막 결재자인 경우
+				result = updateApprAgree(apprNo);
+			}
+		}
+		
+		return result;
+	}
+	
+	//반려통합메소드
+	public int processReject(String apprNo, String userNo, String lineReason) {
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("apprNo", apprNo);
+		params.put("userNo", userNo);
+		params.put("lineReason", lineReason);
+		
+		//결재선반려처리
+		int result = updateLineReject(params);
+		
+		if(result > 0) {
+			//결재문서반려전환
+			result = updateApprReject(apprNo);
+		}
+		
+		
+		return result;
 	}
 
+
+
+	
+	
 }

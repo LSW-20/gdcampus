@@ -98,7 +98,7 @@
 										<th width="15%" scope="col">시수</th>
 										<td width="15%" scope="col">${ c.classHours}</td>
 										<th width="20%" scope="col">대상학년</th>
-										<td width="20%" scope="col">${c.targetGrade} 학년</td>
+										<td width="20%" scope="col">${c.targetGrade eq 5 ? '전체' : c.targetGrade} 학년</td>
 									</tr>
 								</thead>
 							</table>

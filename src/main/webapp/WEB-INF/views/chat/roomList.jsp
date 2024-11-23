@@ -134,8 +134,14 @@
 			                                                       
 			                                                       <div class="media-body overflow-hidden">
 			                                                           <h5 class="text-truncate font-size-14 mb-1">
-			                                                           	 ${map['counterpartName']} (${map['counterpartNo']})
+			                                                           		 <c:forEach var="UserChatRoomDto" items="${ map['userChatRoomList'] }">
+			                                                           		     <c:if test="${UserChatRoomDto.userName ne loginUser.userName}">
+			                                                           		     	   ${UserChatRoomDto.userName} (${UserChatRoomDto.userNo})
+			                                                           		     </c:if>	
+			                                                           		 </c:forEach>
+
 			                                                           </h5>
+			                                                           
 			                                                           <c:forEach var="messageDto" items="${recentMessageList}"> <%-- 채팅방별 최근 메세지 1개 띄우기 --%>
                                           		                       <c:if test="${map['chatRoomDto'].roomNo eq messageDto.roomNo}">  
                                           		                     		  <p class="text-truncate mb-0">${messageDto.msgContent}</p>
@@ -179,10 +185,13 @@
                                                </div>
                                                <div class="media-body">
                                                    <h5 class="font-size-16 mb-1 text-truncate">
-                                                   	 RoomNo : <span id="room-no"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                   	 RoomNo : <span id="room-no"></span> &nbsp;&nbsp;
                                                    	 <span id="room-name"></span>
                                                    </h5>
-                                                   <p class="text-muted text-truncate mb-0"><i class="uil uil-users-alt mr-1"></i> <span id="room-count"></span> members </p>
+                                                   <p class="text-muted text-truncate mb-0">
+                                                   	   <i class="uil uil-users-alt mr-1"></i> 
+                                                   	   <span id="room-count"></span> members (<span id="all-people"></span>)
+                                                   </p>
                                                </div>
                                            </div>
                                        </div>
@@ -364,18 +373,7 @@
 							  $('#room-no').html(roomNo);	  // 오른쪽 채팅방 영역에 "현재 채팅방 번호" 표시
 								$('#room-count').text(count); // 오른쪽 채팅방 영역에 "현재 채팅방 인원수" 표시
 								
-								if(!roomName){ // 오른쪽 채팅방 영역에 "현재 채팅방 이름" 혹은 "상대방 이름(1:1 채팅의 경우)" 표시
-									$('#room-name').text('<' + counterpartName + ' 님과 채팅>'); 
-								}else {
-									$('#room-name').text('<' + roomName + '>');
-								}
-								
-
-
-							  
-							  
-							  
-						    			    
+		    			    
 						    // AJAX 요청을 보내 해당 채팅방의 과거 메시지들을 가져와서 보여준다.
 						    $.ajax({
 						        url: '/chat/getChatRoomData',  // 서버에서 채팅방 데이터를 가져올 URL
@@ -383,13 +381,37 @@
 						        data: { roomNo: roomNo },
 						        
 						        success: function(resData) {
+						        	
+							        	let chatMessageList = resData.chatMessageList;
+							        	let roomName = resData.roomName;
+							        	let userChatRoomList = resData.userChatRoomList;
 						            	
-							        	console.log("ajax로 요청 후 돌아온 응답데이터 : " + JSON.stringify(resData) );						        	
+							        	console.log("ajax로 요청 후 돌아온 응답데이터 chatMessageList : " + JSON.stringify(chatMessageList) );						        	
 							        	// [{"msgNo":"1","msgContent":"직원1입니다.","userNo":"B0001","roomNo":"0001","createDateTime":"2024-10-01 01:30","status":"Y","userName":"김철수","msgType":"NORMAL"},
 							        	//	{"msgNo":"2","msgContent":"안녕하세요. B입니다.","userNo":"B0002","roomNo":"0001","createDateTime":"2024-10-01 01:35","status":"Y","userName":"이영희","msgType":"NORMAL"}]
 							        	
 							        	
-				        		    resData.forEach(function(messageDto) {
+												if(roomName){ 
+												    $('#room-name').text('<' + roomName + '>'); // 그룹 채팅방의 경우 오른쪽 채팅방 영역에 "현재 채팅방 이름" 표시
+												}else {
+														userChatRoomList.forEach(function(UserChatRoomDto){
+																if(UserChatRoomDto.userName != "${loginUser.userName}"){
+																	  $('#room-name').text('<' + UserChatRoomDto.userName + '님과 채팅>'); // 1:1 채팅방의 경우 오른쪽 채팅방 영역에 "상대방 이름" 표시
+																}
+														})
+												}
+							        	
+							        	// 오른쪽 채팅방 영역에 채팅방 참여인원 표시하기
+							        	let allPeople = "";
+							        	userChatRoomList.forEach(function(UserChatRoomDto){
+							        		allPeople += UserChatRoomDto.userName + ", ";
+							        	});
+							        	allPeople = allPeople.slice(0, -2); // 마지막 쉼표와 공백 제거
+							        	$('#all-people').text(allPeople);
+							        	
+							        	
+							        	// 메세지 불러와서 화면에 띄우기
+				        		    chatMessageList.forEach(function(messageDto) {
 												    
 				        		    		let $chatDiv = $("<li>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작) // <li></li> 생성
 				        		    		
@@ -465,11 +487,26 @@
 							}
 							
 							// 나가기버튼 클릭시 alert로 다시 한번 묻고, yes시 채팅방 나가기.
-							function exitRoom(){
-					        if ( confirm("정말로 채팅방을 나가시겠습니까?") ) {
-					        		let roomNo = $("#room-no").text();
-					            location.href = '/chat/exitRoom?roomNo=' + roomNo;
-					        }
+							function exitRoom() {
+									if (confirm("정말로 채팅방을 나가시겠습니까?")) {
+											var roomNo = $("#room-no").text();
+
+											// jQuery로 폼을 생성
+											var $form = $('<form>', {
+													'method': 'POST',
+													'action': '/chat/exitRoom' 
+											});
+
+											var $input = $('<input>', {
+													'type': 'hidden',
+													'name': 'roomNo',
+													'value': roomNo
+											});
+
+											$form.append($input);
+											$('body').append($form);
+											$form.submit();
+									}
 							}
 							
 							</script>

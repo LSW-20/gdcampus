@@ -100,9 +100,6 @@
                             </div>
                         </div>
 
-                        <div class="mt-5 text-center">
-                            <p>© 2020 Drezon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
 
                     </div>
                 </div>

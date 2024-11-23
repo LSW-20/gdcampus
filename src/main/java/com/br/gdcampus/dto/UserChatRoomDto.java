@@ -22,4 +22,6 @@ public class UserChatRoomDto {
 	private Date joinTime;
 	private String joinYN;
 	
+	private String userName;
+	
 }

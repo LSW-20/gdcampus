@@ -36,13 +36,13 @@
 <!-- 부서 매핑 -->
 <resultMap id="deptList" type="DeptDto">
     <result column="dept_no" property="deptNo"/>
-    <result column="dept_name" property="deptName"/>
+    <result column="dn" property="deptName"/>
 </resultMap>
 
 <!-- 직급 매핑 -->
 <resultMap id="rankList" type="RankDto">
     <result column="rank_no" property="rankNo"/>
-    <result column="rank_name" property="rankName"/>
+    <result column="rn" property="rankName"/>
 </resultMap>
 	
 	<resultMap id="categoryResultMap" type="CategoryDto">
@@ -163,29 +163,29 @@
 	
 	<!-- 교수파트 -->
 	<!-- 교수 목록조회 -->
-	<select id="h" resultType="_int">
+	<select id="selectProfListCount" resultType="_int">
 		SELECT count(*) as count
 	  	  FROM T_USER U
 	      JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
 	 	 WHERE 1 = 1 
 	 	 <if test="dept != 'all'">
-	        AND DEPT_NAME = #{dept}
+	        AND U.ST_DEPT_NO = #{dept}
 	    </if>
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
 
 	</select>
-	<select id="j" resultMap="userResultMap">
+	<select id="selectProfList" resultMap="userResultMap">
 	    SELECT USER_NO
 	         , USER_NAME
-	         , ST_DEPT_NO
+	         , DEPT_NAME as st_dept_no
 	         , USER_STATUS
 	    FROM T_USER U
 	    JOIN T_ST_DEPT D ON D.ST_DEPT_NO = U.ST_DEPT_NO
 	    WHERE 1 = 1  
 	 	 <if test="dept != 'all'">
-	        AND DEPT_NAME = #{dept}
+	        AND U.ST_DEPT_NO = #{dept}
 	    </if>
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
@@ -194,7 +194,7 @@
 	</select>
 	
 	<!-- 교수 추가 -->
-	<insert id="k">
+	<insert id="insertProf">
 		INSERT 
 		  INTO T_USER 
 		            (
@@ -224,30 +224,28 @@
 		      ,#{userName}
 		      ,#{email}
 		      ,#{gender}
-		      ,'/upload/profile/default.jpg'
-		      ,'/upload/name/default.jpg'
+		      ,'/upload/profile/default.png'
+		      ,'/upload/name/default.png'
 		      ,to_date(SYSDATE,'RR/MM/DD')
 		     )
 	</insert>
 	
 	<!-- 교수 상세조회 -->
-	<select id="l" resultMap="userResultMap">
+	<select id="selectProf" resultMap="userResultMap">
 	SELECT USER_NO
 	     , USER_NAME
 	     , EMAIL
 	     , ST_DEPT_NO
 	     , GENDER
 	     , USER_ID
-	     , HIRE_DATE
-	     , LEAVE_DATE
-      FROM T_USER U
-      JOIN T_RANK R ON R.RANK_NO = U.RANK_NO
-      JOIN T_DEPT D ON U.DEPT_NO = D.DEPT_NO
+	     , to_char(HIRE_DATE,'YY/MM/DD') as "HIRE_DATE"
+	     , to_char(LEAVE_DATE,'YY/MM/DD') as "LEAVE_DATE"
+      FROM T_USER 
      WHERE USER_NO = #{userNo}
 	</select>
 	
 	<!-- 교수 수정 -->
-	<update id="q">
+	<update id="updateProf">
 		UPDATE T_USER
 		   SET USER_NAME = #{userName}
 		     , ST_DEPT_NO = #{stDeptNo}
@@ -268,7 +266,7 @@
 		  WHERE USER_NO = #{userNo}
 	</update>
 	<!-- 퇴직 처리 -->
-	<update id="e">
+	<update id="deleteUser">
 		UPDATE T_USER
 	       SET LEAVE_DATE = to_date(SYSDATE,'RR/MM/DD')
 	     , USER_STATUS = 'N'
@@ -431,7 +429,7 @@
 	</update>
 	<!-- 직급 조회 -->
 	<select id="selectRank" resultMap="rankList">
-		select *
+		select rank_no, rank_name as rn
 			from t_rank
 	</select>
 	<!-- 직급 추가 -->
@@ -439,7 +437,7 @@
 		insert 
 			into t_rank
 					 (
-					 	 rank_no
+					 	 rank_no 
 					 , create_date
 					 , create_user
 					 , modify_date
@@ -472,8 +470,14 @@
 	<delete id="deleteRanks">
     DELETE FROM t_rank
     WHERE rank_no IN
-	    <foreach collection="rankNoList" item="rankNo" open="(" separator="," close=")">
+	    <foreach collection="rankNos" item="rankNo" open="(" separator="," close=")">
 	        #{rankNo}
 	    </foreach>
 	</delete>
+	<!-- 회원탈퇴 -->
+	<update id="resignUser">
+		update t_user
+			 set user_status = 'N'
+		 where user_no = #{userNo}
+	</update>
 </mapper>

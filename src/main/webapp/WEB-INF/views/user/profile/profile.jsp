@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -30,7 +31,7 @@
     </head>
 
     
-    <body data-sidebar="dark">
+    <body data-topbar="dark"  data-sidebar="dark">
 
     <!-- <body data-layout="horizontal" data-topbar="colored"> -->
 
@@ -68,8 +69,6 @@
                         </div>
                         <!-- end page title -->
 
-                        <div class="row">
-                            <div class="col-xl-3">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="dropdown float-right">
@@ -95,14 +94,17 @@
                                             <h5 class="mt-4 mb-2">${loginUser.userName }</h5>
                                             <p class="text-muted">
 	                                            <i class="icon-xs mr-1 icon" data-feather="monitor"></i> 
-	                                            
-	                                            
+	                                          
 	                                            <c:choose>
 	                                            	<c:when test="${ not empty loginUser.deptNo}">
 	                                            	 ${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
 	                                            	</c:when>
-	                                            	<c:otherwise>
-	                                            	</c:otherwise>
+    																						<c:when test="${fn:contains(loginUser.userNo, 'A')}">
+	                                            	관리자
+	                                            	</c:when>
+	                                            	<c:when test="${fn:contains(loginUser.userNo, 'C')}">
+	                                            	교수
+	                                            	</c:when>
 	                                            </c:choose>
                                             </p>
                                         </div>
@@ -143,57 +145,57 @@
                                         <h4 class="card-title">회원정보</h4><br>
                                       
     <form action="${contextPath }/user/profile/modify.do" class="custom-validation" id="modiform" method="post">
-    <div class="form-group">
-        <label>이름</label>
-        <div>
-            <input type="text" class="form-control" required="" data-parsley-minlength="6" value="${loginUser.userName}" readonly id="userName" name="userName">
-        </div>
-    </div>
-    <div class="form-group">
-        <label>전화번호</label>
-        <div>
-        
-            <input type="text" class="form-control" required="" data-parsley-maxlength="6" value="${loginUser.phone}" readonly id="phone" name="phone"  pattern="^\d{3}-\d{4}-\d{4}$">
-        </div>
-    </div>
-    <div class="form-group">
-        <label>이메일</label>
-        <div>
-            <input type="text" class="form-control" required="" data-parsley-length="[5,10]"  value="${loginUser.email}" readonly id="email" name="email" pattern="^[^@]+@[^@]+\.[a-zA-Z]{2,}$">
-        </div>
-    </div>
-    <div class="form-group">
-        <label>주소</label>
-        <div>
-            <input type="text" class="form-control" required="" data-parsley-min="6" value="${loginUser.address}" readonly id="address" name="address" >
-        </div>
-    </div>
-    <div class="form-group">
-        <label>성별</label>
-        <div>
-            <input type="text" class="form-control" required="" data-parsley-max="6" value="${loginUser.gender eq 'M' ? '남자' : '여자'}" readonly id="gender" name="gender">
-        </div>
-    </div>
-
-		<!-- userId를 넘기는 히든버튼 -->
-		<input type="hidden" value="${loginUser.userId}" name="userId">
-    <!-- 수정하기 버튼 -->
-    <div class="form-group mb-0">
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-light waves-effect mr-1" id="editButton" onclick="enableEdit()">수정하기</button>
-        </div>
-    </div>
-		<div class="form-group mb-0">
-		    <div class="d-flex justify-content-end">
-		        <!-- 취소 버튼 (숨겨져 있음) -->
-		        <button type="button" class="btn btn-secondary waves-effect waves-light mr-1" id="cancelButton" style="display: none;" onclick="resetForm()">취소</button>
-		        
-		        <!-- 수정완료 버튼 (숨겨져 있음) -->
-		        <button type="submit" class="btn btn-success waves-effect waves-light mr-1" id="saveButton" style="display: none;">수정완료</button>
+		    <div class="form-group">
+		        <label>이름</label>
+		        <div>
+		            <input type="text" class="form-control" required="" data-parsley-minlength="6" value="${loginUser.userName}" readonly id="userName" name="userName">
+		        </div>
 		    </div>
-		</div>
-</form>
-        
+		    <div class="form-group">
+		        <label>전화번호</label>
+		        <div>
+		        
+		            <input type="text" class="form-control" required="" data-parsley-maxlength="6" value="${loginUser.phone}" readonly id="phone" name="phone"  pattern="^\d{3}-\d{4}-\d{4}$">
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label>이메일</label>
+		        <div>
+		            <input type="text" class="form-control" required="" data-parsley-length="[5,10]"  value="${loginUser.email}" readonly id="email" name="email" pattern="^[^@]+@[^@]+\.[a-zA-Z]{2,}$">
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label>주소</label>
+		        <div>
+		            <input type="text" class="form-control" required="" data-parsley-min="6" value="${loginUser.address}" readonly id="address" name="address" >
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label>성별</label>
+		        <div>
+		            <input type="text" class="form-control" required="" data-parsley-max="6" value="${loginUser.gender eq 'M' ? '남자' : '여자'}" readonly id="gender" name="gender">
+		        </div>
+		    </div>
+		
+				<!-- userId를 넘기는 히든버튼 -->
+				<input type="hidden" value="${loginUser.userId}" name="userId">
+		    <!-- 수정하기 버튼 -->
+		    <div class="form-group mb-0">
+		        <div class="d-flex justify-content-end">
+		            <button type="button" class="btn btn-light waves-effect mr-1" id="editButton" onclick="enableEdit()">수정하기</button>
+		        </div>
+		    </div>
+				<div class="form-group mb-0">
+				    <div class="d-flex justify-content-end">
+				        <!-- 취소 버튼 (숨겨져 있음) -->
+				        <button type="button" class="btn btn-secondary waves-effect waves-light mr-1" id="cancelButton" style="display: none;" onclick="resetForm()">취소</button>
+				        
+				        <!-- 수정완료 버튼 (숨겨져 있음) -->
+				        <button type="submit" class="btn btn-success waves-effect waves-light mr-1" id="saveButton" style="display: none;">수정완료</button>
+				    </div>
+				</div>
+				
+		</form>
                                     </div>
                                 </div>
                             </div>
@@ -206,20 +208,6 @@
                 <!-- End Page-content -->
 
                 
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Drezon.
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-right d-none d-sm-block">
-                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
             </div>
             <!-- end main content-->
         </div>
@@ -303,13 +291,14 @@
         initialValues.phone = document.getElementById("phone").value;
         initialValues.email = document.getElementById("email").value;
         initialValues.address = document.getElementById("address").value;
-        initialValues.gender = document.getElementById("gender").value;
+        initialValues.gender = document.getElementById("gender").value.trim() === "남자" ? "M" : "F"; // 성별 저장 (M/F 변환)
 
         // readonly 속성 제거
         document.getElementById("userName").removeAttribute("readonly");
         document.getElementById("phone").removeAttribute("readonly");
         document.getElementById("email").removeAttribute("readonly");
         document.getElementById("address").removeAttribute("readonly");
+
 
         // gender 필드를 셀렉트 박스로 변경
         var genderField = document.getElementById("gender");
@@ -319,14 +308,11 @@
             '<option value="F" ' + (initialValues.gender === 'F' ? 'selected' : '') + '>여자</option>' +
             '</select>';
 
-        // 수정하기 버튼 숨기기
-        document.getElementById("editButton").style.display = "none";
+        // 버튼 표시/숨김 설정
+        document.getElementById("editButton").style.display = "none"; // 수정하기 버튼 숨기기
+        document.getElementById("saveButton").style.display = "inline-block"; // 수정완료 버튼 표시
+        document.getElementById("cancelButton").style.display = "inline-block"; // 취소 버튼 표시
 
-        // 수정완료 버튼 보이기
-        document.getElementById("saveButton").style.display = "inline-block";
-
-        // 취소 버튼 보이기
-        document.getElementById("cancelButton").style.display = "inline-block";
 
         // 각 input 요소에 대해 마우스 오버 이벤트 설정
         for (var i = 0; i < inputFields.length; i++) {
@@ -343,7 +329,13 @@
         document.getElementById("phone").value = initialValues.phone;
         document.getElementById("email").value = initialValues.email;
         document.getElementById("address").value = initialValues.address;
-        document.getElementById("gender").value = initialValues.gender;
+        // 성별 값 변환 (M -> 남자, F -> 여자)
+        var genderText = initialValues.gender === "M" ? "남자" : "여자";
+
+        // gender 필드를 텍스트로 복원
+        var genderField = document.getElementById("gender");
+        genderField.outerHTML = '<input type="text" class="form-control" id="gender" value="' + genderText + '" readonly>';
+
 
         // readonly 속성 복원
         document.getElementById("userName").setAttribute("readonly", "true");
@@ -351,10 +343,7 @@
         document.getElementById("email").setAttribute("readonly", "true");
         document.getElementById("address").setAttribute("readonly", "true");
 
-        // gender 필드를 텍스트로 복원 (셀렉트 박스에서 텍스트로 변경)
-        var genderField = document.getElementById("gender");
-        genderField.outerHTML = '<input type="text" class="form-control" id="gender" value="' + initialValues.gender + '" readonly>';
-
+        
         // 수정하기 버튼 보이기
         document.getElementById("editButton").style.display = "inline-block";
 

@@ -1,0 +1,50 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	    <div class="container">
+        <h1>올해 근무 현황</h1>
+        <div class="grid">
+            <!-- 근태 현황 -->
+            <div class="card">
+                <h3>근태 현황</h3>
+                <p>지각: <%= request.getAttribute("lateCount") %>회</p>
+                <p>조기퇴근: <%= request.getAttribute("earlyLeaveCount") %>회</p>
+                <p>퇴근미체크: <%= request.getAttribute("missingClockOut") %>회</p>
+                <p>결근: <%= request.getAttribute("absenceCount") %>회</p>
+            </div>
+            
+            <!-- 휴가 현황 -->
+            <div class="card">
+                <h3>휴가 현황</h3>
+                <p>잔여 휴가: <%= request.getAttribute("remainingLeave") %>일</p>
+                <a href="/applyLeave.jsp" class="btn">휴가 신청</a>
+            </div>
+
+            <!-- 근무 시간 -->
+            <div class="card">
+                <h3>근무 시간</h3>
+                <p>근무 일수: <%= request.getAttribute("workingDays") %>일</p>
+                <p>총 근무 시간: <%= request.getAttribute("totalWorkingHours") %>시간</p>
+                <p>보정 평균: <%= request.getAttribute("averageWorkHours") %>시간</p>
+            </div>
+
+            <!-- 근무 계획 -->
+            <div class="card">
+                <h3>오늘 근무 계획</h3>
+                <p>내근무 계획: <%= request.getAttribute("todayWorkPlan") %></p>
+                <p>근무 체크: <%= request.getAttribute("todayWorkCheck") %></p>
+            </div>
+        </div>
+
+    </div>
+	
+</body>
+</html>

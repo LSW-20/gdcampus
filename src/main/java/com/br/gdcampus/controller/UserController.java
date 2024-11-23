@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -176,6 +179,11 @@ public class UserController {
 			return "redirect:/user/staff/list.do";
 		}
 		
+		/**인사팀 비밀번호 초기화
+		 * @param user
+		 * @param session
+		 * @return
+		 */
 		@ResponseBody
 		@PostMapping("/resetPwd.do")
 		public String replyInsert(UserDto user, HttpSession session) {
@@ -185,6 +193,151 @@ public class UserController {
 			int result = userService.PwdReset(user);
 			return result > 0 ? "SUCCESS" : "FAIL";
 		}
+		/**
+		 * 인사팀 교수 리스트 조회 요청
+		 */
+		@GetMapping("/prof/list.do")
+		public void profList(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 리스트(테이블 안 내용) 조회 요청
+		 * @param currentPage 
+		 * @param dept 부서번호
+		 * @param rank 직급번호
+		 * @param keyword 검색어
+		 * @return
+		 */
+		@ResponseBody
+		@GetMapping(value="/prof/listContent.do", produces="application/json")
+		public Map<String,Object> profListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+				,String dept,String keyword) {
+			
+			Map<String, Object> res = new HashMap<>();
+			Map<String,String> search = new HashMap<>();
+			
+			search.put("dept", dept);
+			search.put("keyword", keyword);
+			
+			int listCount = userService.selectProfListCount(search);
+			PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+			List<UserDto> list = userService.selectProfList(search, pi);
+			
+			res.put("userList", list);
+			res.put("pi", pi);
+			return res;
+		}
+		
+		/**인사팀 교수 상세페이지 요청
+		 * @param userNo 조회할 사원의 사번
+		 * @param model
+		 */
+		@GetMapping("/prof/detail.do") 
+		public void profDetail(String userNo, Model model) {
+			
+			UserDto user =  userService.selectProf(userNo);
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    map.put("user", user);
+		    
+		    log.debug("user : {}",user);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 정보 수정
+		 * @param user 수정할 직원
+		 * @param rdAttributes 
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/prof/update.do")
+		public String updateProf(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setUpdateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("updateUser : {}", user);
+			int result = userService.updateProf(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 저장되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/prof/detail.do?userNo=" + user.getUserNo();
+		}
+		
+		/**
+		 * 인사팀 교수 추가페이지
+		 */
+		@GetMapping("/prof/addForm.do")
+		public void profAddForm(Model model) {
+			
+			List<CategoryDto> deptList =  userService.selectCategory("T_ST_DEPT");
+			
+			Map<String, Object> map = new HashMap<>();
+		    map.put("deptList", deptList);
+		    
+		    model.addAllAttributes(map);
+		}
+		
+		/**인사팀 교수 추가 요청
+		 * @param user 추가할 직원
+		 * @param rdAttributes
+		 * @param session
+		 * @return
+		 */
+		@PostMapping("/prof/insert.do")
+		public String insertProf(UserDto user, RedirectAttributes rdAttributes, HttpSession session) {
+			user.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			log.debug("insertUser : {}", user);
+			int result = userService.insertProf(user);
+			
+			if(result > 0) {
+				rdAttributes.addFlashAttribute("alertMsg","성공적으로 추가되었습니다.");
+			}else {
+				rdAttributes.addFlashAttribute("alertMsg","신규회원 생성에 실패하였습니다.");
+			}
+			
+			return "redirect:/user/prof/list.do";
+		}
+		
+		/**인사팀 사원,교수 삭제 요청(상태를 N으로)
+		 * @param delUser 삭제할 사원의 사번이 담긴 배열
+		 * @param session
+		 * @return 성공 실패 여부
+		 */
+		@ResponseBody
+		@PostMapping("/deleteUser.do")
+		public String deleteUser(String delUser, HttpSession session) {
+			
+			log.debug("delUser : "+ delUser);
+			delUser=delUser.replace("\"", "").replace("[", "").replace("]", "");
+			
+			String[] delUsers = delUser.split(",");
+			String updateUser = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+			int result = 0;
+			
+			for(String userNo : delUsers) {
+				Map<String, String> delInfo = new HashMap<>();
+				delInfo.put("userNo", userNo);
+				delInfo.put("updateUser", updateUser);
+				result += userService.deleteUser(delInfo);
+			}
+			if(result == delUsers.length) {
+				return "SUCCESS";
+			}else {
+				return "FAIL";
+			}
+		}
+	
 	//------------------------------인사팀 끝--------------------------------------
 		
 	//로그인(메인)
@@ -281,13 +434,13 @@ public class UserController {
 	}//modifyProfile
 	
 	//아이디찾기이동(이메일인증페이지)
-	@GetMapping("/profile/idSearch.do")
+	@GetMapping("/login/idSearch.do")
 	public void idSearch() {
 		
 	}
 	
 	//비번찾기이동(이메일인증페이지)
-	@GetMapping("/profile/pwdSearch.do")
+	@GetMapping("/login/pwdSearch.do")
 	public void pwdSearch() {
 		
 	}
@@ -311,7 +464,7 @@ public class UserController {
 	
 		if(user != null) {
 			 session.setAttribute("ID", user.getUserId());
-			 request.getRequestDispatcher("/WEB-INF/views/user/profile/idResult.jsp").forward(request, response);
+			 request.getRequestDispatcher("/WEB-INF/views/user/login/idResult.jsp").forward(request, response);
 		}else {
 			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
 			    out.println("<script>history.back();</script>");
@@ -339,7 +492,7 @@ public class UserController {
 	    
 	    if (user != null) {
 	    	session.setAttribute("user", user);
-			 request.getRequestDispatcher("/WEB-INF/views/user/profile/pwdChange.jsp").forward(request, response);
+			 request.getRequestDispatcher("/WEB-INF/views/user/login/pwdChange.jsp").forward(request, response);
 		}else {
 			 out.println("<script>alert('인증번호가 일치하지 않습니다.');</script>");
 			    out.println("<script>history.back();</script>");
@@ -465,16 +618,63 @@ public class UserController {
 	 */
 	@PostMapping("/profile/deleteRanks")
 	@ResponseBody
-	public Map<String, String> deleteRanks(@RequestBody List<Integer> rankNoList) {
-	    int result = userService.deleteRanks(rankNoList);
-	    
-	    Map<String, String> response = new HashMap<>();
-	    if (result > 0) {
-	        response.put("message", "성공적으로 삭제되었습니다.");
-	    } else {
-	        response.put("message", "삭제에 실패했습니다.");
+	public Map<String, Object> deleteRanks(@RequestBody List<Integer> rankNos) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        boolean isDeleted = userService.deleteRanks(rankNos);
+	        if (isDeleted) {
+	            response.put("success", true);
+	            response.put("message", "선택한 직급이 삭제되었습니다.");
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "삭제 실패.");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "삭제 중 오류 발생.");
+	        e.printStackTrace();
 	    }
 	    return response;
 	}
 	
+	/**
+	 * 회원탈퇴페이지
+	 *
+	*/
+	@GetMapping("/profile/resign.do")
+	public void resign() {}
+	
+	
+
+    @PostMapping("/resign.do")
+    public String resignBtn(String pwd, String userPwd, String userNo, RedirectAttributes rdAttributes, HttpSession session) {
+    	
+    	//비밀번호 미입력시
+		if(pwd == null || pwd.isEmpty()) {
+			rdAttributes.addFlashAttribute("alertMsg", "비밀번호를 입력해주세요.");
+            return "redirect:/user/profile/resign.do";
+        }
+		
+		//비밀번호가 일치했을 경우
+        if(bcryptPwdEncoder.matches(pwd,userPwd)) {
+        	int result = userService.resignUser(userNo);
+        	if (result > 0) {
+                session.invalidate();
+
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴가 완료되었습니다.");
+
+                return "redirect:/";
+            } else {
+                rdAttributes.addFlashAttribute("alertMsg", "회원탈퇴 처리에 실패하였습니다.");
+                return "redirect:/user/profile/resign.do";
+            }
+        	
+        //비밀번호가 틀렸을경우
+        }else {
+        	rdAttributes.addFlashAttribute("alertMsg", "비밀번호가 틀렸습니다.");
+            return "redirect:/user/profile/resign.do";
+        }
+	      
+    	
+    }
 }

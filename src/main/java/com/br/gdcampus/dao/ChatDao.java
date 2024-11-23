@@ -132,5 +132,14 @@ public class ChatDao {
 		return sqlSession.selectList("chatMapper.recentMessage");
 	}
 
+	/**
+	 * 현재 채팅방(1개)에 대한 정보 조회
+	 * author : 상우
+	 * reutrn 현재 채팅방 객체
+	 */
+	public ChatRoomDto selectChatRoomOne(String roomNo) {
+		return sqlSession.selectOne("chatMapper.selectChatRoomOne", roomNo);
+	}
+
 
 }
