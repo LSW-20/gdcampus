@@ -93,7 +93,7 @@
         }
         
         #paging_area {
-            margin-top: 500px;
+            margin-top: 50px;
         }
     </style>
 </head>
@@ -150,22 +150,22 @@
                                 </tbody>
                             </table>
                             
-<%--                             <!-- 페이징 처리 -->
+                             <!-- 페이징 처리 -->
                             <ul id="paging_area" class="pagination d-flex justify-content-center">
                                 <li class="page-item ${pi.currentPage == 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage-1}">Prev</a>
+                                    <a class="page-link" href="${contextPath}/approval/upComing?page=${pi.currentPage-1}">Prev</a>
                                 </li>
                                 
                                 <c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
                                     <li class="page-item ${pi.currentPage == p ? 'active' : ''}">
-                                        <a class="page-link" href="${contextPath}/approval/upcoming?page=${p}">${p}</a>
+                                        <a class="page-link" href="${contextPath}/approval/upComing?page=${p}">${p}</a>
                                     </li>
                                 </c:forEach>
                                 
                                 <li class="page-item ${pi.currentPage == pi.maxPage || pi.endPage == 0 ? 'disabled' : ''}">
-                                    <a class="page-link" href="${contextPath}/approval/upcoming?page=${pi.currentPage+1}">Next</a>
+                                    <a class="page-link" href="${contextPath}/approval/upComing?page=${pi.currentPage+1}">Next</a>
                                 </li>
-                            </ul> --%>
+                            </ul> 
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -174,7 +174,7 @@
         <!-- main-content 끝 -->
     </div>
     <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-        <!-- Required datatable js -->
+<%--         <!-- Required datatable js -->
         <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
         
@@ -183,7 +183,7 @@
         <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
         <!-- init js -->
-        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
+        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script> --%>
     
 </body>
 </html>

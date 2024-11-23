@@ -97,7 +97,7 @@
 		  FROM T_APPROVAL A
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
-		 WHERE APPR_STATUS = 1					<!-- 진행중 -->
+		 WHERE APPR_STATUS IN(0,1)					<!-- 진행중 -->
 		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
 		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->  	
 	</select>

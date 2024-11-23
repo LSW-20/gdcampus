@@ -123,7 +123,7 @@
             background-color: #ddd;
         }
         #paging_area {
-        	margin-top: 500px;
+        	margin-top: 50px;
         }        
     </style>
 </head>
