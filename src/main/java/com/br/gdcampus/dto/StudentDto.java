@@ -18,7 +18,7 @@ import lombok.ToString;
 @Builder
 public class StudentDto {
 	
-	private Integer stuNo;
+	private String stuNo;
 	private String dept;
 	private String CreateDate;
 	private String CreateUser;

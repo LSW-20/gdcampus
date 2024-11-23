@@ -1,6 +1,8 @@
 package com.br.gdcampus.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,4 +32,11 @@ public class StudentDao {
 	public int deleteStu(int stuNo) {
 		return sqlSession.update("studentMapper.deleteStu", stuNo);
 	}
+	public int deleteStus(List<Integer> stuNos) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("stuNos", stuNos);
+
+	    return sqlSession.update("studentMapper.deleteStus", params);
+	}
+	
 }

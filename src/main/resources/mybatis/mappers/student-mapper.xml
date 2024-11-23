@@ -80,10 +80,21 @@
     </foreach>
 	</update>
 	
-	<!-- 학생 삭제 delete-->
+	<!-- 학생 삭제-->
 	<update id="deleteStu">
 		update t_student
 			 set enroll_status = 5
 		 where stu_no = #{stuNo}
 	</update>
+	
+	<!-- 학생 여러행 삭제 -->
+	<update id="deleteStus">
+		update t_student
+			 set enroll_status = 5
+		 where stu_no IN
+		  <foreach collection="stuNos" item="stuNo" open="(" separator="," close=")">
+	        #{stuNo}
+	    </foreach>
+	</update>
+	
 </mapper>
