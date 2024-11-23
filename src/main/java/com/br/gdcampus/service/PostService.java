@@ -25,7 +25,7 @@ public interface PostService {
     int updateIncreaseCount(int postNo);
 
     // 게시글 상세 - 게시글 조회
-    PostDto selectPost(int postNo);
+    PostDto selectPostDetail(int postNo);
 
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/

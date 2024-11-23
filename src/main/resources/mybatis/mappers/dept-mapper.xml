@@ -13,6 +13,7 @@
         <result property="modifyUser" column="MODIFY_USER" />
     </resultMap>
 
+		
     <select id="selectDeptList" resultMap="DeptResultMap">
         SELECT DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER, MODIFY_DATE, MODIFY_USER
         FROM T_DEPT

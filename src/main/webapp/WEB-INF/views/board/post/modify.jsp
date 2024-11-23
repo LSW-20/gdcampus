@@ -82,19 +82,19 @@
     align-items: center;    /* 세로 중앙 정렬 */
 }
 
-        .form-container {
-            padding: 20px;
-            margin: 20px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+   .form-container {
+       padding: 20px;
+       margin: 20px;
+       background: #fff;
+       border-radius: 5px;
+       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+   }
 
-        .approval-header {
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
+   .approval-header {
+       margin-bottom: 20px;
+       border-bottom: 2px solid #eee;
+       padding-bottom: 10px;
+   }
     </style>
 </head>
 
@@ -122,7 +122,7 @@
                   <input type="text" class="form-control" id="registDate" value="${ p.registDate }" readonly><br>
                   
                   <label for="upfile">첨부파일 </label>
-                  <input type="file" class="form-control-file post" id="upfile" name="uploadFiles" multiple>
+                  <input type="file" class="form-control-file post" id="uploadFiles" name="uploadFiles" multiple>
                   
                   <c:forEach var="at" items="${ p.attachList }">
                   	<div>
@@ -151,7 +151,7 @@
           			
           			// 삭제할 첨부파일 번호를 submit시 넘기기위한 작업
           			// 수정하기 submit시 form요소내에 input type="hidden" 으로 첨부파일번호 숨기기
-          			let hiddenEl = "<input type='hidden' name='delFileNo' value='" + $(this).data("fileno") + "'>";
+          			let hiddenEl = "<input type='hidden' name='postNo' value='" + $(this).data("postno") + "'>";
           			$("#modify-form").append(hiddenEl);
           			
           			// 화면으로부터 삭제된거 처럼 보여지게 해당 첨부파일 링크 삭제 처리
@@ -161,6 +161,29 @@
           	})
           	
           </script>
+          
+          <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+
+<!-- JAVASCRIPT -->
+        <script src="${contextPath }/libs/jquery/jquery.min.js"></script>
+        <script src="${contextPath }/libs/metismenu/metisMenu.min.js"></script>
+        <script src="${contextPath }/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="${contextPath }/libs/simplebar/simplebar.min.js"></script>
+        <script src="${contextPath }/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+
+        <!-- plugin js -->
+        <script src="${contextPath }/libs/moment/min/moment.min.js"></script>
+        <script src="${contextPath }/libs/jquery-ui-dist/jquery-ui.min.js"></script>
+        <script src="${contextPath }/libs/@fullcalendar/core/main.min.js"></script>
+        <script src="${contextPath }/libs/@fullcalendar/bootstrap/main.min.js"></script>
+        <script src="${contextPath }/libs/@fullcalendar/daygrid/main.min.js"></script>
+        <script src="${contextPath }/libs/@fullcalendar/timegrid/main.min.js"></script>
+        <script src="${contextPath }/libs/@fullcalendar/interaction/main.min.js"></script>
+
+        <!-- Calendar init -->
+        <script src="${contextPath }/js/pages/calendar.init.js"></script>
+        <script src="${contextPath }/js/app.js"></script>
+          
           
         </div>
 

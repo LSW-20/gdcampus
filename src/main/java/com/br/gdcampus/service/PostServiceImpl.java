@@ -1,14 +1,12 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.PostDao;
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
-import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -43,9 +41,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostDto selectPost(int postNo) {
-		// TODO Auto-generated method stub
-		return null;
+	public PostDto selectPostDetail(int postNo) {
+		return postDao.selectPostDetail(postNo);
 	}
 
 	@Override

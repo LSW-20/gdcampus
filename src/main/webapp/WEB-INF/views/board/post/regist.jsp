@@ -40,16 +40,16 @@
 				<div class="col-lg-12">
 					<hr>
 					<div class="mt-5">
-						<form action="${contextPath}/post//insert.do" method="post"
+						<form action="${contextPath}board/post/insert.do" method="post"
 							class="was-validated">
 
 							<div class="row justify-content-md-center">
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="userName"></label> 
-										<input type="text" class="form-control" id="userName" name="userName" required>
+										<input type="text" class="form-control" id="postName" name="postName" required>
 										<div class="invalid-feedback">
-											<p>이름을 작성해주세요</p>
+											<p>게시글 제목을 작성해주세요</p>
 										</div>
 									</div>
 								</div>
@@ -118,7 +118,7 @@
 							<hr>
 							<div class="mt-4 row d-flex justify-content-center">
 								<button type="submit" class="btn btn-primary w-md mr-3">추가</button>
-								<a class="btn btn-primary w-md mr-3" href="${contextPath }/user/staff/list.do">취소</a>
+								<a class="btn btn-primary w-md mr-3" href="${contextPath }/board/post/list">취소</a>
 							</div>
 						</form>
 					</div>

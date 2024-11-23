@@ -7,10 +7,10 @@
 			<result column="board_type_no" property="boardTypeNo" />
 			<result column="user_no" property="userNo" />
 			<result column="POST_TITLE" property="postTitle" />
-			<result column="post_content" property="postContent" />
+			<result column="POST_CONTENT" property="postContent" />
 			<result column="REGIST_DATE" property="registDate" />
 			<result column="FILE_STATUS" property="fileStatus" />
-			<result column="count" property="count" />
+			<result column="COUNT" property="count" />
 			<result column="POST_TOP" property="postTop" />
 			<result column="modify_date" property="modifyDate" />
 			<result column="modify_user" property="modifyUser" />
@@ -30,30 +30,67 @@
       t_post
 	</select>
 	
-	<!--  -->
 
+	<select id="selectPostDetail" resultMap="postResultMap">
+		SELECT
+			    POST_NO,
+			    BOARD_TYPE_NO,
+			    USER_NO,
+			    POST_TITLE,
+			    POST_CONTENT,
+			    USER_NAME AS WRITER_NAME,  -- 작성자 이름 (USER_NAME 사용)
+			    USER_ID AS WRITER_ID,      -- 작성자 ID (USER_ID 사용)
+			    "COUNT",
+			    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE, -- 작성일 형식 변환
+			    (
+			        SELECT COUNT(*)
+			        FROM ATTACHMENT A
+			        WHERE A.REF_TYPE = 'B'  
+			          AND A.FILE_NO = P.POST_NO
+			    ) AS ATTACH_COUNT
+FROM 
+    T_POST P
+JOIN 
+    T_USER U 
+ON 
+    P.USER_NO = U.USER_NO         -- USER_NO로 작성자와 JOIN
+WHERE 
+    P_STATUS = 'Y'                -- 게시글 상태가 'Y'인 데이터만 조회
+    user_no = #{userNo}
+ORDER BY 
+    P.POST_NO DESC;               -- 게시글 번호 내림차순 정렬
 
-<!-- <select id="selectPostList" resultMap="postResultMap">
-		select
-		       p.post_no
-		     , post_type_no
-		     , user_no
-		     , post_title
-		     , post_content
-		     , 
-		     , user_id
-		     , count
-		     , to_char(regist_date, 'YYYY-MM-DD') as "regist_date"
-		     , (
-		         select count(*)
-		           from attachment
-		          where ref_type = ''
-		            and ref_no = b.board_no
-		       ) as "attach_count"
-		  from board b
-		  join member on (user_no = board_writer)
-		 where b.status = 'Y'
-		 order by board_no desc
+	</select> 
+	
+	
+	<!-- 게시글 상세 페이지 조회 -->
+	
+	<!-- <select id="selectPostDetail" resultMap="postResultMap" >
+		  SELECT 
+            POST_NO as postNo,
+            POST_TITLE as postTitle,
+            POST_CONTENT as postContent,
+            POST_WRITER as postWriter,
+            REGIST_DT as registDate
+        FROM 
+            T_POST
+        WHERE 
+            POST_NO = #{postNo}
 	</select> -->
+	
+	
+
+<!-- 
+		<insert id="insertCategoryDept">
+        INSERT INTO T_DEPT (DEPT_NO, DEPT_NAME, CREATE_DATE, CREATE_USER)
+        VALUES (SEQ_DNO.NEXTVAL, #{deptName}, SYSDATE, #{createUser})
+    </insert>
+    
+
+ -->	
+	 
+    
+	
+	
 </mapper>
 
