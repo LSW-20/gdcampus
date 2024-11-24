@@ -1,11 +1,9 @@
 package com.br.gdcampus.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
-import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
 public interface PostService {
@@ -22,10 +20,10 @@ public interface PostService {
     int insertPost(PostDto p);
 
     // 게시글 상세 - 조회수 증가
-    int updateIncreaseCount(int postNo);
+    int updateIncreaseCount(String postNo);
 
     // 게시글 상세 - 게시글 조회
-    PostDto selectPostDetail(int postNo);
+    PostDto selectPostDetail(String postNo);
 
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/

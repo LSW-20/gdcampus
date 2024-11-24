@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.br.gdcampus.dto.CommentDto;
 import com.br.gdcampus.dto.PostDto;
 import com.br.gdcampus.service.PostService;
+import com.br.gdcampus.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ public class PostController {
 
 	@Autowired
 	private final PostService postService; 
+	private final FileUtil fileUtil;
 	
 	/**
 	 * 
@@ -55,22 +59,32 @@ public class PostController {
 	 * }
 	 */ 
 
-	
+	/**
+	 * 게시글 상세 페이지
+	 * @param no
+	 * @param model
+	 */
 	@GetMapping("/detail") 
-	 public String selectPostDetail(@RequestParam("no") int postNo, Model model) {
+	 public void selectPostDetail(String no, Model model) {
 		
-		PostDto postDto = postService.selectPostDetail(postNo);
+		PostDto postDto = postService.selectPostDetail(no);
 		
 		model.addAttribute("postDto", postDto);
 		
-		return "detail";
-		
 	}	
-	
+	/**
+	 * 
+	 * 
+	 */
+	/*
+	 * @GetMapping("/수정페이지") public
+	 */
+	@ResponseBody
+	@GetMapping(value="/clist", produces="application/json")
+	public List<CommentDto> commentList(int no) {
+		return postService.selectCommentList(no);
 	}
 	
-
-	 
-		
+	
 }
 		
