@@ -5,10 +5,15 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.br.gdcampus.interceptor.LoginCheckInterceptor;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 	
+	private final LoginCheckInterceptor loginCheckInterceptor;
 
 
 	/**
@@ -27,9 +32,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	}
 	
 
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(loginCheckInterceptor)
-//				.addPathPatterns("/member/myinfo.do")
-//				.addPathPatterns("/board/regist.do");			
-//	}
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loginCheckInterceptor)
+				.addPathPatterns("/main2.do")
+				.addPathPatterns("/user/profile/*");			
+	}
 }

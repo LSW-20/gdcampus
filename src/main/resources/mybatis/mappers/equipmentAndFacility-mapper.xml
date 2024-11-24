@@ -41,7 +41,10 @@
     select
            COUNT(*)
       from T_EQUIPMENT
-     where STATUS = 'Y'      
+     where STATUS = 'Y'   
+     <if test="equipment != '비품 전체'">
+         and EQUIP_CATEGORY = #{equipment}
+     </if>   
   </select>
 
 	<!-- (상우) 시설 목록 전체 개수 조회 -->
@@ -50,6 +53,9 @@
            COUNT(*)
       from T_FACILITY
      where STATUS = 'Y'      
+     <if test="facility != '시설 전체'">
+         and FACILITY_CATEGORY = #{facility}
+     </if>
   </select>
 
 	<!-- (상우) 비품 목록 조회 -->
@@ -90,4 +96,115 @@
      order by FACILITY_NO desc
   </select>	
 	
+	<!-- (상우) 비품 삭제 -->
+	<update id="deleteEquipment">
+		update T_EQUIPMENT
+		   set STATUS = 'N'
+		 where EQUIP_NO IN
+		<foreach collection="array" item="equip_no" open="(" separator="," close=")">
+    		#{equip_no}
+    </foreach>
+	</update>
+	
+	<!-- (상우) 시설 삭제 -->
+	<update id="deleteFacility">
+		update T_FACILITY
+		   set STATUS = 'N'
+		<where>
+			<foreach collection="array" item="facility_no" open="FACILITY_NO IN (" separator="," close=")">
+	    		#{facility_no}
+	    </foreach>
+    </where>     
+	</update>
+	
+	<!-- (상우) 비품 추가(첨부파일) - (1/2) T_EQUIPMENT 테이블에 INSERT -->
+	<insert id="addEquipment">
+		insert
+			into T_EQUIPMENT
+			(
+				EQUIP_NO
+			, EQUIP_NAME
+			, EQUIP_CATEGORY
+			, CREATE_DATETIME
+			, CREATE_USER
+			)
+			values
+			(
+				LPAD(SEQ_ENO.NEXTVAL, 4, '0')
+			, #{name}
+			, #{selectedCategory}
+			, SYSDATE
+			, #{userNo}	
+			)
+	</insert>
+	
+	<!-- (상우) 비품 추가(첨부파일) - (2/2) T_ATTACHMENT 테이블에 INSERT -->
+	<insert id="addAttachment">
+		insert
+		  into T_ATTACHMENT
+		  (
+		  	FILE_NO
+		  , EQUIP_NO
+		  , FILE_PATH
+			, FILESYSTEM_NAME
+			, ORIGINAL_NAME
+			, UPLOAD_DATE
+			, REF_TYPE
+		  )
+		  values
+		  (
+		  	SEQ_ATNO.NEXTVAL
+		  , LPAD(SEQ_ENO.CURRVAL, 4, '0')	
+		  , #{filePath}
+		  , #{filesystemName}
+		  , #{originalName}
+		  , SYSDATE
+		  , 'E'
+		  )
+	</insert>
+	
+	<!-- (상우) 시설 추가 -->
+	<insert id="addFacility">
+		insert
+			into T_FACILITY
+			(
+				FACILITY_NO
+			, FACILITY_NAME
+			, FACILITY_CATEGORY
+			, CREATE_DATETIME
+			, CREATE_USER
+			)
+			values
+			(
+				LPAD(SEQ_FNO.NEXTVAL, 4, '0')
+			, #{name}
+			, #{selectedCategory}
+			, SYSDATE
+			, #{userNo}	
+			)
+	</insert>
+	
+	<!-- (상우) 파일경로, DB저장파일명 조회  -->
+	<select id="selectFileURL" resultType="java.util.Map">
+		select 
+					 FILE_PATH
+				 , FILESYSTEM_NAME
+	  	from T_ATTACHMENT
+		 where equip_no = #{equipNo}
+	</select>
+	
+	<!-- (상우) 비품번호로 비품 정보 조회 -->
+	<select id="selectEquipmentByEquipNo" resultMap="EquipmentResultMap">
+		select
+					 EQUIP_NO
+				 , EQUIP_NAME
+				 , EQUIP_CATEGORY
+				 , CREATE_DATETIME
+				 , CREATE_USER
+				 , UPDATE_DATETIME
+				 , UPDATE_USER
+				 , STATUS
+			from T_EQUIPMENT
+		 where EQUIP_NO = ${equipNo}		 
+	</select>
 </mapper>

@@ -85,26 +85,18 @@
                                             <input type="password" class="form-control" id="userPwd"  name="userPwd" placeholder="Enter password">
                                         </div>
                 
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="auth-remember-check">
-                                            <label class="custom-control-label" for="auth-remember-check">Remember me</label>
-                                        </div>
                                         
                                         <div class="mt-3 text-right">
                                             <button class="btn btn-primary btn-block waves-effect waves-light" type="submit"><i class="icon-xs icon mr-1" data-feather="log-in"></i> Log In</button>
                                         </div>
                                         <div class="mt-4 text-center">
-                                            <p class="mb-0"><a href="${contextPath }/user/profile/idSearch.do" class="font-weight-medium text-primary">아이디 찾기</a>/ <a href="${contextPath }/user/profile/pwdSearch.do" class="font-weight-medium text-primary">비밀번호 찾기</a> </p>
+                                            <p class="mb-0"><a href="${contextPath }/user/login/idSearch.do" class="font-weight-medium text-primary">아이디 찾기</a>/ <a href="${contextPath }/user/login/pwdSearch.do" class="font-weight-medium text-primary">비밀번호 찾기</a> </p>
                                         </div>
             
                                         
                                     </form>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="mt-5 text-center">
-                            <p>© 2020 Drezon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                         </div>
 
                     </div>
