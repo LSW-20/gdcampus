@@ -117,4 +117,71 @@
     </where>     
 	</update>
 	
+	<!-- (상우) 비품 추가(첨부파일) - (1/2) T_EQUIPMENT 테이블에 INSERT -->
+	<insert id="addEquipment">
+		insert
+			into T_EQUIPMENT
+			(
+				EQUIP_NO
+			, EQUIP_NAME
+			, EQUIP_CATEGORY
+			, CREATE_DATETIME
+			, CREATE_USER
+			)
+			values
+			(
+				LPAD(SEQ_ENO.NEXTVAL, 4, '0')
+			, #{name}
+			, #{selectedCategory}
+			, SYSDATE
+			, #{userNo}	
+			)
+	</insert>
+	
+	<!-- (상우) 비품 추가(첨부파일) - (2/2) T_ATTACHMENT 테이블에 INSERT -->
+	<insert id="addAttachment">
+		insert
+		  into T_ATTACHMENT
+		  (
+		  	FILE_NO
+		  , EQUIP_NO
+		  , FILE_PATH
+			, FILESYSTEM_NAME
+			, ORIGINAL_NAME
+			, UPLOAD_DATE
+			, REF_TYPE
+		  )
+		  values
+		  (
+		  	SEQ_ATNO.NEXTVAL
+		  , LPAD(SEQ_ENO.CURRVAL, 4, '0')	
+		  , #{filePath}
+		  , #{filesystemName}
+		  , #{originalName}
+		  , SYSDATE
+		  , 'E'
+		  )
+	</insert>
+	
+	<!-- (상우) 시설 추가 -->
+	<insert id="addFacility">
+		insert
+			into T_FACILITY
+			(
+				FACILITY_NO
+			, FACILITY_NAME
+			, FACILITY_CATEGORY
+			, CREATE_DATETIME
+			, CREATE_USER
+			)
+			values
+			(
+				LPAD(SEQ_FNO.NEXTVAL, 4, '0')
+			, #{name}
+			, #{selectedCategory}
+			, SYSDATE
+			, #{userNo}	
+			)
+	</insert>
+	
 </mapper>

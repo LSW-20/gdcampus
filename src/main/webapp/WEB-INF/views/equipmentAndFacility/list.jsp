@@ -150,16 +150,16 @@
 				.modal-content {
 						width: 600px !important; 
 				}
-				#modify-facility-table-div{
+				#add-table-div{
 						display: flex;
 						justify-content: center; /* 가로 가운데 정렬 */
 						align-items: center; /* 세로 가운데 정렬 */
 				}
-				#modify-facility-table{
+				#add-table{
 						width: 400px;
 						height: 200px;
 				}
-				#modify-facility-table td{
+				#add-table td{
 						border: 1px solid black;
 						padding-left: 10px;
 				}
@@ -168,11 +168,15 @@
 						display: none;
 				}
 
-				#delete-button-div{
+				#button-div{
 						text-align: right;
 				}
 				#delete-button{
 						margin-right: 250px;
+				}
+
+				#top-child2-2{
+						/* display: none; */
 				}
 		</style>
 
@@ -260,7 +264,7 @@
 
 										<!-- top-child2 시작 -->
 										<div id="top-child2">
-												<div id="top-child2-1">비품 추가/수정창</div>
+												<div id="top-child2-1">시설/비품 수정창</div>
 
 												<div id="top-child2-2">
 														<div id="top-child2-2-1">
@@ -346,7 +350,7 @@
 																									<td>${ dto.equipCategory }</td>
 																									<td>${ dto.equipNo }</td>
 																									<td>${ dto.equipName }</td>
-																									<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																									<td><button onclick="modifyFacility()">수정하기</button></td>
 																							</tr>
 																						</c:if>
 																						<c:if test="${category == '시설'}">
@@ -356,7 +360,7 @@
 																									<td>${ dto.facilityCategory }</td>
 																									<td>${ dto.facilityNo }</td>
 																									<td>${ dto.facilityName }</td>
-																									<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																									<td><button onclick="modifyFacility()">수정하기</button></td>
 																							</tr>
 																						</c:if>
 																				</c:forEach>
@@ -371,7 +375,9 @@
 								<br><br>
 
 								<c:if test="${ !empty list }">
-										<div id="delete-button-div">
+										<div id="button-div">
+											  <button type="button" data-toggle="modal" data-target="#add-equipment">비품 추가</button> &nbsp;
+											  <button type="button" data-toggle="modal" data-target="#add-facility">시설 추가</button> &nbsp;
 												<button type="button" id="delete-button" onclick="confirmDelete()">삭제</button>
 										</div>
 
@@ -414,66 +420,143 @@
 								</c:if>
 
 
-							<!-- 시설 수정 modal -->
-							<div class="modal fade" id="modify-facility">
-								<div class="modal-dialog modal-sm">
-										<div class="modal-content" >
-										
-											<!-- Modal Header -->
-											<div class="modal-header">
-													<h4 class="modal-title">시설 수정창</h4>
-													<button type="button" class="close" data-dismiss="modal">&times;</button> 
-											</div>
-							
-											<form action="${contextPath}/equipAndFacility/modifyFacility" method="post">
-													<!-- Modal Body -->
-													<div class="modal-body">   
-															<div id="modify-facility-table-div">
-																	<table id="modify-facility-table">
-																			<tr>
-																					<td>구분</td>
-																					<td>시설</td>
-																			</tr>
-																			<tr>
-																					<td>분류</td>
-																					<td>회의장</td>
-																			</tr>
-																			<tr>
-																					<td>시설번호</td>
-																					<td>MT01</td>
-																			</tr>
-																			<tr>
-																					<td>시설명</td>
-																					<td>회의실 A (정원 10명)</td>
-																			</tr>
-																	</table>
-															</div>
-													</div>
-													
-													<!-- Modal footer -->
-													<div class="modal-footer">
-															<button type="submit" class="btn btn-primary">생성</button>
-															<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-													</div>
-											</form>
-										
-										</div>
-								</div>
-						</div>
-
-
-
-
-
-
 						</div>
 				</div>
 		</div>            
 		<!-- main-content 끝 -->
 
 
+		<!-- 비품 추가 modal 시작 -->
+		<div class="modal fade" id="add-equipment">
+				<div class="modal-dialog modal-sm">
+						<div class="modal-content" >
+						
+								<!-- Modal Header -->
+								<div class="modal-header">
+										<h4 class="modal-title">비품 추가창</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button> 
+								</div>
+
+								<form action="${contextPath}/equipmentAndFacility/addEquipment" method="post" enctype="multipart/form-data">
+										<!-- Modal Body -->
+										<div class="modal-body">   
+												<div id="add-table-div">
+														<table id="add-table">
+																<tr>
+																		<td style="width: 80px;">구분</td>
+																		<td>비품</td>
+																</tr>
+																<tr>
+																		<td style="width: 320px;">분류</td>
+																		<td>
+																				<select name="selectedCategory">
+																						<c:forEach var="category" items="${ equipmentCategoryList }">
+																								<option>${ category }</option>
+																						</c:forEach>		
+																				</select>
+																		</td>
+																</tr>
+																<tr>
+																		<td>비품명</td>
+																		<td><input type="text" class="form-control" name="name"></td>
+																</tr>
+																<tr>
+																		<td>비품 이미지</td>
+																		<td>
+																				<input type="file" name="uploadFile"> <br><br>
+																				<div>첨부파일 사이즈는 10MB 이하여야 됩니다.</div> 
+																		</td>
+																</tr>
+														</table>
+												</div>
+										</div>
+										
+										<!-- Modal footer -->
+										<div class="modal-footer">
+												<button type="submit" class="btn btn-primary">추가</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+										</div>
+								</form>
+						
+						</div>
+				</div>
+		</div>
+		<!-- 비품 추가 modal 끝 -->
+
+
+		<!-- 시설 추가 modal 시작 -->
+			<div class="modal fade" id="add-facility">
+					<div class="modal-dialog modal-sm">
+							<div class="modal-content" >
+						
+									<!-- Modal Header -->
+									<div class="modal-header">
+											<h4 class="modal-title">시설 추가창</h4>
+											<button type="button" class="close" data-dismiss="modal">&times;</button> 
+									</div>
+
+									<form action="${contextPath}/equipmentAndFacility/addFacility" method="post">
+											<!-- Modal Body -->
+											<div class="modal-body">   
+													<div id="add-table-div">
+															<table id="add-table">
+																	<tr>
+																			<td style="width: 80px;">구분</td>
+																			<td style="width: 320px;">시설</td>
+																	</tr>
+																	<tr>
+																			<td>분류</td>
+																			<td>
+																					<select name="selectedCategory"> 
+																							<c:forEach var="category" items="${ facilityCategoryList }">
+																								<option>${ category }</option>
+																						</c:forEach>	
+																					</select>
+																			</td>
+																	</tr>
+																	<tr>
+																			<td>시설명</td>
+																			<td><input type="text" class="form-control" name="name"></td>
+																	</tr>
+															</table>
+													</div>
+											</div>
+											
+											<!-- Modal footer -->
+											<div class="modal-footer">
+													<button type="submit" class="btn btn-primary">추가</button>
+													<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+											</div>
+									</form>
+						
+						</div>
+				</div>
+		</div>
+		<!-- 시설 추가 modal 끝 -->
+
+
 		<script>
-			function radioSelect(selection) {
+			$(function(){  // 모든 요소가 만들어지고 나서 실행.
+               
+					$("input[type=file]").on('change', function(evt){ // 첨부파일을 선택하는 순간 10mb를 초과하면 alert를 띄우면서 막는다.
+						
+							const files = evt.target.files; // FileList {0:File, 1:File, ...} // evt.target.files는 FileList 객체를 반환한다. 
+							console.log(files);
+						
+						
+							for(let i=0; i<files.length; i++){
+									if(files[i].size > 10 * 1024 * 1024) {
+											alert("첨부파일의 최대 크기는 10MB입니다.");
+											evt.target.value = ""; // 선택한 파일 초기화
+									}
+							}
+						
+					})
+				
+			})
+
+
+			function radioSelect(selection) { // 사용자가 선택한 구분에 따라 "비품", "시설" 분류가 보여진다.
 					if (selection === 'equipment') {
 							$("#equipmentSelectDiv").show();
 							$("#equipmentSelectDiv select").attr("name", "equipment");
@@ -490,7 +573,7 @@
 			}
 
 
-			function confirmDelete() {
+			function confirmDelete() { // 삭제 요청을 보내는 함수
 					if ($('.delete-checkboxes:checked').length === 0) {
 							alert("삭제할 항목을 선택해주세요.");
 							return;

@@ -1,11 +1,13 @@
 package com.br.gdcampus.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.EquipmentDto;
 import com.br.gdcampus.dto.FacilityDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -100,5 +102,38 @@ public class EquipmentAndFacilityDao {
 	public int deleteFacility(String[] deleteList) {
 		return sqlSession.update("equipmentAndFacilityMapper.deleteFacility", deleteList);
 	}
+	
+	/**
+	 * 비품 추가(첨부파일) - (1/2) T_EQUIPMENT 테이블에 INSERT
+	 * author : 상우
+	 * @param map 유저사번, 비품 카테고리, 비품명
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addEquipment(Map<String, String> map) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addEquipment", map);
+	}
+
+	/**
+	 * 비품 추가(첨부파일) - (2/2) T_ATTACHMENT 테이블에 INSERT
+	 * author : 상우
+	 * @param map 유저사번, 비품 카테고리, 비품명
+	 * @param attachDto 첨부파일 dto
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addAttachment(AttachDto attachDto) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addAttachment", attachDto);
+	}
+
+	/**
+	 * 시설 추가
+	 * author : 상우
+	 * @param map 유저사번, 시설 카테고리, 시설명
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addFacility(Map<String, String> map) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addFacility", map);
+	}
+
+
 
 }
