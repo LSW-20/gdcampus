@@ -238,7 +238,7 @@ public class EquipmentAndFacilityController {
 			filePathAndFileSystemName = map.get("FILE_PATH") + "/" + map.get("FILESYSTEM_NAME");
 		}else {
 			EquipmentDto equipmentDto = equipmentAndFacilityService.selectEquipmentByEquipNo(equipNo); // 비품번호로 비품 정보 조회
-			filePathAndFileSystemName = "/images/equipment/" + equipmentDto.getEquipName() + ".jpg";
+			filePathAndFileSystemName = "/images/equipment/" + equipmentDto.getEquipName() + ".jpg"; // 초기 샘플 데이터는 확장자가 전부 .jpg
 		}
 		
 		
