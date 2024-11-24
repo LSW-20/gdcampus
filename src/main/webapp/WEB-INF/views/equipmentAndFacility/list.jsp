@@ -589,6 +589,7 @@
 
 			// 수정 버튼 클릭시 실행되는 함수
 			function modifyButton(classification, category, no, name){
+					$(".modify-classification").text(classification); // 구분 (비품/시설)
 					$("#modify-classification").val(classification);  // 구분 (비품/시설)
 					$("#modify-category").val(category);              // 분류
 					$("#modify-no").val(no);                          // 번호
