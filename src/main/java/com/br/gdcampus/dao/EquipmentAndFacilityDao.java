@@ -134,6 +134,26 @@ public class EquipmentAndFacilityDao {
 		return sqlSession.insert("equipmentAndFacilityMapper.addFacility", map);
 	}
 
+	/**
+	 * 파일경로, DB저장파일명 조회 메소드
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return 파일경로, DB저장된파일명
+	 */
+	public Map<String, String> selectFileURL(String equipNo) {
+		return sqlSession.selectOne("equipmentAndFacilityMapper.selectFileURL", equipNo);
+	}
+
+	/**
+	 * 비품번호로 비품 정보 조회
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return EquipmentDto
+	 */
+	public EquipmentDto selectEquipmentByEquipNo(String equipNo) {
+		return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentByEquipNo", equipNo);
+	}
+
 
 
 }

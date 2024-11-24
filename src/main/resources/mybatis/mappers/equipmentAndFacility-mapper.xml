@@ -184,4 +184,27 @@
 			)
 	</insert>
 	
+	<!-- (상우) 파일경로, DB저장파일명 조회  -->
+	<select id="selectFileURL" resultType="java.util.Map">
+		select 
+					 FILE_PATH
+				 , FILESYSTEM_NAME
+	  	from T_ATTACHMENT
+		 where equip_no = #{equipNo}
+	</select>
+	
+	<!-- (상우) 비품번호로 비품 정보 조회 -->
+	<select id="selectEquipmentByEquipNo" resultMap="EquipmentResultMap">
+		select
+					 EQUIP_NO
+				 , EQUIP_NAME
+				 , EQUIP_CATEGORY
+				 , CREATE_DATETIME
+				 , CREATE_USER
+				 , UPDATE_DATETIME
+				 , UPDATE_USER
+				 , STATUS
+			from T_EQUIPMENT
+		 where EQUIP_NO = ${equipNo}		 
+	</select>
 </mapper>

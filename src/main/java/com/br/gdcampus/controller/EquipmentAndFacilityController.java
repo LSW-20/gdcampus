@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -160,9 +161,9 @@ public class EquipmentAndFacilityController {
 		
 	    if(uploadFile != null && !uploadFile.isEmpty()) { // 첨부파일이 존재할 경우 => 업로드
 	    	
-	      log.debug("파일명: {}", uploadFile.getOriginalFilename());
-	      log.debug("파일크기: {}", uploadFile.getSize());
-	      log.debug("파일타입: {}", uploadFile.getContentType());
+	      log.debug("파일명 : {}", uploadFile.getOriginalFilename());
+	      log.debug("파일크기 : {}", uploadFile.getSize());
+	      log.debug("파일타입 : {}", uploadFile.getContentType());
 	     
 	      Map<String,String> insertFileInfo = new HashMap<>();
 			
@@ -216,5 +217,33 @@ public class EquipmentAndFacilityController {
 	}
 	
 	
-	
+	/**
+	 * 파일경로, db저장파일명 조회 메소드
+	 * @param equipNo 조회할 비품 번호
+	 * @param session 현재 로그인한 사용자 세션
+	 * @return 파일경로 + DB저장파일명
+	 */
+	@ResponseBody
+	@GetMapping(value="/selectFileURL", produces="text/html; charset=utf-8")
+	public String selectFileURL(String equipNo) {
+		
+		log.debug("=============== selectFileURL 메소드 실행됨 ===============");
+		
+		Map<String, String> map = equipmentAndFacilityService.selectFileURL(equipNo); // static 폴더의 초기 샘플 데이터면 null | db에 첨부파일 업로드했다면 파일경로, db에저장된파일명이 담긴 Map 객체
+		
+		
+		String filePathAndFileSystemName = "";
+		
+		if(map != null) {
+			filePathAndFileSystemName = map.get("FILE_PATH") + "/" + map.get("FILESYSTEM_NAME");
+		}else {
+			EquipmentDto equipmentDto = equipmentAndFacilityService.selectEquipmentByEquipNo(equipNo); // 비품번호로 비품 정보 조회
+			filePathAndFileSystemName = "/images/equipment/" + equipmentDto.getEquipName() + ".jpg";
+		}
+		
+		
+		log.debug("filePathAndFileSystemName 값 : {}", filePathAndFileSystemName);
+		
+		return filePathAndFileSystemName;
+	}
 }

@@ -21,7 +21,7 @@ public class FileUtil {
 		String filePath = "/upload/" + folderName + new SimpleDateFormat("/yyyyMMdd").format(new Date());
         
         
-        File filePathDir = new File("C:" + filePath); // 스프링 때는 "C:"를 붙이지 않았다. 외부 톰캣을 사용했기 때문에 /만 해도 C를 찾았다. 스프링 부트는 내장 톰캣을 사용해서 따로 적어줘야 한다.
+        File filePathDir = new File("C:" + filePath); // 스프링 때는 "C:"를 붙이지 않았다. 외부 톰캣을 사용했기 때문에 /만 해도 C를 찾았다. 스프링 부트는 내장 톰캣을 사용해서 따로 적어줘야 한다. 지금은 개발 할 때 테스트를 위한거다. 배포할 땐 C가 아니다.
         if(!filePathDir.exists()) { // 해당 경로의 폴더가 존재하지 않을 경우
            filePathDir.mkdirs();   // 해당 폴더 만들기
         }

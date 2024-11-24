@@ -168,15 +168,13 @@
 						display: none;
 				}
 
-				#button-div{
+				.button-div{
 						text-align: right;
-				}
-				#delete-button{
 						margin-right: 250px;
 				}
 
-				#top-child2-2{
-						/* display: none; */
+				#top-child2{
+						display: none; 
 				}
 		</style>
 
@@ -264,35 +262,46 @@
 
 										<!-- top-child2 시작 -->
 										<div id="top-child2">
-												<div id="top-child2-1">시설/비품 수정창</div>
+												<div id="top-child2-1">
+														<span class="modify-classification"></span>&nbsp;수정창
+												</div>
 
 												<div id="top-child2-2">
 														<div id="top-child2-2-1">
-																<img src="${contextPath}/images/product/img-01.png" id="equip-img">  
-																<div>레노버 노트북1.png</div> 
-																<input type="file">
+																<%-- <img src="${contextPath}/images/equipment/HP K110.jpg" id="equip-img"> --%>
+																<%-- <img src="/upload/Equipment/20241124/3792e018404c4440aed8a313c5773d32.jpg" id="equip-img"> --%>
+																<img id="equip-img">
+																<input type="file" name="uploadFile">
 														</div>
 														<div id="top-child2-2-2">
 																<table id="modify-equip-table">
 																		<tr>
 																				<td>구분</td>
-																				<td>비품</td>
+																				<td>
+																						<input type="text" class="form-control" id="modify-classification" name="classification" readonly>
+																				</td>
 																		</tr>
 																		<tr>
 																				<td>분류</td>
-																				<td>노트북</td>
+																				<td>
+																						<input type="text" class="form-control" id="modify-category" name="category">
+																				</td>
 																		</tr>
 																		<tr>
-																				<td>비품번호</td>
-																				<td>NT01</td>
+																				<td>번호</td>
+																				<td>
+																						<input type="text" class="form-control" id="modify-no" name="no" readonly>
+																				</td>
 																		</tr>
 																		<tr>
-																				<td>비품명</td>
-																				<td>Lenovo ThinkPad X1 Carvon Gen 9</td>
+																				<td>이름</td>
+																				<td>
+																						<input type="text" class="form-control" id="modify-name" name="name">
+																				</td>
 																		</tr>
 																</table>
 
-																<button>추가</button>
+																<button type="submit">수정</button>
 														</div>
 												</div>
 										</div>
@@ -350,7 +359,7 @@
 																									<td>${ dto.equipCategory }</td>
 																									<td>${ dto.equipNo }</td>
 																									<td>${ dto.equipName }</td>
-																									<td><button onclick="modifyFacility()">수정하기</button></td>
+																									<td><button type="button" onclick="modifyButton('비품', '${ dto.equipCategory }', '${ dto.equipNo }', '${ dto.equipName }')">수정하기</button></td>
 																							</tr>
 																						</c:if>
 																						<c:if test="${category == '시설'}">
@@ -360,7 +369,7 @@
 																									<td>${ dto.facilityCategory }</td>
 																									<td>${ dto.facilityNo }</td>
 																									<td>${ dto.facilityName }</td>
-																									<td><button onclick="modifyFacility()">수정하기</button></td>
+																									<td><button type="button" onclick="modifyButton('시설', '${ dto.facilityCategory }', '${ dto.facilityNo }', '${ dto.facilityName }')">수정하기</button></td>
 																							</tr>
 																						</c:if>
 																				</c:forEach>
@@ -375,9 +384,7 @@
 								<br><br>
 
 								<c:if test="${ !empty list }">
-										<div id="button-div">
-											  <button type="button" data-toggle="modal" data-target="#add-equipment">비품 추가</button> &nbsp;
-											  <button type="button" data-toggle="modal" data-target="#add-facility">시설 추가</button> &nbsp;
+										<div class="button-div">
 												<button type="button" id="delete-button" onclick="confirmDelete()">삭제</button>
 										</div>
 
@@ -419,6 +426,10 @@
 										</ul>										
 								</c:if>
 
+								<div class="button-div">
+										<button type="button" data-toggle="modal" data-target="#add-equipment">비품 추가</button> &nbsp;
+										<button type="button" data-toggle="modal" data-target="#add-facility">시설 추가</button>
+								</div>
 
 						</div>
 				</div>
@@ -449,11 +460,7 @@
 																<tr>
 																		<td style="width: 320px;">분류</td>
 																		<td>
-																				<select name="selectedCategory">
-																						<c:forEach var="category" items="${ equipmentCategoryList }">
-																								<option>${ category }</option>
-																						</c:forEach>		
-																				</select>
+																				<input type="text" class="form-control" name="selectedCategory" placeholder="노트북, 키보드, 마우스, 의자 등">
 																		</td>
 																</tr>
 																<tr>
@@ -507,11 +514,7 @@
 																	<tr>
 																			<td>분류</td>
 																			<td>
-																					<select name="selectedCategory"> 
-																							<c:forEach var="category" items="${ facilityCategoryList }">
-																								<option>${ category }</option>
-																						</c:forEach>	
-																					</select>
+																					<input type="text" class="form-control" name="selectedCategory" placeholder="회의실, 강당, 휴게실, 연구실 등">
 																			</td>
 																	</tr>
 																	<tr>
@@ -539,10 +542,9 @@
 			$(function(){  // 모든 요소가 만들어지고 나서 실행.
                
 					$("input[type=file]").on('change', function(evt){ // 첨부파일을 선택하는 순간 10mb를 초과하면 alert를 띄우면서 막는다.
-						
+
 							const files = evt.target.files; // FileList {0:File, 1:File, ...} // evt.target.files는 FileList 객체를 반환한다. 
 							console.log(files);
-						
 						
 							for(let i=0; i<files.length; i++){
 									if(files[i].size > 10 * 1024 * 1024) {
@@ -550,13 +552,13 @@
 											evt.target.value = ""; // 선택한 파일 초기화
 									}
 							}
-						
 					})
 				
 			})
 
 
-			function radioSelect(selection) { // 사용자가 선택한 구분에 따라 "비품", "시설" 분류가 보여진다.
+			// 사용자가 선택한 구분에 따라 "비품", "시설" 분류가 보여진다.
+			function radioSelect(selection) { 
 					if (selection === 'equipment') {
 							$("#equipmentSelectDiv").show();
 							$("#equipmentSelectDiv select").attr("name", "equipment");
@@ -573,7 +575,8 @@
 			}
 
 
-			function confirmDelete() { // 삭제 요청을 보내는 함수
+			// 삭제 요청을 보내는 함수
+			function confirmDelete() { 
 					if ($('.delete-checkboxes:checked').length === 0) {
 							alert("삭제할 항목을 선택해주세요.");
 							return;
@@ -581,6 +584,31 @@
 
 					if (confirm("선택된 항목을 삭제하시겠습니까?")) {
 							$('#delete-form').submit();
+					}
+			}
+
+			// 수정 버튼 클릭시 실행되는 함수
+			function modifyButton(classification, category, no, name){
+					$("#modify-classification").val(classification);  // 구분 (비품/시설)
+					$("#modify-category").val(category);              // 분류
+					$("#modify-no").val(no);                          // 번호
+					$("#modify-name").val(name);                      // 이름
+					$('#top-child2').show(); // 수정창 요소가 보여지게 하기
+
+					if (classification === '비품') {
+							$.ajax({
+									url: "${contextPath}/equipmentAndFacility/selectFileURL",
+									type: "get",
+									data: "equipNo=" + no,
+
+									success: function(resData){
+											console.log(resData);
+											$('#equip-img').attr('src', resData);
+									},
+									error: function(){
+											alert('비품 이미지 파일 정보 조회 실패');
+									}
+							});
 					}
 			}
 	</script>

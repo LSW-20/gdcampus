@@ -137,6 +137,28 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 		return equipAndFacilityDao.addFacility(map);
 	}
 
+	/**
+	 * 파일경로, DB저장파일명 조회 메소드
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return 파일경로, db저장파일명
+	 */
+	@Override
+	public Map<String, String> selectFileURL(String equipNo) {
+		return equipAndFacilityDao.selectFileURL(equipNo);
+	}
+
+	/**
+	 * 비품번호로 비품 정보 조회
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return EquipmentDto
+	 */
+	@Override
+	public EquipmentDto selectEquipmentByEquipNo(String equipNo) {
+		return equipAndFacilityDao.selectEquipmentByEquipNo(equipNo);
+	}
+
 
 
 
