@@ -110,10 +110,21 @@ public interface ApprovalService {
 	//진행중으로변경
 	int updateApprStatusToProgress(String apprNo);
 	
+	//양식생성
+	int insertAdminForm(ApprovalDto apprForm);
+
+	//양식조회
+	List<ApprovalDto> selectAdminFormList();
+	
+	//양식상세조회
+	ApprovalDto selectAdminFormDetail(String apprNo);
+
+	//양식수정
+	int updateAdminForm(ApprovalDto apprForm);
+	
 	//글삭제
 	
 	//글수정
 	
-	//양식생성
 	
 }
