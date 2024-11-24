@@ -15,18 +15,30 @@
 			<result column="modify_date" property="modifyDate" />
 			<result column="modify_user" property="modifyUser" />
 	</resultMap>
+
 	
-		<!-- 게시글 목록 조회 -->
+	<!-- 게시판 유형이 공지사항 -->
 	<select id="selectNoticeList" resultMap="noticeResultMap">
-		select 
-      POST_NO
-    , POST_TITLE
-    , REGIST_DATE
-    , FILE_STATUS
-    , "COUNT" as count 
-    , POST_TOP
-  from
-      t_post
+	SELECT
+    P.POST_NO,
+    P.POST_TITLE,
+    P.POST_CONTENT,
+    U.USER_NAME AS WRITER_NAME,
+    BOARD_TYPE_NO,
+    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE
+FROM 
+    T_POST P
+JOIN 
+    T_USER U 
+ON 
+    P.USER_NO = U.USER_NO
+
+WHERE 
+    BOARD_TYPE_NO = 1
+ORDER BY 
+    P.POST_NO DESC
+		
 	</select>
+	
 	
 </mapper>
