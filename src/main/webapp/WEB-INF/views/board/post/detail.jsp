@@ -58,47 +58,45 @@
          <h2 class="m-4">게시글 상세</h2>
          <br>
 
-         <a class="btn btn-secondary" style="float:right" href="${ contextPath }/post/list.do">목록으로</a>
+         <a class="btn btn-secondary" style="float:right" href="${ contextPath }board/post/detail">상세</a>
          <br><br>
          <table align="center" class="table">
              <tr>
                  <th width="120">제목</th>
-                 <td colspan="3">${ p.postTitle }</td>
+                 <td colspan="3">${ postDto.postTitle }</td>
              </tr>
              <tr>
                  <th>작성자</th>
-                 <td width="400">${ p.postWriter }</td>
+                 <td width="400">${ postDto.writerName }</td> <!-- 작성자 사번에서 가지고 와야할때는 뭐라고 입력해야하는지?   -->
                  <th width="120">작성일</th>
-                 <td>${ p.registDate }</td>
+                 <td>${ postDto.registDate }</td>
              </tr>
              <tr>
                  <th>첨부파일</th>
                  <td colspan="3">
-                 	 <c:forEach var="at" items="${ p.attachList }">
+                 	 <c:forEach var="at" items="${ a.attachList }">
                      <a href="${ contextPath }${ at.filePath }/${ at.filesystemName }" download="${ at.originalName }">${ at.originalName }</a> 
                      <br>
                    </c:forEach>
                  </td>
              </tr>
+            
              <tr>
-                 <th>내용</th>
-                 <td colspan="3"></td>
-             </tr>
-             <tr>
+             		<th>내용</th>
                  <td colspan="4">
-                 	 <p style="height:150px">${ p.postContent }</p>
+                 	 <p style="height:150px">${ postDto.postContent }</p>
                  </td>
              </tr>
          </table>
          <br>
 
          <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-         <c:if test="${ loginUser.userId eq p.user_no }">
+         <c:if test="${ loginUser.userId eq postDto.userNo }">
 	         <div align="center">
 	         		<form id="frm" action="" method="post">
-	         			<input type="hidden" name="no" value="${ p.postNo }">
-	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/post/modify.do');">수정하기</button>
-	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/post/delete.do');">삭제하기</button>
+	         			<input type="hidden" name="no" value="${ postDto.postNo }">
+	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/post/modify');">수정하기</button>
+	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
 	            </form>
 	         </div>
          </c:if>
@@ -117,14 +115,15 @@
                  		 </c:when>
                  		 <c:otherwise>
 	                 		 <th colspan="2" width="650">
-	                         <textarea class="form-control" id="comment_content" rows="2" style="resize:none; width:100%"></textarea>
+	                         <textarea class="form-control" rows="2" style="resize:none; width:100%"></textarea>
 	                     </th>
 	                     <th style="vertical-align: middle"><button class="btn btn-secondary" onclick="fn_insertComment();">등록하기</button></th>
                    	 </c:otherwise>
                    </c:choose>
                  </tr>
                  <tr>
-                    <td colspan="3">댓글 (<span id="rcount">0</span>) </td> 
+                   <td colspan="3">댓글 (<span id="comment">0</span>) </td> 
+
                  </tr>
              </thead>
              <tbody>
@@ -140,13 +139,13 @@
          	 // 해당 게시글의 댓글 목록 조회용 (ajax) 함수
          	 function fn_commentList(){
          		 $.ajax({
-         			 url: '${contextPath}/board/post/clist.do',
-         			 data: "no=" + ${p.postNo},
+         			 url: '${contextPath}/board/post/clist',
+         			 data: "no=" + ${postDto.postNo},
          			 success: function(resData){
-         				 console.log(resData); // [{}, {}, ..]
+         				 /* console.log(resData); // [{}, {}, ..] */
          				 
-         				/* 
-         				 	<tr>
+         			 
+         				 /* 	<tr>
                      <th>user02</th>
                      <td>댓글입니다. <td>
                      <td>2020-04-10</td>
@@ -172,11 +171,11 @@
          	 // 댓글 등록용 (ajax) 함수
          	 function fn_insertComment(){
          		 $.ajax({
-         			 url: '${contextPath}/post/comment.do',
+         			 url: '${contextPath}/board/post/cinsert',
          			 type: 'post',
          			 data: {
-         				 postContent: $("#post_content").val(),
-         				 refpostdNo: ${p.postNo}
+         				 comment: $("#post_content").val(),
+         				 commentNo: ${commentDto.postNo}
          			 },
          			 success: function(resData){
          				 if(resData == "SUCCESS"){

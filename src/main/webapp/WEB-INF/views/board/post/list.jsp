@@ -28,8 +28,8 @@
         <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
 </head>
+
 <body data-sidebar="dark">
 	<div id="layout-wrapper">
 		<!-- header 시작 -->
@@ -43,214 +43,83 @@
 		<div class="main-content">
 	     <div class="page-content">
 	         <div class="container-fluid">
-	
-	             <!-- start page title -->
-	             <div class="row">
-	                 <div class="col-12">
-	                     <div class="page-title-box d-flex align-items-center justify-content-between">
-	                         <h4 class="mb-0">게시판</h4>
-	
-	                         <div class="page-title-right">
-	                             <ol class="breadcrumb m-0">
-	                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-	                                 <li class="breadcrumb-item active">Invoice List</li>
-	                             </ol>
-	                         </div>
-	
-	                     </div>
-	                 </div>
-	             </div>
-	             <!-- end page title -->
-	            
-		<!--게시판 추가 모달 창 -->
-		<!-- 게시글 생성 -->
-		<form action="${contextPath }/board/post/regist" method="POST" id="boardForm">
-			<div class="modal fade" id="addboardModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
-			    <div class="modal-dialog modal-dialog-centered">
-			        <div class="modal-content">
-			            <!-- 모달 헤더 -->
-			            <div class="modal-header">
-			                <h5 class="modal-title" id="addPostModalLabel">Add Post</h5>
-			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			                    <span aria-hidden="true">&times;</span>
-			                </button>
-			            </div>
-			            <!-- 모달 바디 -->
-			            <div class="modal-body">
-			                
-		                <!-- Select Fields 세로 정렬 -->
-		                <div class="form-group">
-		                    <label for="select1">게시판유형</label>
-		                    <select class="form-control" id="boardTypeNo" name="boardTypeNo" required>
-		                        <option value="1">공지사항</option>
-		                        <option value="2">자유게시판</option>
-		                        <option value="3">투표게시판</option>
-		                    </select>
-		                </div>
-		               
-		                </div>
-		                
-		                <!-- 텍스트 입력 필드 -->
-		                <div class="form-group">
-		                    <label for="inputText" >이름</label>
-		                    <input type="text" class="form-control" id="inputText" name="postName" placeholder="Enter text here" required>
-		                </div>
-		                
-			            </div>
-			            <!-- 모달 푸터 -->
-			            <div class="modal-footer">
-			                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-			                <button type="submit" class="btn btn-primary">Save</button>
-			            </div>
-			        </div>
-			    </div>
-			</div>
-		</form>
-									
-									<!-- 학생 수정 모달 -->
-									<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
-									    <div class="modal-dialog modal-dialog-centered">
-									        <div class="modal-content">
-									            <!-- 모달 헤더 -->
-									            <div class="modal-header">
-									                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
-									                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									                    <span aria-hidden="true">&times;</span>
-									                </button>
-									            </div>
-									            <!-- 모달 바디 -->
-									            <div class="modal-body">
-									                <!-- Select Fields 세로 정렬 -->
-									                <div class="form-group">
-									                    <label for="editGrade">학년</label>
-									                    <select class="form-control" id="editGrade" required>
-									                        <option value="1">1</option>
-									                        <option value="2">2</option>
-									                        <option value="3">3</option>
-									                        <option value="4">4</option>
-									                    </select>
-									                </div>
-									                <div class="form-group">
-									                    <label for="editDept">제목</label>
-									                    <select class="form-control" id="editDept" required>
-									                        <option value="컴퓨터공학과">컴퓨터공학과</option>
-									                        <option value="전자공학과">전자공학과</option>
-									                    </select>
-									                </div>
-									                <div class="form-group">
-									                    <label for="editStatus">재적상태</label>
-									                    <select class="form-control" id="editStatus" required>
-									                        <option value="1">재학</option>
-									                        <option value="2">휴학</option>
-									                        <option value="3">졸업</option>
-									                        <option value="4">제적</option>
-									                    </select>
-									                </div>
-									                <!-- 텍스트 입력 필드 -->
-									                <div class="form-group">
-									                    <label for="editName">이름</label>
-									                    <input type="text" class="form-control" id="editName" placeholder="Enter name here" required>
-									                </div>
-									            </div>
-									            <!-- 모달 푸터 -->
-									            <div class="modal-footer">
-									                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-									                <button type="button" class="btn btn-success waves-effect waves-light" id="saveEditBtn">Save</button>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									
-									<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-									<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-                    
-                    <!-- 학생추가 -->
-                     <div class="row">
-                         <div class="col-md-4">
-                             <div>
-                                 <button type="button" class="btn btn-primary waves-effect waves-light mb-3" data-toggle="modal" data-target="#addStudentModal"><i class="mdi mdi-plus mr-1"></i> Add Student</button>
-                             </div>
-                         </div>
-                         <div class="col-md-8">
-                             
-                         </div>
-                     </div>
-
-                     <div class="row">
-                         <div class="col-lg-12">
-                             
-                             <div class="table-responsive custom-table mb-4">
-                                 <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
-                                     <thead>
-                                         <tr class="bg-transparent">
-                                             <th style="width: 24px;">
-                                                 <div class="custom-control custom-checkbox">
-                                                     <input type="checkbox" class="custom-control-input" id="checkAll">
-                                                     <label class="custom-control-label" for="checkAll"></label>
-                                                 </div>
-                                             </th>
-                                             
-                                             <th>게시글 제목</th>
-                                             <th>작성일</th>
-                                             <th>첨부파일</th>
-                                             <th>조회수</th>
-                                             <th>공지사항Y / 자유게시판N</th>
-                                             <th style="width: 120px;">Action</th>
-                                         </tr>
-                                     </thead>
-                                     <tbody>
-                                      <c:forEach var="p" items="${ postList }">
-                                          			<tr>
-																						    <td>
-																						        <div class="custom-control custom-checkbox">
-																						            <input type="checkbox" class="custom-control-input" id="invoicecheck${p.postNo}">
-																						            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
-																						        </div>
-																						    </td>
-																						    
-																						    <td>${ p.postTitle }</td>
-																						    <td>${ p.registDate }</td>
-																						    <td>${ p.fileStatus }</td>
-																						    <td>${ p.count }</td>
-																						    <td>${ p.postTop }</td>
-																						    
-																						      
-																						    <td>
-																						        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editStudentModal" data-stu-no="${s.stuNo}" data-grade="${s.grade}" data-dept="${s.dept}" data-name="${s.stuName}" data-status="${s.status}">
-																				                <i class="uil uil-pen font-size-18"></i>
-																				            </a>
-																						        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-																						            <i class="uil uil-trash font-size-18"></i>
-																						        </a>
-																						    </td>
-																						</tr>
-															          </c:forEach>
-                                     </tbody>
-                                 </table>
-                             </div>
-                         </div>
-                     </div>
-                     <!-- end row -->
-                 </div> <!-- container-fluid -->
-             </div>
-             <!-- End Page-content -->
-
-             
-             <footer class="footer">
-                 <div class="container-fluid">
-                     <div class="row">
-                         <div class="col-sm-6">
-                             <script>document.write(new Date().getFullYear())</script> © Drezon.
-                         </div>
-                         <div class="col-sm-6">
-                             <div class="text-sm-right d-none d-sm-block">
-                                 Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </footer>
+               <div class="row">
+                   <div class="col-lg-12">
+                       <div class="table-responsive custom-table mb-4">
+                           <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                               <thead>
+                                   <tr class="bg-transparent">
+                                       <th style="width: 24px;">
+                                           <div class="custom-control custom-checkbox">
+                                               <input type="checkbox" class="custom-control-input" id="checkAll">
+                                               <label class="custom-control-label" for="checkAll"></label>
+                                           </div>
+                                       </th>
+	                                       <th>게시글 번호</th>
+	                                       <th>게시글 내용</th>
+	                                       <th>작성자</th>
+	                                       <th>작성일</th>
+	                                       <th>첨부파일 여부</th>
+	                                       <th>조회수</th>
+	                                       <th>${ postDto.boardTypeNo }</th>
+                                   </tr>
+                               </thead>
+                               
+                               <tbody>
+                                <c:forEach var="p" items="${ postList }">
+                    	           	<tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'>
+															    <td>
+															        <div class="custom-control custom-checkbox">
+															            <input type="checkbox" class="custom-control-input" id="invoicecheck${p.postNo}">
+															            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
+															        </div>
+															    </td>
+															    
+															    <td>${ p.postNo }</td>
+															    <td>${ p.postTitle }</td>
+															    <td>${ u.userName }</td>
+															    <td>${ p.registDate }</td>
+															    <td>${ p.fileStatus }</td>
+															    <td>${ p.count }</td>
+															    <td>${ b.attachCount > 0 ? '★' : ''  }</td>
+															 
+														    <td>
+														      <%--   <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
+												                <i class="uil uil-pen font-size-18"></i>
+												            </a>
+														        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+														            <i class="uil uil-trash font-size-18"></i>
+														        </a> --%>
+														    </td>
+															</tr>
+									        	  </c:forEach>
+                               </tbody>
+                           </table>
+                       </div>
+                   </div>
+                
+               <!-- end row -->
+             </div> <!-- container-fluid -->
          </div>
+         <!-- End Page-content -->
+
+           
+           <footer class="footer">
+               <div class="container-fluid">
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <script>document.write(new Date().getFullYear())</script> © Drezon.
+                       </div>
+                       <div class="col-sm-6">
+                           <div class="text-sm-right d-none d-sm-block">
+                               Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </footer>
+       </div>
+       
          <!-- end main content-->
 
      </div>
@@ -331,23 +200,5 @@
 
      <script src="${contextPath}/js/app.js"></script>
      
-     <script>
-     $(document).on('click', '.edit-btn', function() {
-         var stuNo = $(this).data('post-no');
-         var grade = $(this).data('grade');
-         var dept = $(this).data('dept');
-         var name = $(this).data('name');
-         var status = $(this).data('status');
-
-         // 모달에 해당 데이터 채우기
-         $('#editGrade').val(grade);
-         $('#editDept').val(dept);
-         $('#editStatus').val(status);
-         $('#editName').val(name);
-         
-         // 추가적으로 postNo를 저장하거나 수정 시 사용할 수 있습니다.
-         $('#saveEditBtn').data('post-no', postNo);
-     });
-     </script>
  </body>
 </html>
