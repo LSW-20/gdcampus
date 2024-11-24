@@ -21,7 +21,7 @@ public class NoticeController {
 	
 	@GetMapping("list")
 	public void noticeList() {
-		List<NoticeDao> list = noticeService.selectNoticeList();
+		List<NoticeDao> list = NoticeService.selectNoticeList();
 		log.debug("list:{}", list);
 		model.addAttribute("list", list);
 		

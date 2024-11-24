@@ -6,7 +6,7 @@ import com.br.gdcampus.dao.NoticeDao;
 import com.br.gdcampus.dto.NoticeDto;
 import com.br.gdcampus.service.NoticeService;
 
-public class noticeService implements NoticeService {
+public class NoticeService implements NoticeService {
 
 	@Override
 	public List<NoticeDao> selectNoticeList() {
