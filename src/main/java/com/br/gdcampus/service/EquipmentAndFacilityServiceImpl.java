@@ -43,8 +43,8 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * @return 비품 목록 전체 개수
 	 */
 	@Override
-	public int selectEquipmentListCount() {
-		return equipAndFacilityDao.selectEquipmentListCount();
+	public int selectEquipmentListCount(String equipment) {
+		return equipAndFacilityDao.selectEquipmentListCount(equipment);
 	}
 
 	/**
@@ -65,8 +65,8 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * @return 시설 목록 전체 개수
 	 */
 	@Override
-	public int selectFacilityListCount() {
-		return equipAndFacilityDao.selectFacilityListCount();
+	public int selectFacilityListCount(String facility) {
+		return equipAndFacilityDao.selectFacilityListCount(facility);
 	}
 
 	/**
@@ -80,5 +80,29 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	public List<FacilityDto> selectFacilityList(PageInfoDto pi, String facility) {
 		return equipAndFacilityDao.selectFacilityList(pi, facility);
 	}
+
+	/**
+	 * 비품 삭제
+	 * author : 상우
+	 * @param 삭제할 비품 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	@Override
+	public int deleteEquipment(String[] deleteList) {
+		return equipAndFacilityDao.deleteEquipment(deleteList);
+	}
+
+	/**
+	 * 시설 삭제
+	 * author : 상우
+	 * @param 삭제할 시설 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	@Override
+	public int deleteFacility(String[] deleteList) {
+		return equipAndFacilityDao.deleteFacility(deleteList);
+	}
+
+
 	
 }

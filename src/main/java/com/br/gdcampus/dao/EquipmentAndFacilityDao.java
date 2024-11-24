@@ -41,8 +41,8 @@ public class EquipmentAndFacilityDao {
 	 * author : 상우
 	 * @return 비품 목록 전체 개수
 	 */
-	public int selectEquipmentListCount() {
-		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentListCount");
+	public int selectEquipmentListCount(String equipment) {
+		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentListCount", equipment);
 	}
 
 	/**
@@ -64,8 +64,8 @@ public class EquipmentAndFacilityDao {
 	 * author : 상우
 	 * @return 시설 목록 전체 개수
 	 */
-	public int selectFacilityListCount() {
-		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectFacilityListCount");
+	public int selectFacilityListCount(String facility) {
+		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectFacilityListCount", facility);
 	}
 
 	/**
@@ -79,6 +79,26 @@ public class EquipmentAndFacilityDao {
 		 RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit(), pi.getBoardLimit());
 		   
 		 return sqlSession.selectList("equipmentAndFacilityMapper.selectFacilityList", facility, rowBounds);
+	}
+
+	/**
+	 * 비품 삭제
+	 * author : 상우
+	 * @param 삭제할 비품 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int deleteEquipment(String[] deleteList) {
+		return sqlSession.update("equipmentAndFacilityMapper.deleteEquipment", deleteList);
+	}
+
+	/**
+	 * 시설 삭제
+	 * author : 상우
+	 * @param 삭제할 시설 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int deleteFacility(String[] deleteList) {
+		return sqlSession.update("equipmentAndFacilityMapper.deleteFacility", deleteList);
 	}
 
 }

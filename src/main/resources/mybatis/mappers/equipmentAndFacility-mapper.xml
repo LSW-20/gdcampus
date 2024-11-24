@@ -41,7 +41,10 @@
     select
            COUNT(*)
       from T_EQUIPMENT
-     where STATUS = 'Y'      
+     where STATUS = 'Y'   
+     <if test="equipment != '비품 전체'">
+         and EQUIP_CATEGORY = #{equipment}
+     </if>   
   </select>
 
 	<!-- (상우) 시설 목록 전체 개수 조회 -->
@@ -50,6 +53,9 @@
            COUNT(*)
       from T_FACILITY
      where STATUS = 'Y'      
+     <if test="facility != '시설 전체'">
+         and FACILITY_CATEGORY = #{facility}
+     </if>
   </select>
 
 	<!-- (상우) 비품 목록 조회 -->
@@ -89,5 +95,26 @@
 		 </if>
      order by FACILITY_NO desc
   </select>	
+	
+	<!-- (상우) 비품 삭제 -->
+	<update id="deleteEquipment">
+		update T_EQUIPMENT
+		   set STATUS = 'N'
+		 where EQUIP_NO IN
+		<foreach collection="array" item="equip_no" open="(" separator="," close=")">
+    		#{equip_no}
+    </foreach>
+	</update>
+	
+	<!-- (상우) 시설 삭제 -->
+	<update id="deleteFacility">
+		update T_FACILITY
+		   set STATUS = 'N'
+		<where>
+			<foreach collection="array" item="facility_no" open="FACILITY_NO IN (" separator="," close=")">
+	    		#{facility_no}
+	    </foreach>
+    </where>     
+	</update>
 	
 </mapper>

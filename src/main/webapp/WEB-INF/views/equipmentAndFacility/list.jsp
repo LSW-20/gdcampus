@@ -167,6 +167,13 @@
 				#equipmentSelectDiv, #facilitySelectDiv{
 						display: none;
 				}
+
+				#delete-button-div{
+						text-align: right;
+				}
+				#delete-button{
+						margin-right: 250px;
+				}
 		</style>
 
 </head>
@@ -222,22 +229,30 @@
 
 												<br>
 												<div id="categorization">
-														<form action="${contextPath}/equipmentAndFacility/selectList" method="get" id="select-form">
+														<form action="${contextPath}/equipmentAndFacility/list" method="get" id="select-form">
 																<span class="large-name">분류</span> &nbsp;&nbsp;
 
 																<span class="radio-or-select">
 																		<span id="equipmentSelectDiv">
-																				<select name="equipment">
-
+																				<select> <%-- name 속성은 동적으로 부여&회수 --%>
+																						<option>비품 전체</option>
+																						<c:forEach var="category" items="${ equipmentCategoryList }">
+																								<option>${ category }</option>
+																						</c:forEach>		
 																				</select>
 																		</span>
 
 																		<span id="facilitySelectDiv">
-																				<select name="facility">
-
+																				<select> <%-- name 속성은 동적으로 부여&회수 --%>
+																						<option>시설 전체</option>
+																						<c:forEach var="category" items="${ facilityCategoryList }">
+																							<option>${ category }</option>
+																					</c:forEach>	
 																				</select>
 																		</span>
 																</span>
+
+																<button type="submit">검색</button>
 														</form>		
 												</div>
 										</div>
@@ -284,74 +299,119 @@
 
 								<br><br><br><br><br><br><br>
 
-
-								<div id="table-mother">
-										<table id="result-table">
-												<thead>
-														<tr>
-															<th></th>
-															<th>구분</th>
-															<th>분류</th>
-															<th>비품/시설 번호</th>
-															<th>비품명/시설명</th>
-															<th></th>
-														</tr>
-												</thead>
-												<tbody>
-
-														<c:choose>
-																<c:when test="${ empty responseMap }">
-																		<tr>
-																				<td colspan="6">조회된 게시글이 없습니다.</td>
-																		</tr>
-																</c:when>
-																<c:otherwise>
-																		<c:forEach var="dto" items="${ responseMap.list }">
-																				<c:if test="${responseMap.category == '비품'}">
-																					<tr>
-																							<td><input type="checkbox" class="delete-checkboxes"></td>
-																							<td>비품</td>
-																							<td>${ dto.equipCategory }</td>
-																							<td>${ dto.equipNo }</td>
-																							<td>${ dto.equipName }</td>
-																							<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-																					</tr>
-																				</c:if>
-																				<c:if test="${responseMap.category == '시설'}">
-																					<tr>
-																							<td><input type="checkbox" class="delete-checkboxes"></td>
-																							<td>시설</td>
-																							<td>${ dto.facilityCategory }</td>
-																							<td>${ dto.facilityNo }</td>
-																							<td>${ dto.facilityName }</td>
-																							<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
-																					</tr>
-																				</c:if>
-																		</c:forEach>
-																</c:otherwise>
-														</c:choose>
-
-												</tbody>		
-										</table>
+								<div style="margin-left: 80px;">
+										<h2>
+												<span id="result-category">${ resultClass }</span>
+												검색결과
+										</h2>
+										<br><br>
 								</div>
+
+								<form id="delete-form" method="post" action="${contextPath}/equipmentAndFacility/deleteList">
+										<c:choose>
+												<c:when test="${category == '비품'}">
+														<input type="hidden" name="target" value="비품">
+												</c:when>
+												<c:otherwise>
+														<input type="hidden" name="target" value="시설">
+												</c:otherwise>
+										</c:choose>		
+
+										<div id="table-mother">
+												<table id="result-table">
+														<thead>
+																<tr>
+																	<th></th>
+																	<th>구분</th>
+																	<th>분류</th>
+																	<th>비품/시설 번호</th>
+																	<th>비품명/시설명</th>
+																	<th></th>
+																</tr>
+														</thead>
+														<tbody>
+
+																<c:choose>
+																		<c:when test="${ empty list }">
+																				<tr>
+																						<td colspan="6">조회된 게시글이 없습니다.</td>
+																				</tr>
+																		</c:when>
+																		<c:otherwise>
+																				<c:forEach var="dto" items="${ list }">
+																						<c:if test="${category == '비품'}">
+																							<tr>
+																									<td><input type="checkbox" class="delete-checkboxes" name="deleteList" value="${dto.equipNo}"></td>
+																									<td>비품</td>
+																									<td>${ dto.equipCategory }</td>
+																									<td>${ dto.equipNo }</td>
+																									<td>${ dto.equipName }</td>
+																									<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																							</tr>
+																						</c:if>
+																						<c:if test="${category == '시설'}">
+																							<tr>
+																									<td><input type="checkbox" class="delete-checkboxes" name="deleteList" value="${dto.facilityNo}"></td>
+																									<td>시설</td>
+																									<td>${ dto.facilityCategory }</td>
+																									<td>${ dto.facilityNo }</td>
+																									<td>${ dto.facilityName }</td>
+																									<td><button data-toggle="modal" data-target="#modify-facility">수정하기</button></td>
+																							</tr>
+																						</c:if>
+																				</c:forEach>
+																		</c:otherwise>
+																</c:choose>
+
+														</tbody>		
+												</table>
+										</div>
+								</form>
 
 								<br><br>
 
-								<ul class="pagination d-flex justify-content-center">
-               
-										<li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
-												<a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${pi.currentPage-1}">Previous</a>
-										</li>
+								<c:if test="${ !empty list }">
+										<div id="delete-button-div">
+												<button type="button" id="delete-button" onclick="confirmDelete()">삭제</button>
+										</div>
+
+										<ul class="pagination d-flex justify-content-center">
 									
-										<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-												<li class="page-item ${ pi.currentPage == p ? 'active' : '' }"><a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${ p }">${ p }</a></li>
-										</c:forEach>
-									
-										<li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
-												<a class="page-link" href="${contextPath}/equipmentAndFacility/selectList?page=${pi.currentPage+1}">Next</a>
-										</li>
-						 
-								</ul>
+												<li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
+														<c:choose>
+																<c:when test="${category == '비품'}">
+																		<a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${pi.currentPage-1}&equipment=${resultClass}">Previous</a>
+																</c:when>
+																<c:otherwise>
+																		<a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${pi.currentPage-1}&facility=${resultClass}">Previous</a>
+																</c:otherwise>
+														</c:choose>		
+												</li>
+											
+												<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
+														<c:choose>
+																<c:when test="${category == '비품'}">
+																		<li class="page-item ${ pi.currentPage == p ? 'active' : '' }"><a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${ p }&equipment=${resultClass}">${ p }</a></li>
+																</c:when>
+																<c:otherwise>
+																		<li class="page-item ${ pi.currentPage == p ? 'active' : '' }"><a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${ p }&facility=${resultClass}">${ p }</a></li>
+																</c:otherwise>
+														</c:choose>		
+												</c:forEach>
+											
+												<li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
+														<c:choose>
+																<c:when test="${category == '비품'}">
+																		<a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${pi.currentPage+1}&equipment=${resultClass}">Next</a>
+																</c:when>
+																<c:otherwise>
+																		<a class="page-link" href="${contextPath}/equipmentAndFacility/list?page=${pi.currentPage+1}&facility=${resultClass}">Next</a>
+																</c:otherwise>
+														</c:choose>		
+													</li>
+								
+										</ul>										
+								</c:if>
 
 
 							<!-- 시설 수정 modal -->
@@ -416,49 +476,29 @@
 			function radioSelect(selection) {
 					if (selection === 'equipment') {
 							$("#equipmentSelectDiv").show();
+							$("#equipmentSelectDiv select").attr("name", "equipment");
 							$("#facilitySelectDiv").hide();
+							$("#facilitySelectDiv select").removeAttr("name");
 							loadOptions('비품');
 					} else if (selection === 'facility') {
 							$("#facilitySelectDiv").show();
+							$("#facilitySelectDiv select").attr("name", "facility");
 							$("#equipmentSelectDiv").hide();
+							$("#equipmentSelectDiv select").removeAttr("name");
 							loadOptions('시설');
 					}
 			}
-	
-			function loadOptions(category) {
-					$.ajax({
-							url: '/equipmentAndFacility/selectCategory', 
-							type: 'GET',
-							data: { category: category },
 
 
-							dataType: 'json', // 컨트롤러가 JSON을 반환하도록 설정된 경우 사실 생략 가능
-							success: function(resData) {
-									console.log('응답 데이터:', resData);
+			function confirmDelete() {
+					if ($('.delete-checkboxes:checked').length === 0) {
+							alert("삭제할 항목을 선택해주세요.");
+							return;
+					}
 
-									const category = resData.category; // "비품" 또는 "시설"
-									const list = resData.list; // List<String> 형태의 카테고리
-									let targetSelect;
-
-									if (category === '비품') {
-											targetSelect = "#equipmentSelectDiv select";
-											$(targetSelect).empty().append('<option selected>비품 전체</option>');
-									} else if (category === '시설') {
-											targetSelect = "#facilitySelectDiv select";
-											$(targetSelect).empty().append('<option selected>시설 전체</option>');
-									}
-
-									list.forEach(function(item) {
-										$(targetSelect).append('<option>' + item + '</option>');
-									});
-
-									$('#select-form button[type="submit"]').remove();  // 기존 버튼 삭제
-									$('#select-form').append('<button type="submit">검색</button>'); // 새 버튼 추가
-							},
-							error: function() {
-									alert('옵션을 불러오는 중 오류가 발생했습니다.');
-							}
-					});
+					if (confirm("선택된 항목을 삭제하시겠습니까?")) {
+							$('#delete-form').submit();
+					}
 			}
 	</script>
 
