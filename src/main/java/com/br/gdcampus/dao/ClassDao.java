@@ -70,6 +70,21 @@ public class ClassDao {
 			return -1;
 		}
 	}
+	public int updateClass(ClassDto c) {
+		return sqlSession.update("classMapper.updateClass",c);
+	}
+	public int updateOpenAppl(ClassDto c) {
+		return sqlSession.update("classMapper.updateOpenAppl",c);
+	}
+	public int updateEva(EvaMethodDto e) {
+		return sqlSession.update("classMapper.updateEva",e);
+	}
+	public int deleteEva(EvaMethodDto e) {
+		return sqlSession.delete("classMapper.deleteEva",e);
+	}
+	public int insertEvaMethod(EvaMethodDto e) {
+		return sqlSession.insert("classMapper.insertEvaMethod",e);
+	}
 
 	
 //--------------------------------------개설신청 끝----------------------------------------------

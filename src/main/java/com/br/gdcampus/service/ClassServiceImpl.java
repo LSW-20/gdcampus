@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.br.gdcampus.dao.ClassDao;
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
+import com.br.gdcampus.dto.EvaMethodDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,51 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public int updateOpning(ClassDto c) {
-		return 0;
+		int result = 0;
+		int count = 0;
+		//수업테이블 update
+		result += classDao.updateClass(c);
+		
+		//개설신청테이블 update
+		result += classDao.updateOpenAppl(c);
+		
+		//변경된 평가방식  update
+		for(EvaMethodDto e : c.getUpdateEvaList()) {
+			e.setClassCode(c.getUpdateClassCode());
+			
+			count += classDao.updateEva(e);
+		}
+		if(count == c.getUpdateEvaList().size()) {
+			result += 1;
+		}
+		
+		count = 0;
+		
+		//사라진 평가방식  delete
+		for(EvaMethodDto e : c.getDeleteEvaList()) {
+			e.setClassCode(c.getUpdateClassCode());
+			count += classDao.deleteEva(e);
+		}
+		if(count == c.getDeleteEvaList().size()) {
+			result += 1;
+		}
+		
+		count = 0;
+		
+		//추가된 평가방식 insert
+		for(EvaMethodDto e : c.getEvaList()) {
+			e.setClassCode(c.getUpdateClassCode());			
+			count += classDao.insertEvaMethod(e);
+		}
+		if(count == c.getEvaList().size()) {
+			result += 1;
+		}
+		
+		if(result == 5) {
+			return 1;
+		}else {
+			return -1;
+		}
 	}
 
 	@Override

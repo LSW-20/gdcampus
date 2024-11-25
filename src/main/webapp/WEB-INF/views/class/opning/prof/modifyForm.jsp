@@ -229,7 +229,6 @@
 							<button class="btn btn-primary w-md mr-3 col-2" id="registBtn">저장</button>
 						</div>
 						<input type="hidden" value="${c.classCode }" name="classCode">
-						<input type="hidden" value="${c.evaList }" name=updateEvaList>
 					</form>
 				</div>
 			</div>
@@ -242,9 +241,8 @@
 		var detail = '';
 
 		$(document).ready(function(){
-
-			console.log($('.allos').val());
-			console.log($('.items').val());
+			
+			sum = 20;
 			
 		 	var allos = [];
 		 	var items = [];
@@ -254,12 +252,31 @@
 		  	$('.items').each(function(index,item){
 		  		items.push($(this).val());
 		  	});
-		 	console.log(allos);
-		 	console.log(items);
 		 	
+		 	var no = 0;
 		 	items.forEach(function(item) {
-		 	    // 만약 아이템이 어쩌구면 점수를 거따가 넣어주기 돌겠네
+
+		 	    var allo = Number(allos[no]);
+		 	    var item = items[no++];
+		 	    
+		 	    if(item == '중간고사'){
+		 	    	$('#middle').val(allo);
+		 	    };
+		 	   	if(item == '기말고사'){
+		 	    	$('#final').val(allo);
+		 	    };
+		 	  	if(item == '실습/과제'){
+		 	    	$('#work').val(allo);
+		 	    };
+		 	 	if(item == '기타'){
+		 	    	$('#etc').val(allo);
+		 	    };
+		 	    
+		 	    sum += allo;
+		 	 
 		 	});
+		 	
+		 	$('#sum').html(sum);
 			
 		});
 		
@@ -283,8 +300,6 @@
 	    	$(".allocation").each(function(){
 	    		sum += Number($(this).val());
 	    		
-
-		    	console.log($(this).attr('id'));
 		    	
 		    	if($(this).val() != null && $(this).val() != ''){
 		    		

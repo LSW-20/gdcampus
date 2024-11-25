@@ -265,9 +265,62 @@
 	    , to_date(SYSDATE,'RR/MM/DD')
 	    )
 	</insert>
-	<!-- 강의신청 수정(보완)/교수 -->
-
 	
+	<!-- 강의신청 수정(보완)/교수 -->
+	<insert id="insertEvaMethod">
+		INSERT 
+		  INTO T_EVA_METHOD 
+		     ( 
+		       CLASS_CODE
+		     , EVA_ITEM
+		     , ALLOCATION
+		     , EVA_DETAIL
+		     , CREATE_DATE
+		     ) 
+		VALUES 
+		    ( 
+		      #{classCode}
+		    , #{evaItem}
+		    , #{allocation}
+		    , #{evaDetail}
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    )
+	</insert>
+	<update id="updateEva">
+		UPDATE T_EVA_METHOD
+		   SET ALLOCATION = #{allocation} 
+		     , EVA_DETAIL = #{evaDetail}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM = #{evaItem}
+	</update>
+	<delete id="deleteEva">
+		DELETE FROM T_EVA_METHOD
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM =  #{evaItem}
+	</delete>
+	<update id="updateOpenAppl">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = '보완완료'
+		     , USER_NO = #{userNo}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{updateClassCode}
+	</update>
+	<update id="updateClass">
+		UPDATE T_CLASS
+		   SET CLASS_CODE = #{updateClassCode}
+		     , CLASS_TITLE = #{classTitle}
+		     , CLASS_TYPE= #{classType}
+		     , PRG_METHOD = #{prgMethod}
+		     , TARGET_GRADE = #{targetGrade}
+		     , CLASS_GOALS = #{classGoals}
+		     , OPERATION_PLAN = #{operationPlan}
+		     , MAIN_TEXTBOOK = #{mainTextBook}
+		     , REFN_BOOK = #{refnBook}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
+
 	<!-- 내강의 목록조회 -->
 	<!-- 내강의 상세조회 -->
 	<!-- 수강생 상세조회 -->
