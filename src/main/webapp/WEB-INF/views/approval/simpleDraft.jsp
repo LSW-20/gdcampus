@@ -214,9 +214,6 @@
             </tr>
         </table>
         
-        <div style="margin-top: 20px;">
-            <span style="color: #666;">첨부파일 0개 (0.0Byte)</span>
-        </div>
     </div>
     <!-- Summernote JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

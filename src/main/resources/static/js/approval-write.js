@@ -8,6 +8,18 @@ const ApprovalModal = {
 	init: function() {
 		this.initTree();
 		this.bindEvents();
+		
+		// 수정 모드인 경우 기존 결재선 복원
+		if(typeof initialApprovers !== 'undefined' && initialApprovers.length > 0) {
+		    initialApprovers.forEach(approver => {
+		        this.addApprover(
+		            approver.userNo,
+		            approver.userName,
+		            approver.rankName,
+		            approver.deptName
+		        );
+		    });
+		}		
 	},
 
 	// 조직도 트리 초기화

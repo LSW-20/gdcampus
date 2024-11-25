@@ -289,13 +289,14 @@
 	 
     <script>
         const contextPath = "${contextPath}";
+        /* const initialApprovers = ${approval.approvers != null ? approval.approvers : '[]'}; */        
         let isEditMode = false;
 
         $(document).ready(function() {
             $('#summernote').summernote({
                 width: 900,
                 height:300,
-                toolbar: [],
+                
                 disable: true
             });
             $('#summernote').summernote('disable');
@@ -313,10 +314,28 @@
             $('#summernote').summernote('enable');
             
             // 결재선 수정 버튼 활성화
-            document.querySelector('.approver-edit-btn').style.display = 'inline-block';
+            /* document.querySelector('.approver-edit-btn').style.display = 'inline-block'; */
+           
+            // 기존 결재선 정보를 approvalLine hidden input에 설정
+/*             const existingApprovers = ${approval.approvers}; // 컨트롤러에서 전달된 결재선 정보
+            if(existingApprovers) {
+                document.getElementById('approvalLine').value = JSON.stringify(
+                    existingApprovers.map(approver => ({
+                        userNo: approver.userNo,
+                        userName: approver.userName,
+                        rankName: approver.rankName,
+                        deptName: approver.deptName,
+                        lineOrder: approver.lineOrder
+                    }))
+                );
+            }
+            
+            // ApprovalModal 초기화
+            ApprovalModal.init(); */
             
             // 버튼 영역 변경
             document.querySelector('.button-area').innerHTML = `
+                <button type="button" class="action-button primary" onclick="ApprovalModal.show()">결재선 수정</button>            
                 <button type="button" class="action-button primary" onclick="saveDoc()">저장</button>
                 <button type="button" class="action-button" onclick="cancelEdit()">취소</button>
             `;

@@ -70,10 +70,10 @@
                         <tr class="approvalDate">
                             <td>
                                 <fmt:formatDate value="${approver.lineDate}" pattern="yyyy-MM-dd"/>
-                                <c:if test="${type eq 'myDoc' && approval.apprStatus eq '0'}">
+<%--                                 <c:if test="${type eq 'myDoc' && approval.apprStatus eq '0'}">
                                     <button type="button" class="approver-edit-btn" style="display: none;" 
                                             onclick="ApprovalModal.show()">결재선 수정</button>
-                                </c:if>
+                                </c:if> --%>
                             </td>
                         </tr>
                     </table>
@@ -110,7 +110,12 @@
         </table>
     </form>
 </div>
-
+    <!-- Summernote JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+		
 <%-- <style>
     .approval-form {
         width: 1000px;
