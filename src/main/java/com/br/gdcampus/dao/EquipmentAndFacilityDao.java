@@ -1,11 +1,13 @@
 package com.br.gdcampus.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.EquipmentDto;
 import com.br.gdcampus.dto.FacilityDto;
 import com.br.gdcampus.dto.PageInfoDto;
@@ -41,8 +43,8 @@ public class EquipmentAndFacilityDao {
 	 * author : 상우
 	 * @return 비품 목록 전체 개수
 	 */
-	public int selectEquipmentListCount() {
-		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentListCount");
+	public int selectEquipmentListCount(String equipment) {
+		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentListCount", equipment);
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class EquipmentAndFacilityDao {
 	 * author : 상우
 	 * @return 시설 목록 전체 개수
 	 */
-	public int selectFacilityListCount() {
-		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectFacilityListCount");
+	public int selectFacilityListCount(String facility) {
+		 return sqlSession.selectOne("equipmentAndFacilityMapper.selectFacilityListCount", facility);
 	}
 
 	/**
@@ -80,5 +82,78 @@ public class EquipmentAndFacilityDao {
 		   
 		 return sqlSession.selectList("equipmentAndFacilityMapper.selectFacilityList", facility, rowBounds);
 	}
+
+	/**
+	 * 비품 삭제
+	 * author : 상우
+	 * @param 삭제할 비품 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int deleteEquipment(String[] deleteList) {
+		return sqlSession.update("equipmentAndFacilityMapper.deleteEquipment", deleteList);
+	}
+
+	/**
+	 * 시설 삭제
+	 * author : 상우
+	 * @param 삭제할 시설 번호들
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int deleteFacility(String[] deleteList) {
+		return sqlSession.update("equipmentAndFacilityMapper.deleteFacility", deleteList);
+	}
+	
+	/**
+	 * 비품 추가(첨부파일) - (1/2) T_EQUIPMENT 테이블에 INSERT
+	 * author : 상우
+	 * @param map 유저사번, 비품 카테고리, 비품명
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addEquipment(Map<String, String> map) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addEquipment", map);
+	}
+
+	/**
+	 * 비품 추가(첨부파일) - (2/2) T_ATTACHMENT 테이블에 INSERT
+	 * author : 상우
+	 * @param map 유저사번, 비품 카테고리, 비품명
+	 * @param attachDto 첨부파일 dto
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addAttachment(AttachDto attachDto) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addAttachment", attachDto);
+	}
+
+	/**
+	 * 시설 추가
+	 * author : 상우
+	 * @param map 유저사번, 시설 카테고리, 시설명
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int addFacility(Map<String, String> map) {
+		return sqlSession.insert("equipmentAndFacilityMapper.addFacility", map);
+	}
+
+	/**
+	 * 파일경로, DB저장파일명 조회 메소드
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return 파일경로, DB저장된파일명
+	 */
+	public Map<String, String> selectFileURL(String equipNo) {
+		return sqlSession.selectOne("equipmentAndFacilityMapper.selectFileURL", equipNo);
+	}
+
+	/**
+	 * 비품번호로 비품 정보 조회
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return EquipmentDto
+	 */
+	public EquipmentDto selectEquipmentByEquipNo(String equipNo) {
+		return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentByEquipNo", equipNo);
+	}
+
+
 
 }

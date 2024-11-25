@@ -313,7 +313,11 @@
 								</li>
 
 								<li>
+<<<<<<< HEAD
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
+=======
+										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
+>>>>>>> main
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
