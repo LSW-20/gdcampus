@@ -19,12 +19,12 @@ public class CommuteDao {
     	Map<String,String> params = new HashMap<>();
     	params.put("userNo", userNo);
     	params.put("userName", userName);
-        return sqlSession.insert("commuteMapper.insertCheckIn", params);
+        return sqlSession.insert("holimapper.insertCheckIn", params);
     }
 
     // 퇴근 기록 업데이트
     public int updateCheckOut(String userNo) {
-        return sqlSession.update("commuteMapper.updateCheckOut", userNo);
+        return sqlSession.update("holimapper.updateCheckOut", userNo);
     }
 }
 

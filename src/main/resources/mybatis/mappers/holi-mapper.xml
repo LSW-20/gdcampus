@@ -26,18 +26,25 @@
 			from T_ATTENDANCE_RECORD
 			where user_no = #{userNo}
 	</select>
-	  <insert id="insertCheckIn">
-    INSERT INTO T_COMMUTE (USER_NO, USER_NAME, WORK_IN, IN_STATUS)
-    VALUES (#{userNo}, #{userName}, CURRENT_TIME, '출근')
-    ON DUPLICATE KEY UPDATE
-        WORK_IN = CURRENT_TIME,
-        IN_STATUS = '출근';
-   </insert>
+	     <insert id="insertCheckIn" parameterType="commuteResultMap">
+        MERGE INTO T_COMMUTE AS target
+        USING (
+            SELECT #{userNo} AS USER_NO, #{userName} AS USER_NAME FROM DUAL
+        ) AS source
+        ON (target.USER_NO = source.USER_NO)
+        WHEN MATCHED THEN
+            UPDATE SET 
+                WORK_IN = CURRENT_TIMESTAMP,
+                IN_STATUS = 'Y'
+        WHEN NOT MATCHED THEN
+            INSERT (USER_NO, USER_NAME, WORK_IN, IN_STATUS)
+            VALUES (source.USER_NO, source.USER_NAME, CURRENT_TIMESTAMP, 'Y');
+    </insert>
    <update id="updateCheckOut">
     UPDATE T_COMMUTE
     SET 
         WORK_OUT = CURRENT_TIME,
-        OUT_STATUS = '퇴근',
+        OUT_STATUS = 'Y',
         HOLIDAY = HOLIDAY + TIMESTAMPDIFF(MINUTE, WORK_IN, CURRENT_TIME),
         WORK_DAYS = WORK_DAYS + 1
     WHERE USER_NO = #{userNo};

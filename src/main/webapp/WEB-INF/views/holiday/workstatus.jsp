@@ -320,8 +320,8 @@
 																					                <td><i class="mdi mdi-account-arrow-right icon-large"></i></td>
 																					            </tr>
 																					            <tr>
-																					            	<td>출근하기</td>
-																					            	<td>퇴근하기</td>
+																					            	<td>    <button id="checkInBtn" class="btn btn-primary">출근하기</button></td>
+																					            	<td>	<button id="checkOutBtn" class="btn btn-secondary">퇴근하기</button></td>
 																					            </tr>
 																					            
 																					        </table>
@@ -443,7 +443,46 @@
                 }
             });
         });
+        
+  
+        $(document).ready(function () {
+            // 출근하기 버튼
+            $("#checkInBtn").click(function () {
+                const userNo = "${loginUser.userNo}";
+                const userName = "${loginUser.userName}";
+
+                $.ajax({
+                    url: "${contextPath}/commute/checkIn",
+                    type: "POST",
+                    data: { userNo: userNo, userName: userName },
+                    success: function (response) {
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("출근 기록 실패:", error);
+                    }
+                });
+            });
+
+            // 퇴근하기 버튼
+            $("#checkOutBtn").click(function () {
+                const userNo = "${loginUser.userNo}";
+
+                $.ajax({
+                    url: "${contextPath}/commute/checkOut",
+                    type: "POST",
+                    data: { userNo: userNo },
+                    success: function (response) {
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("퇴근 기록 실패:", error);
+                    }
+                });
+            });
+        });
     </script>
+
 
     </body>
 </html>
