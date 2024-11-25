@@ -85,7 +85,7 @@
 											aria-controls="collapse${l.learnerNo}">
 											<div class="card-header row m-1" id="headingOne">
 												<div class="col">${l.stuName}</div>
-												<div class="col">${l.grade}학년</div>
+												<div class="col">${l.grade == 5 ? '전체' : l.grade}학년</div>
 												<div class="col">${l.department}</div>
 												<c:choose>
 													<c:when test="${ l.finalGrade eq null }">
