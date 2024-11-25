@@ -50,12 +50,6 @@
                                 <div class="page-title-box d-flex align-items-center justify-content-between">
                                     <h4 class="mb-0">직급 List</h4>
 
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                                            <li class="breadcrumb-item active">Invoice List</li>
-                                        </ol>
-                                    </div>
 
                                 </div>
                             </div>
@@ -160,27 +154,27 @@
 											
 											<!-- 직급선택삭제모달 -->
 												<div class="modal fade" id="selectConfirmModal" tabindex="-1" aria-labelledby="selectConfirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <!-- 모달 헤더 -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- 모달 본문 -->
-            <div class="modal-body">
-                <p>선택한 항목들을 삭제하시겠습니까?</p>
-            </div>
-            <!-- 모달 푸터 -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete" onclick="deleteSelectedRanks()">삭제</button>
-            </div>
-        </div>
-    </div>
-</div>
+											    <div class="modal-dialog modal-dialog-centered">
+											        <div class="modal-content">
+											            <!-- 모달 헤더 -->
+											            <div class="modal-header">
+											                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+											                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											                    <span aria-hidden="true">&times;</span>
+											                </button>
+											            </div>
+											            <!-- 모달 본문 -->
+											            <div class="modal-body">
+											                <p>선택한 항목들을 삭제하시겠습니까?</p>
+											            </div>
+											            <!-- 모달 푸터 -->
+											            <div class="modal-footer">
+											                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+											                <button type="button" class="btn btn-danger" id="confirmDelete" onclick="deleteSelectedRanks()">삭제</button>
+											            </div>
+											        </div>
+											    </div>
+											</div>
 												<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 												<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
                        
@@ -250,20 +244,6 @@
                 <!-- End Page-content -->
 
                 
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Drezon.
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-right d-none d-sm-block">
-                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
             </div>
             <!-- end main content-->
 

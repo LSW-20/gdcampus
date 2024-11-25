@@ -173,7 +173,7 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/student/student.do" class="waves-effect">
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
@@ -191,74 +191,28 @@
 								<li class="menu-title">전자결재</li>
 
 								<li>
-										<a href="${contextPath}/approval/home" class="has-arrow waves-effect">
+										<a href= "${contextPath}/approval/home" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="check"></i>
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
+												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
+												<li><a href="${contextPath}/approval/home"></a></li> 
+												
 										</ul>
 								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/todo" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="columns"></i>
-												<span class="menu-item">결재 대기 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/approved" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="inbox"></i>
-												<span class="menu-item">내 결재함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
+
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="eye"></i>
-												<span class="menu-item">결재 참조/열람함</span>
+												<i class="icon nav-icon" data-feather="inbox"></i>
+												<span class="menu-item">개인 문서함</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/approved">내 결재함</a></li>
+												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/upComing" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="clipboard"></i>
-												<span class="menu-item">결재 예정 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/myDoc" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="file-text"></i>
-												<span class="menu-item">기안문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-										</ul>
-								</li>								
+								</li>							
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="edit-3"></i>
@@ -282,40 +236,28 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">부서 카테고리 관리</a></li>
-										</ul>
 								</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/user/profile/rank.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="minus-square"></i>
 												<span class="menu-item">직급 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-
-												<li><a href="${contextPath }/user/profile/rank.do">직급 조회, 추가, 수정, 삭제</a></li>
-
-
-										</ul>
 								</li>
 								
 									<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">게시판 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">게시판 카테고리 관리</a></li>
-										</ul>
 								</li>
 
 								<li>
-										<a href="${contextPath }/equipmentAndFacility/manage" class="waves-effect">
+										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
