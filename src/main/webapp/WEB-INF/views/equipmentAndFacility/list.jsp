@@ -273,7 +273,7 @@
 																		<%-- <img src="/upload/Equipment/20241124/3792e018404c4440aed8a313c5773d32.jpg" id="equip-img"> --%>
 																		<img id="equip-img">
 																		<a id="file-a"></a> <br>
-																		<input type="file" name="modifyUploadFile" id="modifyUploadFile">
+																		<input type="file" name="modifyUploadFile" id="modifyUploadFile" required>
 																</div>
 																<div id="top-child2-2-2">
 																		<table id="modify-equip-table">

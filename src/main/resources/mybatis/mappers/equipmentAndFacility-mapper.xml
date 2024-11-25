@@ -40,12 +40,14 @@
 	<select id="selectEquipmentCategory" resultType="String">
 		select DISTINCT EQUIP_CATEGORY
 	  	from T_EQUIPMENT
+	   where STATUS ='Y'
 	</select>
 	
 	<!-- (상우) 시설 카테고리 조회 -->
 	<select id="selectFacilityCategory" resultType="String">
 		select DISTINCT FACILITY_CATEGORY
 		  from T_FACILITY
+		 where STATUS ='Y'
 	</select>
 	
 	<!-- (상우) 비품 목록 전체 개수 조회 -->
@@ -237,7 +239,7 @@
 	</update>
 	
 	<!-- (상우) 비품 수정 - 비품 테이블만 update -->
-	<update id="modifyEquipmentWithoutFile">
+	<update id="modifyEquipment">
 		update
 					 T_EQUIPMENT
 			 set EQUIP_NAME = #{name}

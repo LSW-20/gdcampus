@@ -130,7 +130,7 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 
 		int result = equipAndFacilityDao.addEquipment(map);
 		
-		if(result > 0 && attachDto != null) {
+		if(result > 0) {
 			result = equipAndFacilityDao.addAttachment(attachDto);
 		}
 		
@@ -181,29 +181,19 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 		return equipAndFacilityDao.modifyFacility(map);
 	}
 
-	/**
-	 * 비품 수정(첨부파일 없는 경우)
-	 * author : 상우
-	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호
-	 * @return 성공시 1, 실패시 0
-	 */
-	@Override
-	public int modifyEquipmentWithoutFile(Map<String, Object> map) {
-		return equipAndFacilityDao.modifyEquipmentWithoutFile(map);
-	}
 
 	/**
-	 * 비품 수정(첨부파일 있는 경우)
+	 * 비품 수정(첨부파일 있음)
 	 * author : 상우
 	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호 + 첨부파일dto
-	 *  @return 성공시 1, 실패시 0
+	 * @return 성공시 1, 실패시 0
 	 */
 	@Override
 	public int modifyEquipmentWithFile(Map<String, Object> map) {
 		
 
 	    // 1) t_equipment 테이블에 update
-	    int result1 = equipAndFacilityDao.modifyEquipmentWithoutFile(map);
+	    int result1 = equipAndFacilityDao.modifyEquipment(map);
 	    
 	   
 	    // 2) t_attachment 테이블에 delete

@@ -170,8 +170,8 @@ public class EquipmentAndFacilityDao {
 	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호
 	 * @return 성공시 1, 실패시 0
 	 */
-	public int modifyEquipmentWithoutFile(Map<String, Object> map) {
-		return sqlSession.update("equipmentAndFacilityMapper.modifyEquipmentWithoutFile", map);
+	public int modifyEquipment(Map<String, Object> map) {
+		return sqlSession.update("equipmentAndFacilityMapper.modifyEquipment", map);
 	}
 
 	/**
