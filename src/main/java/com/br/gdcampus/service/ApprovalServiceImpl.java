@@ -412,6 +412,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.deleteAdminForm(apprNo);
 	}
 
+	@Override
+	public List<String> selectCustomFormTypes() {
+		return apprDao.selectCustomFormTypes();
+	}
+
+	@Override
+	public ApprovalDto selectCustomFormContent(String formType) {
+		return apprDao.selectCustomFormContent(formType);
+	}
+
 
 
 	

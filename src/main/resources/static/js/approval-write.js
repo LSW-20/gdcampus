@@ -8,6 +8,18 @@ const ApprovalModal = {
 	init: function() {
 		this.initTree();
 		this.bindEvents();
+		
+		// 수정 모드인 경우 기존 결재선 복원
+		if(typeof initialApprovers !== 'undefined' && initialApprovers.length > 0) {
+		    initialApprovers.forEach(approver => {
+		        this.addApprover(
+		            approver.userNo,
+		            approver.userName,
+		            approver.rankName,
+		            approver.deptName
+		        );
+		    });
+		}		
 	},
 
 	// 조직도 트리 초기화
@@ -244,7 +256,12 @@ const ApprovalModal = {
 	            alert('제목을 입력해주세요.');
 	            return false;
 	        }
-	    }
+	    } else if(apprType !== '기안서' && apprType!=='품의서'){
+					if(!document.querySelector('input[name="apprTitle"]').value) {
+					    alert('제목을 입력해주세요.');
+					    return false;
+					}
+			}
 
 	    return true;
 	},	

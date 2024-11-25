@@ -55,8 +55,13 @@ public class ApprovalController {
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		List<ApprovalDto> apprList = apprService.selectApprTodoList(pi, userNo);
 		
+		//관리자정의양식목록조회
+		List<String> formTypes = apprService.selectCustomFormTypes();
+		System.out.println("양식이름 : "+formTypes);
+		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
+		model.addAttribute("formList", formTypes);
 	}
 	
 	//결재예정문서페이지
@@ -84,7 +89,17 @@ public class ApprovalController {
 	
 	//작성페이지 요청
 	@GetMapping("/regist")
-	public void registPage() {}
+	public void registPage(@RequestParam(required=false) String formType, Model model) {
+
+		//선택된 양식이 있고 관리자 정의 양식인 경우
+		if(formType != null && !formType.equals("purchaseDraft") && !formType.equals("simpleDraft")) {
+			ApprovalDto selectedForm = apprService.selectCustomFormContent(formType);
+	        model.addAttribute("selectedForm", selectedForm);	
+	        System.out.println("양식파라미터 받은 formType : "+formType);
+	        System.out.println("양식 : "+selectedForm);
+		}
+		
+	}
 	
 	//기안문서함
 	/**
@@ -241,7 +256,6 @@ public class ApprovalController {
 			case "approved":
 				approval = apprService.selectMyApprovedDetail(params);
 				System.out.println("내결재함: "+approval);
-			//case "others":
 		}
 		if(approval == null) {
 			throw new RuntimeException("문서를 찾을 수 없음");

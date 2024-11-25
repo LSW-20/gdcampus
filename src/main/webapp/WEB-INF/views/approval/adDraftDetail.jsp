@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="approval-form">
-    <div class="title">업무 기안</div>        
+    <div class="title">${ approval.apprType }</div>        
     <div class="form-header">
         <div class="form-info">
             <table>
@@ -70,10 +70,6 @@
                         <tr class="approvalDate">
                             <td>
                                 <fmt:formatDate value="${approver.lineDate}" pattern="yyyy-MM-dd"/>
-<%--                                 <c:if test="${type eq 'myDoc' && approval.apprStatus eq '0'}">
-                                    <button type="button" class="approver-edit-btn" style="display: none;" 
-                                            onclick="ApprovalModal.show()">결재선 수정</button>
-                                </c:if> --%>
                             </td>
                         </tr>
                     </table>
@@ -84,26 +80,16 @@
 
     <!-- 문서 내용 -->
     <form id="docForm">
-        <input type="hidden" name="apprType" value="기안서"/>
+        <input type="hidden" name="apprType" value="${ approval.apprType }"/>
         <table>
             <tr>
-                <th width="20%">시행일자</th>
-                <td width="30%">
-                    <input type="date" name="enforceDate" value="<fmt:formatDate value='${approval.draft.enforceDate}' pattern='yyyy-MM-dd'/>" readonly />
-                </td>
-                <th width="20%">협조부서</th>
-                <td width="30%">
-                    <input type="text" name="coopDept" value="${approval.draft.coopDept}" readonly />
-                </td>
-            </tr>
-            <tr>
                 <th>제목</th>
-                <td colspan="3">
+                <td>
                     <input type="text" class="appr-title" name="apprTitle" value="${approval.apprTitle}" readonly />
                 </td>
             </tr>
             <tr>
-                <td colspan="4" class="content-area">
+                <td colspan="2" class="content-area">
                     <textarea id="summernote" name="apprContent" readonly>${approval.apprContent}</textarea>
                 </td>
             </tr>
@@ -115,105 +101,3 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
-		
-<%-- <style>
-    .approval-form {
-        width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .form-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    
-    .approval-line {
-        display: flex;
-        gap: 10px;
-    }
-    
-    #apprUserLineTable {
-        width: 126px;
-        margin-left: -140px;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-    
-    .approvalLineTable {
-        width: 126px;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-    
-    .stamp {
-        width: 50px;
-        height: 50px;
-        margin: 5px auto;
-        border: 2px solid #000;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-    }
-    
-    .stamp.approved {
-        border-color: #ff0000;
-        color: #ff0000;
-    }
-    
-    .stamp.rejected {
-        border-color: #ff0000;
-        color: #ff0000;
-    }
-    
-    .stamp.pending {
-        border-color: #ccc;
-        color: #ccc;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-    
-    .content-area {
-        min-height: 300px;
-        text-align: left;
-    }
-    
-    input[type="text"],
-    input[type="date"] {
-        width: 90%;
-        padding: 5px;
-    }
-    
-    input[readonly] {
-        background-color: #f8f9fa;
-    }
-</style>
-    <!-- Summernote JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
-		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
-	
-<script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            width: 900,
-            height:300,
-            toolbar: [],
-            disable: true
-        });
-        $('#summernote').summernote('disable');
-    });
-</script> --%>
