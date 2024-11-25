@@ -310,6 +310,7 @@ public class ApprovalController {
 	@GetMapping("/admin/registForm")
 	public void adminRegistFormPage() {}
 	
+	
 	@GetMapping("/admin/formList")
 	public String adminFormListPage(Model model) {
 	    List<ApprovalDto> formList = apprService.selectAdminFormList();
@@ -343,7 +344,7 @@ public class ApprovalController {
 	}
 	
 	@GetMapping("/admin/detailForm/{apprNo}")
-	public String adminFormDetail(@PathVariable String apprNo, Model model) {
+	public String adminFormDetailPage(@PathVariable String apprNo, Model model) {
 		
 		ApprovalDto apprForm = apprService.selectAdminFormDetail(apprNo);
 		model.addAttribute("apprForm",apprForm);
@@ -370,6 +371,22 @@ public class ApprovalController {
 	    }
 	    
 	    return "redirect:/approval/admin/formDetail/" + apprForm.getApprNo();		
+	}
+	
+	@PostMapping("/admin/deleteForm")
+	public String deleteAdminForm(String apprNo, RedirectAttributes ra) {
+	    try {
+	        int result = apprService.deleteAdminForm(apprNo);
+	        
+	        if(result > 0) {
+	            ra.addFlashAttribute("alertMsg", "양식이 삭제되었습니다.");
+	        } else {
+	            ra.addFlashAttribute("alertMsg", "양식 삭제에 실패했습니다.");
+	        }
+	    } catch(Exception e) {
+	        ra.addFlashAttribute("alertMsg", "양식 삭제 중 오류가 발생했습니다.");
+	    }		
+		return "redirect:/approval/admin/formList";
 	}
 	
 	

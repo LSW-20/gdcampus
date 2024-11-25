@@ -237,4 +237,8 @@ public class ApprovalDao {
 		return sqlSession.update("approvalMapper.updateAdminForm",apprForm);
 	}
 
+	public int deleteAdminForm(String apprNo) {
+		return sqlSession.delete("approvalMapper.deleteAdminForm",apprNo);
+	}
+
 }

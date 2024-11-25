@@ -121,6 +121,9 @@ public interface ApprovalService {
 
 	//양식수정
 	int updateAdminForm(ApprovalDto apprForm);
+
+	//양식삭제
+	int deleteAdminForm(String apprNo);
 	
 	//글삭제
 	

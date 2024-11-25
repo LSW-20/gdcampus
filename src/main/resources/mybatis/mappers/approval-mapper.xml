@@ -724,34 +724,41 @@
 	    ORDER BY A.CREATE_DATE DESC
 	</select>	
 	
-<!-- 관리자 양식 상세 조회 -->
-<select id="selectAdminFormDetail" resultMap="approvalResultMap">
-    SELECT 
-          A.APPR_NO
-        , A.APPR_TYPE
-        , A.APPR_CONTENT
-        , A.CREATE_DATE
-        , A.CREATE_USER
-        , A.MODIFY_DATE
-        , A.MODIFY_USER
-        , U1.USER_NAME as CREATE_USER_NAME
-        , U2.USER_NAME as MODIFY_USER_NAME
-    FROM T_APPROVAL A
-    LEFT JOIN T_USER U1 ON A.CREATE_USER = U1.USER_NO
-    LEFT JOIN T_USER U2 ON A.MODIFY_USER = U2.USER_NO
-    WHERE A.APPR_NO = #{apprNo}
-    AND A.APPR_STATUS = 4  <!-- 양식만 조회 -->
-</select>
+	<!-- 관리자 양식 상세 조회 -->
+	<select id="selectAdminFormDetail" resultMap="approvalResultMap">
+	    SELECT 
+	          A.APPR_NO
+	        , A.APPR_TYPE
+	        , A.APPR_CONTENT
+	        , A.CREATE_DATE
+	        , A.CREATE_USER
+	        , A.MODIFY_DATE
+	        , A.MODIFY_USER
+	        , U1.USER_NAME as CREATE_USER_NAME
+	        , U2.USER_NAME as MODIFY_USER_NAME
+	    FROM T_APPROVAL A
+	    LEFT JOIN T_USER U1 ON A.CREATE_USER = U1.USER_NO
+	    LEFT JOIN T_USER U2 ON A.MODIFY_USER = U2.USER_NO
+	    WHERE A.APPR_NO = #{apprNo}
+	    AND A.APPR_STATUS = 4  <!-- 양식만 조회 -->
+	</select>
+	
+	<!-- 관리자 양식 수정 -->
+	<update id="updateAdminForm">
+	    UPDATE T_APPROVAL 
+	    SET 
+	        APPR_TYPE = #{apprType}
+	        , APPR_CONTENT = #{apprContent}
+	        , MODIFY_DATE = SYSDATE
+	        , MODIFY_USER = #{modifyUser}
+	    WHERE APPR_NO = #{apprNo}
+	    AND APPR_STATUS = 4  <!-- 양식만 수정 가능 -->
+	</update>	
 
-<!-- 관리자 양식 수정 -->
-<update id="updateAdminForm">
-    UPDATE T_APPROVAL 
-    SET 
-        APPR_TYPE = #{apprType}
-        , APPR_CONTENT = #{apprContent}
-        , MODIFY_DATE = SYSDATE
-        , MODIFY_USER = #{modifyUser}
+	<delete id="deleteAdminForm">
+    DELETE FROM T_APPROVAL
     WHERE APPR_NO = #{apprNo}
-    AND APPR_STATUS = 4  <!-- 양식만 수정 가능 -->
-</update>	
+    AND APPR_STATUS = 4	
+	</delete>
+
 </mapper>

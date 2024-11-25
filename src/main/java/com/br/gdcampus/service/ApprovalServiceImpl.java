@@ -407,6 +407,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.updateAdminForm(apprForm);
 	}
 
+	@Override
+	public int deleteAdminForm(String apprNo) {
+		return apprDao.deleteAdminForm(apprNo);
+	}
+
 
 
 	
