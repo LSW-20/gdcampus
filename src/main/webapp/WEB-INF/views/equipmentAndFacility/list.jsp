@@ -337,7 +337,7 @@
 												<table id="result-table">
 														<thead>
 																<tr>
-																	<th></th>
+																	<th><i data-feather="check-square" onclick="allCheck();" style="cursor: pointer;"></i></th>
 																	<th>구분</th>
 																	<th>분류</th>
 																	<th>비품/시설 번호</th>
@@ -625,6 +625,23 @@
 									}
 							});
 					}
+			}
+
+			function allCheck(){
+				const $checkboxes = $('.delete-checkboxes'); // form 안의 체크박스들 선택
+				const totalCount = $checkboxes.length;
+				const checkedCount = $checkboxes.filter(':checked').length; // 체크된 체크박스 개수
+
+				if (checkedCount === 0) {
+						// (1) 체크박스들 중 체크된 게 아무것도 없으면, 전부 체크
+						$checkboxes.prop('checked', true);
+				} else if (checkedCount === totalCount) {
+						// (2) 체크박스들이 전부 체크되어 있으면, 전부 체크 해제
+						$checkboxes.prop('checked', false);
+				} else {
+						// (3) 체크박스들이 일부만 체크되어 있으면, 나머지 체크되지 않은 체크박스도 체크
+						$checkboxes.prop('checked', true);
+				}
 			}
 	</script>
 
