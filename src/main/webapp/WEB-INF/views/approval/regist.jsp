@@ -128,10 +128,10 @@
                         <div class="approval-content">
                             <c:choose>
                                 <c:when test="${param.formType eq 'purchase'}">
-                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
+                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
                                 </c:otherwise>
                             </c:choose>
                         </div>

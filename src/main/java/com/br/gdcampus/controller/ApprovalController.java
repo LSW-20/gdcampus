@@ -307,5 +307,87 @@ public class ApprovalController {
 
 	}
 	
+	@GetMapping("/admin/registForm")
+	public void adminRegistFormPage() {}
+	
+	
+	@GetMapping("/admin/formList")
+	public String adminFormListPage(Model model) {
+	    List<ApprovalDto> formList = apprService.selectAdminFormList();
+	    model.addAttribute("formList", formList);
+	    return "approval/admin/formList";  		
+	}
+	
+	@PostMapping("/admin/insertForm")
+	public String adminInsertForm(ApprovalDto apprForm, HttpSession session, RedirectAttributes ra) {
+		try {
+			//4 : 양식
+			apprForm.setApprStatus("4");
+			apprForm.setCreateUser(((UserDto)session.getAttribute("loginUser")).getUserNo());
+			
+			int result = apprService.insertAdminForm(apprForm);
+			
+			if(result > 0) {
+				ra.addFlashAttribute("alertMsg", "양식이 등록 되었습니다.");
+			}else {
+				ra.addFlashAttribute("alertMsg", "양식이 등록 실패.");
+				
+			}
+			
+		}catch(Exception e){
+			log.error("양식등록 오류",e);
+			ra.addFlashAttribute("alertMsg", "exception - 양식 등록 중 에러 발생.");
+		}
+		
+		
+		return "redirect:/approval/admin/formList";
+	}
+	
+	@GetMapping("/admin/detailForm/{apprNo}")
+	public String adminFormDetailPage(@PathVariable String apprNo, Model model) {
+		
+		ApprovalDto apprForm = apprService.selectAdminFormDetail(apprNo);
+		model.addAttribute("apprForm",apprForm);
+		return"approval/admin/detailForm";
+	}
+	
+	@PostMapping("/admin/updateForm")
+	public String adminFormUpdate(ApprovalDto apprForm, HttpSession session, RedirectAttributes ra) {
+	    try {
+	        UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+	        
+	        apprForm.setUpdateUser(loginUser.getUserNo()); // 수정자 정보 설정
+	        
+	        int result = apprService.updateAdminForm(apprForm);
+	        
+	        if(result > 0) {
+	            ra.addFlashAttribute("alertMsg", "양식이 수정되었습니다.");
+	        } else {
+	            ra.addFlashAttribute("alertMsg", "양식 수정에 실패했습니다.");
+	        }
+	    } catch(Exception e) {
+	        log.error("양식 수정 중 오류", e);
+	        ra.addFlashAttribute("alertMsg", "양식 수정 중 오류가 발생했습니다.");
+	    }
+	    
+	    return "redirect:/approval/admin/detailForm/" + apprForm.getApprNo();		
+	}
+	
+	@GetMapping("/admin/deleteForm")
+	public String deleteAdminForm(String apprNo, RedirectAttributes ra) {
+	    try {
+	        int result = apprService.deleteAdminForm(apprNo);
+	        
+	        if(result > 0) {
+	            ra.addFlashAttribute("alertMsg", "양식이 삭제되었습니다.");
+	        } else {
+	            ra.addFlashAttribute("alertMsg", "양식 삭제에 실패했습니다.");
+	        }
+	    } catch(Exception e) {
+	        ra.addFlashAttribute("alertMsg", "양식 삭제 중 오류가 발생했습니다.");
+	    }		
+		return "redirect:/approval/admin/formList";
+	}
+	
 	
 }
