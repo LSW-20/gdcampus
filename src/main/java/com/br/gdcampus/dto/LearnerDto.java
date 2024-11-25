@@ -20,6 +20,9 @@ public class LearnerDto {
 
 	private int learnerNo;
 	private int stuNo;
+	private String stuName;
+	private String department;
+	private int grade;
 	private int middleTest;
 	private int finalTestL; // 테이블에 오타나있음
 	private int practice;
