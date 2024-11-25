@@ -70,10 +70,36 @@ public class ClassDao {
 			return -1;
 		}
 	}
-
+	public int updateClass(ClassDto c) {
+		return sqlSession.update("classMapper.updateClass",c);
+	}
+	public int updateOpenAppl(ClassDto c) {
+		return sqlSession.update("classMapper.updateOpenAppl",c);
+	}
+	public int updateEva(EvaMethodDto e) {
+		return sqlSession.update("classMapper.updateEva",e);
+	}
+	public int deleteEva(EvaMethodDto e) {
+		return sqlSession.delete("classMapper.deleteEva",e);
+	}
+	public int insertEvaMethod(EvaMethodDto e) {
+		return sqlSession.insert("classMapper.insertEvaMethod",e);
+	}
 	
 //--------------------------------------개설신청 끝----------------------------------------------
-	
+	public int selectMyClassListCount(Map<String, String> search) {
+		return sqlSession.selectOne("classMapper.selectMyClassListCount",search);
+	}
+	public List<ClassDto> selectMyClassList(PageInfoDto pi, Map<String, String> search) {
+		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() ,pi.getBoardLimit());
+		return sqlSession.selectList("classMapper.selectMyClassList",search,rowBounds);
+	}
+	public ClassDto selectMyClassDetail(String classCode) {
+		return sqlSession.selectOne("classMapper.selectMyClassDetail",classCode);
+	}
+	public ClassDto selectLearnerList(String classCode) {
+		return sqlSession.selectOne("classMapper.selectLearnerList", classCode);
+	}
 
 //--------------------------------------내강의 시작---------------------------------------------
 	

@@ -9,6 +9,7 @@
 		<result column="MODIFY_DATE" property="modifyDate"/>
 		
 		<result column="DEPT_NAME" property="deptName"/>
+		<result column="COUNT" property="stuCount"/>
 		
 		<result column="CLASS_TITLE" property="classTitle"/>
 		<result column="CLASS_TYPE" property="classType"/>
@@ -42,7 +43,9 @@
 	<!-- 수강생 매핑 -->
 	<resultMap id="learnerList" type="LearnerDto">
 	    <result column="LEARNER_NO" property="learnerNo"/>
-	    <result column="STU_NO" property="stuNo"/>
+	    <result column="DEPARTMENT" property="department"/>
+	    <result column="GRADE" property="grade"/>
+	    <result column="STU_NAME" property="stuName"/>
 	    <result column="MIDDLE_TEST" property="middleTest"/>
 	    <result column="FINAL_TESTL" property="finalTestL"/>
 	    <result column="PRACTICE" property="practice"/>
@@ -265,13 +268,135 @@
 	    , to_date(SYSDATE,'RR/MM/DD')
 	    )
 	</insert>
+	
 	<!-- 강의신청 수정(보완)/교수 -->
+	<insert id="insertEvaMethod">
+		INSERT 
+		  INTO T_EVA_METHOD 
+		     ( 
+		       CLASS_CODE
+		     , EVA_ITEM
+		     , ALLOCATION
+		     , EVA_DETAIL
+		     , CREATE_DATE
+		     ) 
+		VALUES 
+		    ( 
+		      #{classCode}
+		    , #{evaItem}
+		    , #{allocation}
+		    , #{evaDetail}
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    )
+	</insert>
+	<update id="updateEva">
+		UPDATE T_EVA_METHOD
+		   SET ALLOCATION = #{allocation} 
+		     , EVA_DETAIL = #{evaDetail}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM = #{evaItem}
+	</update>
+	<delete id="deleteEva">
+		DELETE FROM T_EVA_METHOD
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM =  #{evaItem}
+	</delete>
+	<update id="updateOpenAppl">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = '보완완료'
+		     , USER_NO = #{userNo}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{updateClassCode}
+	</update>
+	<update id="updateClass">
+		UPDATE T_CLASS
+		   SET CLASS_CODE = #{updateClassCode}
+		     , CLASS_TITLE = #{classTitle}
+		     , CLASS_TYPE= #{classType}
+		     , PRG_METHOD = #{prgMethod}
+		     , TARGET_GRADE = #{targetGrade}
+		     , CLASS_GOALS = #{classGoals}
+		     , OPERATION_PLAN = #{operationPlan}
+		     , MAIN_TEXTBOOK = #{mainTextBook}
+		     , REFN_BOOK = #{refnBook}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
 
-	
 	<!-- 내강의 목록조회 -->
+	<select id="selectMyClassListCount" resultType="_int">
+	    SELECT count(*) as count
+		  FROM T_CLASS
+		 WHERE USER_NO = #{userNo}
+   		   AND CLASS_CODE LIKE #{year} || '%'
+  		   AND CONFIRM_YN = 'Y'
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectMyClassList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		 	 , CLASS_TITLE
+		 	 , CLASS_TYPE
+		 	 , TARGET_GRADE
+		 	 , CLASS_HOURS
+  		  FROM T_CLASS
+         WHERE USER_NO = #{userNo}
+   		   AND CLASS_CODE LIKE #{year} || '%'
+   	   	   AND CONFIRM_YN = 'Y'
+   	   	<if test="keyword != null and keyword != ''">
+	       AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		 ORDER 
+		    BY CLASS_CODE
+	</select>
 	<!-- 내강의 상세조회 -->
+	<select id="selectMyClassDetail" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , CLASS_TYPE
+		     , TARGET_GRADE
+		     , CLASS_HOURS
+             , (SELECT DEPT_NAME 
+                  FROM T_ST_DEPT S
+                  JOIN T_CLASS C
+                    ON SUBSTR(C.CLASS_CODE,6,2) = S.ST_DEPT_NO
+                 WHERE CLASS_CODE = #{classCode}) AS DEPT_NAME
+		     , (SELECT COUNT(STU_NAME)
+		          FROM T_CLASS 
+		  		  LEFT 
+		  		  JOIN T_LEARNER_LIST 
+		  		 USING(CLASS_CODE)
+		  		  JOIN T_STUDENT 
+		  		 USING(STU_NO)
+		   		 WHERE CLASS_CODE = #{classCode}) AS COUNT 
+		   	 , PRG_METHOD
+		  FROM T_CLASS
+		 WHERE CLASS_CODE = #{classCode}
+		   AND CONFIRM_YN = 'Y'
+	</select>
 	<!-- 수강생 상세조회 -->
-	
+	<select id="selectLearnerList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+			 , LEARNER_NO
+			 , STU_NAME
+		 	 , DEPARTMENT
+             , GRADE
+		 	 , MIDDLE_TEST
+		 	 , FINAL_TESTL
+		 	 , PRACTICE
+		 	 , ATTENDANCE
+		 	 , ETC
+		 	 , FINAL_GRADE
+  		FROM T_CLASS 
+  		LEFT 
+  		JOIN T_LEARNER_LIST 
+  	   USING(CLASS_CODE)
+        JOIN T_STUDENT 
+       USING(STU_NO)
+ 	   WHERE CLASS_CODE=#{classCode}
+	</select>
 	<!-- 수업계획서 조회 -->
 	<!-- 수업계획서 수정 -->
 	<!-- 수업계획서 삭제 -->

@@ -25,7 +25,9 @@ public class ClassDto {
 	 private String userNo;
 	 private String modifyDate; // 수정일
 	 
+	 private String updateClassCode; // 수정후 학과 반영
 	 private String deptName; // 개설 학과명
+	 private int stuCount;
 	 
 	 private String classTitle;
 	 private String classType;
