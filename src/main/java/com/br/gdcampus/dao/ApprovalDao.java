@@ -241,4 +241,12 @@ public class ApprovalDao {
 		return sqlSession.delete("approvalMapper.deleteAdminForm",apprNo);
 	}
 
+	public List<String> selectCustomFormTypes() {
+		return sqlSession.selectList("approvalMapper.selectCustomFormTypes");
+	}
+
+	public ApprovalDto selectCustomFormContent(String formType) {
+		return sqlSession.selectOne("approvalMapper.selectCustomFormContent",formType);
+	}
+
 }

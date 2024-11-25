@@ -124,6 +124,12 @@ public interface ApprovalService {
 
 	//양식삭제
 	int deleteAdminForm(String apprNo);
+
+	//양식종류조회
+	List<String> selectCustomFormTypes();
+
+	//선택양식내용불러오기
+	ApprovalDto selectCustomFormContent(String formType);
 	
 	//글삭제
 	

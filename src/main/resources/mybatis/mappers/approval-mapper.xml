@@ -27,7 +27,8 @@
     <!-- 결재선 정보는 selectApproversList 쿼리 결과를 매핑 -->
     <collection property="approvers" column="APPR_NO" select="selectApproversList"/>       
     <collection property="draft" column="APPR_NO" select="selectSimpleDraftDetail"/>       
-    <collection property="purchDraft" column="APPR_NO" select="selectPurchDraftDetail"/>       
+    <collection property="purchDraft" column="APPR_NO" select="selectPurchDraftDetail"/>
+<!--     <collection property="cumstomForms" column="APPR_TYPE" select="selectCustomFormTypes"/>  -->      
 	</resultMap>
 	
 	
@@ -752,10 +753,33 @@
 	       AND APPR_STATUS = 4  <!-- 양식만 수정 가능 -->
 	</update>	
 
+	<!-- 양식 삭제 -->
 	<delete id="deleteAdminForm">
     DELETE FROM T_APPROVAL
      WHERE APPR_NO = #{apprNo}
        AND APPR_STATUS = 4	
 	</delete>
+	
+	<!-- 양식종류 조회 -->
+	<select id="selectCustomFormTypes" resultMap="approvalResultMap">
+		SELECT DISTINCT APPR_TYPE as APPR_TYPE
+		  FROM T_APPROVAL 
+		 WHERE APPR_STATUS = '4'
+		 ORDER 
+		    BY APPR_TYPE	
+	</select>
+	
+	<!-- 종류에 따른 내용 가져오기(CLOB이라 내용가져오는 거 분리해야함) -->
+	<select id="selectCustomFormContent" resultMap="approvalResultMap">
+    SELECT 
+           APPR_TYPE
+         , APPR_CONTENT
+      FROM T_APPROVAL 
+     WHERE APPR_STATUS = '4'
+       AND APPR_TYPE = #{apprType}
+       AND ROWNUM = 1	
+	</select>
+
+	
 
 </mapper>
