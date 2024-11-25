@@ -141,6 +141,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">내 결재함</h2>
+							        <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist">결재작성</a>
                     
                     <div class="tab-menu">
                         <button class="${ empty param.status ? 'active' : '' }" data-status="all">전체</button>
