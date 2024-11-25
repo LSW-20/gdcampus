@@ -266,44 +266,47 @@
 														<span class="modify-classification"></span>&nbsp;수정창
 												</div>
 
-												<div id="top-child2-2">
-														<div id="top-child2-2-1">
-																<%-- <img src="${contextPath}/images/equipment/HP K110.jpg" id="equip-img"> --%>
-																<%-- <img src="/upload/Equipment/20241124/3792e018404c4440aed8a313c5773d32.jpg" id="equip-img"> --%>
-																<img id="equip-img">
-																<input type="file" name="uploadFile">
-														</div>
-														<div id="top-child2-2-2">
-																<table id="modify-equip-table">
-																		<tr>
-																				<td>구분</td>
-																				<td>
-																						<input type="text" class="form-control" id="modify-classification" name="classification" readonly>
-																				</td>
-																		</tr>
-																		<tr>
-																				<td>분류</td>
-																				<td>
-																						<input type="text" class="form-control" id="modify-category" name="category">
-																				</td>
-																		</tr>
-																		<tr>
-																				<td>번호</td>
-																				<td>
-																						<input type="text" class="form-control" id="modify-no" name="no" readonly>
-																				</td>
-																		</tr>
-																		<tr>
-																				<td>이름</td>
-																				<td>
-																						<input type="text" class="form-control" id="modify-name" name="name">
-																				</td>
-																		</tr>
-																</table>
+												<form action="${contextPath}/equipmentAndFacility/modify" method="post" enctype="multipart/form-data">
+														<div id="top-child2-2">
+																<div id="top-child2-2-1">
+																		<%-- <img src="${contextPath}/images/equipment/HP K110.jpg" id="equip-img"> --%>
+																		<%-- <img src="/upload/Equipment/20241124/3792e018404c4440aed8a313c5773d32.jpg" id="equip-img"> --%>
+																		<img id="equip-img">
+																		<a id="file-a"></a> <br>
+																		<input type="file" name="modifyUploadFile" id="modifyUploadFile">
+																</div>
+																<div id="top-child2-2-2">
+																		<table id="modify-equip-table">
+																				<tr>
+																						<td>구분</td>
+																						<td>
+																								<input type="text" class="form-control" id="modify-classification" name="classification" readonly>
+																						</td>
+																				</tr>
+																				<tr>
+																						<td>분류</td>
+																						<td>
+																								<input type="text" class="form-control" id="modify-category" name="category">
+																						</td>
+																				</tr>
+																				<tr>
+																						<td>번호</td>
+																						<td>
+																								<input type="text" class="form-control" id="modify-no" name="no" readonly>
+																						</td>
+																				</tr>
+																				<tr>
+																						<td>이름</td>
+																						<td>
+																								<input type="text" class="form-control" id="modify-name" name="name">
+																						</td>
+																				</tr>
+																		</table>
 
-																<button type="submit">수정</button>
+																		<button type="submit">수정</button>
+																</div>
 														</div>
-												</div>
+												</form>
 										</div>
 										<!-- top-child2 끝 -->
 
@@ -470,7 +473,7 @@
 																<tr>
 																		<td>비품 이미지</td>
 																		<td>
-																				<input type="file" name="uploadFile"> <br><br>
+																				<input type="file" name="uploadFile" required> <br><br>
 																				<div>첨부파일 사이즈는 10MB 이하여야 됩니다.</div> 
 																		</td>
 																</tr>
@@ -589,11 +592,17 @@
 
 			// 수정 버튼 클릭시 실행되는 함수
 			function modifyButton(classification, category, no, name){
+					$(".modify-classification").text(classification); // 구분 (비품/시설)
 					$("#modify-classification").val(classification);  // 구분 (비품/시설)
 					$("#modify-category").val(category);              // 분류
 					$("#modify-no").val(no);                          // 번호
 					$("#modify-name").val(name);                      // 이름
 					$('#top-child2').show(); // 수정창 요소가 보여지게 하기
+				
+					if(classification === '시설') { // 시설은 개별 이미지가 없다. 기본 이미지 띄우기.
+							$('#equip-img').attr('src', "${contextPath}/images/facility.jpg");
+							$('#modifyUploadFile').hide();
+					}
 
 					if (classification === '비품') {
 							$.ajax({
@@ -603,6 +612,12 @@
 
 									success: function(resData){
 											console.log(resData);
+											// $('#modifyUploadFile').val(resData);
+
+											$('#file-a').text(name);
+											$('#file-a').attr('href', resData);
+											$('#file-a').attr('download', name);
+
 											$('#equip-img').attr('src', resData);
 									},
 									error: function(){
