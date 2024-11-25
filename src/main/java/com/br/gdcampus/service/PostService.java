@@ -34,7 +34,7 @@ public interface PostService {
 
 //=============== 댓글 기능======================
     // 댓글 목록 조회
-    List<CommentDto> selectCommentList(int postNo); // 내가 선택할 게시글의 글 번호만 넘겨 받게 하기
+    List<CommentDto> selectCommentList(String postNo); // 내가 선택할 게시글의 글 번호만 넘겨 받게 하기
 
     // 댓글 등록
     int insertComment(CommentDto c); /*commet 객체 넘겨 받기*/

@@ -123,14 +123,14 @@
                  </tr>
                  <tr>
                    <td colspan="3">댓글 (<span id="comment">0</span>) </td> 
-
                  </tr>
              </thead>
+             
              <tbody>
                  
              </tbody>
          </table>
-         
+         	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
          <script>
          	 $(document).ready(function(){
          		 fn_commentList();
@@ -140,23 +140,23 @@
          	 function fn_commentList(){
          		 $.ajax({
          			 url: '${contextPath}/board/post/clist',
-         			 data: "no=" + ${postDto.postNo},
+         			 data: "no=" + '${postDto.postNo}',
          			 success: function(resData){
-         				 /* console.log(resData); // [{}, {}, ..] */
+         				 console.log(resData); // [{}, {}, ..]
          				 
          			 
-         				 /* 	<tr>
+         					/* <tr>
                      <th>user02</th>
                      <td>댓글입니다. <td>
                      <td>2020-04-10</td>
-                  </tr>
-         				 */
+                  </tr> */
+         	
          				 
          				 $("#rcount").text(resData.length); // 댓글수출력
          				 let tr = "";
          				 for(let i=0; i<resData.length; i++){
          					 tr += "<tr>"
-         					 		 +		"<th>" + resData[i].commenterId  + "</th>"
+         					 		 +		"<th>" + resData[i].commentWriter  + "</th>"
          					 		 +	  "<td>" + resData[i].comment + "</td>"
          					 		 +    "<td>" + resData[i].registDate     + "</td>"
          					 		 + "</tr>";
@@ -175,7 +175,7 @@
          			 type: 'post',
          			 data: {
          				 comment: $("#post_content").val(),
-         				 commentNo: ${commentDto.postNo}
+         				 commentNo: '${commentDto.postNo}'
          			 },
          			 success: function(resData){
          				 if(resData == "SUCCESS"){

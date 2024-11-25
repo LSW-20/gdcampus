@@ -31,8 +31,8 @@ public class PostDao {
 	}
 
 
-	public List<CommentDto> selectCommentList(int postNo) {
-		return sqlSession.selectOne("postMapper.selectCommentList", postNo);
+	public List<CommentDto> selectCommentList(String postNo) {
+		return sqlSession.selectList("postMapper.selectCommentList", postNo);
 	}
 
 

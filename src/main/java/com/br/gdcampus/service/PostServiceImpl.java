@@ -63,7 +63,7 @@ public class PostServiceImpl implements PostService {
 
 	// 댓글 목록 조회
 	@Override
-	public List<CommentDto> selectCommentList(int postNo) {
+	public List<CommentDto> selectCommentList(String postNo) {
 
 		return postDao.selectCommentList(postNo);
 	}
