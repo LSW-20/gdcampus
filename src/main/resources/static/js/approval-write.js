@@ -256,7 +256,12 @@ const ApprovalModal = {
 	            alert('제목을 입력해주세요.');
 	            return false;
 	        }
-	    }
+	    } else if(apprType !== '기안서' && apprType!=='품의서'){
+					if(!document.querySelector('input[name="apprTitle"]').value) {
+					    alert('제목을 입력해주세요.');
+					    return false;
+					}
+			}
 
 	    return true;
 	},	

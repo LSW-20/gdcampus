@@ -251,6 +251,10 @@
                             <c:when test="${approval.apprType eq '품의서'}">
                                 <jsp:include page="purchaseDraftDetail.jsp"/>
                             </c:when>
+										        <c:otherwise>
+										            <!-- 관리자 정의 양식인 경우 -->
+																<jsp:include page="adDraftDetail.jsp"/>
+										        </c:otherwise>                            
                         </c:choose>
                     </div>
                 </div>

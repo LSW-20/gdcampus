@@ -155,7 +155,7 @@
 				                <div class="stamp">승인</div>
 				                ${loginUser.userName} ${loginUser.rankName}
 				                <input type="hidden" name="apprUser" value=" ${loginUser.userNo}">
-				                <input type="hidden" name="apprType" value="기안서">
+				                <input type="hidden" name="apprType" value="${param.formType}">
 				                <input type="hidden" name="createUser" value="${loginUser.userNo}">				                
 				            </td>
 				        </tr>
@@ -171,7 +171,6 @@
 					</div>
         </div>		
 
-    <input type="hidden" name="apprType" value="${param.formType}"/>
     <div class="form-type-display">
         <h3>${param.formType}</h3>
     </div>

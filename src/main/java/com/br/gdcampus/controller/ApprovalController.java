@@ -256,7 +256,6 @@ public class ApprovalController {
 			case "approved":
 				approval = apprService.selectMyApprovedDetail(params);
 				System.out.println("내결재함: "+approval);
-			//case "others":
 		}
 		if(approval == null) {
 			throw new RuntimeException("문서를 찾을 수 없음");
