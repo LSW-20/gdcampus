@@ -716,8 +716,8 @@
 	        , A.CREATE_DATE as CREATE_DATE
 	        , A.CREATE_USER as CREATE_USER
 	        , A.MODIFY_DATE as MODIFY_DATE
-	        , A.MODIFY_USER as MODIFY_USER
-	        , U.USER_NAME as CREATE_USER_NAME   <!-- 생성자명 -->
+	        , A.UPDATE_USER as UPDATE_USER
+	        , U.USER_NAME as USER_NAME   <!-- 생성자명 -->
 	    FROM T_APPROVAL A
 	    LEFT JOIN T_USER U ON A.CREATE_USER = U.USER_NO
 	    WHERE A.APPR_STATUS = 4  <!-- 양식 상태값 -->
@@ -727,38 +727,35 @@
 	<!-- 관리자 양식 상세 조회 -->
 	<select id="selectAdminFormDetail" resultMap="approvalResultMap">
 	    SELECT 
-	          A.APPR_NO
-	        , A.APPR_TYPE
-	        , A.APPR_CONTENT
-	        , A.CREATE_DATE
-	        , A.CREATE_USER
-	        , A.MODIFY_DATE
-	        , A.MODIFY_USER
-	        , U1.USER_NAME as CREATE_USER_NAME
-	        , U2.USER_NAME as MODIFY_USER_NAME
-	    FROM T_APPROVAL A
-	    LEFT JOIN T_USER U1 ON A.CREATE_USER = U1.USER_NO
-	    LEFT JOIN T_USER U2 ON A.MODIFY_USER = U2.USER_NO
-	    WHERE A.APPR_NO = #{apprNo}
-	    AND A.APPR_STATUS = 4  <!-- 양식만 조회 -->
+	           A.APPR_NO as APPR_NO
+	         , A.APPR_TYPE as APPR_TYPE
+	         , A.APPR_CONTENT as APPR_CONTENT
+	         , A.CREATE_DATE as CREATE_DATE
+	         , A.CREATE_USER as CREATE_USER
+	         , A.MODIFY_DATE as MODIFY_DATE
+	         , A.UPDATE_USER as UPDATE_USER
+	    	FROM T_APPROVAL A
+	    	LEFT JOIN T_USER U1 ON A.CREATE_USER = U1.USER_NO
+	     WHERE A.APPR_NO = #{apprNo}
+	    	 AND A.APPR_STATUS = 4  <!-- 양식만 조회 -->
 	</select>
 	
 	<!-- 관리자 양식 수정 -->
 	<update id="updateAdminForm">
 	    UPDATE T_APPROVAL 
-	    SET 
-	        APPR_TYPE = #{apprType}
-	        , APPR_CONTENT = #{apprContent}
-	        , MODIFY_DATE = SYSDATE
-	        , MODIFY_USER = #{modifyUser}
-	    WHERE APPR_NO = #{apprNo}
-	    AND APPR_STATUS = 4  <!-- 양식만 수정 가능 -->
+	       SET 
+	        	 APPR_TYPE = #{apprType}
+	         , APPR_CONTENT = #{apprContent}
+	         , MODIFY_DATE = SYSDATE
+	         , UPDATE_USER = #{updateUser}
+	     WHERE APPR_NO = #{apprNo}
+	       AND APPR_STATUS = 4  <!-- 양식만 수정 가능 -->
 	</update>	
 
 	<delete id="deleteAdminForm">
     DELETE FROM T_APPROVAL
-    WHERE APPR_NO = #{apprNo}
-    AND APPR_STATUS = 4	
+     WHERE APPR_NO = #{apprNo}
+       AND APPR_STATUS = 4	
 	</delete>
 
 </mapper>

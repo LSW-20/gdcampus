@@ -132,35 +132,33 @@
 	<!-- sidebar 끝 -->
 
     <div class="approval-form">
-    <div class="title">양식생성폼</div>        
-    <form id="approvalForm" action="${contextPath}/approval/admin/insertForm" method="post">
-           
-                    <div class="form-container">
-                        <div class="approval-header">
-                            <div class="btn-form">
-                                
-        												<button type="button" class="btn btn-primary" onclick="ApprovalModal.submitForm()">양식생성</button>
-                                <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
-                            </div>
-                        </div>
-                        
-                        <!-- 문서 양식 -->
-                        <div class="approval-content">
-									        <table>
-									            <tr>
-									                <th>문서명</th>
-									                <td colspan="3"><input type="text" class="appr-type" name="apprType" style="width:100%;"></td>
-									            </tr>
-									            <tr>
-									                <td colspan="4" class="content-area">
-									                    <textarea id="summernote" name="apprContent"></textarea>
-									                </td>
-									            </tr>
-									        </table>
-                        </div>
-                    </div>
-            
-    </form>
+		<div class="title">양식생성폼</div>        
+		<form id="approvalForm" action="${contextPath}/approval/admin/insertForm" method="post">
+		    <div class="form-container">
+		        <!-- 버튼 영역 -->
+		        <div class="btn-form" style="text-align: right; margin-bottom: 20px;">
+		            <button type="button" class="btn btn-primary" onclick="ApprovalModal.submitForm()">양식생성</button>
+		            <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
+		        </div>
+		        
+		        <!-- 문서 양식 -->
+		        <div class="approval-content">
+		            <table>
+		                <tr>
+		                    <th>문서명</th>
+		                    <td colspan="3">
+		                        <input type="text" class="appr-type" name="apprType" style="width:100%;">
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td colspan="4" class="content-area">
+		                        <textarea id="summernote" name="apprContent"></textarea>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		    </div>
+		</form>
 
 
 
@@ -173,14 +171,48 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
 		
-    <script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            width: 900,
-            height:800,        	
-          placeholder: '양식 작성'
-        });
-      });
-    </script>     
+<script>
+$(document).ready(function() {
+    // Summernote 초기화
+    $('#summernote').summernote({
+        width: 900,
+        height: 800,        	
+        placeholder: '양식 작성',
+        callbacks: {
+            onImageUpload: function(files) {
+                alert('이미지 업로드는 지원하지 않습니다.');
+            }
+        }
+    });
+
+    // form submit 처리를 위한 객체
+    const ApprovalModal = {
+        submitForm: function() {
+            // 유효성 검사
+            const apprType = $('input[name="apprType"]').val();
+            const apprContent = $('#summernote').val();
+
+            if(!apprType.trim()) {
+                alert('문서명을 입력해주세요.');
+                $('input[name="apprType"]').focus();
+                return;
+            }
+
+            if(!apprContent.trim()) {
+                alert('양식 내용을 입력해주세요.');
+                $('#summernote').summernote('focus');
+                return;
+            }
+
+            if(confirm('양식을 생성하시겠습니까?')) {
+                $('#approvalForm').submit();
+            }
+        }
+    };
+
+    // 전역 객체로 등록
+    window.ApprovalModal = ApprovalModal;
+});
+</script> 
 </body>
 </html>

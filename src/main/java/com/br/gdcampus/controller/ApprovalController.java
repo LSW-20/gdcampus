@@ -351,7 +351,7 @@ public class ApprovalController {
 		return"approval/admin/detailForm";
 	}
 	
-	@GetMapping("/admin/updateForm")
+	@PostMapping("/admin/updateForm")
 	public String adminFormUpdate(ApprovalDto apprForm, HttpSession session, RedirectAttributes ra) {
 	    try {
 	        UserDto loginUser = (UserDto)session.getAttribute("loginUser");
@@ -370,10 +370,10 @@ public class ApprovalController {
 	        ra.addFlashAttribute("alertMsg", "양식 수정 중 오류가 발생했습니다.");
 	    }
 	    
-	    return "redirect:/approval/admin/formDetail/" + apprForm.getApprNo();		
+	    return "redirect:/approval/admin/detailForm/" + apprForm.getApprNo();		
 	}
 	
-	@PostMapping("/admin/deleteForm")
+	@GetMapping("/admin/deleteForm")
 	public String deleteAdminForm(String apprNo, RedirectAttributes ra) {
 	    try {
 	        int result = apprService.deleteAdminForm(apprNo);

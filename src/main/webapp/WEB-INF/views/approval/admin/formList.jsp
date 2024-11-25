@@ -103,9 +103,9 @@
                                 <thead>
                                     <tr class="bg-transparent">
                                         <th style="width: 15%;">양식번호</th>
-                                        <th style="width: 20%;">양식종류</th>
-                                        <th style="width: 30%;">생성일</th>
-                                        <th style="width: 20%;">생성자</th>
+                                        <th style="width: 30%;">양식종류</th>
+                                        <th style="width: 20%;">생성일</th>
+                                        <th style="width: 10%;">생성자</th>
                                         <th style="width: 15%;">관리</th>
                                     </tr>
                                 </thead>
@@ -119,14 +119,14 @@
                                             </td>
                                             <td>${form.createUser}</td>
                                             <td class="action-btns">
-                                                <button type="button" class="btn btn-sm btn-primary" 
-                                                        onclick="location.href='${contextPath}/approval/admin/updateForm?apprNo=${form.apprNo}'">
-                                                    수정
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-danger" 
+                                                <a class="px-3 text-primary edit-btn"
+                                                        href="${contextPath}/approval/admin/detailForm/${form.apprNo}">
+                                                    <i class="uil uil-pen font-size-18"></i>
+                                                </a>
+                                                <a class="px-3 text-danger edit-btn" 
                                                         onclick="deleteForm('${form.apprNo}')">
-                                                    삭제
-                                                </button>
+                                                    <i class="uil uil-trash font-size-18"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -140,7 +140,16 @@
         <!-- main-content 끝 -->
     </div>
     <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-    
+         <!-- Required datatable js -->
+        <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        
+        <!-- Responsive examples -->
+        <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- init js -->
+        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>    
     <script>
     function deleteForm(apprNo) {
         if(confirm('해당 양식을 삭제하시겠습니까?')) {
