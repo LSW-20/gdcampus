@@ -263,16 +263,11 @@
 										</a>
 								</li>
 								
-
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/approval/admin/formList" class="waves-effect">
 												<i class="icon nav-icon" data-feather="file"></i>
 												<span class="menu-item">결재 문서 양식 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">템플릿 양식 조회</a></li>
-												<li><a href="#">템플릿 양식 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 								<!-- 관리자 메뉴 끝 -->		
 								</c:if>
