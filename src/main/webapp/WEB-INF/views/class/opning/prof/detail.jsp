@@ -178,7 +178,7 @@
 							</c:forEach>
 						</table>
 					</div>
-					<h5>교재</h5>
+					<h5 class="mt-4">교재</h5>
 					<hr>
 					<div class=" mt-2 mb-4">
 						<table class="table mb-0" style="table-layout: fixed">

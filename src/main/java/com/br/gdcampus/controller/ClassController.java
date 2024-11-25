@@ -218,6 +218,11 @@ public class ClassController {
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
+	/**교수측 보완요청에 대한 수정 폼 요청
+	 * @param classCode
+	 * @param model
+	 * @param session
+	 */
 	@GetMapping("/opning/prof/modifyForm.do" )
 	public void modifyForm(String classCode, Model model, HttpSession session) {
 		ClassDto c = classService.selectStaffOpningDetail(classCode);
@@ -227,6 +232,12 @@ public class ClassController {
 		session.setAttribute("c", c);
 	}
 	
+	/**교수측 보완완료 요청
+	 * @param c
+	 * @param session
+	 * @param rdAttributes
+	 * @return
+	 */
 	@PostMapping("/opning/prof/update.do")
 	public String updateForm(ClassDto c, HttpSession session, RedirectAttributes rdAttributes) {
 		
@@ -236,8 +247,6 @@ public class ClassController {
 		
 		ClassDto originC = ((ClassDto)session.getAttribute("c"));
 		c.setUpdateEvaList(originC.getEvaList());
-		
-		log.debug("c:{}",c);
 		
 		List<EvaMethodDto> updateEvaList = c.getUpdateEvaList();
 		List<EvaMethodDto> evaList = c.getEvaList();
@@ -265,17 +274,12 @@ public class ClassController {
 			}
 		}
 		
-		log.debug("최종eva:{}",evaList);
-		log.debug("최종upeva:{}",updateEvaList);
-		log.debug("최종deleva:{}",deleteEvaList);
-		
 		c.setEvaList(evaList);
 		c.setUpdateEvaList(updateEvaList);
 		c.setDeleteEvaList(deleteEvaList);
 		
 		c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
-		// evaList는 insert문 updateEvaList는 update문 deleteEvaList는 delete문
-		// 대상학과가 바뀌는 경우도 있으므로 수정전 classCode와 수정후 classCode도 보내줘야함(Map)
+
 		c.setClassCode(originC.getClassCode());
 		log.debug("최종c:{}",c);
 		
@@ -288,5 +292,55 @@ public class ClassController {
 			rdAttributes.addFlashAttribute("alertMsg","변경사항 저장에 실패하였습니다.");
 			return "redirect:/class/opning/prof/list.do";
 		}
+	}
+	
+	/**교수측 강의 수강생 리스트 목록 조회
+	 * @param classCode
+	 */
+	@GetMapping("/learner/list.do")
+	public void myClassLearnerList(String classCode, Model mode) {
+		ClassDto c = classService.selectLearnerList(classCode);
+		log.debug("학생들이 들어있는 c : {}", c);
+		mode.addAttribute("c",c);
+	}
+	
+	/**교수측 내 강의 목록 조회
+	 * 
+	 */
+	@GetMapping("/list.do")
+	public void myClassList() {}
+	
+	/**교수측 내 강의 목록 table 안 내용
+	 * @param currentPage
+	 * @param session
+	 * @param year
+	 * @param keyword
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(value="/listContent.do", produces="application/json")
+	public Map<String,Object> myClassListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+			,HttpSession session,String year,String keyword) {
+		
+		Map<String, Object> res = new HashMap<>();
+		Map<String,String> search = new HashMap<>();
+		log.debug("year:{}, keyword:{}",year,keyword);
+		search.put("year", year.substring(2));
+		search.put("keyword", keyword);
+		search.put("userNo", ((UserDto)session.getAttribute("loginUser")).getUserNo());
+		
+		int listCount = classService.selectMyClassListCount(search);
+		log.debug("listCount:{}",listCount);
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		List<ClassDto> list = classService.selectMyClassList(search, pi);
+		
+		res.put("classList", list);
+		res.put("pi", pi);
+		return res;
+	}
+	
+	@GetMapping("/detail.do")
+	public void myClassDetail(String classCode, Model model) {
+		 model.addAttribute("c", classService.selectMyClassDetail(classCode));
 	}
 }

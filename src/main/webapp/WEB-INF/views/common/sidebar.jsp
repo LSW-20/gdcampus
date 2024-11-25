@@ -125,7 +125,7 @@
 												<span class="menu-item">강의 조회</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">강의 목록 조회</a></li>
+												<li><a href="${contextPath}/class/list.do">강의 목록 조회</a></li>
 												<li><a href="#">수업계획서 관리</a></li>
 												<li><a href="#"></a></li>
 										</ul>
