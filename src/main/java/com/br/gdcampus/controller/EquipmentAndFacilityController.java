@@ -1,10 +1,14 @@
 package com.br.gdcampus.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -114,19 +118,82 @@ public class EquipmentAndFacilityController {
 		    return "redirect:/equipmentAndFacility/list";
 		}
 		
+		
+		
 		int result = 0;
 		
+		
+		
 		if(target.equals("비품")) {
+			
+			// db에 삭제 요청 성공시 new File(~).delete()로 삭제할 파일 정보 미리 조회 (첨부파일로 업로드한 파일 정보들)
+			List<AttachDto> delAttachDtoList = new ArrayList<>();
+			delAttachDtoList = equipmentAndFacilityService.selectAttachmentList(deleteList);
+			
+			// 초기 샘플데이터(첨부파일로 업로드하지 않고 static 폴더에 있음) 파일명 알아내기
+			List<String> equipmentNameList = new ArrayList<>();
+			for(String equipNo : deleteList) {
+				EquipmentDto equipmentDto = equipmentAndFacilityService.selectEquipmentByEquipNo(equipNo);
+				equipmentNameList.add(equipmentDto.getEquipName());
+			}
+			
+			
+			// 비품 삭제
 			result = equipmentAndFacilityService.deleteEquipment(deleteList);
-		}else {
+			
+			if(result > 0) {
+				
+				ra.addFlashAttribute("alertMsg", "비품 삭제에 성공했습니다.");
+				
+				if(!delAttachDtoList.isEmpty()) { // 첨부파일 업로드 기능으로 업로드한 경우
+					
+					for(AttachDto delAttachDto : delAttachDtoList) {
+						new File(delAttachDto.getFilePath() + "/" + delAttachDto.getFilesystemName()).delete();
+					}
+					
+				}else if(delAttachDtoList.isEmpty()) { // 첨부파일 업로드한 데이터가 아닌 초기 샘플 데이터의 경우(첨부 파일 테이블에 데이터 없고 static 폴더에 있음)
+			        
+					
+			        for (String equipmentName : equipmentNameList) {
+			        	
+			        	// File sampleFile = new File("src/main/resources/static/images/equipment/" + equipmentName + ".jpg"); 로컬에서는 이렇게 직접 참조 가능하지만 배포하면 불가능하다.
+
+						try {
+							String staticPath = new ClassPathResource("static/images/equipment/").getFile().getAbsolutePath();
+							File sampleFile = new File(staticPath + "/" + equipmentName + ".jpg");
+							
+				            if (sampleFile.exists()) {
+				                if (sampleFile.delete()) {
+				                    log.debug("샘플 데이터 삭제 성공: {}", sampleFile.getAbsolutePath());
+				                } else {
+				                    log.warn("샘플 데이터 삭제 실패: {}", sampleFile.getAbsolutePath());
+				                }
+				            } else {
+				                log.debug("샘플 데이터 파일이 존재하지 않음: {}", sampleFile.getAbsolutePath());
+				            }
+				            
+						} catch (IOException e) {
+							log.error("샘플 데이터 삭제 중 경로 접근 실패", e);
+						}
+
+			        }
+				}
+
+			}else {
+				ra.addFlashAttribute("alertMsg", "비품 삭제에 실패하였습니다.");
+			}
+			
+		}else if(target.equals("시설")) {
 			result = equipmentAndFacilityService.deleteFacility(deleteList);
+			
+			if(result > 0) {
+				ra.addFlashAttribute("alertMsg", "시설 삭제에 성공했습니다.");
+			}else {
+				ra.addFlashAttribute("alertMsg", "시설 삭제에 실패하였습니다.");
+			}
 		}
 				
-		if(result > 0) {
-			ra.addFlashAttribute("alertMsg", "삭제에 성공했습니다.");
-		}else {
-			ra.addFlashAttribute("alertMsg", "삭제에 실패하였습니다.");
-		}
+
 		
 		return "redirect:/equipmentAndFacility/list";
 	}
@@ -218,7 +285,7 @@ public class EquipmentAndFacilityController {
 	
 	
 	/**
-	 * 파일경로, db저장파일명 조회 메소드
+	 * 비품번호로 파일경로, db저장파일명 조회 메소드
 	 * @param equipNo 조회할 비품 번호
 	 * @param session 현재 로그인한 사용자 세션
 	 * @return 파일경로 + DB저장파일명
@@ -227,15 +294,15 @@ public class EquipmentAndFacilityController {
 	@GetMapping(value="/selectFileURL", produces="text/html; charset=utf-8")
 	public String selectFileURL(String equipNo) {
 		
-		log.debug("=============== selectFileURL 메소드 실행됨 ===============");
+		log.debug("=============== selectFileURL 메소드 실행됨(수정하기 클릭시) ===============");
 		
-		Map<String, String> map = equipmentAndFacilityService.selectFileURL(equipNo); // static 폴더의 초기 샘플 데이터면 null | db에 첨부파일 업로드했다면 파일경로, db에저장된파일명이 담긴 Map 객체
+		AttachDto attachDto = equipmentAndFacilityService.selectAttachment(equipNo); // static 폴더의 초기 샘플 데이터면 null | db에 첨부파일 업로드했다면 파일경로, db에저장된파일명이 담긴 Map 객체
 		
 		
 		String filePathAndFileSystemName = "";
 		
-		if(map != null) {
-			filePathAndFileSystemName = map.get("FILE_PATH") + "/" + map.get("FILESYSTEM_NAME");
+		if(attachDto != null) {
+			filePathAndFileSystemName = attachDto.getFilePath() + "/" + attachDto.getFilesystemName();
 		}else {
 			EquipmentDto equipmentDto = equipmentAndFacilityService.selectEquipmentByEquipNo(equipNo); // 비품번호로 비품 정보 조회
 			filePathAndFileSystemName = "/images/equipment/" + equipmentDto.getEquipName() + ".jpg"; // 초기 샘플 데이터는 확장자가 전부 .jpg
@@ -246,4 +313,138 @@ public class EquipmentAndFacilityController {
 		
 		return filePathAndFileSystemName;
 	}
+	
+	
+	/**
+	 * 비품, 시설 수정 메소드
+	 * author : 상우
+	 * @param classification 구분("비품" | "시설")
+	 * @param category 수정한 분류
+	 * @param no 비품번호 | 시설번호
+	 * @param name 수정한비품명 | 수정한시설명
+	 * @param modifyUploadFile 첨부파일(비어있을 수도 있다)
+	 * @param session 현재 로그인한 사용자 세션
+	 * @param ra 리다이렉트한 jsp로 응답 데이터를 전달하기 위한 객체
+	 */
+	@PostMapping("/modify")
+	public String modify(String classification, String category, String no, String name, MultipartFile modifyUploadFile, HttpSession session, RedirectAttributes ra) {
+		
+		// 수정가능한 것은 분류(category)와 이름(name)뿐이다.
+		
+		log.debug("=============== modify 메소드 실행됨 ===============");
+		log.debug("파일명 : {}",  modifyUploadFile.getOriginalFilename()); 
+		
+		String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("selectedCategory", category);
+		map.put("no", no);
+		map.put("name", name);
+		
+		int result = 0;
+		
+		
+		// 시설 수정 요청인 경우. 시설은 첨부파일이 없다.
+		if(classification.equals("시설")) { 
+			
+			result = equipmentAndFacilityService.modifyFacility(map);
+			
+		    if(result > 0) { 	    	
+		    	ra.addFlashAttribute("alertMsg", "시설 수정에 성공했습니다.");
+		    }else {  	
+		    	ra.addFlashAttribute("alertMsg", "시설 수정에 실패했습니다.");
+		    }
+		    
+		}
+		
+		
+		// 비품 수정 요청인 경우. 비품은 첨부파일이 올 수도 있고 안 올 수도 있다.
+		if(classification.equals("비품")) {
+			
+			AttachDto delAttachDto = null;
+			AttachDto insertAttachDto = null;
+			
+			
+			if(modifyUploadFile == null || modifyUploadFile.isEmpty()) { // 업로드한 첨부파일이 없는 경우
+				
+				result = equipmentAndFacilityService.modifyEquipmentWithoutFile(map);
+				
+			    if(result > 0) { 	    	
+			    	ra.addFlashAttribute("alertMsg", "비품 수정에 성공했습니다.\\n(업로드한 이미지 파일 없음)");
+			    }else {  	
+			    	ra.addFlashAttribute("alertMsg", "비품 수정에 실패했습니다.");
+			    }
+			    
+				
+			}else { // 업로드한 첨부파일이 있는 경우
+				
+				// db에 수정 요청 성공시 new File(~).delete()로 삭제할 파일 정보 미리 조회 (첨부파일로 업로드한 파일 정보들)
+				delAttachDto = equipmentAndFacilityService.selectAttachment(no);
+				
+	
+				// 초기 샘플데이터(첨부파일로 업로드하지 않고 static 폴더에 있음) 파일명 알아내기
+				EquipmentDto equipmentDto = equipmentAndFacilityService.selectEquipmentByEquipNo(no);
+				String equipmentName = equipmentDto.getEquipName();
+				
+				
+				// /upload/Equipment/yyyyMMdd에 첨부파일 저장하고, 첨부파일의 정보를 돌려받음. 
+			    Map<String,String> insertFileInfo = new HashMap<>();			
+			    insertFileInfo = fileUtil.fileupload(modifyUploadFile, "Equipment");	  
+			    
+			    // 첨부파일테이블에 insert할 첨부파일 정보
+			    insertAttachDto = AttachDto.builder().filePath(insertFileInfo.get("filePath")).originalName(insertFileInfo.get("originalName")).filesystemName(insertFileInfo.get("filesystemName")).build();
+				map.put("insertAttachDto", insertAttachDto);		
+				
+			    result = equipmentAndFacilityService.modifyEquipmentWithFile(map);
+			    
+			    
+			    
+			    if(result > 0) { 
+			    	
+			    	ra.addFlashAttribute("alertMsg", "비품 수정에 성공했습니다.\\\n(업로드한 이미지 파일 있음)");
+			    	
+			    	if(delAttachDto != null) { // 첨부파일 업로드 기능으로 업로드한 경우
+			    		
+			    		new File(delAttachDto.getFilePath() + "/" + delAttachDto.getFilesystemName()).delete(); 
+			    		
+			    	}else if(delAttachDto == null) { // 첨부파일 업로드한 데이터가 아닌 초기 샘플 데이터의 경우(첨부 파일 테이블에 데이터 없고 static 폴더에 있음)
+			    		
+						try {
+							String staticPath = new ClassPathResource("static/images/equipment/").getFile().getAbsolutePath();
+							File sampleFile = new File(staticPath + "/" + equipmentName + ".jpg");
+							
+				            if (sampleFile.exists()) {
+				                if (sampleFile.delete()) {
+				                    log.debug("샘플 데이터 삭제 성공: {}", sampleFile.getAbsolutePath());
+				                } else {
+				                    log.warn("샘플 데이터 삭제 실패: {}", sampleFile.getAbsolutePath());
+				                }
+				            } else {
+				                log.debug("샘플 데이터 파일이 존재하지 않음: {}", sampleFile.getAbsolutePath());
+				            }
+				            
+						} catch (IOException e) {
+							log.error("샘플 데이터 삭제 중 경로 접근 실패", e);
+						}
+			    		
+			    	}
+			        
+			        
+			    }else { 
+			    	
+			    	ra.addFlashAttribute("alertMsg", "비품 수정에 실패했습니다.");
+			    	new File(insertAttachDto.getFilePath() + "/" + insertAttachDto.getFilesystemName()).delete(); // 기능이 실패했으나 첨부파일 저장은 되었다. 삭제한다.
+			    	
+			    }
+			    
+			}
+			
+		}
+		
+		return "redirect:/equipmentAndFacility/list";
+		
+	}
+	
+	
 }

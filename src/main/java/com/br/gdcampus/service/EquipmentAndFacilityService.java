@@ -36,18 +36,22 @@ public interface EquipmentAndFacilityService {
 	// 시설 추가 - 상우
 	int addFacility(Map<String, String> map);
 
-	// 파일경로, DB저장파일명 조회 - 상우
-	Map<String, String> selectFileURL(String equipNo);
+	// 비품번호로 파일경로, DB저장파일명 등 조회 - 상우
+	AttachDto selectAttachment(String equipNo);
 
 	// 비품번호로 비품 정보 조회 - 상우
 	EquipmentDto selectEquipmentByEquipNo(String equipNo);
 
-	
-	// 비품 수정 - 상우
-	//int updateEquip(Map<String, Object> map);
-	
 	// 시설 수정 - 상우
-	//int updateFacility(Map<String, Object> map);
+	int modifyFacility(Map<String, Object> map);
 
+	// 비품 수정(첨부파일 없는 경우) - 상우
+	int modifyEquipmentWithoutFile(Map<String, Object> map);
+
+	// 비품 수정(첨부파일 있는 경우) - 상우
+	int modifyEquipmentWithFile(Map<String, Object> map);
+
+	// 복수의 비품 번호로 복수의 첨부파일 정보 조회 - 상우
+	List<AttachDto> selectAttachmentList(String[] equipNoList);
 	
 }

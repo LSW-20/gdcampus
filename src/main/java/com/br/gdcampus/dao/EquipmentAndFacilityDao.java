@@ -135,13 +135,13 @@ public class EquipmentAndFacilityDao {
 	}
 
 	/**
-	 * 파일경로, DB저장파일명 조회 메소드
+	 * 비품번호로 파일경로, DB저장파일명 등 조회 메소드
 	 * author : 상우
 	 * @param equipNo 비품번호
 	 * @return 파일경로, DB저장된파일명
 	 */
-	public Map<String, String> selectFileURL(String equipNo) {
-		return sqlSession.selectOne("equipmentAndFacilityMapper.selectFileURL", equipNo);
+	public AttachDto selectAttachment(String equipNo) {
+		return sqlSession.selectOne("equipmentAndFacilityMapper.selectAttachment", equipNo);
 	}
 
 	/**
@@ -152,6 +152,55 @@ public class EquipmentAndFacilityDao {
 	 */
 	public EquipmentDto selectEquipmentByEquipNo(String equipNo) {
 		return sqlSession.selectOne("equipmentAndFacilityMapper.selectEquipmentByEquipNo", equipNo);
+	}
+
+	/**
+	 * 시설 수정
+	 * author : 상우 
+	 * @param map 유저사번, 시설 카테고리, 시설명, 시설번호
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int modifyFacility(Map<String, Object> map) {
+		return sqlSession.update("equipmentAndFacilityMapper.modifyFacility", map);
+	}
+
+	/**
+	 * 비품 수정 - 비품 테이블만 update
+	 * author : 상우
+	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int modifyEquipmentWithoutFile(Map<String, Object> map) {
+		return sqlSession.update("equipmentAndFacilityMapper.modifyEquipmentWithoutFile", map);
+	}
+
+	/**
+	 * 비품 번호로 첨부파일 데이터 삭제
+	 * author : 상우
+	 * @param equipNo 비품번호
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int deleteAttachment(String equipNo) {
+		return sqlSession.update("equipmentAndFacilityMapper.deleteAttachment", equipNo);
+	}
+
+	/**
+	 * 복수의 비품 번호로 복수의 첨부파일 정보 조회
+	 * author : 임상우
+	 * @param equipNoList 비품 번호들
+	 * return List<AttachDto>
+	 */
+	public List<AttachDto> selectAttachmentList(String[] equipNoList) {
+		return sqlSession.selectList("equipmentAndFacilityMapper.selectAttachmentList", equipNoList);
+	}
+
+	/**
+	 * 비품 수정 후 첨부파일 insert
+	 * @param insertAttachDto equipNo, filePath, filesystemName, originalName
+	 * @return 성공시 1, 실패시 0
+	 */
+	public int modifyAddAttachment(AttachDto insertAttachDto) {
+		return sqlSession.insert("equipmentAndFacilityMapper.modifyAddAttachment", insertAttachDto);
 	}
 
 
