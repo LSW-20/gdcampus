@@ -1,14 +1,13 @@
 package com.br.gdcampus.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.br.gdcampus.dto.AttachDto;
-import com.br.gdcampus.dto.PageInfoDto;
+import com.br.gdcampus.dto.CommentDto;
 import com.br.gdcampus.dto.PostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -17,47 +16,52 @@ import lombok.RequiredArgsConstructor;
 @Repository
 public class PostDao {
 	
+	@Autowired
 	private final SqlSessionTemplate sqlSession;
-	
-	public int test(int num1, int num2) {
-		return num1+num2;
+	public int deleteCommentCompletely;
+	// 게시글 목록
+	public List<PostDto> selectPostList(){
+		return sqlSession.selectList("postMapper.selectPostList");
 	}
 	
-	public int selectPostListCount() {
-		return sqlSession.selectOne("PostMapper.selectPostListCount");
+	// 게시글 상세페이지
+	public PostDto selectPostDetail(String postNo) {
+		return sqlSession.selectOne("postMapper.selectPostDetail", postNo);
 	}
-	
-	public List<PostDto> selectPostList(PageInfoDto pi){
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPageLimit() , pi.getPageLimit());
-		return sqlSession.selectList("postMapper.selectPostList", null, rowBounds);
-	}
-	
-	public int selectSearchListCount(Map<String, String> search) {
-		return sqlSession.selectOne("postMapper.selectSearchListCount", search);
-	}
-	
-	public List<PostDto> selectSearchList(Map<String, String> search, PageInfoDto pi){
-		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getPageLimit() , pi.getPageLimit());
-		return sqlSession.selectList("postMapper.selectSearchList", search, rowBounds);
-	}
-	
-	public int insertPost(PostDto b) {
-		return sqlSession.insert("postMapper.insertPost", b);
-	}
-	
 
-	 public int insertAttach(AttachDto at) { 
-		 return sqlSession.insert("postMapper.insertAttach", at); 
-	 }
 
+	// 댓글 목록 조회
 	
-	public PostDto selectPost(int postNo) {
-		return sqlSession.selectOne("postMapper.selectPost", postNo);
+	public List<CommentDto> selectCommentList(String postNo) {
+		return sqlSession.selectList("postMapper.selectCommentList", postNo);
 	}
+
+	// 댓글 등록
+	public int insertComment(CommentDto c) {
+		return sqlSession.insert("postMapper.insertComment",c);
+	}
+
+	public int insertAttach(AttachDto at) {
+		return sqlSession.insert("postMapper.insertAttach", at);
+	} 
 	
+	// 게시글 수정
+	public int updatePost(PostDto p) {
+		return sqlSession.update("postMapper.updateComment", p);
+	}
+
+	// 게시글 삭제
+	public int deleteAttach(String[] delFileNo) {
+		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
+	}
+
 	public int updateIncreaseCount(int postNo) {
-		return sqlSession.update("postMapper.updateIncreaseCount", postNo);
+		return sqlSession.update("postMapper.updateIncreaseCount",postNo);
 	}
 
+
+
+	
+	
 
 }
