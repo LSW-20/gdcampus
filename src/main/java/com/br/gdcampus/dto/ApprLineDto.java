@@ -32,4 +32,6 @@ public class ApprLineDto {
 	private String deptName;
 	private String rankName;
 	
+	//수정인지 확인
+	private boolean updateYn;
 }
