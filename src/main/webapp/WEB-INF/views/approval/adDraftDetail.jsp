@@ -81,6 +81,12 @@
     <!-- 문서 내용 -->
     <form id="docForm">
         <input type="hidden" name="apprType" value="${ approval.apprType }"/>
+        <input type="hidden" name="apprNo" value="${approval.apprNo}"/>
+        <input type="hidden" name="apprStatus" value="${approval.apprStatus}"/>
+        <!-- 결재선 정보를 저장할 hidden input -->
+        <input type="hidden" id="approvalLine" name="approvalLine"/>
+        <input type="hidden" id="originalApprovalLine" name="originalApprovalLine"/>
+                
         <table>
             <tr>
                 <th>제목</th>
@@ -101,3 +107,24 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
+<script>
+    // 초기 결재선 정보를 JSON으로 변환하여 hidden input에 저장
+    $(document).ready(function() {
+        const approvers = [
+            <c:forEach items="${approval.approvers}" var="approver" varStatus="status">
+                {
+                    userNo: '${approver.userNo}',
+                    userName: '${approver.userName}',
+                    rankName: '${approver.rankName}',
+                    deptName: '${approver.deptName}',
+                    lineOrder: ${approver.lineOrder},
+                    lineStatus: ${approver.lineStatus}
+                }${!status.last ? ',' : ''}
+            </c:forEach>
+        ];
+        
+        // 원본 결재선 정보 저장
+        document.getElementById('originalApprovalLine').value = JSON.stringify(approvers);
+        document.getElementById('approvalLine').value = JSON.stringify(approvers);
+    });
+</script>
