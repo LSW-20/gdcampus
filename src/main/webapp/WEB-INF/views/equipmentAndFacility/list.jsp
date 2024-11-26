@@ -495,45 +495,45 @@
 
 
 		<!-- 시설 추가 modal 시작 -->
-			<div class="modal fade" id="add-facility">
-					<div class="modal-dialog modal-sm">
-							<div class="modal-content" >
+		<div class="modal fade" id="add-facility">
+				<div class="modal-dialog modal-sm">
+						<div class="modal-content" >
 						
-									<!-- Modal Header -->
-									<div class="modal-header">
-											<h4 class="modal-title">시설 추가창</h4>
-											<button type="button" class="close" data-dismiss="modal">&times;</button> 
-									</div>
+								<!-- Modal Header -->
+								<div class="modal-header">
+										<h4 class="modal-title">시설 추가창</h4>
+										<button type="button" class="close" data-dismiss="modal">&times;</button> 
+								</div>
 
-									<form action="${contextPath}/equipmentAndFacility/addFacility" method="post">
-											<!-- Modal Body -->
-											<div class="modal-body">   
-													<div id="add-table-div">
-															<table id="add-table">
-																	<tr>
-																			<td style="width: 80px;">구분</td>
-																			<td style="width: 320px;">시설</td>
-																	</tr>
-																	<tr>
-																			<td>분류</td>
-																			<td>
-																					<input type="text" class="form-control" name="selectedCategory" placeholder="회의실, 강당, 휴게실, 연구실 등">
-																			</td>
-																	</tr>
-																	<tr>
-																			<td>시설명</td>
-																			<td><input type="text" class="form-control" name="name"></td>
-																	</tr>
-															</table>
-													</div>
-											</div>
-											
-											<!-- Modal footer -->
-											<div class="modal-footer">
-													<button type="submit" class="btn btn-primary">추가</button>
-													<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-											</div>
-									</form>
+								<form action="${contextPath}/equipmentAndFacility/addFacility" method="post">
+										<!-- Modal Body -->
+										<div class="modal-body">   
+												<div id="add-table-div">
+														<table id="add-table">
+																<tr>
+																		<td style="width: 80px;">구분</td>
+																		<td style="width: 320px;">시설</td>
+																</tr>
+																<tr>
+																		<td>분류</td>
+																		<td>
+																				<input type="text" class="form-control" name="selectedCategory" placeholder="회의실, 강당, 휴게실, 연구실 등">
+																		</td>
+																</tr>
+																<tr>
+																		<td>시설명</td>
+																		<td><input type="text" class="form-control" name="name"></td>
+																</tr>
+														</table>
+												</div>
+										</div>
+										
+										<!-- Modal footer -->
+										<div class="modal-footer">
+												<button type="submit" class="btn btn-primary">추가</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+										</div>
+								</form>
 						
 						</div>
 				</div>
@@ -627,20 +627,20 @@
 			}
 
 			function allCheck(){
-				const $checkboxes = $('.delete-checkboxes'); // form 안의 체크박스들 선택
-				const totalCount = $checkboxes.length;
-				const checkedCount = $checkboxes.filter(':checked').length; // 체크된 체크박스 개수
+					const $checkboxes = $('.delete-checkboxes'); // form 안의 체크박스들 선택
+					const totalCount = $checkboxes.length;
+					const checkedCount = $checkboxes.filter(':checked').length; // 체크된 체크박스 개수
 
-				if (checkedCount === 0) {
-						// (1) 체크박스들 중 체크된 게 아무것도 없으면, 전부 체크
-						$checkboxes.prop('checked', true);
-				} else if (checkedCount === totalCount) {
-						// (2) 체크박스들이 전부 체크되어 있으면, 전부 체크 해제
-						$checkboxes.prop('checked', false);
-				} else {
-						// (3) 체크박스들이 일부만 체크되어 있으면, 나머지 체크되지 않은 체크박스도 체크
-						$checkboxes.prop('checked', true);
-				}
+					if (checkedCount === 0) {
+							// (1) 체크박스들 중 체크된 게 아무것도 없으면, 전부 체크
+							$checkboxes.prop('checked', true);
+					} else if (checkedCount === totalCount) {
+							// (2) 체크박스들이 전부 체크되어 있으면, 전부 체크 해제
+							$checkboxes.prop('checked', false);
+					} else {
+							// (3) 체크박스들이 일부만 체크되어 있으면, 나머지 체크되지 않은 체크박스도 체크
+							$checkboxes.prop('checked', true);
+					}
 			}
 	</script>
 

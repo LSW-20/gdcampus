@@ -88,6 +88,16 @@
 				#top-child2{
 						display: none; 
 				}
+
+        /* 달력의 날짜 셀에 마우스 올리면 커서를 손가락 모양으로 바꿈 */
+        .fc-daygrid-day {
+            cursor: pointer;
+        }
+
+        /* 모달 width 변경 */
+        .modal-content {
+						width: 400px !important; 
+				}
 		</style>
 
     <!-- FullCalendar -->
@@ -137,7 +147,7 @@
 												<div id="left">
 
                             <select style="width: 200px;" id="classification-select" onchange="onClassificationChange()"> 
-                                <option disabled selected>구분</option>
+                                <option disabled selected>구분(선택필요)</option>
                                 <option>비품</option>
                                 <option>시설</option>  
                             </select>
@@ -163,7 +173,7 @@
 										<!-- top-child2 시작 -->
 										<div id="top-child2">
 												<div id="top-child2-1">
-														<span class="detailClassification"></span>&nbsp;상세 조회창
+														<span id="detailClassification1"></span>&nbsp;상세 조회창
 												</div>
 
                         <div id="top-child2-2">
@@ -176,23 +186,21 @@
                                 <table id="detail-table">
                                     <tr>
                                         <td style="width: 65px;">구분</td>
-                                        <td class="detailClassification"></td>
+                                        <td id="detailClassification2"></td>
                                     </tr>
                                     <tr>
                                         <td>분류</td>
-                                        <td class="datailCategory"></td>
+                                        <td id="datailCategory"></td>
                                     </tr>
                                     <tr>
                                         <td>번호</td>
-                                        <td class="detailNumber"></td>
+                                        <td id="detailNumber"></td>
                                     </tr>
                                     <tr>
                                         <td>이름</td>
-                                        <td class="detailName"></td>
+                                        <td id="detailName"></td>
                                     </tr>
                                 </table>
-
-                                <button type="button">예약 일정 조회</button>
                             </div>
                         </div>
 
@@ -222,7 +230,70 @@
 		<!-- main-content 끝 -->
 
 
+	<!-- 예약 modal 시작-->
+	<div class="modal fade" id="reservation-modal">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content" >
 
+              <form action="${contextPath}/reservation/reserve" method="post">
+                  <div class="modal-body">   
+                      <div>
+                          <table>
+                              <tr>
+                                  <th style="text-align: center; height: 50px; font-size: 20px;" colspan="2">예약</th>
+                              </tr>
+                              <tr>
+                                  <td style="width: 120px;">구분</td>
+                                  <td style="width: 280px;"><input type="text" class="form-control" name="classification" readonly id="modal-classification"></td>
+                              </tr>
+                              <tr>
+                                  <td>분류</td>
+                                  <td><input type="text" class="form-control" name="category" readonly id="modal-category"></td>
+                              </tr>
+                              <tr>
+                                  <td>번호</td>
+                                  <td><input type="text" class="form-control" name="number" readonly id="modal-number"></td>
+                              </tr>
+                              <tr>
+                                  <td>이름</td>
+                                  <td><input type="text" class="form-control" name="name" readonly id="modal-name"></td>
+                              </tr>
+                              <tr>
+                                  <td>예약희망일</td>
+                                  <td><input type="text" class="form-control" name="date" readonly id="modal-date"></td>
+                              </tr>
+                              <tr>
+                                  <td>예약희망시간</td>
+                                  <td style="height: 30px; vertical-align: middle;">
+                                      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                          <input type="radio" id="all" name="time" value="종일" checked>
+                                          <label for="all" style="margin: 0;">종일</label>
+                                          <input type="radio" id="am" name="time" value="오전">
+                                          <label for="am" style="margin: 0;">오전</label>
+                                          <input type="radio" id="pm" name="time" value="오후">
+                                          <label for="pm" style="margin: 0;">오후</label>
+                                      </div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>예약사유</td>
+                                  <td><input type="text" class="form-control" name="reason"></td>
+                              </tr>
+                          </table>
+
+                          <br>
+
+                          <button type="button" onclick="checkAvailability()">예약 가능 여부 조회</button> <br>
+                          <button type="button">예약하기</button>
+                      </div>
+  
+                  </div>
+              </form>
+          
+          </div>
+      </div>
+  </div>
+  <!-- 예약 modal 끝 -->
 
 
 	<script>
@@ -244,7 +315,7 @@
             success: function(resData){
                 console.log('resData 값 : ' + resData);  // List<String> 형태로 JSON 배열
 
-                $categorySelectEl.append('<option disabled selected>분류</option>');
+                $categorySelectEl.append('<option disabled selected>분류(선택필요)</option>');
 
                 resData.forEach(function(category) {
                     $categorySelectEl.append('<option>' + category + '</option>');
@@ -310,10 +381,11 @@
           const name = $numberName.substring( $numberName.indexOf(')') + 1 ); 
 
 
-					$(".detailClassification").text($classificationVal); // 구분 (비품/시설)
-					$(".datailCategory").text($categoryVal);              // 분류
-					$(".detailNumber").text(number);                      // 번호
-					$(".detailName").text(name);                          // 이름
+          $("#detailClassification1").text($classificationVal); // 구분 (비품/시설)
+					$("#detailClassification2").text($classificationVal); // 구분 (비품/시설)
+					$("#datailCategory").text($categoryVal);              // 분류
+					$("#detailNumber").text(number);                      // 번호
+					$("#detailName").text(name);                          // 이름
 					$('#top-child2').show(); // 수정창 요소가 보여지게 하기
 				
           
@@ -351,11 +423,40 @@
                   left: 'prev',
                   center: 'title',
                   right: 'next'
+              },
+
+              dateClick: function(info) { // 일자 셀 클릭 함수
+                  // alert(info.dateStr); // 클릭한 날짜 (문자열 형식, 예: '2024-11-01')
+
+                  const topChild2 = document.getElementById('top-child2'); // top-child2 요소
+
+                  // top-child2 상태 확인
+                  if (topChild2.style.display === 'none' || window.getComputedStyle(topChild2).display === 'none') {
+                      alert('먼저 상세 조회를 해주세요.');
+                  } else {
+
+                      const classification = $("#detailClassification2").text(); // 구분 (비품/시설)
+                      const category = $("#datailCategory").text();              // 분류
+                      const number = $("#detailNumber").text();                      // 번호
+                      const name = $("#detailName").text();                          // 이름
+
+                      $('#modal-classification').val(classification);
+                      $('#modal-category').val(category);
+                      $('#modal-number').val(number);
+                      $('#modal-name').val(name);
+                      $('#modal-date').val(info.dateStr);
+                      $('#reservation-modal').modal('show');
+                  }
               }
+
           });
 
           calendar.render();
       });
+
+      function checkAvailability(){
+          alert('미구현');
+      }
 
 	</script>
 
