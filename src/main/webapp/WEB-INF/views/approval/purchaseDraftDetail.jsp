@@ -7,8 +7,9 @@
 	<input type="hidden" name="apprNo" value="${approval.apprNo}"/>
 	<input type="hidden" name="apprType" value="품의서"/>
 	<input type="hidden" name="apprStatus" value="${approval.apprStatus}"/>
-	<input type="hidden" id="approvalLine" name="approvalLine"/>
-	<%-- <input type="hidden" id="originalApprovalLine" name="originalApprovalLine" value='${approval.approvers}'/> --%>
+  <!-- 결재선 정보를 저장할 hidden input -->
+  <input type="hidden" id="approvalLine" name="approvalLine"/>
+  <input type="hidden" id="originalApprovalLine" name="originalApprovalLine"/>
 	
 	<div class="purchase-form">
     <div class="title">구매품의서</div>        
@@ -172,6 +173,26 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
 <script>
+		// 초기 결재선 정보를 JSON으로 변환하여 hidden input에 저장
+		$(document).ready(function() {
+		    const approvers = [
+		        <c:forEach items="${approval.approvers}" var="approver" varStatus="status">
+		            {
+		                userNo: '${approver.userNo}',
+		                userName: '${approver.userName}',
+		                rankName: '${approver.rankName}',
+		                deptName: '${approver.deptName}',
+		                lineOrder: ${approver.lineOrder},
+		                lineStatus: ${approver.lineStatus}
+		            }${!status.last ? ',' : ''}
+		        </c:forEach>
+		    ];
+		    
+		    // 원본 결재선 정보 저장
+		    document.getElementById('originalApprovalLine').value = JSON.stringify(approvers);
+		    document.getElementById('approvalLine').value = JSON.stringify(approvers);
+		});
+		
     // 물품 행 추가 버튼 (수정 모드일 때만 보임)
     function addItemRow() {
         const tbody = document.querySelector('#purchaseTable tbody');

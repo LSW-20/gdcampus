@@ -85,13 +85,12 @@
     <!-- 문서 내용 -->
     <form id="docForm">
         <input type="hidden" name="apprType" value="기안서"/>
-		    <!-- 결재선 정보를 저장할 hidden input 추가 -->
-		    <input type="hidden" id="approvalLine" name="approvalLine"/>
 		    <!-- 문서 상태 정보 추가 -->
 		    <input type="hidden" name="apprNo" value="${approval.apprNo}"/>
 		    <input type="hidden" name="apprStatus" value="${approval.apprStatus}"/>
-		    <!-- 원본 결재선 정보 저장 -->
-		    <!-- <input type="hidden" id="originalApprovalLine" name="originalApprovalLine"/> -->        
+        <!-- 결재선 정보를 저장할 hidden input -->
+        <input type="hidden" id="approvalLine" name="approvalLine"/>
+        <input type="hidden" id="originalApprovalLine" name="originalApprovalLine"/>
         <table>
             <tr>
                 <th width="20%">시행일자</th>
