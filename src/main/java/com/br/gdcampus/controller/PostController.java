@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.stream.events.Comment;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,12 +63,12 @@ public class PostController {
 	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
 	public String increaseCount(int no) {
 		postService.updateIncreaseCount(no);
-		return "redirect:/board/post/?no=" + no; // 상세페이지로 
+		return "redirect:/board/post/detail?no=" + no; // 상세페이지로 
 	}
 	
 
 	
-	// 게시판 작성
+	// 게시글 추가
 	@GetMapping("/regist")
 	public void registPage() {}
 	
@@ -118,18 +121,17 @@ return "redirect:/board/post/list";
 		
 	}
 	
+	
+
 	// 게시글 댓글 등록
-	/*
+	
     @PostMapping("/cinsert")
-    public ResponseEntity<String> addComment(@RequestBody CommentDto comment) {
-        int result = postService.insertComment(comment);
-        if (result > 0) {
-            return Respone Entity.ok("댓글이 성공적으로 등록되었습니다.");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 등록 실패");
-        }
+    public String CommentInsert(CommentDto c, HttpSession session) {
+    	c.setCommentWriter( String.valueOf( ((CommentDto)session.getAttribute("loginUser")).getUserNo() ) );
+		int result = postService.insertComment(c);
+		return result > 0 ? "SUCCESS" : "FAIL";
     }
-    */
+    
 	
 	
 //	@ResponseBody

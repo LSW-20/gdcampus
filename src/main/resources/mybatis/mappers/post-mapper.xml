@@ -33,9 +33,7 @@
 	<resultMap id="commentResultMap" type="commentDto">
 		<result column="USER_NO" property="userNo" />
 		<result column="POST_NO" property="postNo" />
-		<result column="USER_NAME" property="
-
-" />
+		<result column="USER_NAME" property="commentWriter" />
 		<result column="COMMENTER_ID" property="commenterId" />
 		<result column="REF_COMMENT_N0" property="refCommentNo" />
 		<result column="REGIST_DATE" property="registDate" />

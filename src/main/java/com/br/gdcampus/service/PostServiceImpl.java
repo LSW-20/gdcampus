@@ -30,6 +30,13 @@ public class PostServiceImpl implements PostService {
 		return postDao.selectPostDetail(postNo);
 	}
 	
+	
+
+	@Override
+	public int insertPost(PostDto p) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	/*
 	 * public List<PostDto> selectSearchList(Map<String, String>search,PageInfoDto
 	 * pi) { }
@@ -40,11 +47,6 @@ public class PostServiceImpl implements PostService {
 		return postDao.updateIncreaseCount(postNo);
 	}
 	
-	@Override
-	public int insertPost(PostDto p) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 
 	@Override
@@ -60,7 +62,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	
-
+//--------------------------------------------------------------
+	
 	// 댓글 목록 조회
 	@Override
 	public List<CommentDto> selectCommentList(String postNo) {
