@@ -170,8 +170,8 @@ public class EquipmentAndFacilityDao {
 	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호
 	 * @return 성공시 1, 실패시 0
 	 */
-	public int modifyEquipmentWithoutFile(Map<String, Object> map) {
-		return sqlSession.update("equipmentAndFacilityMapper.modifyEquipmentWithoutFile", map);
+	public int modifyEquipment(Map<String, Object> map) {
+		return sqlSession.update("equipmentAndFacilityMapper.modifyEquipment", map);
 	}
 
 	/**
@@ -203,6 +203,22 @@ public class EquipmentAndFacilityDao {
 		return sqlSession.insert("equipmentAndFacilityMapper.modifyAddAttachment", insertAttachDto);
 	}
 
+	/**
+	 * 카테고리에 맞는 비품 정보 조회
+	 * author : 임상우
+	 * return 전체 비품 정보
+	 */
+	public List<EquipmentDto> selectAllEquipment(String category) {
+		return sqlSession.selectList("equipmentAndFacilityMapper.selectAllEquipment", category);
+	}
 
+	/**
+	 * 카테고리에 맞는 시설 정보 조회
+	 * author : 임상우
+	 * return 전체 시설 정보
+	 */
+	public List<FacilityDto> selectAllFacility(String category) {
+		return sqlSession.selectList("equipmentAndFacilityMapper.selectAllFacility", category);
+	}
 
 }
