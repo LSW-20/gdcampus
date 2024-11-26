@@ -18,12 +18,13 @@ public class PostServiceImpl implements PostService {
 	
 	private final PostDao postDao;
 
-
+	// 게시판 목록조회
 	@Override
 	public List<PostDto> selectPostList() {
 		return postDao.selectPostList();
 	}
-
+	
+	// 게시판 상세조회
 	@Override
 	public PostDto selectPostDetail(String postNo) {
 		return postDao.selectPostDetail(postNo);
@@ -35,9 +36,8 @@ public class PostServiceImpl implements PostService {
 	 */
 	 
 	@Override
-	public int updateIncreaseCount(String postNo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateIncreaseCount(int postNo) {
+		return postDao.updateIncreaseCount(postNo);
 	}
 	
 	@Override
@@ -114,6 +114,7 @@ public class PostServiceImpl implements PostService {
 		// TODO Auto-generated method stub
 		return postDao.deleteCommentCompletely;
 	}
+
 
 	
 

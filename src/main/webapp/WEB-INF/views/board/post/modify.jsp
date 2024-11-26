@@ -112,7 +112,7 @@
           <h2 class="m-4">게시글 수정</h2>
           <br>
 
-          <form id="modify-form" method="post" action="${ contextPath }/post/modify.do" enctype="multipart/form-data">
+          <form id="modify-form" method="post" action="${ contextPath }/post/modify" enctype="multipart/form-data">
               <input type="hidden" name="postNo" value="${ p.postNo }">
               <div class="form-group">
                   <label for="title">제목 </label>

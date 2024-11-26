@@ -40,7 +40,7 @@
 				<div class="col-lg-12">
 					<hr>
 					<div class="mt-5">
-						<form action="${contextPath}board/post/insert.do" method="post"
+						<form action="${contextPath}board/post/insert" method="post"
 							class="was-validated">
 
 							<div class="row justify-content-md-center">
@@ -57,10 +57,10 @@
 							<div class="row justify-content-md-center">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="email">이메일</label> 
+										<label for="text">제목</label> 
 										<input type="email" class="form-control" id="email" name="email" required>
 										<div class="invalid-feedback">
-											<p>이메일을 작성해주세요</p>
+											<p>댓글을 작성해주세요</p>
 										</div>
 									</div>
 								</div>

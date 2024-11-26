@@ -6,7 +6,7 @@
 			<result column="POST_NO" property="postNo" />
 			<result column="board_type_no" property="boardTypeNo" />
 			<result column="user_no" property="userNo" />
-			<result column="WRITER_NAME" property="writerName" />
+			<result column="USER_NAME" property="writerName" />
 			<result column="POST_TITLE" property="postTitle" />
 			<result column="POST_CONTENT" property="postContent" />
 			<result column="REGIST_DATE" property="registDate" />
@@ -17,7 +17,7 @@
 			<result column="modify_user" property="modifyUser" />
 	</resultMap>
 	
-	<!-- 	첨부파일
+
 	<resultMap id="attachResultMap" type="AttachDto">
 		<result column="file_no" property="fileNo"/>
 		<result column="equipNo" property="fileNo"/>
@@ -27,13 +27,15 @@
 		<result column="filesystem_name" property="filesystemName"/>
 		<result column="original_name" property="originalName"/>
 	</resultMap>
-	 -->
+
 	<!-- 혹시라도 has a 관계(1:1)일 경우 => collection 대신에 association 으로 사용 -->
 
 	<resultMap id="commentResultMap" type="commentDto">
 		<result column="USER_NO" property="userNo" />
 		<result column="POST_NO" property="postNo" />
-		<result column="commentWriter" property="commentWriter" />
+		<result column="USER_NAME" property="
+
+" />
 		<result column="COMMENTER_ID" property="commenterId" />
 		<result column="REF_COMMENT_N0" property="refCommentNo" />
 		<result column="REGIST_DATE" property="registDate" />
@@ -48,13 +50,20 @@
 	<select id="selectPostList" resultMap="postResultMap">
 		select 
       POST_NO
-    , POST_TITLE
+    , POST_TITLE 
+    , USER_NAME 
     , REGIST_DATE
     , FILE_STATUS
     , "COUNT" as count 
     , POST_TOP
   from
-      t_post
+      T_POST P
+   JOIN 
+	    T_USER U 
+	ON 
+	    P.USER_NO = U.USER_NO    
+	ORDER BY 
+	    P.POST_NO ASC 
 	</select>
 	
 	<!-- 게시글 상세페이지 조회 -->
@@ -65,7 +74,7 @@
         P.USER_NO,
         POST_TITLE,
         POST_CONTENT,
-        USER_NAME AS WRITER_NAME, 
+        USER_NAME , 
         USER_ID AS WRITER_ID,     
         "COUNT",
         TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
@@ -84,20 +93,25 @@
             AND
                 POST_NO = #{postNo}
         )AS LIKE_COUNT
-FROM 
-    T_POST P
-JOIN 
-    T_USER U 
-ON 
-    P.USER_NO = U.USER_NO     
-WHERE 
-    p.post_no = #{postNo}
-    
-ORDER BY 
-    P.POST_NO DESC 
-</select>	
+				FROM 
+				    T_POST P
+				JOIN 
+				    T_USER U 
+				ON 
+				    P.USER_NO = U.USER_NO     
+				WHERE 
+				    p.post_no = #{postNo}
+				    
+				ORDER BY 
+				    P.POST_NO DESC 
+				</select>	
 
-<!-- 댓글 목록 -->
+
+
+
+
+
+<!-- 게시글 댓글 목록조회 -->
 <select id="selectCommentList" resultMap="commentResultMap">
 	select
 				   comment_no
@@ -109,6 +123,26 @@ ORDER BY
 		 where post_no = #{postNo}
 		 order by comment_no desc
 	</select>
+	
+	
+<!-- 게시글 댓글 등록 -->
+    <insert id="insertComment">
+        INSERT 
+          INTO T_COMMENT 	
+        	  (
+            	COMMENT_NO
+            , USER_NO
+            , POST_NO
+            , COMMENTER_ID
+            , COMMENT_WRITER
+            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
+        )
+        VALUES (
+            #{commentNo}, #{userNo}, #{postNo}, #{commenterId}, #{commentWriter},
+            #{refCommentNo}, SYSDATE, #{comment}, NULL, #{level}
+        )
+    </insert>
+</mapper>
 	
 	
 	
@@ -166,5 +200,4 @@ ORDER BY
     
 	
 	
-</mapper>
 

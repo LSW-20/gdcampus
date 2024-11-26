@@ -55,13 +55,13 @@
                                                <label class="custom-control-label" for="checkAll"></label>
                                            </div>
                                        </th>
-	                                       <th>게시글 번호</th>
-	                                       <th>게시글 내용</th>
-	                                       <th>작성자</th>
-	                                       <th>작성일</th>
-	                                       <th>첨부파일 여부</th>
-	                                       <th>조회수</th>
-	                                       <th>${ postDto.boardTypeNo }</th>
+		                                       <th>게시글 번호</th>
+		                                       <th>게시글 내용</th>
+		                                       <th>작성자</th>
+		                                       <th>작성일</th>
+		                                       <th>첨부파일 여부</th>
+		                                       <th>조회수</th>
+		                                       <th>${ p.boardTypeNo }</th>
                                    </tr>
                                </thead>
                                
@@ -77,23 +77,25 @@
 															    
 															    <td>${ p.postNo }</td>
 															    <td>${ p.postTitle }</td>
-															    <td>${ u.userName }</td>
+															    <td>${ p.writerName }</td>
 															    <td>${ p.registDate }</td>
-															    <td>${ p.fileStatus }</td>
+															    <td>${ p.fileStatus == 'Y' ? '★' : ''  }</td>
 															    <td>${ p.count }</td>
-															    <td>${ b.attachCount > 0 ? '★' : ''  }</td>
+															
 															 
 														    <td>
-														      <%--   <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
+														       <%--   
+														        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
 												                <i class="uil uil-pen font-size-18"></i>
 												            </a>
 														        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
 														            <i class="uil uil-trash font-size-18"></i>
-														        </a> --%>
+														        </a>  
+														        --%>
 														    </td>
-															</tr>
+																</tr>
 									        	  </c:forEach>
-                               </tbody>
+                              </tbody>
                            </table>
                        </div>
                    </div>
@@ -166,7 +168,7 @@
 
          
              </div>
-
+					</div>
          </div> <!-- end slimscroll-menu-->
      </div>
      <!-- /Right-bar -->
