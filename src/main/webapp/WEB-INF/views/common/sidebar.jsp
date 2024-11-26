@@ -55,7 +55,7 @@
 												<span class="menu-item">근태 관리</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">나의 근태 현황</a></li>
+												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
 												<li><a href="#">휴가 신청</a></li>
 										</ul>
 								</li>
@@ -147,7 +147,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath}/user/staff/list.do">사원 관리</a></li>
-												<li><a href="#">교수 관리</a></li>
+												<li><a href="${contextPath}/user/prof/list.do">교수 관리</a></li>
 												<li><a href="#"></a></li>
 										</ul>
 								</li>
@@ -174,7 +174,7 @@
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/student/student.do" class="waves-effect">
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
@@ -192,14 +192,15 @@
 								<li class="menu-title">전자결재</li>
 
 								<li>
-										<a href="${contextPath}/approval/home" class="has-arrow waves-effect">
+										<a href= "${contextPath}/approval/home" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="check"></i>
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
+												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
+												<li><a href="${contextPath}/approval/home"></a></li> 
+
 										</ul>
 								</li>
 								
@@ -218,12 +219,11 @@
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="inbox"></i>
-												<span class="menu-item">결재 수신 문서함</span>
+												<span class="menu-item">개인 문서함</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
+												<li><a href="${contextPath}/approval/approved">내 결재함</a></li>
+												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
 								</li>
 								
@@ -283,7 +283,7 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
@@ -293,7 +293,7 @@
 								</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/user/profile/rank.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="minus-square"></i>
 												<span class="menu-item">직급 관리</span>
 										</a>
@@ -303,7 +303,7 @@
 								</li>
 								
 									<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="javascript: void(0);" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">게시판 관리</span>
 										</a>
