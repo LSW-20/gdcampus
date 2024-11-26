@@ -9,6 +9,57 @@
     <meta charset="UTF-8">
     <title>전자결재 홈</title>
     <style>
+/* 카드 컨테이너: 가로로 카드들이 나란히 정렬되고, 여러 줄로 흐를 수 있게 flex 레이아웃 설정 */
+.doc-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* 카드들이 왼쪽 정렬되도록 설정 */
+}
+
+/* 카드 스타일 */
+.doc-card {
+    width: 22%; /* 카드의 너비를 설정 (화면에 4개 정도가 보이도록 설정) */
+    min-width: 200px; /* 최소 너비 설정 (너무 작아지지 않도록) */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left; /* 카드 내용 글자들을 왼쪽 정렬 */
+    margin-bottom: 20px;
+    background-color: #fff; /* 카드 배경색 추가 */
+}
+
+/* 카드 제목 스타일 */
+.doc-card h3 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+}
+
+/* 카드 내의 문서 정보 스타일 */
+.doc-card .doc-info {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+/* 결재하기 버튼 스타일 - 중앙 정렬 */
+.doc-card button {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    background-color: #4B49AC;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;      /* 버튼을 블록 요소로 설정 */
+    margin: 0 auto;      /* 버튼을 수평 중앙 정렬 */
+}
+
+.doc-card button:hover {
+    background-color: #3a389f;
+}
+
         .main-content {
             margin-left: 250px;
             padding: 20px;
@@ -76,8 +127,7 @@
         .pagination {
             display: flex;
             justify-content: center;
-            margin-top: 145px;
-            margin-bottom: 20px;
+            margin-top: 10px; /* 결재 대기 문서 영역과 일정한 간격을 둠 */
         }
 
         .pagination button {
@@ -119,15 +169,14 @@
                             결재 대기 문서
                             <span id="pageInfo">1/1</span>
                         </div>
-                        <div id="todoDocsList">
+                        <div id="todoDocsList" class="doc-card-container">
                             <!-- 결재 대기 문서 목록이 동적으로 로드됨 -->
                         </div>
-                        <div class="pagination">
-                            <button onclick="prevPage()" id="prevBtn">&lt;</button>
-                            <button onclick="nextPage()" id="nextBtn">&gt;</button>
-                        </div>
                     </div>
-
+                    <div class="pagination">
+                        <button onclick="prevPage()" id="prevBtn">&lt;</button>
+                        <button onclick="nextPage()" id="nextBtn">&gt;</button>
+                    </div>
                     <div class="approval-container">
                         <!-- 기안 진행 문서 -->
                         <div class="doc-section">
@@ -142,7 +191,7 @@
                                             ${doc.apprTitle}
                                         </a>
                                         <span class="doc-date">
-                                            <fmt:formatDate value="${doc.apprDate}" pattern="yyyy-MM-dd"/>
+                                            ${doc.apprDate}
                                         </span>
                                     </li>
                                 </c:forEach>
@@ -162,7 +211,7 @@
                                             ${doc.apprTitle}
                                         </a>
                                         <span class="doc-date">
-                                            <fmt:formatDate value="${doc.apprDate}" pattern="yyyy-MM-dd"/>
+                                            ${doc.apprDate}
                                         </span>
                                     </li>
                                 </c:forEach>
@@ -191,11 +240,14 @@
                 data: { page: page },
                 success: function(response) {
                     const todoDocsHtml = response.docs.map(doc => `
-                        <div class="doc-item">
-                            <a href="${contextPath}/approval/detail/\${doc.apprNo}?type=todo" class="doc-link">
-                                \${doc.apprTitle}
-                            </a>
-                            <span class="doc-date">\${formatDate(doc.apprDate)}</span>
+                        <div class="doc-card">
+                            <p class="doc-title" style="font-weight: bold;">\${doc.apprTitle}</p>
+                            <div class="doc-info">
+                                <div>기안자: \${doc.apprUser}</div>
+                                <div>기안일: \${doc.apprDate}</div>
+                                <div>결재양식: \${doc.apprType}</div>
+                            </div>
+                            <button onclick="location.href='${contextPath}/approval/detail/\${doc.apprNo}?type=todo'">결재하기</button>
                         </div>
                     `).join('');
 
@@ -231,16 +283,6 @@
         function updatePaginationButtons() {
             document.getElementById('prevBtn').disabled = currentPage === 1;
             document.getElementById('nextBtn').disabled = currentPage === maxPage;
-        }
-
-        // 날짜 포맷팅
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            }).replace(/\./g, '-').replace(/ /g, '');
         }
     </script>
 </body>
