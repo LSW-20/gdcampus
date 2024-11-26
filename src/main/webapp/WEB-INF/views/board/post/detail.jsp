@@ -84,17 +84,17 @@
              <tr>
              		<th>내용</th>
                  <td colspan="4">
-                 	 <p style="height:150px">${ postDto.postContent }</p>
+                 	 <p style="height:150px">${ p.postContent }</p>
                  </td>
              </tr>
          </table>
          <br>
 
          <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-         <c:if test="${ loginUser.userId eq postDto.userNo }">
+         <c:if test="${ loginUser.userId eq p.userNo }">
 	         <div align="center">
 	         		<form id="frm" action="" method="post">
-	         			<input type="hidden" name="no" value="${ postDto.postNo }">
+	         			<input type="hidden" name="no" value="${ p.postNo }">
 	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/post/modify');">수정하기</button>
 	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
 	            </form>

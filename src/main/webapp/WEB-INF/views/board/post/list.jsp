@@ -28,6 +28,7 @@
         <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
 </head>
 
 <body data-sidebar="dark">
@@ -52,7 +53,7 @@
                                        <th style="width: 24px;">
                                            <div class="custom-control custom-checkbox">
                                                <input type="checkbox" class="custom-control-input" id="checkAll">
-                                               <label class="custom-control-label" for="checkAll"></label>
+                                               <label class="custom-control-label" for="check"></label>
                                            </div>
                                        </th>
 		                                       <th>게시글 번호</th>
@@ -70,7 +71,7 @@
                     	           	<tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'>
 															    <td>
 															        <div class="custom-control custom-checkbox">
-															            <input type="checkbox" class="custom-control-input" id="invoicecheck${p.postNo}">
+															            <input type="checkbox" class="custom-control-input postCheckbox" id="invoicecheck${p.postNo}">
 															            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
 															        </div>
 															    </td>
@@ -201,6 +202,12 @@
      <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
 
      <script src="${contextPath}/js/app.js"></script>
+     
+     <script>
+   		 $('.postCheckbox').parent().on("click", function(evt){
+    			evt.stopPropagation();
+   			})
+ 		 </script>
      
  </body>
 </html>

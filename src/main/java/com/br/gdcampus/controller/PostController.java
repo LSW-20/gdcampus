@@ -52,12 +52,12 @@ public class PostController {
 		
 		PostDto postDto = postService.selectPostDetail(no);
 		
-		model.addAttribute("postDto", postDto);
+		model.addAttribute("p", postDto);
 		
 	}	
 	
-	// 댓글조회
-	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail.do 재요청
+	
+	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
 	public String increaseCount(int no) {
 		postService.updateIncreaseCount(no);
 		return "redirect:/board/post/?no=" + no; // 상세페이지로 
