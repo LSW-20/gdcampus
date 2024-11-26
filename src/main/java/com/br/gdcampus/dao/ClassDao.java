@@ -87,6 +87,9 @@ public class ClassDao {
 	}
 	
 //--------------------------------------개설신청 끝----------------------------------------------
+	
+//--------------------------------------내강의 시작---------------------------------------------
+
 	public int selectMyClassListCount(Map<String, String> search) {
 		return sqlSession.selectOne("classMapper.selectMyClassListCount",search);
 	}
@@ -103,8 +106,9 @@ public class ClassDao {
 	public List<Map<String, Object>> selectLearnerCount(String classCode) {
 		return sqlSession.selectList("classMapper.selectLearnerCount", classCode);
 	}
-
-//--------------------------------------내강의 시작---------------------------------------------
+	public ClassDto selectPlanList(String classCode) {
+		return sqlSession.selectOne("classMapper.selectPlanList", classCode);
+	}
 	
 	
 //--------------------------------------내강의 끝----------------------------------------------	

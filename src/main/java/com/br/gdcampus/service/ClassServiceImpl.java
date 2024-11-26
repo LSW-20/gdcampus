@@ -151,7 +151,7 @@ public class ClassServiceImpl implements ClassService {
 	}
 	@Override
 	public ClassDto selectPlanList(String classCode) {
-		return null;
+		return classDao.selectPlanList(classCode);
 	}
 
 	@Override
