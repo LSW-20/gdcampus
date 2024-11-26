@@ -203,6 +203,22 @@ public class EquipmentAndFacilityDao {
 		return sqlSession.insert("equipmentAndFacilityMapper.modifyAddAttachment", insertAttachDto);
 	}
 
+	/**
+	 * 카테고리에 맞는 비품 정보 조회
+	 * author : 임상우
+	 * return 전체 비품 정보
+	 */
+	public List<EquipmentDto> selectAllEquipment(String category) {
+		return sqlSession.selectList("equipmentAndFacilityMapper.selectAllEquipment", category);
+	}
 
+	/**
+	 * 카테고리에 맞는 시설 정보 조회
+	 * author : 임상우
+	 * return 전체 시설 정보
+	 */
+	public List<FacilityDto> selectAllFacility(String category) {
+		return sqlSession.selectList("equipmentAndFacilityMapper.selectAllFacility", category);
+	}
 
 }

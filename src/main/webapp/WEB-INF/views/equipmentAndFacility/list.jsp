@@ -230,7 +230,7 @@
 												</div>
 
 												<br>
-												<div id="categorization">
+												<div id="categorization"><%-- 비품/시설 검색요청 --%>
 														<form action="${contextPath}/equipmentAndFacility/list" method="get" id="select-form">
 																<span class="large-name">분류</span> &nbsp;&nbsp;
 
@@ -612,7 +612,6 @@
 
 									success: function(resData){
 											console.log(resData);
-											// $('#modifyUploadFile').val(resData);
 
 											$('#file-a').text(name);
 											$('#file-a').attr('href', resData);

@@ -299,4 +299,41 @@
 		  , 'E'
 		  )
 	</insert>
+	
+	<!-- (상우) 전체 비품 정보 조회 -->
+	<select id="selectAllEquipment" resultMap="EquipmentResultMap">
+	  select
+   				 EQUIP_NO
+				 , EQUIP_NAME
+				 , EQUIP_CATEGORY
+				 , CREATE_DATETIME
+				 , CREATE_USER
+				 , UPDATE_DATETIME
+				 , UPDATE_USER
+				 , STATUS
+      from T_EQUIPMENT
+     where STATUS = 'Y'
+     <if test="category != '전체'">
+		 	 and EQUIP_CATEGORY = #{category}
+		 </if>
+	</select>
+	
+	<!-- (상우) 전체 시설 정보 조회 -->
+	<select id="selectAllFacility" resultMap="FacilityResultMap">
+    select
+   				 FACILITY_NO
+				 , FACILITY_NAME
+				 , FACILITY_CATEGORY
+				 , CREATE_DATETIME
+				 , CREATE_USER
+				 , UPDATE_DATETIME
+				 , UPDATE_USER
+				 , STATUS
+      from T_FACILITY
+     where STATUS = 'Y'
+     <if test="category != '전체'">
+		 	 and FACILITY_CATEGORY = #{category}
+		 </if>
+	</select>
+	
 </mapper>

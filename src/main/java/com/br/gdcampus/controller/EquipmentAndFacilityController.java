@@ -59,18 +59,20 @@ public class EquipmentAndFacilityController {
 		log.debug("facility값 : {}", facility);	   
 		log.debug("page값 : {}", currentPage);
 		
+		
+		// 검색 후 리다이렉트시 화면의 검색결과 앞에 "비품", "시설"을 붙여주기 위한 resultClass.
 		if(facility != null) {
 			model.addAttribute("resultClass", facility);
 		}else if(equipment != null) {
 			model.addAttribute("resultClass", equipment);
 		}
 		
-		
+		// 비품, 시설 카테고리 조회
 		List<String> equipmentCategoryList = equipmentAndFacilityService.selectEquipmentCategory(); // 비품 카테고리 조회
 		List<String> facilityCategoryList = equipmentAndFacilityService.selectFacilityCategory(); 	// 시설 카테고리 조회
-		
 		model.addAttribute("equipmentCategoryList", equipmentCategoryList);
 		model.addAttribute("facilityCategoryList", facilityCategoryList);
+		
 		
 		
 		if(facility != null) { // 시설 리스트 조회의 경우
