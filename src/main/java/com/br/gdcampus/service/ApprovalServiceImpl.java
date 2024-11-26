@@ -1,5 +1,6 @@
 package com.br.gdcampus.service;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,26 +207,29 @@ public class ApprovalServiceImpl implements ApprovalService {
 			throw new RuntimeException("결재 문서 등록 실패");
 		}
 		
-		System.out.println("결재 insert result : "+result);
+		System.out.println("serviceImpl-결재 insert result : "+result);
 	
 		//결재선 insert
 		List<ApprLineDto> approvers = approval.getApprovers();
 		System.out.println("결재선 : "+approvers);
 		if(approvers != null && !approvers.isEmpty()) {
 			for(ApprLineDto line : approvers) {
+				line.setUpdateYn(false);
+				line.setCreateUser(approval.getApprUser());
 				result = apprDao.insertApprovalLine(line);
 				if(result == 0) {
 	                throw new RuntimeException("결재선 등록 실패");
 				}
 			}
 		}
-		System.out.println("결재선 insert result : "+result);
+		System.out.println("serviceImpl-결재선 insert result : "+result);
 		
 		//문서타입따라 다르게 문서 등록
 		if("기안서".equals(approval.getApprType())) {
 			DraftDto draft = approval.getDraft();
 //			System.out.println("draft : "+draft);
 			if(draft != null) {
+				draft.setUpdateYn(false);
 				result = apprDao.insertSimpleDraft(draft);
 				if(result == 0) {
 					throw new RuntimeException("기안서 등록 실패");
@@ -245,6 +249,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 				System.out.println("ServiceImpl items : " + purchaseItems);
 				if(purchaseItems != null) {
 					for(PurchaseHistoryDto item : purchaseItems) {
+						item.setUpdateYn(false);
 						result = apprDao.insertPurchaseHistory(item);
 						if(result == 0) {
 							throw new RuntimeException("품의서 물품 등록 실패");
@@ -422,8 +427,87 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apprDao.selectCustomFormContent(formType);
 	}
 
+	@Override
+	public int updateApproval(ApprovalDto approval) {
+	    // 결재 문서 update
+	    int result = apprDao.updateApproval(approval);
+	    if(result == 0) {
+	        throw new RuntimeException("결재 문서 수정 실패");
+	    }
 
+	    // 결재선 update (기존 데이터 삭제 후 새로 추가)
+	    result = apprDao.deleteApprovalLines(approval.getApprNo());
+	    
+	    List<ApprLineDto> approvers = approval.getApprovers();
+	    if(approvers != null && !approvers.isEmpty()) {
+	        for(ApprLineDto line : approvers) {
+	        	line.setUpdateYn(true);
+	        	line.setApprNo(approval.getApprNo());
+	            line.setModifyUser(approval.getUpdateUser());
+	            result = apprDao.insertApprovalLine(line);
+	            if(result == 0) {
+	                throw new RuntimeException("결재선 수정 실패");
+	            }
+	        }
+	    }
 
-	
-	
+	    // 문서 타입별 update
+	    if("기안서".equals(approval.getApprType())) {
+	        DraftDto draft = approval.getDraft();
+	        draft.setApprNo(approval.getApprNo());
+	        if(draft != null) {
+	            result = apprDao.updateSimpleDraft(draft);
+	            if(result == 0) {
+	                throw new RuntimeException("기안서 수정 실패");
+	            }
+	        }
+	    } else if("품의서".equals(approval.getApprType())) {
+	        PurchaseDraftDto purchDraft = approval.getPurchDraft();
+	        purchDraft.setApprNo(approval.getApprNo());
+	        if(purchDraft != null) {
+	            result = apprDao.updatePurchaseDraft(purchDraft);
+	            if(result == 0) {
+	                throw new RuntimeException("품의서 수정 실패");
+	            }
+	            
+	            // 기존 물품 내역 삭제
+	            result = apprDao.deletePurchaseHistory(approval.getApprNo());
+	            
+	            // 새 물품 내역 추가
+	            List<PurchaseHistoryDto> items = purchDraft.getPurchaseItems();
+	            if(items != null) {
+	                for(PurchaseHistoryDto item : items) {
+	                	item.setUpdateYn(true);//수정상태
+	                	item.setApprNo(approval.getApprNo());
+	                    result = apprDao.insertPurchaseHistory(item);
+	                    if(result == 0) {
+	                        throw new RuntimeException("품의서 물품 등록 실패");
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+		return result;
+	}
+
+	@Override
+	public int deleteApprovalLines(String apprNo) {
+		return apprDao.deleteApprovalLines(apprNo);
+	}
+
+	@Override
+	public int updateSimpleDraft(DraftDto draft) {
+		return apprDao.updateSimpleDraft(draft);
+	}
+
+	@Override
+	public int updatePurchaseDraft(PurchaseDraftDto purchDraft) {
+		return apprDao.updatePurchaseDraft(purchDraft);
+	}
+
+	@Override
+	public int deletePurchaseHistory(String apprNo) {
+		return apprDao.deletePurchaseHistory(apprNo);
+	}	
 }

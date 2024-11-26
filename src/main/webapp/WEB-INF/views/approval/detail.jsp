@@ -283,8 +283,7 @@
         </div>
     </div>
 
-    <!-- jstree -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    
     <!-- Summernote JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -317,33 +316,120 @@
             // summernote 활성화
             $('#summernote').summernote('enable');
             
-            // 결재선 수정 버튼 활성화
-            /* document.querySelector('.approver-edit-btn').style.display = 'inline-block'; */
-           
-            // 기존 결재선 정보를 approvalLine hidden input에 설정
-/*             const existingApprovers = ${approval.approvers}; // 컨트롤러에서 전달된 결재선 정보
-            if(existingApprovers) {
-                document.getElementById('approvalLine').value = JSON.stringify(
-                    existingApprovers.map(approver => ({
-                        userNo: approver.userNo,
-                        userName: approver.userName,
-                        rankName: approver.rankName,
-                        deptName: approver.deptName,
-                        lineOrder: approver.lineOrder
-                    }))
-                );
-            }
-            
-            // ApprovalModal 초기화
-            ApprovalModal.init(); */
-            
+				    // 문서 종류에 따른 추가 처리
+				    const apprType = document.querySelector('input[name="apprType"]').value;
+				    if(apprType === '품의서') {
+				        enablePurchaseEdit(); // 품의서인 경우 추가 활성화
+				    }	
+				    
             // 버튼 영역 변경
             document.querySelector('.button-area').innerHTML = `
                 <button type="button" class="action-button primary" onclick="ApprovalModal.show()">결재선 수정</button>            
                 <button type="button" class="action-button primary" onclick="saveDoc()">저장</button>
                 <button type="button" class="action-button" onclick="cancelEdit()">취소</button>
             `;
+            
+				    // 기존 결재선 정보를 모달에 설정
+				    const originalApprovers = JSON.parse(document.getElementById('originalApprovalLine').value);
+				    if (originalApprovers.length > 0) {
+				        document.getElementById('approversList').innerHTML = ''; // 기존 목록 초기화
+				        originalApprovers.forEach(approver => {
+				            ApprovalModal.addApprover(
+				                approver.userNo,
+				                approver.userName,
+				                approver.rankName,
+				                approver.deptName
+				            );
+				        });
+				    }			    
         }
+
+     // 품의서 물품 정보 수집 함수 추가
+        function collectPurchaseItems() {
+            const items = [];
+            const rows = document.querySelectorAll('#purchaseTable tbody tr');
+            
+            rows.forEach((row, index) => {
+                items.push({
+                    productNo: row.querySelector('input[name$=".productNo"]').value,
+                    productName: row.querySelector('input[name$=".productName"]').value,
+                    productUnit: row.querySelector('input[name$=".productUnit"]').value,
+                    productAmt: row.querySelector('input[name$=".productAmt"]').value,
+                    productPrice: row.querySelector('input[name$=".productPrice"]').value,
+                    updateYn: row.querySelector('input[name$=".updateYn"]')?.value || 'true'
+                });
+            });
+            
+            return items;
+        }        
+        
+        //수정사항 저장
+				function saveDoc() {
+				    if(!ApprovalModal.checkRequiredFields()) {
+				        return;
+				    }
+				    
+				    if(confirm('수정사항을 저장하시겠습니까?')) {
+				        // form data 수집
+				        const formData = $('#docForm').serializeArray();
+				        
+				        // 결재선 정보를 JSON 문자열로 변환
+				        const approvers = JSON.parse(document.getElementById('approvalLine').value);
+				        const approversData = approvers.map((approver, index) => ({
+				            userNo: approver.userNo,
+				            lineOrder: index + 1,
+				            createUser: approver.userNo
+				        }));
+				        
+				        const requestData = {
+				            apprNo: formData.find(item => item.name === 'apprNo')?.value,
+				            apprType: formData.find(item => item.name === 'apprType')?.value,
+				            apprTitle: formData.find(item => item.name === 'apprTitle')?.value,
+				            apprContent: formData.find(item => item.name === 'apprContent')?.value,
+				            approvers: approversData
+				        };
+				
+				        // 기안서인 경우
+				        if(requestData.apprType === '기안서') {
+				            requestData.draft = {
+				                enforceDate: formData.find(item => item.name === 'enforceDate')?.value,
+				                coopDept: formData.find(item => item.name === 'coopDept')?.value
+				            };
+				        }
+				        // 품의서인 경우
+				        else if(requestData.apprType === '품의서') {
+				            const purchaseItems = collectPurchaseItems(); // 품의서 물품 정보 수집 함수
+				            requestData.purchDraft = {
+				                purchDept: formData.find(item => item.name === 'purchDraft.purchDept')?.value,
+				                purchEmpName: formData.find(item => item.name === 'purchDraft.purchEmpName')?.value,
+				                purchPurpose: formData.find(item => item.name === 'purchDraft.purchPurpose')?.value,
+				                purchDeadline: formData.find(item => item.name === 'purchDraft.purchDeadline')?.value,
+				                purchTotal: formData.find(item => item.name === 'purchDraft.purchTotal')?.value,
+				                purchaseItems: purchaseItems
+				            };
+				        }
+				        
+				        $.ajax({
+				            url: `${contextPath}/approval/update`,
+				            type: 'POST',
+				            contentType: 'application/json',
+				            data: JSON.stringify(requestData),
+				            success: function(response) {
+				                if(response.success) {
+				                    alert('수정이 완료되었습니다.');
+				                    location.reload();
+				                } else {
+				                    alert('수정 중 오류가 발생했습니다.');
+				                }
+				            },
+				            error: function(xhr, status, error) {
+				                console.error('Update failed:', error);
+				                alert('수정 중 오류가 발생했습니다.');
+				            }
+				        });
+				    }
+				}
+        
         
         // 수정 취소
         function cancelEdit() {
@@ -416,7 +502,8 @@
             }
         }
     </script>
-    
+    <!-- jstree -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <!-- 결재선 관련 JS -->
     <script src="${contextPath}/js/approval-write.js"></script>
 </body>
