@@ -130,7 +130,7 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 
 		int result = equipAndFacilityDao.addEquipment(map);
 		
-		if(result > 0 && attachDto != null) {
+		if(result > 0) {
 			result = equipAndFacilityDao.addAttachment(attachDto);
 		}
 		
@@ -163,7 +163,7 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * 비품번호로 비품 정보 조회
 	 * author : 상우
 	 * @param equipNo 비품번호
-	 * @return EquipmentDto
+	 * @return 비품 정보
 	 */
 	@Override
 	public EquipmentDto selectEquipmentByEquipNo(String equipNo) {
@@ -181,29 +181,19 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 		return equipAndFacilityDao.modifyFacility(map);
 	}
 
-	/**
-	 * 비품 수정(첨부파일 없는 경우)
-	 * author : 상우
-	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호
-	 * @return 성공시 1, 실패시 0
-	 */
-	@Override
-	public int modifyEquipmentWithoutFile(Map<String, Object> map) {
-		return equipAndFacilityDao.modifyEquipmentWithoutFile(map);
-	}
 
 	/**
-	 * 비품 수정(첨부파일 있는 경우)
+	 * 비품 수정(첨부파일 있음)
 	 * author : 상우
 	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호 + 첨부파일dto
-	 *  @return 성공시 1, 실패시 0
+	 * @return 성공시 1, 실패시 0
 	 */
 	@Override
 	public int modifyEquipmentWithFile(Map<String, Object> map) {
 		
 
 	    // 1) t_equipment 테이블에 update
-	    int result1 = equipAndFacilityDao.modifyEquipmentWithoutFile(map);
+	    int result1 = equipAndFacilityDao.modifyEquipment(map);
 	    
 	   
 	    // 2) t_attachment 테이블에 delete
@@ -233,12 +223,30 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * 복수의 비품 번호로 복수의 첨부파일 정보 조회
 	 * author : 임상우
 	 * @param equipNoList 비품 번호들
-	 * return List<AttachDto>
+	 * return 비품 번호에 해당하는 첨부파일 정보 리스트
 	 */
 	@Override
 	public List<AttachDto> selectAttachmentList(String[] equipNoList) {
 		return equipAndFacilityDao.selectAttachmentList(equipNoList);
 	}
 
-	
+	/**
+	 * 카테고리에 맞는 비품 정보 조회
+	 * author : 임상우
+	 * return 전체 비품 정보
+	 */
+	@Override
+	public List<EquipmentDto> selectAllEquipment(String category) {
+		return equipAndFacilityDao.selectAllEquipment(category);
+	}
+
+	/**
+	 * 카테고리에 맞는 시설 정보 조회
+	 * author : 임상우
+	 * return 전체 시설 정보
+	 */
+	@Override
+	public List<FacilityDto> selectAllFacility(String category) {
+		return equipAndFacilityDao.selectAllFacility(category);
+	}
 }
