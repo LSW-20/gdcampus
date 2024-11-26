@@ -74,8 +74,8 @@
 												<span class="menu-item">게시판</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath}/board/notice/list">공지게시판</a></li>
-												<li><a href="${contextPath}/board/post/list">자유게시판</a></li>
+												<li><a href="#">공지게시판</a></li>
+												<li><a href="#">자유게시판</a></li>
 												<li><a href="#">투표게시판</a></li>
 										</ul>
 								</li>
@@ -86,7 +86,7 @@
 												<span class="menu-item">비품, 시설 예약</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">예약 신청</a></li>
+												<li><a href="${contextPath }/reservation/main">예약 신청</a></li>
 												<li><a href="#">예약 신청 내역 조회</a></li>
 										</ul>
 								</li>
@@ -148,7 +148,6 @@
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath}/user/staff/list.do">사원 관리</a></li>
 												<li><a href="${contextPath}/user/prof/list.do">교수 관리</a></li>
-												<li><a href="#"></a></li>
 										</ul>
 								</li>
 
@@ -200,22 +199,10 @@
 												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
 												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
 												<li><a href="${contextPath}/approval/home"></a></li> 
+												
+										</ul>
+								</li>
 
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/todo" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="columns"></i>
-												<span class="menu-item">결재 대기 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="inbox"></i>
@@ -225,41 +212,7 @@
 												<li><a href="${contextPath}/approval/approved">내 결재함</a></li>
 												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
-								</li>
-								
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="eye"></i>
-												<span class="menu-item">결재 참조/열람함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/upComing" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="clipboard"></i>
-												<span class="menu-item">결재 예정 문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
-								
-								<li>
-										<a href="${contextPath}/approval/myDoc" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="file-text"></i>
-												<span class="menu-item">기안문서함</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-										</ul>
-								</li>								
+								</li>							
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
 												<i class="icon nav-icon" data-feather="edit-3"></i>
@@ -287,9 +240,6 @@
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/dept/list">부서 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 
 								<li>
@@ -297,9 +247,6 @@
 												<i class="icon nav-icon" data-feather="minus-square"></i>
 												<span class="menu-item">직급 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">직급 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 								
 									<li>
@@ -307,9 +254,6 @@
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">게시판 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">게시판 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 
 								<li>
@@ -317,9 +261,6 @@
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">비품, 시설 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 								
 								<li>
