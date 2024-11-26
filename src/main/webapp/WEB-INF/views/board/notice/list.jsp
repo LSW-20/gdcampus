@@ -195,6 +195,10 @@
      <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
 
      <script src="${contextPath}/js/app.js"></script>
-     
+       <script>
+   		 $('.postCheckbox').parent().on("click", function(evt){
+    			evt.stopPropagation();
+   			})
+ 		 </script>
  </body>
 </html>
