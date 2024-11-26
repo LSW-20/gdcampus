@@ -33,7 +33,7 @@ public interface ApprovalService {
 	//기안문서>진행중 최근 5개
 	List<ApprovalDto> getRecentInProgressDocs(String userNo);
 	
-	//기안문서>환료 최근 5개
+	//기안문서>완료 최근 5개
 	List<ApprovalDto> getRecentCompletedDocs(String userNo);
 	
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
@@ -131,9 +131,24 @@ public interface ApprovalService {
 	//선택양식내용불러오기
 	ApprovalDto selectCustomFormContent(String formType);
 	
+	//글수정
+	int updateApproval(ApprovalDto approval);
+	
+	//결재선삭제
+	int deleteApprovalLines(String apprNo);
+	
+	//기안서 수정
+	int updateSimpleDraft(DraftDto draft);
+	
+	//품의서 수정
+	int updatePurchaseDraft(PurchaseDraftDto purchDraft);
+	
+	//품의서>내역삭제
+	int deletePurchaseHistory(String apprNo);
+	
 	//글삭제
 	
-	//글수정
+	
 	
 	
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -225,6 +226,30 @@ public class ApprovalController {
 	    }
 	    
 	    return "redirect:/approval/home";
+	}
+	
+	@PostMapping("/update")
+	@ResponseBody
+	public Map<String, Object> updateApproval(@RequestBody ApprovalDto approval,
+	                                        HttpSession session) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    try {
+	        UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+	        approval.setUpdateUser(loginUser.getUserNo());
+
+	        int result = apprService.updateApproval(approval);
+	        
+	        response.put("success", result > 0);
+	        response.put("message", result > 0 ? "수정 완료" : "수정 실패");
+	        
+	    } catch(Exception e) {
+	        log.error("결재 문서 수정 중 오류 발생", e);
+	        response.put("success", false);
+	        response.put("message", "문서 수정 중 오류가 발생했습니다.");
+	    }
+	    
+	    return response;
 	}
 	
 	@GetMapping("/detail/{apprNo}")

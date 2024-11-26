@@ -481,16 +481,31 @@
 		  , LINE_STATUS
 		  , CREATE_DATE
 		  , CREATE_USER
+		  <if test="updateYn == true">
+		  , MODIFY_DATE
+		  , MODIFY_USER
+		  </if>
 		) 
 	  VALUES 
 		(
 		    SEQ_ALNO.NEXTVAL
-		  , LPAD(SEQ_ANO.CURRVAL, 4, '0')
+		  , <choose>
+		  		<when test="updateYn==true">
+		  			#{apprNo}
+		  		</when>
+		  		<otherwise>		  		
+					  LPAD(SEQ_ANO.CURRVAL, 4, '0')
+		  		</otherwise>
+		  	</choose>
 		  , #{userNo}
 		  , #{lineOrder}
 		  , 0
 		  , SYSDATE
 		  , #{createUser}
+		  <if test="updateYn == true">
+		  , SYSDATE
+		  , #{modifyUser}
+		  </if>		  
 		)	
 	</insert>
 	
@@ -505,7 +520,14 @@
 	   ) 
 	   VALUES 
 	   (
-	       LPAD(SEQ_ANO.CURRVAL, 4, '0')
+	       <choose>
+		       	<when test="updateYn == true">
+		       		#{apprNo}
+		       	</when>
+		       	<otherwise>
+				       LPAD(SEQ_ANO.CURRVAL, 4, '0')	       	
+		       	</otherwise>
+	       </choose>	     
 	     , #{enforceDate}
 	     , #{coopDept}
 	   )
@@ -548,7 +570,14 @@
 	   ) 
 	   VALUES 
 	   (
-	       LPAD(SEQ_ANO.CURRVAL, 4, '0')
+	       <choose>
+		       	<when test="updateYn == true">
+		       		#{apprNo}
+		       	</when>
+		       	<otherwise>
+				       LPAD(SEQ_ANO.CURRVAL, 4, '0')	       	
+		       	</otherwise>
+	       </choose>
 	     , #{productNo}
 	     , #{productName}
 	     , #{productUnit}
@@ -779,7 +808,46 @@
        AND APPR_TYPE = #{apprType}
        AND ROWNUM = 1	
 	</select>
-
+		
+	<!-- 결재 문서 수정 -->
+	<update id="updateApproval">
+	    UPDATE T_APPROVAL
+	       SET APPR_TITLE = #{apprTitle}
+	         , APPR_CONTENT = #{apprContent}
+	         , MODIFY_DATE = SYSDATE
+	         , UPDATE_USER = #{updateUser}
+	     WHERE APPR_NO = #{apprNo}
+	</update>	
 	
+	<!-- 기안서 수정 -->
+	<update id="updateSimpleDraft">
+	    UPDATE T_DRAFT
+	       SET ENFORCE_DATE = #{enforceDate}
+	         , COOP_DEPT = #{coopDept}
+	     WHERE APPR_NO = #{apprNo}
+	</update>
+	
+	<!-- 품의서 수정 -->
+	<update id="updatePurchaseDraft">
+	    UPDATE T_PURCH_DRAFT
+	       SET PURCH_DEPT = #{purchDept}
+	         , PURCH_EMP_NAME = #{purchEmpName}
+	         , PURCH_PURPOSE = #{purchPurpose}
+	         , PURCH_DEADLINE = #{purchDeadline}
+	         , PURCH_TOTAL = #{purchTotal}
+	     WHERE APPR_NO = #{apprNo}
+	</update>
+	
+	<!-- 결재선 삭제 -->
+	<delete id="deleteApprovalLines">
+	    DELETE FROM T_APPR_LINE
+	     WHERE APPR_NO = #{apprNo}
+	</delete>
+	
+	<!-- 품의서 물품 내역 삭제 -->
+	<delete id="deletePurchaseHistory">
+	    DELETE FROM T_PURCH_HISTORY
+	     WHERE APPR_NO = #{apprNo}
+	</delete>	
 
 </mapper>

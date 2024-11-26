@@ -249,4 +249,25 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectCustomFormContent",formType);
 	}
 
+	public int updateApproval(ApprovalDto approval) {
+		return sqlSession.update("approvalMapper.updateApproval",approval);
+	}
+
+	public int deleteApprovalLines(String apprNo) {
+		return sqlSession.delete("approvalMapper.deleteApprovalLines",apprNo);
+	}
+
+	public int updateSimpleDraft(DraftDto draft) {
+		return sqlSession.update("approvalMapper.updateSimpleDraft",draft);
+	}
+
+	public int updatePurchaseDraft(PurchaseDraftDto purchDraft) {
+		return sqlSession.update("approvalMapper.updatePurchaseDraft",purchDraft);
+	}
+
+	public int deletePurchaseHistory(String apprNo) {
+		return sqlSession.delete("approvalMapper.deletePurchaseHistory",apprNo);
+	}
+
+
 }

@@ -19,4 +19,6 @@ public class DraftDto {
 	private String apprNo;
 	private Date enforceDate;
 	private String coopDept;
+	
+	private boolean updateYn;
 }

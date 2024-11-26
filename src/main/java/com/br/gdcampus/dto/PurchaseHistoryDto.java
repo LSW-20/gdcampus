@@ -19,4 +19,6 @@ public class PurchaseHistoryDto {
 	private String productUnit;
 	private int productAmt;
 	private String productPrice;
+	
+	private boolean updateYn;
 }

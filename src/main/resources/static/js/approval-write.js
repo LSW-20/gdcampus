@@ -223,19 +223,19 @@ const ApprovalModal = {
 
 	    // 문서 타입별 필수값 체크
 	    if(apprType === '품의서') {
-	        if(!document.querySelector('input[name="purchDept"]').value) {
+	        if(!document.querySelector('input[name$="purchDept"]').value) {
 	            alert('담당부서를 입력해주세요.');
 	            return false;
 	        }
-	        if(!document.querySelector('input[name="purchEmpName"]').value) {
+	        if(!document.querySelector('input[name$="purchEmpName"]').value) {
 	            alert('납품자를 입력해주세요.');
 	            return false;
 	        }
-	        if(!document.querySelector('input[name="purchPurpose"]').value) {
+	        if(!document.querySelector('input[name$="purchPurpose"]').value) {
 	            alert('사용목적을 입력해주세요.');
 	            return false;
 	        }
-	        if(!document.querySelector('input[name="purchDeadline"]').value) {
+	        if(!document.querySelector('input[name$="purchDeadline"]').value) {
 	            alert('희망납기일을 선택해주세요.');
 	            return false;
 	        }
