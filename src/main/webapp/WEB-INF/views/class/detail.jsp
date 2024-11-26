@@ -111,6 +111,11 @@
 									<h5 class="pr-4 ml-4">수강인원 : ${c.stuCount}명</h5>
 									<a href="${contextPath }/class/learner/list.do?classCode=${c.classCode}" style="color: gray">상세보기 > </a>
 								</div>
+								
+								<div>
+									<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+									<canvas id="doughnut" height="150"></canvas>
+								</div>
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -122,8 +127,39 @@
 		</div>
 		<!-- main-content 끝 -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
 		<script>
+		
+		
+	    var statusData = [
+	        <c:forEach items="${chart}" var="c" varStatus="loop">
+	            {
+	                type: "${c.GRADE}",
+	                cnt: ${c.COUNT}
+	            }<c:if test="${!loop.last}">,</c:if>
+	        </c:forEach>
+	    ];
 	    
+	    
+		new Chart(document.getElementById("doughnut"), {
+		    type: 'doughnut',
+		    data: {
+		      labels: ["1학년", "2학년", "3학년", "4학년"],
+		      datasets: [
+		        {
+		          label: "Population (millions)",
+		          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+		          data: statusData.map(item => item.cnt)
+		        }
+		      ]
+		    },
+		    options: {
+		      title: {
+		        display: true,
+		        text: '학년 분포도'
+		      }
+		    }
+		});
 		</script>
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->

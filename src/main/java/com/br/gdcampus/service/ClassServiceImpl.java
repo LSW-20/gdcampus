@@ -146,6 +146,10 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	@Override
+	public List<Map<String, Object>> selectLearnerCount(String classCode) {
+		return classDao.selectLearnerCount(classCode);
+	}
+	@Override
 	public ClassDto selectPlanList(String classCode) {
 		return null;
 	}
@@ -160,5 +164,6 @@ public class ClassServiceImpl implements ClassService {
 		// 학과 조회
 		return classDao.selectCategory(string);
 	}
+
 
 }

@@ -397,6 +397,15 @@
        USING(STU_NO)
  	   WHERE CLASS_CODE=#{classCode}
 	</select>
+	<!-- 수강생 숫자 조회(차트용) -->
+	<select id="selectLearnerCount" resultType="map">
+		SELECT GRADE, COUNT(GRADE) as COUNT
+		  FROM T_LEARNER_LIST
+		  JOIN T_STUDENT
+		 USING (STU_NO)
+		 WHERE CLASS_CODE=#{classCode}
+		 GROUP BY GRADE
+	</select>
 	<!-- 수업계획서 조회 -->
 	<!-- 수업계획서 수정 -->
 	<!-- 수업계획서 삭제 -->

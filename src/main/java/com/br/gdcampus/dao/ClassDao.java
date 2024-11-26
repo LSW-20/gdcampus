@@ -100,6 +100,9 @@ public class ClassDao {
 	public ClassDto selectLearnerList(String classCode) {
 		return sqlSession.selectOne("classMapper.selectLearnerList", classCode);
 	}
+	public List<Map<String, Object>> selectLearnerCount(String classCode) {
+		return sqlSession.selectList("classMapper.selectLearnerCount", classCode);
+	}
 
 //--------------------------------------내강의 시작---------------------------------------------
 	

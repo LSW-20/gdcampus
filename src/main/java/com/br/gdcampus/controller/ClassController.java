@@ -341,6 +341,10 @@ public class ClassController {
 	
 	@GetMapping("/detail.do")
 	public void myClassDetail(String classCode, Model model) {
+		
+		 List<Map<String,Object>> chart = classService.selectLearnerCount(classCode);
+		 log.debug("학생수가 들어있는 chart : {}", chart);
+		 model.addAttribute("chart",chart);
 		 model.addAttribute("c", classService.selectMyClassDetail(classCode));
 	}
 }
