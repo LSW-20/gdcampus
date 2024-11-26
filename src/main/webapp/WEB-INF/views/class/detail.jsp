@@ -114,13 +114,14 @@
 								
 								<div>
 									<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-									<canvas id="doughnut" height="150"></canvas>
+									<canvas id="doughnut" height="100"></canvas>
 								</div>
 							</c:otherwise>
 						</c:choose>
 					</div>
 					<div class="mt-5 row d-flex justify-content-center">
 						<a class="btn btn-primary w-md mr-3" href="${contextPath }/class/list.do">목록</a>
+						<a class="btn btn-primary w-md mr-3" href="${contextPath }/class/plan/detail.do?classCode=${c.classCode}">강의계획서</a>
 					</div>
 				</div>
 			</div>
