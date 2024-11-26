@@ -3,29 +3,43 @@
 <mapper namespace="noticeMapper">
 	    <!-- 결과 매핑 -->
    <resultMap id="noticeResultMap" type="NoticeDto">
-			<result column="POST_NO" property="postNo" />
+			<result column="POST_NO" property="noticeNo" />
 			<result column="board_type_no" property="boardTypeNo" />
-			<result column="user_no" property="userNo" />
-			<result column="POST_TITLE" property="postTitle" />
-			<result column="POST_CONTENT" property="postContent" />
+			<result column="user_no" property="noticeNo" />
+			<result column="USER_NAME" property="userName" />
+			<result column="POST_TITLE" property="noticeTitle" />
+			<result column="POST_CONTENT" property="noticeContent" />
 			<result column="REGIST_DATE" property="registDate" />
 			<result column="FILE_STATUS" property="fileStatus" />
 			<result column="COUNT" property="count" />
 			<result column="POST_TOP" property="postTop" />
 			<result column="modify_date" property="modifyDate" />
 			<result column="modify_user" property="modifyUser" />
+			
+			  <collection ofType="AttachDto" property="attachList" resultMap="attachResultMap"/>
 	</resultMap>
-
+	
+	<resultMap id="attachResultMap" type="AttachDto">
+			<result column="FILE_NO" property="fileNo"/>
+			<result column="APPR_NO" property="apprNo"/>
+			<result column="FILE_PATH" property="filePath"/>
+			<result column="FILESYSTEM_NAME" property="filesystemName"/>
+			<result column="ORIGINAL_NAME" property="originalName"/>
+			<result column="UPLOAD_DATE" property="uploadDate"/>
+			<result column="REF_TYPE" property="refType"/>
+	</resultMap>
 	
 	<!-- 게시판 유형이 공지사항 -->
-	<select id="selectNoticeList" resultMap="noticeResultMap">
+	<select id="selectNoticeListCount" resultMap="noticeResultMap">
 	SELECT
     P.POST_NO,
     P.POST_TITLE,
     P.POST_CONTENT,
-    U.USER_NAME AS WRITER_NAME,
+    USER_NAME,
     BOARD_TYPE_NO,
-    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE
+    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
+    FILE_STATUS
+    
 FROM 
     T_POST P
 JOIN 
@@ -36,9 +50,27 @@ ON
 WHERE 
     BOARD_TYPE_NO = 1
 ORDER BY 
-    P.POST_NO DESC
+    P.POST_NO ASC
 		
 	</select>
 	
+	<!-- 공지사항 조회(첨부파일여부) -->
+	<select id="selectNotice" resultMap="noticeResultMap">
+    		select
+		       POST_NO
+		     , POST_TITLE
+		     , POST_CONTENT
+		     , USER_NAME
+		     , BOARD_TYPE_NO
+		     , to_char(REGIST_DATE,'YYYY-MM-DD') as "regist_date"
+		     , FILE_NO
+		     , FILE_PATH
+		     , FILESYSTEM_NAME
+		     , ORIGINAL_NAME
+		  from t_post n
+		  join t_user using (USER_NO)
+		  left join t_attachment on (ref_type = 'B' and APPR_NO = POST_NO)
+		 where POST_NO = #{noticeNo}
+	</select>
 	
 </mapper>

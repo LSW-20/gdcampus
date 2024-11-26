@@ -20,7 +20,7 @@ public interface PostService {
     int insertPost(PostDto p);
 
     // 게시글 상세 - 조회수 증가
-    int updateIncreaseCount(String postNo);
+    int updateIncreaseCount(int postNo);
 
     // 게시글 상세 - 게시글 조회
     PostDto selectPostDetail(String postNo);
@@ -41,4 +41,7 @@ public interface PostService {
 
     // 댓글 완전 삭제 (스케줄러)
     int deleteCommentCompletely();
+
+	
+	
 }

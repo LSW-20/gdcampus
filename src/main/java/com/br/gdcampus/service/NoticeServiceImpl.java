@@ -20,11 +20,6 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeDao.selectNoticeList();
 	}
 
-	@Override
-	public NoticeDto selectNoticeByNo(int noticeNo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public int insertNotice(NoticeDto n) {
@@ -42,6 +37,11 @@ public class NoticeServiceImpl implements NoticeService {
 	public int deleteNotice(String[] deleteNo) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public NoticeDto selectNotice(String noticeNo) {
+		return noticeDao.selectNotice(noticeNo);
 	}
 
 }

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시글 상세</title>
+<title>공자사항 상세</title>
 <style type="text/css">
 .main-content {
 	min-height: 900px;
@@ -55,21 +55,21 @@
 			<div class="page-content">
 			
        <div class="container border p-5 m-4 rounded">
-         <h2 class="m-4">게시글 상세</h2>
+         <h2 class="m-4">공지글 상세</h2>
          <br>
 
-         <a class="btn btn-secondary" style="float:right" href="${ contextPath }board/post/list">목록으로</a>
+         <a class="btn btn-secondary" style="float:right" href="${ contextPath }board/notice/detail">상세</a>
          <br><br>
          <table align="center" class="table">
              <tr>
                  <th width="120">제목</th>
-                 <td colspan="3">${ p.postTitle }</td>
+                 <td colspan="3">${ n.noticeTitle }</td>
              </tr>
              <tr>
                  <th>작성자</th>
-                 <td width="400">${ p.writerName }</td> <!-- 작성자 사번에서 가지고 와야할때는 뭐라고 입력해야하는지?   -->
+                 <td width="400">${ n.userName }</td> <!-- 작성자 사번에서 가지고 와야할때는 뭐라고 입력해야하는지?   -->
                  <th width="120">작성일</th>
-                 <td>${ p.registDate }</td>
+                 <td>${ n.registDate }</td>
              </tr>
              <tr>
                  <th>첨부파일</th>
@@ -84,19 +84,19 @@
              <tr>
              		<th>내용</th>
                  <td colspan="4">
-                 	 <p style="height:150px">${ postDto.postContent }</p>
+                 	 <p style="height:150px">${ n.noticeContent }</p>
                  </td>
              </tr>
          </table>
          <br>
 
          <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-         <c:if test="${ loginUser.userId eq postDto.userNo }">
+         <c:if test="${ loginUser.userId eq p.userNo }">
 	         <div align="center">
 	         		<form id="frm" action="" method="post">
-	         			<input type="hidden" name="no" value="${ postDto.postNo }">
-	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/post/modify');">수정하기</button>
-	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
+	         			<input type="hidden" name="no" value="${ p.postNo }">
+	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/notice/modify');">수정</button>
+	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/notice/delete');">삭제</button>
 	            </form>
 	         </div>
          </c:if>

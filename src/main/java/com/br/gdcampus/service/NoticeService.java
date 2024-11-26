@@ -15,12 +15,9 @@ public interface NoticeService {
 	// 공지사항 목록조회 
 	List<NoticeDto> selectNoticeList();
 	
-	// 공지사항 상단고정
-	//?
-	
-	// 번호로 공지사항 한개 조회 
-	NoticeDto selectNoticeByNo(int noticeNo);
-	
+	// 공지사항 상단고정용(
+	NoticeDto selectNotice(String no); 
+
 	// 공지사항 등록
 	int insertNotice(NoticeDto n);
 	
@@ -30,7 +27,7 @@ public interface NoticeService {
 	// 다수의 번호들 가지고 공지사항 일괄삭제 
 	int deleteNotice(String[] deleteNo);
 	
-	// 공지사항 숨기기 (일반게시글로 이동)
+	// 공지사항 일반게시글로 이동
 	
 
 	

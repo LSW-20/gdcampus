@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -55,55 +56,52 @@
                                                <label class="custom-control-label" for="checkAll"></label>
                                            </div>
                                        </th>
-	                                       <th>게시글 번호</th>
-	                                       <th>게시글 내용</th>
-	                                       <th>작성자</th>
-	                                       <th>작성일</th>
-	                                       <th>첨부파일 여부</th>
-	                                       <th>조회수</th>
-	                                       <th>${ postDto.boardTypeNo }</th>
+		                                     	<th>공지사항 번호</th>
+				                                  <th>공지사항 내용</th>
+				                                  <th>작성자</th>
+				                                  <th>작성일</th>
+				                                  <th>첨부파일 여부</th>
+				                                  <th>조회수</th>
+				                                 <%--  <th>${ noticeList[0].boardTypeNo }</th> --%>
                                    </tr>
                                </thead>
                                
                                <tbody>
-                                <c:forEach var="p" items="${ postList }">
-                    	           	<tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'>
-															    <td>
-															        <div class="custom-control custom-checkbox">
-															            <input type="checkbox" class="custom-control-input" id="invoicecheck${p.postNo}">
-															            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
-															        </div>
-															    </td>
-															    
-															    <td>${ p.postNo }</td>
-															    <td>${ p.postTitle }</td>
-															    <td>${ u.userName }</td>
-															    <td>${ p.registDate }</td>
-															    <td>${ p.fileStatus }</td>
-															    <td>${ p.count }</td>
-															    <td>${ b.attachCount > 0 ? '★' : ''  }</td>
-															 
-														    <td>
-														      <%--   <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
-												                <i class="uil uil-pen font-size-18"></i>
-												            </a>
-														        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-														            <i class="uil uil-trash font-size-18"></i>
-														        </a> --%>
-														    </td>
-															</tr>
-									        	  </c:forEach>
-                               </tbody>
+                               <c:choose>
+							                		<c:when test="${ not empty list }">
+							                			<tr>
+							                				<td colspan="6">조회된 게시글이 없습니다.</td>
+							                			</tr>
+							                		</c:when>
+							                    <c:otherwise>
+				                              <c:forEach var="n" items="${ noticeList }">
+				                    	           	<tr onclick='location.href = "${contextPath}/board/notice/${ loginUser.userId eq p.userName ? "detail?":"increase"}?no=${n.noticeNo}";'>
+																			   
+																			    <td>
+																			        <div class="custom-control custom-checkbox">
+																			            <input type="checkbox" class="custom-control-input" id="invoicecheck${n.noticeNo}">
+																			            <label class="custom-control-label" for="invoicecheck${n.noticeNo}"></label>
+																			        </div>
+																			    
+																			    <td>${ n.noticeNo }</td>
+																			    <td>${ n.noticeTitle }</td>
+																			    <td>${ n.userName }</td>
+																			    <td>${ n.registDate }</td>
+																			    <td>${ n.fileStatus == Y ? '★' : 'X'  }</td>
+																			    <td>${ n.count }</td>
+																			</tr>
+													        	  </c:forEach>
+												        	 </c:otherwise> 
+											        	 </c:choose>
+                              </tbody>
                            </table>
                        </div>
                    </div>
-                
+                </div><!-- 추가 -->
                <!-- end row -->
              </div> <!-- container-fluid -->
          </div>
          <!-- End Page-content -->
-
-           
            <footer class="footer">
                <div class="container-fluid">
                    <div class="row">
@@ -119,9 +117,7 @@
                </div>
            </footer>
        </div>
-       
-         <!-- end main content-->
-
+       <!-- end main content-->
      </div>
      <!-- END layout-wrapper -->
 
@@ -164,13 +160,13 @@
                      <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
                  </div>
 
-         
              </div>
 
          </div> <!-- end slimscroll-menu-->
      </div>
      <!-- /Right-bar -->
 
+            
      <!-- Right bar overlay-->
      <div class="rightbar-overlay"></div>
 
