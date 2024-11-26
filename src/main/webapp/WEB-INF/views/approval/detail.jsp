@@ -316,7 +316,12 @@
             // summernote 활성화
             $('#summernote').summernote('enable');
             
-
+				    // 문서 종류에 따른 추가 처리
+				    const apprType = document.querySelector('input[name="apprType"]').value;
+				    if(apprType === '품의서') {
+				        enablePurchaseEdit(); // 품의서인 경우 추가 활성화
+				    }	
+				    
             // 버튼 영역 변경
             document.querySelector('.button-area').innerHTML = `
                 <button type="button" class="action-button primary" onclick="ApprovalModal.show()">결재선 수정</button>            
@@ -336,8 +341,27 @@
 				                approver.deptName
 				            );
 				        });
-				    }            
+				    }			    
         }
+
+     // 품의서 물품 정보 수집 함수 추가
+        function collectPurchaseItems() {
+            const items = [];
+            const rows = document.querySelectorAll('#purchaseTable tbody tr');
+            
+            rows.forEach((row, index) => {
+                items.push({
+                    productNo: row.querySelector('input[name$=".productNo"]').value,
+                    productName: row.querySelector('input[name$=".productName"]').value,
+                    productUnit: row.querySelector('input[name$=".productUnit"]').value,
+                    productAmt: row.querySelector('input[name$=".productAmt"]').value,
+                    productPrice: row.querySelector('input[name$=".productPrice"]').value,
+                    updateYn: row.querySelector('input[name$=".updateYn"]')?.value || 'true'
+                });
+            });
+            
+            return items;
+        }        
         
         //수정사항 저장
 				function saveDoc() {
@@ -376,11 +400,11 @@
 				        else if(requestData.apprType === '품의서') {
 				            const purchaseItems = collectPurchaseItems(); // 품의서 물품 정보 수집 함수
 				            requestData.purchDraft = {
-				                purchDept: formData.find(item => item.name === 'purchDept')?.value,
-				                purchEmpName: formData.find(item => item.name === 'purchEmpName')?.value,
-				                purchPurpose: formData.find(item => item.name === 'purchPurpose')?.value,
-				                purchDeadline: formData.find(item => item.name === 'purchDeadline')?.value,
-				                purchTotal: formData.find(item => item.name === 'purchTotal')?.value,
+				                purchDept: formData.find(item => item.name === 'purchDraft.purchDept')?.value,
+				                purchEmpName: formData.find(item => item.name === 'purchDraft.purchEmpName')?.value,
+				                purchPurpose: formData.find(item => item.name === 'purchDraft.purchPurpose')?.value,
+				                purchDeadline: formData.find(item => item.name === 'purchDraft.purchDeadline')?.value,
+				                purchTotal: formData.find(item => item.name === 'purchDraft.purchTotal')?.value,
 				                purchaseItems: purchaseItems
 				            };
 				        }

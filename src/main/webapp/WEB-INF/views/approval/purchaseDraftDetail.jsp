@@ -2,7 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div class="purchase-form">
+<form id="docForm">
+	<!-- 기본 정보 hidden input -->
+	<input type="hidden" name="apprNo" value="${approval.apprNo}"/>
+	<input type="hidden" name="apprType" value="품의서"/>
+	<input type="hidden" name="apprStatus" value="${approval.apprStatus}"/>
+	<input type="hidden" id="approvalLine" name="approvalLine"/>
+	<%-- <input type="hidden" id="originalApprovalLine" name="originalApprovalLine" value='${approval.approvers}'/> --%>
+	
+	<div class="purchase-form">
     <div class="title">구매품의서</div>        
     <div class="form-header">
         <div class="form-info">
@@ -80,18 +88,22 @@
 
     <!-- 구매 정보 -->
     <table id="purchInfo">
-        <tr>
-            <th>담당부서</th>
-            <td>${approval.purchDraft.purchDept}</td>
-            <th>납품자</th>
-            <td>${approval.purchDraft.purchEmpName}</td>
-        </tr>
-        <tr>
-            <th>사용목적</th>
-            <td>${approval.purchDraft.purchPurpose}</td>
-            <th>희망납기일</th>
-            <td><fmt:formatDate value="${approval.purchDraft.purchDeadline}" pattern="yyyy-MM-dd"/></td>
-        </tr>
+    	 <tr>
+    	 		<th>제목</th>
+    	 		<td colspan="3"><input style="width:95%; "type="text" name="apprTitle" value="${ approval.apprTitle }" readonly></td>
+    	 </tr>
+	     <tr>
+	         <th>담당부서</th>
+	         <td><input type="text" name="purchDraft.purchDept" value="${approval.purchDraft.purchDept}" readonly/></td>
+	         <th>납품자</th>
+	         <td><input type="text" name="purchDraft.purchEmpName" value="${approval.purchDraft.purchEmpName}" readonly/></td>
+	     </tr>
+	     <tr>
+	         <th>사용목적</th>
+	         <td><input type="text" name="purchDraft.purchPurpose" value="${approval.purchDraft.purchPurpose}" readonly/></td>
+	         <th>희망납기일</th>
+	         <td><input type="date" name="purchDraft.purchDeadline" value="<fmt:formatDate value='${approval.purchDraft.purchDeadline}' pattern='yyyy-MM-dd'/>" readonly/></td>
+	     </tr>
     </table>
 
     <!-- 구매 물품 목록 -->
@@ -106,33 +118,38 @@
                 <th>금액</th>
             </tr>
         </thead>
-        <tbody>
-            <c:forEach items="${approval.purchDraft.purchaseItems}" var="item">
-                <tr>
-                    <td>${item.productNo}</td>
-                    <td>${item.productName}</td>
-                    <td>${item.productUnit}</td>
-                    <td>${item.productAmt}</td>
-                    <td>${item.productPrice}</td>
-                    <td>${item.productAmt * item.productPrice}</td>
-                </tr>
-            </c:forEach>
-        </tbody>
+            <tbody>
+                <c:forEach items="${approval.purchDraft.purchaseItems}" var="item" varStatus="status">
+                    <tr>
+                        <td>
+                            <input type="hidden" name="purchaseItems[${status.index}].updateYn" value="false"/>
+                            <input type="text" name="purchaseItems[${status.index}].productNo" value="${item.productNo}" readonly/>
+                        </td>
+                        <td><input type="text" name="purchaseItems[${status.index}].productName" value="${item.productName}" readonly/></td>
+                        <td><input type="text" name="purchaseItems[${status.index}].productUnit" value="${item.productUnit}" readonly/></td>
+                        <td><input type="number" name="purchaseItems[${status.index}].productAmt" value="${item.productAmt}" readonly class="calc-amt"/></td>
+                        <td><input type="number" name="purchaseItems[${status.index}].productPrice" value="${item.productPrice}" readonly class="calc-price"/></td>
+                        <td class="item-total">${item.productAmt * item.productPrice}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
         <tfoot>
-            <tr class="total-row">
-                <td colspan="5">합계</td>
-                <td>${approval.purchDraft.purchTotal}</td>
-            </tr>
+	        <tr class="total-row">
+	            <td colspan="5">합계</td>
+	            <td id="totalAmount">${approval.purchDraft.purchTotal}</td>
+	        </tr>
         </tfoot>
     </table>
-
+		<input type="hidden" name="purchDraft.purchTotal" value="${approval.purchDraft.purchTotal}"/>
+    
     <!-- 상세 내용 -->
     <div class="editor-section mt-3">
         <div class="content-area">
-            ${approval.apprContent}
+            <textarea id="summernote" name="apprContent" readonly>${approval.apprContent}</textarea>
         </div>
     </div>
-    
+    </div>
+</form>    
     <!-- 버튼 영역 -->
     <div class="button-area" style="margin-top: 20px; text-align: center;">
         <c:choose>
@@ -148,135 +165,74 @@
         </c:choose>
         <button type="button" class="btn btn-secondary" onclick="history.back()">목록</button>
     </div>
-</div>
+
     <!-- Summernote JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
-		
-<!-- <style>
-    .purchase-form {
-        width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .form-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    
-    .approval-line {
-        display: flex;
-        gap: 10px;
-    }
-    
-    #apprUserLineTable {
-        width: 126px;
-        margin-left: 150px;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-    
-    .approvalLineTable {
-        width: 126px;
-        table-layout: fixed;
-        border-collapse: collapse;
-    }
-    
-    .stamp {
-        width: 50px;
-        height: 50px;
-        margin: 5px auto;
-        border: 2px solid #000;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-    }
-    
-    .stamp.approved {
-        border-color: #ff0000;
-        color: #ff0000;
-    }
-    
-    .stamp.rejected {
-        border-color: #ff0000;
-        color: #ff0000;
-    }
-    
-    .stamp.pending {
-        border-color: #ccc;
-        color: #ccc;
-    }
-    
-    .content-area {
-        min-height: 300px;
-        text-align: left;
-    }
-    
-    .total-row {
-        background-color: #f9f9f9;
-        font-weight: bold;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-</style> -->
-
 <script>
-/* function approveDocument() {
-    if(confirm('해당 문서를 승인하시겠습니까?DraftDetail.jsp')) {
-        $.ajax({
-            url: '${contextPath}/approval/approve',
-            type: 'POST',
-            data: {
-                apprNo: '${approval.apprNo}',
-                apprStatus: '${approval.apprStatus}'
-            },
-            success: function(response) {
-                if(response.success) {
-                    alert('결재가 완료되었습니다.');
-                    location.href = '${contextPath}/approval/todo';
-                } else {
-                    alert('결재 처리 중 오류가 발생했습니다.');
-                }
-            }
-        });
+    // 물품 행 추가 버튼 (수정 모드일 때만 보임)
+    function addItemRow() {
+        const tbody = document.querySelector('#purchaseTable tbody');
+        const newIndex = tbody.children.length;
+        const tr = document.createElement('tr');
+        
+        tr.innerHTML = `
+            <td><input type="text" name="purchaseItems[${newIndex}].productNo" required/></td>
+            <td><input type="text" name="purchaseItems[${newIndex}].productName" required/></td>
+            <td><input type="text" name="purchaseItems[${newIndex}].productUnit" required/></td>
+            <td><input type="number" name="purchaseItems[${newIndex}].productAmt" required class="calc-amt"/></td>
+            <td><input type="number" name="purchaseItems[${newIndex}].productPrice" required class="calc-price"/></td>
+            <td class="item-total">0</td>
+        `;
+        
+        tbody.appendChild(tr);
     }
-}
+document.addEventListener('DOMContentLoaded', function() {
 
-function rejectDocument() {
-    const lineReason = prompt('반려 사유를 입력해주세요.');
-    if(reason) {
-        $.ajax({
-            url: '${contextPath}/approval/reject',
-            type: 'POST',
-            data: {
-                apprNo: '${approval.apprNo}',
-                userNo: '${loginUser.userNo}',
-                lineReason: lineReason
-            },
-            success: function(response) {
-                if(response.success) {
-                    alert('반려가 완료되었습니다.');
-                    location.href = '${contextPath}/approval/todo';
-                } else {
-                    alert('반려 처리 중 오류가 발생했습니다.');
-                }
-            }
+    // 금액 자동 계산
+    function calculateTotal() {
+        let total = 0;
+        
+        document.querySelectorAll('#purchaseTable tbody tr').forEach(tr => {
+            const amt = parseFloat(tr.querySelector('.calc-amt').value) || 0;
+            const price = parseFloat(tr.querySelector('.calc-price').value) || 0;
+            const itemTotal = amt * price;
+            
+            tr.querySelector('.item-total').textContent = itemTotal;
+            total += itemTotal;
         });
+
+        document.getElementById('totalAmount').textContent = total;
+        document.querySelector('input[name="purchDraft.purchTotal"]').value = total;
     }
-} */
-</script>
+
+    // 이벤트 리스너
+    document.getElementById('purchaseTable').addEventListener('input', function(e) {
+        if (e.target.matches('.calc-amt, .calc-price')) {
+            calculateTotal();
+        }
+    });
+});
+
+// 품의서 수정 모드 활성화 (detail.jsp의 enableEdit()에서 호출)
+function enablePurchaseEdit() {
+    // readonly 해제
+    document.querySelectorAll('#docForm input[readonly], #docForm textarea[readonly]')
+        .forEach(el => el.removeAttribute('readonly'));
+        
+    // 물품 추가 버튼 표시
+    const table = document.getElementById('purchaseTable');
+    const addButton = document.createElement('button');
+    addButton.type = 'button';
+    addButton.className = 'action-button primary';
+    addButton.textContent = '물품 추가';
+    addButton.onclick = addItemRow;  // 전역 함수 참조
+    table.parentNode.insertBefore(addButton, table);
+
+    // updateYn 값 설정
+    document.querySelectorAll('input[name$=".updateYn"]')
+        .forEach(input => input.value = "true");
+}
+</script>		
