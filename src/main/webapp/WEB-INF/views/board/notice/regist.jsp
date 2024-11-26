@@ -56,7 +56,7 @@
           <h2 class="m-4">게시글 등록</h2>
           <br>
 
-          <form id="enroll-form" method="post" action="${ contextPath }/board/notice/insert" enctype="multipart/form-data">
+          <form id="enroll-form" method="post" action="${ contextPath }/board/notice/regist" enctype="multipart/form-data">
               <div class="form-group">
                   <label for="title">제목 </label>
                   <input type="text" class="form-control" id="title" name="Title" required><br>
@@ -74,10 +74,10 @@
               <br>
               <div align="center">
 							    <!-- "등록하기" 버튼 클릭 시 regist.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-primary" onclick="location.href='${contextPath}/board/notice/regist'">등록하기</button>
+							    <button type="button" class="btn btn-primary" onclick="location.href='${contextPath}/board/post/regist.jsp'">등록하기</button>
 							    
 							    <!-- "수정하기" 버튼 클릭 시 update.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-warning" onclick="location.href='${contextPath}/board/notice/update'">수정하기</button>
+							    <button type="button" class="btn btn-warning" onclick="location.href='${contextPath}/board/post/update.jsp'">수정하기</button>
 							</div>
 
 
@@ -88,7 +88,6 @@
       <!-- Section end -->
   
   </div>
-  
   
   
   <script src="${ contextPath }/resources/js/fileValidate.js"></script>
