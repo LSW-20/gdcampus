@@ -426,6 +426,18 @@
               },
 
               dateClick: function(info) { // 일자 셀 클릭 함수
+
+                  // 오늘 이전 날짜는 선택 안되게끔.
+                  const clickedDate = new Date(info.dateStr); // 클릭한 날짜
+                  const today = new Date(); // 오늘 날짜
+                  today.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 설정
+
+                  if (clickedDate < today) {
+                      alert('오늘 이전 날짜는 선택할 수 없습니다.');
+                      return;
+                  }
+
+
                   // alert(info.dateStr); // 클릭한 날짜 (문자열 형식, 예: '2024-11-01')
 
                   const topChild2 = document.getElementById('top-child2'); // top-child2 요소
