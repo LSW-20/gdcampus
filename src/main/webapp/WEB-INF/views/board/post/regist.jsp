@@ -2,137 +2,172 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta charset="utf-8" />
+        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- bootstrap-datepicker css -->
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+
+        <!-- Bootstrap Css -->
+        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 </head>
-<body data-topbar="dark" data-sidebar="dark">
-	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
-	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
-
-
-
-	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+<body data-sidebar="dark">
 	<div id="layout-wrapper">
-
-
 		<!-- header 시작 -->
 		<jsp:include page="/WEB-INF/views/common/header.jsp" />
-		<!-- header 끝 -->
+    <!-- header 끝 -->
 
 
 		<!-- sidebar 시작 -->
-		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-		<!-- sidebar 끝 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
+<style>
+  /* 기본 스타일링 */
+  .row { display: flex; flex-direction: row; }
+  .column { display: flex; flex-direction: column; }
+  .center { display: flex; align-items: center; justify-content: center; text-align: center; }
 
+  /* 색상 설정 */
+  .bgc-fff { background-color: #fff; }
+  .bgc-F8FCFF { background-color: #F8FCFF; }
 
+  /* 게시판 헤더 */
+  .head-nav { height: 56px; display: flex; align-items: center; padding-left: 30px; }
+  .head-nav ul li { margin: 0px 5px; }
+  
+  .title-container {
+    padding: 20px 0;
+    font-size: 24px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
 
-		<!-- main-content 시작 -->
-		<div class="main-content">
-			<div class="page-content">
-				<div class="row justify-content-md-center">
-					<div class="mt-5">
-						<h3>게시글 추가</h3>
-					</div>
+ /* 공지사항 제목 */
+#boardTitle {width: 70%;padding: 10px;margin-bottom: 20px;border-radius:0px; border-style:none; border-bottom: 1px solid #eee;font-size: 32px;}
+  /* 버튼스타일 */
+  button{cursor: pointer; }
+  .btnContainer{display: flex;justify-content: space-evenly;}
+  .btnSimple{border: solid 1px #e0e0e0;background-color:#fff; }
+  
+  /* 첨부파일 스타일 */
+  .file-upload { border: 1px solid #e0e0e0; padding: 10px; margin-bottom: 20px; border-radius: 4px; display: flex; align-items: center;}
+  .file-upload input[type="file"] { display: none; }
+  .file-upload label { cursor: pointer; background-color: #e0e0e0; padding: 8px 20px; border-radius: 4px;  font-size: 12px;}
+  /* 첨부된 파일 목록 스타일 */
+  .file-item {display: inline-block;background-color: #f2f2f2;padding: 5px;margin: 5px;border-radius: 4px;font-size: 8px;}
+  /* 파일 제거 버튼 스타일 */
+  .remove-file {margin-left: 5px;color: red;cursor: pointer;}
+  
+</style>
+<section class="max1920px">
+	<jsp:include page="/WEB-INF/views/common/side-nav.jsp" />
+	<div class="main-section bgc-F8FCFF">		
+        <div class="section-shadow bgc-fff head-nav">
+            <ul class="row">
+                <li>게시판</li>
+                <li>|</li>
+                <li>${loginMember.dept.deptName } 게시판</li>
+            </ul>
+        </div>
+		<form action="" method="post" enctype="multipart/form-data">
+			<div class="section-shadow bgc-fff" style="padding: 20px">
+			    <input type="text" value="" id="boardTitle" placeholder="제목" required/>
+				<div>
+					<jsp:include page="/WEB-INF/views/smarteditor/newPost.jsp" />
 				</div>
-				<div class="col-lg-12">
-					<hr>
-					<div class="mt-5">
-						<form action="${contextPath}board/post/insert" method="post"
-							class="was-validated">
-
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="userName"></label> 
-										<input type="text" class="form-control" id="postName" name="postName" required>
-										<div class="invalid-feedback">
-											<p>게시글 제목을 작성해주세요</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="text">제목</label> 
-										<input type="email" class="form-control" id="email" name="email" required>
-										<div class="invalid-feedback">
-											<p>댓글을 작성해주세요</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>부서</label>
-										<div class="select">
-											<select class="custom-select" name="deptNo" id="deptNo">
-												<c:forEach var="category" items="${deptList}">
-													<option value="${category.deptNo}">
-														${category.deptName}</option>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>직급</label>
-										<div class="select">
-											<select class="custom-select" name="rankNo" id="rankNo">
-												<c:forEach var="category" items="${rankList}">
-													<option value="${category.rankNo}">
-														${category.rankName}</option>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>성별</label>
-										<div class="d-flex">
-											<div class="custom-control custom-radio mr-3">
-												<input type="radio" id="M" name="gender" value="M"
-													class="custom-control-input" checked> <label
-													class="custom-control-label" for="M">남</label>
-											</div>
-											<div class="custom-control custom-radio">
-												<input type="radio" id="F" name="gender" value="F"
-													class="custom-control-input"> <label
-													class="custom-control-label" for="F">여</label>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<hr>
-							<div class="mt-4 row d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary w-md mr-3">추가</button>
-								<a class="btn btn-primary w-md mr-3" href="${contextPath }/board/post/list">취소</a>
-							</div>
-						</form>
-					</div>
+				<div class="file-upload">
+				    <label for="file">첨부파일 선택</label>
+				    <input type="file" id="file" name="file" multiple>
+				    <span class="file-list" id="file-name"><p class="file-item">선택된 첨부파일이 표시됩니다.</p></span>
 				</div>
-
+			    <div style="text-align: right;">
+				    <button type="button" onclick="insertContent();">등록</button>
+				    <button type="button" onclick="cancle();" class="btnSimple">취소</button>
+			    </div>
 			</div>
-		</div>
-		<!-- main-content 끝 -->
-
-  <script src="${ contextPath }/resources/js/fileValidate.js"></script>
-
+		</form>
 	</div>
-	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-  
-  
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+var selectedFiles = [];
+$(document).ready(function() {
+    // 파일명 표시 및 제거 버튼 추가
+    $(".file-upload input[type='file']").change(function() {
+        var fileList = $(".file-list");
+        fileList.empty();  // 기존 목록 초기화
+
+        Array.from(this.files).forEach(function(file) {
+            var fileName = file.name;
+            var fileItem = $('<span class="file-item">' + fileName + ' <span class="remove-file">x</span></span>');          
+            fileItem.find(".remove-file").click(function() {
+                var index = selectedFiles.indexOf(file);  // 해당 파일의 인덱스 찾기
+                if (index > -1) {
+                    selectedFiles.splice(index, 1);  // 배열에서 해당 파일 제거
+                }
+                $(this).parent().remove();
+            });
+            fileList.append(fileItem);
+         	//selectedFiles 배열에 선택한 파일 추가
+            selectedFiles.push(file);
+        });
+    });
+
+});
+
+function insertContent() {
+    oEditors.getById["editorTxt"].exec("UPDATE_CONTENTS_FIELD", []);
+    
+    var formData = new FormData();
+    formData.append("content", $("#editorTxt").val());
+    formData.append("title", $("#boardTitle").val());
+
+    $.each(selectedFiles, function(i, file) {
+        formData.append("file", file);
+    });
+
+    $.ajax({
+        url: "${path}/board/insertBoardEnd",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            if(response.status === "success") {
+                alert("게시글이 성공적으로 등록되었습니다.");
+                location.href = "${path}/board/boardList";
+            } else {
+                alert("게시글 등록에 실패하였습니다.");
+            }
+        }
+    });
+}
+	function cancle(){
+		if(confirm('게시글 작성을 취소하시겠습니까?')){
+			location.href = "${path}/post/postList";
+		}
+	}
+
+</script>
+
 </body>
 </html>
