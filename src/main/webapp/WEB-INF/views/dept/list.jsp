@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
@@ -51,38 +51,38 @@
 			<div class="page-content">
 
 
-				    <h1>부서 목록</h1>
-				    <table border="1">
-				        <thead>
-				            <tr>
-				                <th>부서 번호</th>
-				                <th>부서 이름</th>
-				                <th>생성일</th>
-				                <th>생성자</th>
-				                <th>수정일</th>
-				                <th>수정자</th>
-				                <th></th>
-				            </tr>
-				        </thead>
-				        <tbody>
-				            <c:forEach var="d" items="${deptList}">
-				                <tr>
-				                    <td>${d.deptNo}</td>
-				                    <td>${d.deptName}</td>
-				                    <td>${d.createDate}</td>
-				                    <td>${d.createUser}</td>
-				                    <td>${d.modifyDate }</td>
-				                    <td>${d.modifyUser}</td>
-				                    <td>
-				                    	<form action="${contextPath}/dept/delete" method="post">
-				                    		<input type="hidden" name="deptNo" value="${d.deptNo}">
-				                    		<button type="submit">삭제</button>
-				                    	</form>
-				                    </td>
-				                </tr>
-				            </c:forEach>
-				         </tbody>
-				     </table>
+	    <h1>부서 목록</h1>
+	    <table border="1">
+	        <thead>
+	            <tr>
+	                <th>부서 번호</th>
+	                <th>부서 이름</th>
+	                <th>생성일</th>
+	                <th>생성자</th>
+	                <th>수정일</th>
+	                <th>수정자</th>
+	                <th></th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <c:forEach var="d" items="${deptList}">
+	                <tr>
+	                    <td>${d.deptNo}</td>
+	                    <td>${d.deptName}</td>
+	                    <td>${d.createDate}</td>
+	                    <td>${d.createUser}</td>
+	                    <td>${d.modifyDate }</td>
+	                    <td>${d.modifyUser}</td>
+	                    <td>
+	                    	<form action="${contextPath}/dept/delete" method="post">
+	                    		<input type="hidden" name="deptNo" value="${d.deptNo}">
+	                    		<button type="submit">삭제</button>
+	                    	</form>
+	                    </td>
+	                </tr>
+	            </c:forEach>
+	         </tbody>
+	     </table>
 				     
 				     <br><br><br>
 				     

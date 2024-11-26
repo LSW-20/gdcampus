@@ -74,7 +74,7 @@
 												<span class="menu-item">게시판</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">공지게시판</a></li>
+												<li><a href="${contextPath}/board/notice/list">공지게시판</a></li>
 												<li><a href="${contextPath}/board/post/list">자유게시판</a></li>
 												<li><a href="#">투표게시판</a></li>
 										</ul>
