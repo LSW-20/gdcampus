@@ -114,7 +114,7 @@
                     <div class="form-container">
                         <div class="approval-header">
                             <div class="btn-form">
-                                <div class="draft-title">업무 기안</div> <br>
+                                <div class="draft-title">결재 작성</div> <br>
                                 <button type="button" class="btn btn-primary" onclick="ApprovalModal.show()">결재선</button> &nbsp;
         												<button type="button" class="btn btn-success" onclick="ApprovalModal.submitForm()">결재요청</button>
                                 <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
@@ -125,16 +125,22 @@
                         <input type="hidden" id="approvalLine" name="approvalLine">
                         
                         <!-- 문서 양식 -->
-                        <div class="approval-content">
-                            <c:choose>
-                                <c:when test="${param.formType eq 'purchase'}">
-                                    <jsp:include page="/WEB-INF/views/approval/simpleDraft.jsp"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <jsp:include page="/WEB-INF/views/approval/purchaseDraft.jsp"/>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
+											<div class="approval-content">
+											    <c:choose>
+											        <c:when test="${param.formType eq 'purchaseDraft'}">
+											            <jsp:include page="purchaseDraft.jsp"/>
+											        </c:when>
+											        <c:when test="${param.formType eq 'simpleDraft'}">
+											            <jsp:include page="simpleDraft.jsp"/>
+											        </c:when>
+											        <c:otherwise>
+											            <!-- 관리자 정의 양식인 경우 -->
+											            <jsp:include page="adminDefineDraft.jsp">
+											                <jsp:param name="formType" value="${param.formType}"/>
+											            </jsp:include>
+											        </c:otherwise>
+											    </c:choose>
+											</div>
                     </div>
                 </div>
             </div>

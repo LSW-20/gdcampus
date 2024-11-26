@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <title>결재예정문서함</title>
+    <title>전자결재 양식 관리</title>
     <style>
         .main-content {
             margin-left: 250px;
@@ -51,49 +51,23 @@
             font-size: 16px;
         }
         
-        .attach-icon {
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-        }
-        
-        .paging_area {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .paging_area a {
-            color: black;
-            padding: 8px 16px;
-            text-decoration: none;
-            border: 1px solid #ddd;
-            margin: 0 4px;
-        }
-        
-        .paging_area a.active {
-            background-color: #4B49AC;
-            color: white;
-            border: 1px solid #4B49AC;
-        }
-        
-        .paging_area a:hover:not(.active) {
-            background-color: #ddd;
-        }
-        
-        .appr-title {
+        .form-title {
             text-align: left;
             color: #333;
             text-decoration: none;
         }
         
-        .appr-title:hover {
+        .form-title:hover {
             text-decoration: underline;
             color: #4B49AC;
         }
         
-        #paging_area {
-            margin-top: 50px;
+        .btn-area {
+            margin-bottom: 20px;
+        }
+        
+        .action-btns .btn {
+            margin: 0 2px;
         }
     </style>
 </head>
@@ -112,60 +86,52 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
-                    <h2 class="page-title">결재 예정 문서</h2>
-                    <a class="btn btn-secondary" style="float:right" href="${contextPath}/approval/regist">결재작성</a>
+                    <h2 class="page-title">전자결재 양식 관리</h2>
+                    <div class="btn-area">
+                        <a class="btn btn-primary" style="float:right" href="${contextPath}/approval/admin/registForm">양식 등록</a>
+                    </div>
                     <br>
                     
                     <c:choose>
-                        <c:when test="${empty apprList}">
+                        <c:when test="${empty formList}">
                             <div class="no-data">
-                                결재 예정 문서가 없습니다.
+                                등록된 양식이 없습니다.
                             </div>
                         </c:when>
                         <c:otherwise>
                             <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                 <thead>
                                     <tr class="bg-transparent">
-                                        <th>기안일</th>
-                                        <th>결재양식</th>
-                                        <th>제목</th>
-                                        <th>기안자</th>
+                                        <th style="width: 15%;">양식번호</th>
+                                        <th style="width: 30%;">양식종류</th>
+                                        <th style="width: 20%;">생성일</th>
+                                        <th style="width: 10%;">생성자</th>
+                                        <th style="width: 15%;">관리</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach items="${apprList}" var="appr">
+                                    <c:forEach items="${formList}" var="form">
                                         <tr>
+                                            <td>${form.apprNo}</td>
+                                            <td>${form.apprType}</td>
                                             <td>
-                                                <fmt:formatDate value="${appr.apprDate}" pattern="yyyy-MM-dd"/>
+                                                <fmt:formatDate value="${form.createDate}" pattern="yyyy-MM-dd HH:mm"/>
                                             </td>
-                                            <td>${appr.apprType}</td>
-                                            <td>
-                                                <a href="${contextPath}/approval/detail/${appr.apprNo}?type=upcoming" class="appr-title">
-                                                    ${appr.apprTitle}
+                                            <td>${form.createUser}</td>
+                                            <td class="action-btns">
+                                                <a class="px-3 text-primary edit-btn"
+                                                        href="${contextPath}/approval/admin/detailForm/${form.apprNo}">
+                                                    <i class="uil uil-pen font-size-18"></i>
+                                                </a>
+                                                <a class="px-3 text-danger edit-btn" 
+                                                        onclick="deleteForm('${form.apprNo}')">
+                                                    <i class="uil uil-trash font-size-18"></i>
                                                 </a>
                                             </td>
-                                            <td>${appr.apprUser}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-                            
-                             <!-- 페이징 처리 -->
-                            <ul id="paging_area" class="pagination d-flex justify-content-center">
-                                <li class="page-item ${pi.currentPage == 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="${contextPath}/approval/upComing?page=${pi.currentPage-1}">Prev</a>
-                                </li>
-                                
-                                <c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-                                    <li class="page-item ${pi.currentPage == p ? 'active' : ''}">
-                                        <a class="page-link" href="${contextPath}/approval/upComing?page=${p}">${p}</a>
-                                    </li>
-                                </c:forEach>
-                                
-                                <li class="page-item ${pi.currentPage == pi.maxPage || pi.endPage == 0 ? 'disabled' : ''}">
-                                    <a class="page-link" href="${contextPath}/approval/upComing?page=${pi.currentPage+1}">Next</a>
-                                </li>
-                            </ul> 
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -174,7 +140,7 @@
         <!-- main-content 끝 -->
     </div>
     <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-<%--         <!-- Required datatable js -->
+         <!-- Required datatable js -->
         <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
         
@@ -183,7 +149,14 @@
         <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
         <!-- init js -->
-        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script> --%>
+        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>    
+    <script>
+    function deleteForm(apprNo) {
+        if(confirm('해당 양식을 삭제하시겠습니까?')) {
+            location.href = '${contextPath}/approval/admin/deleteForm?apprNo=' + apprNo;
+        }
+    }
+    </script>
     
 </body>
 </html>

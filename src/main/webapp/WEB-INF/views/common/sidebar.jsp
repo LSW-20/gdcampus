@@ -125,7 +125,7 @@
 												<span class="menu-item">강의 조회</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">강의 목록 조회</a></li>
+												<li><a href="${contextPath}/class/list.do">강의 목록 조회</a></li>
 												<li><a href="#">수업계획서 관리</a></li>
 												<li><a href="#"></a></li>
 										</ul>
@@ -313,11 +313,7 @@
 								</li>
 
 								<li>
-<<<<<<< HEAD
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-=======
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
->>>>>>> main
 												<i class="icon nav-icon" data-feather="tool"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
@@ -325,16 +321,12 @@
 												<li><a href="#">비품, 시설 조회, 추가, 수정, 삭제</a></li>
 										</ul>
 								</li>
-
+								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath }/approval/admin/formList" class="waves-effect">
 												<i class="icon nav-icon" data-feather="file"></i>
 												<span class="menu-item">결재 문서 양식 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">템플릿 양식 조회</a></li>
-												<li><a href="#">템플릿 양식 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 								<!-- 관리자 메뉴 끝 -->		
 								</c:if>

@@ -94,9 +94,10 @@
 	                                
 	                                <label for="example-text-input2" class="col-md-2 col-form-label">대상학과</label>
 	                                <div class="col-md-3">
+	                                	<c:set var = "originDept" value = "${fn:substring(c.classCode, 5, 7)}" />                
 	                                   	<select class="custom-select" name="deptName" id="deptName">
 											<c:forEach var="category" items="${deptList}">
-	               								<option value="${category.stDeptNo}">
+	               								<option value="${category.stDeptNo}" ${category.stDeptNo == originDept ? 'selected' : ''}>
 	                   								${category.deptName}
 	               								</option>
 	           								</c:forEach>
@@ -195,9 +196,16 @@
 						<h5>평가상세</h5>
 						<hr>
 						<div style="min-height:100px" id="detailBox">
-	
-						
-	
+							<c:forEach var="eva" items="${c.evaList}" varStatus="status">
+								<div class="form-group mt-4 mb-4">
+					                <label>${eva.evaItem }</label>
+					                <input type="hidden" name="evaList[${status.index }].evaItem"  value="${eva.evaItem }" class="items">
+					                <input type="hidden" name="evaList[${status.index }].allocation"  value="${eva.allocation }" class="allos">
+					             	<div>
+					             		<textarea required class="form-control" rows="5" style="height: 80px;" name="evaList[${status.index }].evaDetail">${eva.evaDetail}</textarea>
+					       			</div>
+				         		</div>
+							</c:forEach>
 						</div>
 						<h5>교재</h5>
 						<hr>
@@ -221,7 +229,6 @@
 							<button class="btn btn-primary w-md mr-3 col-2" id="registBtn">저장</button>
 						</div>
 						<input type="hidden" value="${c.classCode }" name="classCode">
-						<input type="hidden" value="${c.evaList }" name="evaList">
 					</form>
 				</div>
 			</div>
@@ -230,20 +237,49 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
 		var sum;
-		var allOk = false;
+		var allOk = true;
 		var detail = '';
-		
-		$(document).ready(function() {
+
+		$(document).ready(function(){
 			
-			// 페이지가 로드되자마자 classCode 쪼개서 대상학과 selected되게 해주고
-			// evaList 안에 EvaMethodDto를 활용해야함 (evaItem, allocation, evaDetail)
-			// 일단 evaList를 빼서 전역변수로 선언 그리고 요소를 만들어줄때는 updateEvaList안에 담기게 만들어줌
-			// 데이터를 보여주는건 했다고 치고
+			sum = 20;
 			
-			// 저장하기 버튼 누르면 ajax요청으로 기존의 evaList는 이름 hidden에 담겨서 가고 updateEvaList 이름으로 수정된 애들이 넘어감
-			// 컨트롤러에서 deleteEvaList 선언해두고 2중 for문 돌림
-			//
+		 	var allos = [];
+		 	var items = [];
+		  	$('.allos').each(function(index,item){
+		  		allos.push($(this).val());
+		  	});
+		  	$('.items').each(function(index,item){
+		  		items.push($(this).val());
+		  	});
+		 	
+		 	var no = 0;
+		 	items.forEach(function(item) {
+
+		 	    var allo = Number(allos[no]);
+		 	    var item = items[no++];
+		 	    
+		 	    if(item == '중간고사'){
+		 	    	$('#middle').val(allo);
+		 	    };
+		 	   	if(item == '기말고사'){
+		 	    	$('#final').val(allo);
+		 	    };
+		 	  	if(item == '실습/과제'){
+		 	    	$('#work').val(allo);
+		 	    };
+		 	 	if(item == '기타'){
+		 	    	$('#etc').val(allo);
+		 	    };
+		 	    
+		 	    sum += allo;
+		 	 
+		 	});
+		 	
+		 	$('#sum').html(sum);
+			
 		});
+		
 		
 		$('#registBtn').on('click', function(){
 			if(allOk == false){
@@ -253,7 +289,7 @@
 			if(confirm('보완요청을 완료하시겠습니까?')){
 				return true;
 			}
-		})
+		});
 		
 	    $('.allocation').on('blur', function() {
 	    	$('#detailBox').html('');
@@ -264,8 +300,6 @@
 	    	$(".allocation").each(function(){
 	    		sum += Number($(this).val());
 	    		
-
-		    	console.log($(this).attr('id'));
 		    	
 		    	if($(this).val() != null && $(this).val() != ''){
 		    		

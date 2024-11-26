@@ -15,7 +15,7 @@ public class FileUtil {
 	
 	public Map<String,String> fileupload(MultipartFile uploadFile, String folderName) {
 		
-        // 1) 업로드할 폴더 (/upload/yyyyMMdd)
+        // 1) 업로드할 폴더 (/upload/folderName/yyyyMMdd)
 		
         // 서비스별로 첨부파일이 저장될 폴더를 구분해서 저장하는 것이 좋다. folderName 변수로 구분한다. board, notice 등..
 		String filePath = "/upload/" + folderName + new SimpleDateFormat("/yyyyMMdd").format(new Date());

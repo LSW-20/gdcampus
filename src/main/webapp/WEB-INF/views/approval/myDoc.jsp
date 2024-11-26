@@ -123,7 +123,7 @@
             background-color: #ddd;
         }
         #paging_area {
-        	margin-top: 500px;
+        	margin-top: 50px;
         }        
     </style>
 </head>
@@ -141,6 +141,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">기안 문서함</h2>
+							      <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist">결재작성</a>
                     
                     <div class="tab-menu">
                         <button class="${ empty param.status ? 'active' : '' }" data-status="all">전체</button>
@@ -201,7 +202,7 @@
                     </table>
                     
                     <!-- 페이징 -->
-<%--                     
+                     <!-- http://localhost:9999/approval/myDoc?status=0?page=2 -->
 								      <ul id="paging_area" class="pagination d-flex justify-content-center">
 								          <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
 								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage-1}">Prev</a>
@@ -217,7 +218,7 @@
 								          	<a class="page-link" href="${ contextPath }/approval/myDoc?page=${pi.currentPage+1}">Next</a>
 								          </li>
 								      </ul>
- --%>                    
+                   
  
  
                 </div>
@@ -225,18 +226,10 @@
         </div>
     </div>
 
-        <!-- Required datatable js -->
-        <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-        
-        <!-- Responsive examples -->
-        <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-        <!-- init js -->
-        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
-    <script>
-    	//tab메뉴 클릭 이벤트 처리
+		<!-- 검색 기능만을 위한 초기화 코드 추가 -->
+		<script>
+		    	//tab메뉴 클릭 이벤트 처리
     	document.querySelectorAll('.tab-menu button').forEach(button =>{
     		button.addEventListener('click', function(){
     			//모든 버튼 active제거

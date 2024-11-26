@@ -1,5 +1,6 @@
 package com.br.gdcampus.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
+import com.br.gdcampus.dto.EvaMethodDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.ClassService;
@@ -216,11 +218,129 @@ public class ClassController {
 		return "redirect:/class/opning/prof/list.do";
 	}
 	
-	@GetMapping("/opning/prof/modifyForm.do")
-	public void modifyForm(String classCode, Model model) {
+	/**교수측 보완요청에 대한 수정 폼 요청
+	 * @param classCode
+	 * @param model
+	 * @param session
+	 */
+	@GetMapping("/opning/prof/modifyForm.do" )
+	public void modifyForm(String classCode, Model model, HttpSession session) {
 		ClassDto c = classService.selectStaffOpningDetail(classCode);
 		log.debug("{}",c);
 		model.addAttribute("c", c);
 		model.addAttribute("deptList", classService.selectCategory("T_ST_DEPT"));
+		session.setAttribute("c", c);
+	}
+	
+	/**교수측 보완완료 요청
+	 * @param c
+	 * @param session
+	 * @param rdAttributes
+	 * @return
+	 */
+	@PostMapping("/opning/prof/update.do")
+	public String updateForm(ClassDto c, HttpSession session, RedirectAttributes rdAttributes) {
+		
+		String[] classCodeArr = c.getClassCode().split("_");
+		classCodeArr[1] = c.getDeptName();
+		c.setUpdateClassCode(String.join("_", classCodeArr));
+		
+		ClassDto originC = ((ClassDto)session.getAttribute("c"));
+		c.setUpdateEvaList(originC.getEvaList());
+		
+		List<EvaMethodDto> updateEvaList = c.getUpdateEvaList();
+		List<EvaMethodDto> evaList = c.getEvaList();
+		List<EvaMethodDto> deleteEvaList = new ArrayList<EvaMethodDto>();
+		
+		for(int i=0; i<updateEvaList.size(); i++) { // 기존 내용 중간 실습 기타
+			EvaMethodDto upEva = updateEvaList.get(i);
+			int comCount = 0;
+			for(int j=0; j<evaList.size(); j++) { // 새로운 내용 중간 기말 기타
+				EvaMethodDto eva = evaList.get(j);
+				if(upEva.getEvaItem().equals(eva.getEvaItem())) {
+					// 이름이 일치하면 update 시켜주면 됨(evaList에서는 삭제)
+					updateEvaList.set(i,eva);
+					evaList.remove(j);
+					j--;
+					comCount++;
+				}
+				
+			}
+			// 다 돌았는데 하나도 일치하는 항목이 없으면 up에서 삭제하고 del로 넣어줌
+			if(comCount == 0) {
+				deleteEvaList.add(upEva);
+				updateEvaList.remove(i);
+				i--;
+			}
+		}
+		
+		c.setEvaList(evaList);
+		c.setUpdateEvaList(updateEvaList);
+		c.setDeleteEvaList(deleteEvaList);
+		
+		c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
+
+		c.setClassCode(originC.getClassCode());
+		log.debug("최종c:{}",c);
+		
+		int result = classService.updateOpning(c);
+		
+		if(result == 1) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 보완완료 처리되었습니다");
+			return "redirect:/class/opning/prof/detail.do?classCode="+c.getUpdateClassCode();
+		}else{
+			rdAttributes.addFlashAttribute("alertMsg","변경사항 저장에 실패하였습니다.");
+			return "redirect:/class/opning/prof/list.do";
+		}
+	}
+	
+	/**교수측 강의 수강생 리스트 목록 조회
+	 * @param classCode
+	 */
+	@GetMapping("/learner/list.do")
+	public void myClassLearnerList(String classCode, Model mode) {
+		ClassDto c = classService.selectLearnerList(classCode);
+		log.debug("학생들이 들어있는 c : {}", c);
+		mode.addAttribute("c",c);
+	}
+	
+	/**교수측 내 강의 목록 조회
+	 * 
+	 */
+	@GetMapping("/list.do")
+	public void myClassList() {}
+	
+	/**교수측 내 강의 목록 table 안 내용
+	 * @param currentPage
+	 * @param session
+	 * @param year
+	 * @param keyword
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping(value="/listContent.do", produces="application/json")
+	public Map<String,Object> myClassListContent(@RequestParam(value="page", defaultValue="1") int currentPage
+			,HttpSession session,String year,String keyword) {
+		
+		Map<String, Object> res = new HashMap<>();
+		Map<String,String> search = new HashMap<>();
+		log.debug("year:{}, keyword:{}",year,keyword);
+		search.put("year", year.substring(2));
+		search.put("keyword", keyword);
+		search.put("userNo", ((UserDto)session.getAttribute("loginUser")).getUserNo());
+		
+		int listCount = classService.selectMyClassListCount(search);
+		log.debug("listCount:{}",listCount);
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		List<ClassDto> list = classService.selectMyClassList(search, pi);
+		
+		res.put("classList", list);
+		res.put("pi", pi);
+		return res;
+	}
+	
+	@GetMapping("/detail.do")
+	public void myClassDetail(String classCode, Model model) {
+		 model.addAttribute("c", classService.selectMyClassDetail(classCode));
 	}
 }

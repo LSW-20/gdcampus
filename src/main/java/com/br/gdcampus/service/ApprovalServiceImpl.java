@@ -387,6 +387,41 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return result;
 	}
 
+	@Override
+	public int insertAdminForm(ApprovalDto apprForm) {
+		return apprDao.insertAdminForm(apprForm);
+	}
+
+	@Override
+	public List<ApprovalDto> selectAdminFormList() {
+		return apprDao.selectAdminFormList();
+	}
+
+	@Override
+	public ApprovalDto selectAdminFormDetail(String apprNo) {
+		return apprDao.selectAdminFormDetail(apprNo);
+	}
+
+	@Override
+	public int updateAdminForm(ApprovalDto apprForm) {
+		return apprDao.updateAdminForm(apprForm);
+	}
+
+	@Override
+	public int deleteAdminForm(String apprNo) {
+		return apprDao.deleteAdminForm(apprNo);
+	}
+
+	@Override
+	public List<String> selectCustomFormTypes() {
+		return apprDao.selectCustomFormTypes();
+	}
+
+	@Override
+	public ApprovalDto selectCustomFormContent(String formType) {
+		return apprDao.selectCustomFormContent(formType);
+	}
+
 
 
 	

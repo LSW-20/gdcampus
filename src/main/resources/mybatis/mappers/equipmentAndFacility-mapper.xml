@@ -23,6 +23,18 @@
 		<result column="UPDATE_USER" property="updateUser"/>
 		<result column="STATUS" property="status"/>				
 	</resultMap>
+	
+	<resultMap id="AttachmentResultMap" type="AttachDto">
+		<result column="FILE_NO" property="fileNo"/>
+		<result column="EQUIP_NO" property="equipNo"/>
+		<result column="APPR_NO" property="apprNo"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="FILESYSTEM_NAME" property="filesystemName"/>
+		<result column="ORIGINAL_NAME" property="originalName"/>
+		<result column="UPLOAD_DATE" property="uploadDate"/>
+		<result column="REF_TYPE" property="refType"/>				
+	</resultMap>
+	
 
 	<!-- (상우) 비품 카테고리 조회 -->
 	<select id="selectEquipmentCategory" resultType="String">
@@ -184,11 +196,16 @@
 			)
 	</insert>
 	
-	<!-- (상우) 파일경로, DB저장파일명 조회  -->
-	<select id="selectFileURL" resultType="java.util.Map">
+	<!-- (상우) 비품번호로 파일경로, DB저장파일명 등 조회  -->
+	<select id="selectAttachment" resultMap="AttachmentResultMap">
 		select 
-					 FILE_PATH
+					 FILE_NO
+				 , EQUIP_NO
+				 , FILE_PATH
 				 , FILESYSTEM_NAME
+				 , ORIGINAL_NAME
+				 , UPLOAD_DATE
+				 , REF_TYPE
 	  	from T_ATTACHMENT
 		 where equip_no = #{equipNo}
 	</select>
@@ -205,6 +222,79 @@
 				 , UPDATE_USER
 				 , STATUS
 			from T_EQUIPMENT
-		 where EQUIP_NO = ${equipNo}		 
+		 where EQUIP_NO = #{equipNo}		 
 	</select>
+	
+	<!-- (상우) 시설 수정 -->
+	<update id="modifyFacility">
+		update
+					 T_FACILITY
+			 set FACILITY_NAME = #{name}
+				 , FACILITY_CATEGORY = #{selectedCategory}
+				 , UPDATE_DATETIME = SYSDATE
+				 , UPDATE_USER = #{userNo}
+		 where FACILITY_NO = #{no}	 			
+	</update>
+	
+	<!-- (상우) 비품 수정 - 비품 테이블만 update -->
+	<update id="modifyEquipmentWithoutFile">
+		update
+					 T_EQUIPMENT
+			 set EQUIP_NAME = #{name}
+				 , EQUIP_CATEGORY = #{selectedCategory}
+				 , UPDATE_DATETIME = SYSDATE
+				 , UPDATE_USER = #{userNo}
+		 where EQUIP_NO = #{no}	 			
+	</update>
+	
+	<!-- (상우) 비품 번호로 첨부파일 데이터 삭제 -->
+	<delete id="deleteAttachment">
+		delete
+			from T_ATTACHMENT
+		 where EQUIP_NO = #{equipNo}	
+	</delete>
+	
+	<!-- (상우) 복수의 비품 번호로 복수의 첨부파일 정보 조회 -->
+	<select id="selectAttachmentList" resultMap="AttachmentResultMap">
+		select 
+					 FILE_NO
+				 , EQUIP_NO
+				 , FILE_PATH
+				 , FILESYSTEM_NAME
+				 , ORIGINAL_NAME
+				 , UPLOAD_DATE
+				 , REF_TYPE
+	  	from T_ATTACHMENT
+		<where>
+			<foreach collection="array" item="equip_no" open="EQUIP_NO IN (" separator="," close=")">
+	    		#{equip_no}
+	    </foreach>
+    </where>     
+	</select>
+	
+	
+	<!-- (상우) 비품 수정 후 첨부파일 insert -->
+	<insert id="modifyAddAttachment">
+		insert
+		  into T_ATTACHMENT
+		  (
+		  	FILE_NO
+		  , EQUIP_NO
+		  , FILE_PATH
+			, FILESYSTEM_NAME
+			, ORIGINAL_NAME
+			, UPLOAD_DATE
+			, REF_TYPE
+		  )
+		  values
+		  (
+		  	SEQ_ATNO.NEXTVAL
+		  , LPAD(#{equipNo}, 4, '0')	
+		  , #{filePath}
+		  , #{filesystemName}
+		  , #{originalName}
+		  , SYSDATE
+		  , 'E'
+		  )
+	</insert>
 </mapper>

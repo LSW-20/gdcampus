@@ -221,4 +221,32 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectMyApprovedDetail",params);
 	}
 
+	public int insertAdminForm(ApprovalDto apprForm) {
+		return sqlSession.insert("approvalMapper.insertAdminForm",apprForm);
+	}
+
+	public List<ApprovalDto> selectAdminFormList() {
+		return sqlSession.selectList("approvalMapper.selectAdminFormList");
+	}
+
+	public ApprovalDto selectAdminFormDetail(String apprNo) {
+		return sqlSession.selectOne("approvalMapper.selectAdminFormDetail",apprNo);
+	}
+
+	public int updateAdminForm(ApprovalDto apprForm) {
+		return sqlSession.update("approvalMapper.updateAdminForm",apprForm);
+	}
+
+	public int deleteAdminForm(String apprNo) {
+		return sqlSession.delete("approvalMapper.deleteAdminForm",apprNo);
+	}
+
+	public List<String> selectCustomFormTypes() {
+		return sqlSession.selectList("approvalMapper.selectCustomFormTypes");
+	}
+
+	public ApprovalDto selectCustomFormContent(String formType) {
+		return sqlSession.selectOne("approvalMapper.selectCustomFormContent",formType);
+	}
+
 }

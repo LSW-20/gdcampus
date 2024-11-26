@@ -8,23 +8,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>업무 기안</title>
+    <title>양식 생성</title>
     <!-- Summernote CSS -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
     
     <style>
+        .draft-title {
+            font-size: 25px;
+        }    
         body {
             font-family: 'Malgun Gothic', sans-serif;
             margin: 0;
         }
         .approval-form {
             width: 1000px;
-            height: 845px;
+            height: 1160px;
             border: 1px solid #ddd;
+            margin-left:270px;
+            margin-top: 95px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        
+
         .form-header {
             display: flex;
             justify-content: space-between;
@@ -40,13 +45,7 @@
 				    display: flex;
 				    gap: 10px;  /* 테이블 간 간격 */
         }
-        /* 결재선 */
-				#apprUserLineTable {
-				    width: 126px;  /* 기안자 테이블 너비 */
-				    margin-left: -140px;
-				    table-layout: fixed;
-				    border-collapse: collapse;
-				}
+
 				#approvalTablesContainer {
 				    display: flex;
 				    gap: 0px;
@@ -112,7 +111,7 @@
         } 
         
         .content-area {
-            min-height: 300px;
+            height: 893px;
             text-align: left;
             vertical-align: top;
             padding: 20px;
@@ -120,100 +119,51 @@
         .appr-title
         {
           width: 600px;
-        }  
-        
-        /* 결재도장 */
-				.stamp.approved {
-				    border-color: #ff0000;
-				    color: #ff0000;
-				}
-				
-				.stamp.pending {
-				    border-color: #ccc;
-				    color: #ccc;
-				}             
+        }               
     </style>
 </head>
 <body data-topbar="dark" data-sidebar="dark">
-<%-- 	<!-- header 시작 -->
+ 	<!-- header 시작 -->
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<!-- header 끝 -->
 	
 	<!-- sidebar 시작 -->
 	<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-	<!-- sidebar 끝 --> --%>
+	<!-- sidebar 끝 -->
 
     <div class="approval-form">
-    <div class="title">업무 기안</div>        
-        <div class="form-header">
-            <div class="form-info">
-                <table>
-                    <tr>
-                        <th width="30%">기안자</th>
-                        <td>${loginUser.userName}</td>
-                    </tr>
-                    <tr>
-                        <th>소속</th>
-                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ deptNo == 1 ? "인사" : "교무" }</td>
-                    </tr>
-                    <tr>
-                        <th>기안일</th>
-                        <td><fmt:formatDate value="${now}" pattern="yy/MM/dd"/></td>
-                    </tr>
-                    <tr>
-                        <th>문서번호</th>
-                        <td>${apprNo}</td>
-                    </tr>
-                </table>
-            </div>
-            
-					<div class="approval-line">
-					
-				    <!-- 기안자 결재선 테이블 -->
-				    <table id="apprUserLineTable">
-				        <tr>
-				            <th width="100%">기안</th>
-				        </tr>
-				        <tr>
-				            <td>
-				                <div class="stamp">승인</div>
-				                ${loginUser.userName} ${loginUser.rankName}
-				                <input type="hidden" name="apprUser" value=" ${loginUser.userNo}">
-				                <input type="hidden" name="apprType" value="기안서">
-				                <input type="hidden" name="createUser" value="${loginUser.userNo}">				                
-				            </td>
-				        </tr>
-				        <tr>
-				            <td><fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/></td>
-				        </tr>
-				    </table>
-
-				    <!-- 결재선 테이블들이 동적으로 추가될 컨테이너 -->
-				    <div id="approvalTablesContainer">
-				        <!-- 여기에 결재선 테이블들이 동적으로 추가 -->
-				    </div>					     
-					</div>
-        </div>
+		<div class="title">양식생성폼</div>        
+		<form id="approvalForm" action="${contextPath}/approval/admin/insertForm" method="post">
+		    <div class="form-container">
+		        <!-- 버튼 영역 -->
+		        <div class="btn-form" style="text-align: right; margin-bottom: 20px;">
+		            <button type="button" class="btn btn-primary" onclick="ApprovalModal.submitForm()">양식생성</button>
+		            <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
+		        </div>
+		        
+		        <!-- 문서 양식 -->
+		        <div class="approval-content">
+		            <table>
+		                <tr>
+		                    <th>문서명</th>
+		                    <td colspan="3">
+		                        <input type="text" class="appr-type" name="apprType" style="width:100%;">
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td colspan="4" class="content-area">
+		                        <textarea id="summernote" name="apprContent"></textarea>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		    </div>
+		</form>
 
 
-        <table>
-            <tr>
-                <th width="20%">시행일자</th>
-                <td width="30%"><input type="date" name="enforceDate"></td>
-                <th width="20%">협조부서</th>
-                <td width="30%"><input type="text" name="coopDept"></td>
-            </tr>
-            <tr>
-                <th>제목</th>
-                <td colspan="3"><input type="text" class="appr-title" name="apprTitle"></td>
-            </tr>
-            <tr>
-                <td colspan="4" class="content-area">
-                    <textarea id="summernote" name="apprContent"></textarea>
-                </td>
-            </tr>
-        </table>
+
         
+
     </div>
     <!-- Summernote JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -221,14 +171,48 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
 		<script src="${contextPath}/libs/summernote/summernote-bs4.min.js" defer></script>
 		
-    <script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            width: 900,
-            height:300,        	
-          placeholder: '기안 내용'
-        });
-      });
-    </script>     
+<script>
+$(document).ready(function() {
+    // Summernote 초기화
+    $('#summernote').summernote({
+        width: 900,
+        height: 800,        	
+        placeholder: '양식 작성',
+        callbacks: {
+            onImageUpload: function(files) {
+                alert('이미지 업로드는 지원하지 않습니다.');
+            }
+        }
+    });
+
+    // form submit 처리를 위한 객체
+    const ApprovalModal = {
+        submitForm: function() {
+            // 유효성 검사
+            const apprType = $('input[name="apprType"]').val();
+            const apprContent = $('#summernote').val();
+
+            if(!apprType.trim()) {
+                alert('문서명을 입력해주세요.');
+                $('input[name="apprType"]').focus();
+                return;
+            }
+
+            if(!apprContent.trim()) {
+                alert('양식 내용을 입력해주세요.');
+                $('#summernote').summernote('focus');
+                return;
+            }
+
+            if(confirm('양식을 생성하시겠습니까?')) {
+                $('#approvalForm').submit();
+            }
+        }
+    };
+
+    // 전역 객체로 등록
+    window.ApprovalModal = ApprovalModal;
+});
+</script> 
 </body>
 </html>
