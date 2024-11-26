@@ -30,7 +30,6 @@
 		 <!-- 평가방식, 수강생, 수업계획 매핑 -->
 	    <collection ofType="EvaMethodDto" property="evaList" resultMap="evaList"/>
 	    <collection ofType="LearnerDto" property="learnerList" resultMap="learnerList"/>
-	    <collection ofType="LessonPlanDto" property="planList" resultMap="planList"/>
 	</resultMap>
 
 	<!-- 평가방식 매핑 -->
@@ -38,6 +37,8 @@
 	    <result column="EVA_ITEM" property="evaItem"/>
 	    <result column="ALLOCATION" property="allocation"/>
 	    <result column="EVA_DETAIL" property="evaDetail"/>
+	    
+	    <collection ofType="LessonPlanDto" property="planList" resultMap="planList"/>
 	</resultMap>
 	
 	<!-- 수강생 매핑 -->
@@ -397,7 +398,51 @@
        USING(STU_NO)
  	   WHERE CLASS_CODE=#{classCode}
 	</select>
+	<!-- 수강생 숫자 조회(차트용) -->
+	<select id="selectLearnerCount" resultType="map">
+		SELECT GRADE, COUNT(GRADE) as COUNT
+		  FROM T_LEARNER_LIST
+		  JOIN T_STUDENT
+		 USING (STU_NO)
+		 WHERE CLASS_CODE=#{classCode}
+		 GROUP BY GRADE
+	</select>
+	
 	<!-- 수업계획서 조회 -->
+	<select id="selectPlanList" resultMap="classResultMap">
+		SELECT C.CLASS_CODE
+             , USER_NAME as USER_NO
+             , ( SELECT DEPT_NAME
+              	   FROM T_ST_DEPT
+	         	  WHERE ST_DEPT_NO = SUBSTR(#{classCode}, INSTR(#{classCode},'_') + 1, 2)
+	           )AS DEPT_NAME
+	         , CLASS_TITLE
+	         , CLASS_TYPE
+	         , PRG_METHOD
+	         , TARGET_GRADE
+	         , CLASS_HOURS
+	         , CLASS_GOALS
+	         , OPERATION_PLAN
+	         , MAIN_TEXTBOOK
+	         , REFN_BOOK
+	         , EVA_ITEM
+	         , ALLOCATION
+	         , EVA_DETAIL   
+             , WEEK
+             , "CONTENT" as CONTENT
+             , TCHNG_MTHD
+             , MATERIAL
+	      FROM T_CLASS C 
+	      JOIN T_USER U 
+	        ON C.USER_NO = U.USER_NO
+	      LEFT 
+	      JOIN T_EVA_METHOD E 
+	        ON C.CLASS_CODE = E.CLASS_CODE
+          LEFT 
+          JOIN T_WEEK_PLAN W 
+            ON C.CLASS_CODE = W.CLASS_CODE
+	     WHERE C.CLASS_CODE = #{classCode}
+	</select>
 	<!-- 수업계획서 수정 -->
 	<!-- 수업계획서 삭제 -->
 	<!-- 수업계획서 추가 -->
