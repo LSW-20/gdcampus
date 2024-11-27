@@ -48,25 +48,6 @@
 								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="user"></i>
-												<span class="menu-item">근태 관리</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
-												<li><a href="#">휴가 신청</a></li>
-										</ul>
-								</li>
-
-								
-								<li>
-										<a href="#" class="waves-effect">
-												<i class="icon nav-icon" data-feather="calendar"></i>
-												<span class="menu-item">일정 관리</span>
-										</a>
-								</li>
 								
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -223,13 +204,10 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class=" waves-effect">
+										<a href="${contextPath }/dept/list" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-											<li><a href="${contextPath }/dept/list">부서 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 
 								<li>
@@ -239,12 +217,6 @@
 										</a>
 								</li>
 								
-									<li>
-										<a href="javascript: void(0);" class=" waves-effect">
-												<i class="icon nav-icon" data-feather="briefcase"></i>
-												<span class="menu-item">게시판 관리</span>
-										</a>
-								</li>
 
 								<li>
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
@@ -266,24 +238,6 @@
 
 								<br>
 								
-
-								<li class="menu-title" c>Components</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="share-2"></i>
-												<span class="menu-item" key="t-multi-level">Multi Level</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="true">
-												<li><a href="javascript: void(0);" key="t-level-1.1">Level 1.1</a></li>
-												<li><a href="javascript: void(0);" class="has-arrow" key="t-level-1.2">Level 1.2</a>
-														<ul class="sub-menu" aria-expanded="true">
-																<li><a href="javascript: void(0);" key="t-level-2.1">Level 2.1</a></li>
-																<li><a href="javascript: void(0);" key="t-level-2.2">Level 2.2</a></li>
-														</ul>
-												</li>
-										</ul>
-								</li>
 
 						</ul>
 				</div>
