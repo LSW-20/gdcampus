@@ -31,9 +31,10 @@
 	<!-- 혹시라도 has a 관계(1:1)일 경우 => collection 대신에 association 으로 사용 -->
 
 	<resultMap id="commentResultMap" type="commentDto">
+		<result column="COMMENT_NO" property="commentNo" />
 		<result column="USER_NO" property="userNo" />
 		<result column="POST_NO" property="postNo" />
-		<result column="USER_NAME" property="commentWriter" />
+		<result column="commentWriter" property="commentWriter" />
 		<result column="COMMENTER_ID" property="commenterId" />
 		<result column="REF_COMMENT_N0" property="refCommentNo" />
 		<result column="REGIST_DATE" property="registDate" />
@@ -118,7 +119,7 @@
 				<select id="selectCommentList" resultMap="commentResultMap">
 					select
 								   comment_no
-								 , user_name as commentWriter
+								 , user_name as "commentWriter"
 								 , "COMMENT"
 								 , to_char(regist_date, 'YYYY-MM-DD') regist_date
 							from t_comment c
@@ -129,13 +130,13 @@
 					
 					
 				<!-- 게시글 댓글 등록 -->
-			    <insert id="insertComment">
+			    <insert id="insertComment" >
 			        INSERT 
 			          INTO T_COMMENT 	
 			        	  (
 			            	COMMENT_NO
-			            , USER_NO
-			            , POST_NO
+			            , user_name as "commentWriter"
+			            , "COMMENT"
 			            , COMMENTER_ID
 			            , COMMENT_WRITER
 			            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
