@@ -58,7 +58,7 @@ public class ApprovalController {
 		
 		//관리자정의양식목록조회
 		List<String> formTypes = apprService.selectCustomFormTypes();
-		System.out.println("양식이름 : "+formTypes);
+//		System.out.println("양식이름 : "+formTypes);
 		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
@@ -75,8 +75,13 @@ public class ApprovalController {
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		List<ApprovalDto> apprList = apprService.selectApprUpcomingList(pi, userNo);
 		
+		//관리자정의양식목록조회
+		List<String> formTypes = apprService.selectCustomFormTypes();
+		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
+		model.addAttribute("formList", formTypes);
+		
 		
 	}
 	
@@ -126,7 +131,10 @@ public class ApprovalController {
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		
 		List<ApprovalDto> apprList = apprService.selectMyDocList(pi, params);
+		//관리자정의양식목록조회
+		List<String> formTypes = apprService.selectCustomFormTypes();
 		
+		model.addAttribute("formList", formTypes);		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
 		model.addAttribute("currentStatus",status);
@@ -148,7 +156,10 @@ public class ApprovalController {
 	    
 	    // 완료된 문서 (최근 5개)
 	    List<ApprovalDto> completedDocs = apprService.getRecentCompletedDocs(userNo);
-	    
+		//관리자정의양식목록조회
+		List<String> formTypes = apprService.selectCustomFormTypes();
+		
+		model.addAttribute("formList", formTypes);
 	    model.addAttribute("inProgressDocs", inProgressDocs);
 	    model.addAttribute("completedDocs", completedDocs);		
 	}
@@ -339,7 +350,10 @@ public class ApprovalController {
 		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
 		
 		List<ApprovalDto> apprList = apprService.selectMyApprovedList(pi, params);
+		//관리자정의양식목록조회
+		List<String> formTypes = apprService.selectCustomFormTypes();
 		
+		model.addAttribute("formList", formTypes);
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
 		model.addAttribute("currentStatus",status);
