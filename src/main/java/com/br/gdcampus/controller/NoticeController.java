@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.br.gdcampus.dto.NoticeDto;
 import com.br.gdcampus.service.NoticeService;
@@ -38,7 +39,12 @@ public class NoticeController {
 		log.debug("notice????!?!??:{}",n);
 	}
 	
-	
+	@ResponseBody
+	@GetMapping("/mainList")
+	public List<NoticeDto> noticeMain() {
+		System.out.println("컨트롤러: " + noticeService.selectNoticeList());
+		return noticeService.selectNoticeList();
+	}
 	
 	
 	

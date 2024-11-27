@@ -56,7 +56,6 @@
                                     </div> <!-- end col -->
                                 </div> 
 
-                                <div style='clear:both'></div>
                                     
                                 <!-- Add New Event MODAL -->
                                 <div class="modal fade" id="event-modal" tabindex="-1">
