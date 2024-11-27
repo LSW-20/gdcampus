@@ -175,9 +175,9 @@
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="${contextPath}/approval/home">결재 홈</a></li> 
 												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
 												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
-												<li><a href="${contextPath}/approval/home"></a></li> 
 												
 										</ul>
 								</li>
@@ -216,7 +216,6 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 								</li>
-								
 
 								<li>
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
@@ -238,7 +237,6 @@
 
 								<br>
 								
-
 						</ul>
 				</div>
 				<!-- Sidebar -->
@@ -247,17 +245,16 @@
 <!-- sidebar 끝 -->
 <script>
 $(document).ready(function() {
-    // 모든 서브메뉴 펼치기
+    // 메뉴 모두 펼치기
     $('.sub-menu').addClass('mm-show');
     $('.has-arrow').addClass('mm-active');
     $('.sub-menu').attr('aria-expanded', 'true');
     
-    // metisMenu 초기화 (이미 사용 중인 경우)
-    $('#side-menu').metisMenu({
-        preventDefault: false,
-        triggerElement: '.has-arrow',
-        subMenu: '.sub-menu',
-        toggle: false // 클릭해도 접히지 않게 설정
+    // 클릭 이벤트 방지
+    $('.has-arrow').off('click').on('click', function(e) {
+        e.preventDefault();
+        // 기존 클릭 이벤트를 완전히 중단
+        return false;
     });
 });
 </script>
