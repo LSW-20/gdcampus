@@ -44,6 +44,8 @@ public interface ClassService {
 	ClassDto selectMyClassDetail(String userNo);
 	// 수강생 목록 조회
 	ClassDto selectLearnerList(String classCode);
+	// 수강생 수 조회(차트용)
+	List<Map<String, Object>> selectLearnerCount(String classCode);
 	
 	// 수업계획서 상세조회
 	ClassDto selectPlanList(String classCode);

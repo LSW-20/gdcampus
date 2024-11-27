@@ -19,15 +19,17 @@ public class DeptDao {
         return sqlSession.selectList("deptMapper.selectDeptList");
     }
 
-    public int insertDept(DeptDto dept) {
-        return sqlSession.insert("deptMapper.insertDept", dept);
+    public int insertCategoryDept(DeptDto deptDto) {
+        int result = sqlSession.insert("deptMapper.insertCategoryDept", deptDto);
+        return result;
     }
 
     public int updateDept(DeptDto dept) {
         return sqlSession.update("deptMapper.updateDept", dept);
     }
 
-    public int deleteDept(String deptNo) {
-        return sqlSession.delete("deptMapper.deleteDept", deptNo);
+    public int deleteCategoryDept(String deptNo) {
+        return sqlSession.delete("deptMapper.deleteCategoryDept", deptNo);
     }
+
 }

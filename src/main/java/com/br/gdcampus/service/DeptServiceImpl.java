@@ -21,8 +21,9 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public int insertCategoryDept(DeptDto dept) {
-        return deptDao.insertDept(dept);
+    public int insertCategoryDept(DeptDto deptDto) {
+        int result = deptDao.insertCategoryDept(deptDto);
+        return result;
     }
 
     @Override
@@ -32,6 +33,6 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public int deleteCategoryDept(String deptNo) {
-        return deptDao.deleteDept(deptNo);
+        return deptDao.deleteCategoryDept(deptNo);
     }
 }
