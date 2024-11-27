@@ -69,7 +69,7 @@
                     <label for="upfile">첨부파일 </label>
                     <input type="file" class="form-control-file border" id="upfile" name=""><br>
                     
-                    <label for="userName">내용 </label>
+                    <label for="content">내용 </label>
                     <textarea class="form-control" required name="" id="content" rows="10" style="resize:none;"></textarea><br>
                     
                 </div>

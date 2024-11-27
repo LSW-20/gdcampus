@@ -51,7 +51,7 @@
 	</select>
 	
 	<!-- (상우) 비품 목록 전체 개수 조회 -->
-  <select id="selectEquipmentListCount" resultType="_int">
+  <select id="selectEquipmentListCount" resultType="int">
     select
            COUNT(*)
       from T_EQUIPMENT
@@ -62,7 +62,7 @@
   </select>
 
 	<!-- (상우) 시설 목록 전체 개수 조회 -->
-  <select id="selectFacilityListCount" resultType="_int">
+  <select id="selectFacilityListCount" resultType="int">
     select
            COUNT(*)
       from T_FACILITY
@@ -335,5 +335,7 @@
 		 	 and FACILITY_CATEGORY = #{category}
 		 </if>
 	</select>
+	
+
 	
 </mapper>

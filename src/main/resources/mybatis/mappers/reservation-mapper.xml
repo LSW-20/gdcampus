@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reservationMapper">
+ 
+	<resultMap id="ReservationResultMap" type="ReservationDto">
+		<result column="RESERVATION_NO" property="reservationNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="RESERVATION_DATE" property="reservationDate"/>
+		<result column="RESERVATION_REASON" property="reservationReason"/>
+		<result column="EQUIP_NO" property="equipNo"/>
+		<result column="FACILITY_NO" property="facilityNo"/>
+		<result column="RESERVATION_REQUEST_DATE" property="reservationRequestDate"/>				
+		<result column="APPROVAL_REJECTION_DATE" property="approvalRejectionDate"/>			
+		<result column="APPROVAL_REJECTION_USER" property="approvalRejectionUser"/>			
+		<result column="APPROVAL_REJECTION_REASON" property="approvalRejectionReason"/>			
+		<result column="STATUS" property="status"/>			
+		<result column="EQUIP_CATEGORY" property="equipCategory"/>			
+		<result column="EQUIP_NAME" property="equipName"/>			
+		<result column="FACILITY_CATEGORY" property="facilityCategory"/>			
+		<result column="FACILITY_NAME" property="facilityName"/>			
+	</resultMap> 
+ 
+ 
+	<!-- (상우) 예약 가능 여부 조회 -->
+	<select id="checkAvailability" resultType="String">
+		select STATUS
+			from T_RESERVATION
+		 where RESERVATION_DATE = #{date}
+	 	 <if test="classification == '비품'">
+			 and EQUIP_NO = #{number}
+		 </if>
+	   <if test="classification == '시설'">
+			 and FACILITY_NO = #{number}
+		 </if>
+	</select>
+	
+	<!-- (상우) 예약하기 -->
+	<insert id="reserve">
+		insert 
+			into T_RESERVATION
+			(
+				RESERVATION_NO 
+			, USER_NO
+			, USER_NAME
+			, RESERVATION_DATE 
+			, RESERVATION_REASON
+			, EQUIP_NO 
+			, FACILITY_NO 
+			, RESERVATION_REQUEST_DATE
+			, STATUS
+			)
+			VALUES
+			(
+			  LPAD(SEQ_RNO.NEXTVAL, 4, '0')
+			, #{userNo}
+			, #{userName}
+			, TO_DATE(#{date}, 'YYYY-MM-DD')
+			, #{reason}
+			, <choose>
+          <when test="classification == '비품'">
+            #{number}
+          </when>
+          <otherwise>
+            NULL
+          </otherwise>
+   		  </choose>
+			, <choose>
+          <when test="classification == '시설'">
+            #{number}
+          </when>
+          <otherwise>
+            NULL
+          </otherwise>
+        </choose>
+			, SYSDATE
+			, '예약신청중'
+			)
+	</insert> 
+	
+	<!-- (상우) userNo로 예약내역 조회 -->
+	<select id="selectReservationByUserNo" resultMap="ReservationResultMap">
+		select 
+					 RESERVATION_NO
+				 , USER_NO
+			   , USER_NAME
+				 , RESERVATION_DATE
+				 , RESERVATION_REASON
+				 , EQUIP_NO
+				 , FACILITY_NO
+				 , RESERVATION_REQUEST_DATE
+				 , APPROVAL_REJECTION_DATE
+				 , APPROVAL_REJECTION_USER
+				 , APPROVAL_REJECTION_REASON
+				 , R.STATUS AS STATUS
+				 , EQUIP_CATEGORY
+         , EQUIP_NAME
+         , FACILITY_CATEGORY
+         , FACILITY_NAME
+		  from T_RESERVATION R
+      left join T_EQUIPMENT USING (EQUIP_NO)
+      left join T_FACILITY USING (FACILITY_NO)
+	   where USER_NO = #{userNo}
+	</select>
+ 
+</mapper>

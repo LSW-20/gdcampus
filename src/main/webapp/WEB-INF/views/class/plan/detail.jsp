@@ -50,7 +50,10 @@
 		<!-- main-content 시작 -->
 		<div class="main-content">
 			<div class="page-content">
-				<div class="container-fluid mt-5">				
+				<div class="container-fluid mt-5">	
+					<div class="mt-4 row d-flex justify-content-end m-4">
+						<button class="btn btn-primary" onclick="downloadPDF()">PDF로 다운로드</button>
+					</div>				
 					<div class="container border p-3 bg-white" id="pdfArea" style="min-width: 1100px;">
 						<div class="row ">
 							<div class="col-8 d-flex align-items-center justify-content-center">
@@ -213,7 +216,7 @@
 					</div>
 					<div class="mt-4 row d-flex justify-content-center">
 						<a class="btn btn-primary w-md mr-3" href="javascript:window.history.back();" >돌아가기</a>
-						<button class="btn btn-primary w-md mr-3" onclick="downloadPDF()">PDF로 다운로드</button>
+						<a class="btn btn-primary w-md mr-3" href="${ contextPath}/class/plan/modifyForm.do?classCode=${c.classCode}">수업계획 수정</a>
 					</div>				
 							
 				</div>

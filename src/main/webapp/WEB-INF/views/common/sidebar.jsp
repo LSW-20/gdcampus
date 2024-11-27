@@ -48,25 +48,6 @@
 								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="user"></i>
-												<span class="menu-item">근태 관리</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
-												<li><a href="#">휴가 신청</a></li>
-										</ul>
-								</li>
-
-								
-								<li>
-										<a href="#" class="waves-effect">
-												<i class="icon nav-icon" data-feather="calendar"></i>
-												<span class="menu-item">일정 관리</span>
-										</a>
-								</li>
 								
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -88,7 +69,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath }/reservation/main">예약 신청</a></li>
-												<li><a href="#">예약 신청 내역 조회</a></li>
+												<li><a href="${contextPath }/reservation/myReservation">예약 신청 내역 조회</a></li>
 										</ul>
 								</li>
 
@@ -194,9 +175,9 @@
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="${contextPath}/approval/home">결재 홈</a></li> 
 												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
 												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
-												<li><a href="${contextPath}/approval/home"></a></li> 
 												
 										</ul>
 								</li>
@@ -223,26 +204,16 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class=" waves-effect">
+										<a href="${contextPath }/dept/list" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-											<li><a href="${contextPath }/dept/list">부서 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>
 
 								<li>
 										<a href="${contextPath }/user/profile/rank.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="minus-square"></i>
 												<span class="menu-item">직급 관리</span>
-										</a>
-								</li>
-								
-									<li>
-										<a href="javascript: void(0);" class=" waves-effect">
-												<i class="icon nav-icon" data-feather="briefcase"></i>
-												<span class="menu-item">게시판 관리</span>
 										</a>
 								</li>
 
@@ -266,28 +237,24 @@
 
 								<br>
 								
-
-								<li class="menu-title" c>Components</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="share-2"></i>
-												<span class="menu-item" key="t-multi-level">Multi Level</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="true">
-												<li><a href="javascript: void(0);" key="t-level-1.1">Level 1.1</a></li>
-												<li><a href="javascript: void(0);" class="has-arrow" key="t-level-1.2">Level 1.2</a>
-														<ul class="sub-menu" aria-expanded="true">
-																<li><a href="javascript: void(0);" key="t-level-2.1">Level 2.1</a></li>
-																<li><a href="javascript: void(0);" key="t-level-2.2">Level 2.2</a></li>
-														</ul>
-												</li>
-										</ul>
-								</li>
-
 						</ul>
 				</div>
 				<!-- Sidebar -->
 		</div>
 </div>
 <!-- sidebar 끝 -->
+<script>
+$(document).ready(function() {
+    // 메뉴 모두 펼치기
+    $('.sub-menu').addClass('mm-show');
+    $('.has-arrow').addClass('mm-active');
+    $('.sub-menu').attr('aria-expanded', 'true');
+    
+    // 클릭 이벤트 방지
+    $('.has-arrow').off('click').on('click', function(e) {
+        e.preventDefault();
+        // 기존 클릭 이벤트를 완전히 중단
+        return false;
+    });
+});
+</script>

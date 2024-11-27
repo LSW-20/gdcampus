@@ -98,6 +98,10 @@
         .modal-content {
 						width: 400px !important; 
 				}
+
+        #modal-reason::placeholder {
+            color: red;
+        }
 		</style>
 
     <!-- FullCalendar -->
@@ -235,7 +239,7 @@
       <div class="modal-dialog modal-sm">
           <div class="modal-content" >
 
-              <form action="${contextPath}/reservation/reserve" method="post">
+              <form action="${contextPath}/reservation/reserve" method="post" id="modal-form">
                   <div class="modal-body">   
                       <div>
                           <table>
@@ -248,7 +252,7 @@
                               </tr>
                               <tr>
                                   <td>분류</td>
-                                  <td><input type="text" class="form-control" name="category" readonly id="modal-category"></td>
+                                  <td><input type="text" class="form-control" readonly id="modal-category"></td>
                               </tr>
                               <tr>
                                   <td>번호</td>
@@ -256,35 +260,24 @@
                               </tr>
                               <tr>
                                   <td>이름</td>
-                                  <td><input type="text" class="form-control" name="name" readonly id="modal-name"></td>
+                                  <td><input type="text" class="form-control" readonly id="modal-name"></td>
                               </tr>
                               <tr>
                                   <td>예약희망일</td>
                                   <td><input type="text" class="form-control" name="date" readonly id="modal-date"></td>
                               </tr>
                               <tr>
-                                  <td>예약희망시간</td>
-                                  <td style="height: 30px; vertical-align: middle;">
-                                      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                                          <input type="radio" id="all" name="time" value="종일" checked>
-                                          <label for="all" style="margin: 0;">종일</label>
-                                          <input type="radio" id="am" name="time" value="오전">
-                                          <label for="am" style="margin: 0;">오전</label>
-                                          <input type="radio" id="pm" name="time" value="오후">
-                                          <label for="pm" style="margin: 0;">오후</label>
-                                      </div>
-                                  </td>
-                              </tr>
-                              <tr>
                                   <td>예약사유</td>
-                                  <td><input type="text" class="form-control" name="reason"></td>
+                                  <td><input type="text" class="form-control" name="reason" id="modal-reason" placeholder="입력 필수" required></td>
                               </tr>
                           </table>
 
                           <br>
 
-                          <button type="button" onclick="checkAvailability()">예약 가능 여부 조회</button> <br>
-                          <button type="button">예약하기</button>
+                          <button type="button" onclick="checkAvailability()">예약 가능 여부 조회</button> 
+                          <span id="modal-result"></span>
+                          <br>
+                          <button type="button" onclick="reserveButton()">예약하기</button>
                       </div>
   
                   </div>
@@ -449,14 +442,16 @@
 
                       const classification = $("#detailClassification2").text(); // 구분 (비품/시설)
                       const category = $("#datailCategory").text();              // 분류
-                      const number = $("#detailNumber").text();                      // 번호
-                      const name = $("#detailName").text();                          // 이름
+                      const number = $("#detailNumber").text();                  // 번호
+                      const name = $("#detailName").text();                      // 이름
 
                       $('#modal-classification').val(classification);
                       $('#modal-category').val(category);
                       $('#modal-number').val(number);
                       $('#modal-name').val(name);
                       $('#modal-date').val(info.dateStr);
+                      $('#modal-reason').val(''); // 예약 사유 초기화
+                      $('#modal-result').text(''); // 예약 가능 여부 초기화
                       $('#reservation-modal').modal('show');
                   }
               }
@@ -466,8 +461,63 @@
           calendar.render();
       });
 
+
       function checkAvailability(){
-          alert('미구현');
+          $.ajax({
+              url: "${contextPath}/reservation/checkAvailability",
+              type: 'post',
+              data: JSON.stringify( { // json 객체(자바스크립트 객체) => json 문자열 변환
+                classification: $('#modal-classification').val(),
+                date:  $('#modal-date').val(),
+                reason: $('#modal-reason').val(),
+                number: $('#modal-number').val(),
+              }),
+              contentType: 'application/json',
+
+              success: function(resData){ // "예약 가능" | "예약 불가능"
+                console.log(resData);
+                $('#modal-result').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + resData);
+
+                if(resData === '예약 가능'){
+                    $('#modal-result').css({
+                        'color': 'blue',
+                        'font-weight': 'bold'
+                    });
+                }else if(resData === '예약 불가능'){
+                    $('#modal-result').css({
+                        'color': 'red',
+                        'font-weight': 'bold'
+                    });
+                }
+              
+              },
+              error: function(){
+                console.log("예약 가능 여부 조회 ajax 통신 실패");
+              }
+          })
+      }
+
+      function reserveButton(){
+
+          // console.log($('#modal-result').text().trim()); // trim()으로 &nbsp;를 제거해야 한다.
+
+          if($('#modal-result').text().trim() === '예약 불가능'){
+
+              alert('예약이 불가능합니다. 다른 날짜를 선택해주세요.');
+
+          }else if($('#modal-result').text().trim() === '예약 가능'){
+
+              const reasonField = $('#modal-reason');
+            
+              if (!reasonField.val().trim()) {
+                  alert('예약 사유를 입력해주세요.');
+                  reasonField.focus(); // 입력 필드로 포커스 이동
+                  return;
+              }
+
+              $('#modal-form').submit();
+          }
+
       }
 
 	</script>

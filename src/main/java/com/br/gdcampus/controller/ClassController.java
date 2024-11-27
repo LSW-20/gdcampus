@@ -369,4 +369,18 @@ public class ClassController {
 		model.addAttribute("c",c);
 		model.addAttribute("email",email);
 	}
+	
+	@GetMapping("/plan/modifyForm.do")
+	public void planModifyForm(String classCode, Model model, HttpSession session) {
+		List<LessonPlanDto> originPlan = classService.selectLessonPlanList(classCode);
+		model.addAttribute("originPlan", originPlan);
+		session.setAttribute("originPlan", originPlan);
+		log.debug("originPlan:{}",originPlan);
+	}
+	
+	@PostMapping("/plan/update.do")
+	public void updatePlan(LessonPlanDto l) {
+		List<LessonPlanDto> planList = l.getPlanList();
+		log.debug("planList : {}",planList);
+	}
 }
