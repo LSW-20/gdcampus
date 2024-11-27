@@ -141,7 +141,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">기안 문서함</h2>
-							      <a class="btn btn-secondary" style="float:right" href="${ contextPath }/approval/regist">결재작성</a>
+ 										<button class="btn btn-secondary" style="float:right" onclick="showFormModal()">결재작성</button>
                     
                     <div class="tab-menu">
                         <button class="${ empty param.status ? 'active' : '' }" data-status="all">전체</button>
@@ -225,7 +225,38 @@
             </div>
         </div>
     </div>
-
+<div class="modal fade" id="formSelectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">결재 양식 선택</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h6 class="fw-bold">기본 양식</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="selectForm('simpleDraft')">기안서</button>
+                        <button class="btn btn-outline-primary" onclick="selectForm('purchaseDraft')">품의서</button>
+                    </div>
+                </div>
+                
+                <c:if test="${not empty formList}">
+                    <div>
+                        <h6 class="fw-bold">관리자 정의 양식</h6>
+                        <div class="d-grid gap-2">
+                            <c:forEach items="${formList}" var="formType">
+                                <button class="btn btn-outline-secondary" onclick="selectForm('${formType.apprType}')">
+                                    ${formType.apprType}
+                                </button>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+        </div>
+    </div>
+</div>
 
 		<!-- 검색 기능만을 위한 초기화 코드 추가 -->
 		<script>
@@ -245,6 +276,23 @@
     			location.href = '${contextPath}/approval/myDoc'+(status === 'all' ? '' : '?status='+status);
     		});
     	});
+
+    	//결재양식선택모달
+    	function showFormModal() {
+    	    $('#formSelectModal').modal('show');
+    	}
+
+    	function selectForm(formType) {
+    	    $('#formSelectModal').modal('hide');
+    	    location.href = '${contextPath}/approval/regist?formType=' + formType;
+    	}
+
+    	// 모달이 완전히 숨겨진 후 페이지 이동하기 위한 이벤트 처리
+    	$('#formSelectModal').on('hidden.bs.modal', function (e) {
+    	    if(window.location.href.includes('formType=')) {
+    	        window.location.href = window.location.href;
+    	    }
+    	});		    	
     </script>
 </body>
 </html>

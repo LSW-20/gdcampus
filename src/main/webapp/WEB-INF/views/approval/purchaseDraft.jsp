@@ -188,7 +188,7 @@
                     </tr>
                     <tr>
                         <th>소속</th>
-                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ deptNo == 1 ? "인사" : "교무" }</td>
+                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ loginUser.deptName }</td>
                     </tr>
                     <tr>
                         <th>기안일</th>
@@ -366,7 +366,25 @@
     $(document).ready(function() {
         $('#summernote').summernote({
             width: 900,
-            height:300,        	
+            height:300,      
+            callbacks: {
+                onInit: function() {
+                    // 에디터 영역의 기본 스타일 설정
+                    $('.note-editable').css({
+                        'color': '#000000',
+                        'background-color': '#ffffff'
+                    });
+                    // 테이블 스타일 설정
+                    $('.note-editable table').css({
+                        'color': '#000000',
+                        'border-color': '#000000'
+                    });
+                    $('.note-editable td, .note-editable th').css({
+                        'border-color': '#000000',
+                        'color': '#000000'
+                    });
+                }
+            },            
           placeholder: '구매사유'
         });
       });
