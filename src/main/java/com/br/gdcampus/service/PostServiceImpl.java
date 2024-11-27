@@ -20,7 +20,7 @@ public class PostServiceImpl implements PostService {
 
 	// 게시판 목록조회
 	@Override
-	public List<PostDto> selectPostList() {
+	public List<PostDto>selectPostList() {
 		return postDao.selectPostList();
 	}
 	
@@ -30,7 +30,13 @@ public class PostServiceImpl implements PostService {
 		return postDao.selectPostDetail(postNo);
 	}
 	
+	// 게시판 상세조회 조회수
+	@Override
+	public int updateIncreaseCount(int postNo) {
+		return postDao.updateIncreaseCount(postNo);
+	}
 	
+
 
 	@Override
 	public int insertPost(PostDto p) {
@@ -42,23 +48,12 @@ public class PostServiceImpl implements PostService {
 	 * pi) { }
 	 */
 	 
-	@Override
-	public int updateIncreaseCount(int postNo) {
-		return postDao.updateIncreaseCount(postNo);
-	}
-	
 
 
 	@Override
 	public int deletePost(int postNo) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public List<AttachDto> selectDelAttach(String[] delFileNo) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	
@@ -116,6 +111,12 @@ public class PostServiceImpl implements PostService {
 	public int deleteCommentCompletely() {
 		// TODO Auto-generated method stub
 		return postDao.deleteCommentCompletely;
+	}
+
+	@Override
+	public List<AttachDto> selectDelAttach(String[] delFileNo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

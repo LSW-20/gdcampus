@@ -18,15 +18,21 @@ public class PostDao {
 	
 	@Autowired
 	private final SqlSessionTemplate sqlSession;
+	
 	public int deleteCommentCompletely;
 	// 게시글 목록
-	public List<PostDto> selectPostList(){
+	public List<PostDto>selectPostList(){
 		return sqlSession.selectList("postMapper.selectPostList");
 	}
 	
 	// 게시글 상세페이지
 	public PostDto selectPostDetail(String postNo) {
 		return sqlSession.selectOne("postMapper.selectPostDetail", postNo);
+	}
+
+	// 게시글 상세 페이지(조회수)
+	public int updateIncreaseCount(int postNo) {
+		return sqlSession.update("postMapper.updateIncreaseCount",postNo);
 	}
 
 
@@ -53,10 +59,6 @@ public class PostDao {
 	// 게시글 삭제
 	public int deleteAttach(String[] delFileNo) {
 		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
-	}
-
-	public int updateIncreaseCount(int postNo) {
-		return sqlSession.update("postMapper.updateIncreaseCount",postNo);
 	}
 
 

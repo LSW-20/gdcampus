@@ -5,132 +5,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta charset="utf-8" />
+        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- bootstrap-datepicker css -->
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+
+        <!-- Bootstrap Css -->
+        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
 </head>
-<body data-topbar="dark" data-sidebar="dark">
-	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
-	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
 
-
-
-	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+<body data-sidebar="dark">
 	<div id="layout-wrapper">
-
-
 		<!-- header 시작 -->
 		<jsp:include page="/WEB-INF/views/common/header.jsp" />
-		<!-- header 끝 -->
+    <!-- header 끝 -->
 
 
 		<!-- sidebar 시작 -->
-		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-		<!-- sidebar 끝 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
 
-
-
-		<!-- main-content 시작 -->
+	<!-- main-content 시작 -->
 		<div class="main-content">
 			<div class="page-content">
 				<div class="row justify-content-md-center">
 					<div class="mt-5">
-						<h3>게시글 추가</h3>
+						<h3>게시글 등록</h3>
 					</div>
 				</div>
-				<div class="col-lg-12">
-					<hr>
-					<div class="mt-5">
-						<form action="${contextPath}board/post/insert" method="post"
+			<!-- Section start -->
+        <section class="row m-3" style="min-height: 500px">
+    
+          <div class="container border p-5 m-4 rounded">
+            <h2 class="m-4">게시글 등록</h2>
+            <br>
+
+            <form  id="enroll-form" method="post" action="${contextPath}/board/post/regist" method="post"
 							class="was-validated">
+                <div class="form-group">
+                    <label for="title">제목 </label>
+                    <input type="text" class="form-control" id="title" name="" required><br>
+                    
+                    <label for="writer">작성자 </label>
+                    <input type="text" class="form-control" id="writer" name="" value="user01" readonly><br>
+                    
+                    <label for="upfile">첨부파일 </label>
+                    <input type="file" class="form-control-file border" id="upfile" name=""><br>
+                    
+                    <label for="userName">내용 </label>
+                    <textarea class="form-control" required name="" id="content" rows="10" style="resize:none;"></textarea><br>
+                    
+                </div>
+                <br>
+                <div align="center">
+                    <button type="submit" class="btn btn-primary" >등록하기</button>
+                    <button type="reset" class="btn btn-danger">취소하기</button>
+                </div>
 
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="userName"></label> 
-										<input type="text" class="form-control" id="postName" name="postName" required>
-										<div class="invalid-feedback">
-											<p>게시글 제목을 작성해주세요</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="text">제목</label> 
-										<input type="email" class="form-control" id="email" name="email" required>
-										<div class="invalid-feedback">
-											<p>댓글을 작성해주세요</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>부서</label>
-										<div class="select">
-											<select class="custom-select" name="deptNo" id="deptNo">
-												<c:forEach var="category" items="${deptList}">
-													<option value="${category.deptNo}">
-														${category.deptName}</option>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>직급</label>
-										<div class="select">
-											<select class="custom-select" name="rankNo" id="rankNo">
-												<c:forEach var="category" items="${rankList}">
-													<option value="${category.rankNo}">
-														${category.rankName}</option>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row justify-content-md-center">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>성별</label>
-										<div class="d-flex">
-											<div class="custom-control custom-radio mr-3">
-												<input type="radio" id="M" name="gender" value="M"
-													class="custom-control-input" checked> <label
-													class="custom-control-label" for="M">남</label>
-											</div>
-											<div class="custom-control custom-radio">
-												<input type="radio" id="F" name="gender" value="F"
-													class="custom-control-input"> <label
-													class="custom-control-label" for="F">여</label>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+            </form>
+          </div>
+    
+        </section>
 							<hr>
 							<div class="mt-4 row d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary w-md mr-3">추가</button>
+								<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
 								<a class="btn btn-primary w-md mr-3" href="${contextPath }/board/post/list">취소</a>
 							</div>
-						</form>
 					</div>
 				</div>
 
 			</div>
-		</div>
 		<!-- main-content 끝 -->
-
   <script src="${ contextPath }/resources/js/fileValidate.js"></script>
 
-	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
   
   

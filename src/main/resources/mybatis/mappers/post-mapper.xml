@@ -41,8 +41,7 @@
 		<result column="MODIFY_DATE" property="modifyDate" />
 		<result column="LEVEL" property="level" />
 	</resultMap>
-	
-	
+
 	
 	<!-- 게시글 목록 조회 -->
 	<select id="selectPostList" resultMap="postResultMap">
@@ -104,42 +103,52 @@
 				    P.POST_NO DESC 
 				</select>	
 
+				<update id="updateIncreaseCount" >
+					update
+								t_post
+						set count = count + 1
+					where post_no = #{postNo}
+					  and status = 'Y'
+				</update>
 
 
 
 
-
-<!-- 게시글 댓글 목록조회 -->
-<select id="selectCommentList" resultMap="commentResultMap">
-	select
-				   comment_no
-				 , user_name as commentWriter
-				 , "COMMENT"
-				 , to_char(regist_date, 'YYYY-MM-DD') regist_date
-			from t_comment c
-			join t_user using (user_no)
-		 where post_no = #{postNo}
-		 order by comment_no desc
-	</select>
-	
-	
-<!-- 게시글 댓글 등록 -->
-    <insert id="insertComment">
-        INSERT 
-          INTO T_COMMENT 	
-        	  (
-            	COMMENT_NO
-            , USER_NO
-            , POST_NO
-            , COMMENTER_ID
-            , COMMENT_WRITER
-            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
-        )
-        VALUES (
-            #{commentNo}, #{userNo}, #{postNo}, #{commenterId}, #{commentWriter},
-            #{refCommentNo}, SYSDATE, #{comment}, NULL, #{level}
-        )
-    </insert>
+				<!-- 게시글 댓글 목록조회 -->
+				<select id="selectCommentList" resultMap="commentResultMap">
+					select
+								   comment_no
+								 , user_name as commentWriter
+								 , "COMMENT"
+								 , to_char(regist_date, 'YYYY-MM-DD') regist_date
+							from t_comment c
+							join t_user using (user_no)
+						 where post_no = #{postNo}
+						 order by comment_no desc
+					</select>
+					
+					
+				<!-- 게시글 댓글 등록 -->
+			    <insert id="insertComment">
+			        INSERT 
+			          INTO T_COMMENT 	
+			        	  (
+			            	COMMENT_NO
+			            , USER_NO
+			            , POST_NO
+			            , COMMENTER_ID
+			            , COMMENT_WRITER
+			            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
+			        )
+			        VALUES (
+			            #{commentNo}, #{userNo}, #{postNo}, #{commenterId}, #{commentWriter},
+			            #{refCommentNo}, SYSDATE, #{comment}, NULL, #{level}
+			        )
+			    </insert>
+				    
+				    
+    
+    
 </mapper>
 	
 	

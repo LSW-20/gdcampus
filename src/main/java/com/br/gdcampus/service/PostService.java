@@ -14,16 +14,17 @@ public interface PostService {
      */
 
     // 게시글 목록 조회
-    List<PostDto> selectPostList();
+    List<PostDto>selectPostList();
+    
+    // 게시글 상세 - 게시글 조회
+    PostDto selectPostDetail(String postNo);
+
+   // 게시글 상세 - 조회수 증가
+ 	int updateIncreaseCount(int postNo);
     
     // 게시글 등록
     int insertPost(PostDto p);
 
-    // 게시글 상세 - 조회수 증가
-    int updateIncreaseCount(int postNo);
-
-    // 게시글 상세 - 게시글 조회
-    PostDto selectPostDetail(String postNo);
 
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/
