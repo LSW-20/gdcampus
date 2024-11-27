@@ -168,6 +168,7 @@
                         <div class="section-title">
                             결재 대기 문서
                             <span id="pageInfo">1/1</span>
+                            <a href="${contextPath}/approval/todo" class="more-link">more</a>
                         </div>
                         <div id="todoDocsList" class="doc-card-container">
                             <!-- 결재 대기 문서 목록이 동적으로 로드됨 -->
@@ -243,7 +244,7 @@
                         <div class="doc-card">
                             <p class="doc-title" style="font-weight: bold;">\${doc.apprTitle}</p>
                             <div class="doc-info">
-                                <div>기안자: \${doc.apprUser}</div>
+                                <div>기안자: \${doc.userName}</div>
                                 <div>기안일: \${doc.apprDate}</div>
                                 <div>결재양식: \${doc.apprType}</div>
                             </div>
