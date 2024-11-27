@@ -148,7 +148,7 @@
                                                     <img src="${contextPath}/images/attach-icon.png" class="attach-icon" alt="첨부파일"/>
                                                 </c:if>
                                             </td> --%>
-                                            <td>${appr.apprUser}</td>
+                                            <td>${appr.userName}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
