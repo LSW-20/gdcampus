@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.br.gdcampus.dao.PostDao;
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
+import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -17,20 +18,20 @@ import lombok.RequiredArgsConstructor;
 public class PostServiceImpl implements PostService {
 	
 	private final PostDao postDao;
-
+	
 	// 게시판 목록조회
 	@Override
 	public List<PostDto>selectPostList() {
 		return postDao.selectPostList();
 	}
 	
-	// 게시판 상세조회
+	// 게시판 상세 / 게시글 조회
 	@Override
 	public PostDto selectPostDetail(String postNo) {
 		return postDao.selectPostDetail(postNo);
 	}
 	
-	// 게시판 상세조회 조회수
+	// 게시판 상세 /조회수증가
 	@Override
 	public int updateIncreaseCount(int postNo) {
 		return postDao.updateIncreaseCount(postNo);
@@ -118,6 +119,9 @@ public class PostServiceImpl implements PostService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	
 
 
 	

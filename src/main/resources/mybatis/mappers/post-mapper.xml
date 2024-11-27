@@ -43,6 +43,13 @@
 		<result column="LEVEL" property="level" />
 	</resultMap>
 
+	<select id="selectPostListCount" resultType="_int">
+		select 
+					 count
+			from t_post
+		 where file_status = 'Y'
+	</select>
+
 	
 	<!-- 게시글 목록 조회 -->
 	<select id="selectPostList" resultMap="postResultMap">
@@ -63,6 +70,17 @@
 	ORDER BY 
 	    P.POST_NO ASC 
 	</select>
+	
+	<insert id="insertPost">
+		insert
+			into post
+			(
+				post_no
+			, post_title
+			, POST_CONTENT
+			)
+	</insert>
+	
 	
 	<!-- 게시글 상세페이지 조회 -->
 	<select id="selectPostDetail" resultMap="postResultMap">
