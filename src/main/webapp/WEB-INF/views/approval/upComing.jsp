@@ -113,7 +113,7 @@
             <div class="page-content">
                 <div class="container-fluid">
                     <h2 class="page-title">결재 예정 문서</h2>
-                    <a class="btn btn-secondary" style="float:right" href="${contextPath}/approval/regist">결재작성</a>
+ 										<button class="btn btn-secondary" style="float:right" onclick="showFormModal()">결재작성</button>
                     <br>
                     
                     <c:choose>
@@ -174,16 +174,55 @@
         <!-- main-content 끝 -->
     </div>
     <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-<%--         <!-- Required datatable js -->
-        <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-        
-        <!-- Responsive examples -->
-        <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<div class="modal fade" id="formSelectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">결재 양식 선택</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h6 class="fw-bold">기본 양식</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="selectForm('simpleDraft')">기안서</button>
+                        <button class="btn btn-outline-primary" onclick="selectForm('purchaseDraft')">품의서</button>
+                    </div>
+                </div>
+                
+                <c:if test="${not empty formList}">
+                    <div>
+                        <h6 class="fw-bold">관리자 정의 양식</h6>
+                        <div class="d-grid gap-2">
+                            <c:forEach items="${formList}" var="formType">
+                                <button class="btn btn-outline-secondary" onclick="selectForm('${formType.apprType}')">
+                                    ${formType.apprType}
+                                </button>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+        </div>
+    </div>
+</div>    
+<script>
+// jQuery를 사용하는 버전
+function showFormModal() {
+    $('#formSelectModal').modal('show');
+}
 
-        <!-- init js -->
-        <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script> --%>
-    
+function selectForm(formType) {
+    $('#formSelectModal').modal('hide');
+    location.href = '${contextPath}/approval/regist?formType=' + formType;
+}
+
+// 모달이 완전히 숨겨진 후 페이지 이동하기 위한 이벤트 처리
+$('#formSelectModal').on('hidden.bs.modal', function (e) {
+    if(window.location.href.includes('formType=')) {
+        window.location.href = window.location.href;
+    }
+});
+</script>    
 </body>
 </html>
