@@ -49,7 +49,7 @@ public class PostController {
         PostDto postDto = postService.selectPostDetail(no);
         List<CommentDto> commentList = postService.selectCommentList(no);
         model.addAttribute("p", postDto);
-        model.addAttribute("commentList", commentList);
+        model.addAttribute("c", commentList);
     }
 
 	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청

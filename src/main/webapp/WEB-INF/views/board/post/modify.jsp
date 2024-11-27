@@ -151,7 +151,7 @@
           			
           			// 삭제할 첨부파일 번호를 submit시 넘기기위한 작업
           			// 수정하기 submit시 form요소내에 input type="hidden" 으로 첨부파일번호 숨기기
-          			let hiddenEl = "<input type='hidden' name='postNo' value='" + $(this).data("postno") + "'>";
+          			let hiddenEl = "<input type='hidden' name='postNo' value='" + $(this).data("postNo") + "'>";
           			$("#modify-form").append(hiddenEl);
           			
           			// 화면으로부터 삭제된거 처럼 보여지게 해당 첨부파일 링크 삭제 처리
@@ -160,6 +160,20 @@
           		})
           	})
           	
+          	//
+          	//  모든 order-window-2-menu 클래스를 가진 요소에 대해 이벤트 리스너 추가
+							  document.querySelectorAll('.order-window-2-menu').forEach(function(element) {
+							    element.addEventListener('mouseover', function() {
+							      // 마우스를 올렸을 때 커서를 포인터로 변경
+							      this.style.cursor = 'pointer';
+							    });
+							
+							    element.addEventListener('mouseout', function() {
+							      // 마우스를 벗어났을 때 커서를 기본값으로 변경
+							      this.style.cursor = 'default';
+							    });
+							  });
+
           </script>
           
           <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->

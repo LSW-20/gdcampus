@@ -92,12 +92,12 @@
 				 <br>
 				 
 					 <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-         <c:if test="${ loginUser.userId eq b.boardWriter }">
+         <c:if test="${ loginUser.userId eq p.writerName }">
 	         <div align="center">
 	         		<form id="frm" action="" method="post">
-	         			<input type="hidden" name="no" value="${ b.boardNo }">
-	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/modify.do');">수정하기</button>
-	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/delete.do');">삭제하기</button>
+	         			<input type="hidden" name="no" value="${ p.userNo }">
+	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}board/post/modify');">수정하기</button>
+	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
 	            </form>
 	         </div>
          </c:if>
@@ -115,16 +115,29 @@
 		         function fn_commentList(){
 		             $.ajax({
 		                 url: '${contextPath}/board/post/clist',
-		                 data: { no: '${p.postNo}' },
+		                 data:  "no:" + '${p.postNo}' ,
 		                 success: function(resData){
-		                     let tbody = $("#comment_area tbody");
+		                	 	console.log(resData);
+		                      let tbody = $("#comment_area tbody");
 		                     tbody.empty();
 		                     $.each(resData, function(index, comment){
 		                         let tr = $("<tr></tr>");
 		                         tr.append($("<td></td>").text(c.commentWriter));
 		                         tr.append($("<td></td>").text(c.comment));
 		                         tr.append($("<td></td>").text(c.registDate));
-		                         tbody.append(tr);
+		                         tbody.append(tr); 
+		                	 	$("#rcount").text(resData.length); // 댓글수출력
+						         				 let tr = "";
+						         				 for(let i=0; i<resData.length; i++){
+						         					 tr += "<tr>"
+						         					 		 +		"<th>" + resData[i].commentWriter  + "</th>"
+						         					 		 +	  "<td>" + resData[i].comment + "</td>"
+						         					 		 +    "<td>" + resData[i].registDate     + "</td>"
+						         					 		 + "</tr>";
+						         				 }
+						         				 
+						         				 $("#comment_area tbody").html
+						         				 (tr);        			
 		                     });
 		                 }
 		             });
@@ -136,18 +149,18 @@
 		                 url: '${contextPath}/board/post/cinsert',
 		                 type: 'post',
 		                 data: {
-		                     comment: $("#comment_content").val(),
+		                     comment: $("#comment").val(),
 		                     postNo: '${p.postNo}'
 		                 },
 		                 success: function(resData){
 		                     if(resData === "SUCCESS"){
 		                         fn_commentList();
-		                         $("#comment_content").val("");
+		                         $("#comment").val("");
 		                     } else {
 		                         alert("댓글 작성 실패");
 		                     }
 		                 }
-		             });
+		             })
 		         }
 		
 		         // 페이지 로드 시 댓글 목록 조회
