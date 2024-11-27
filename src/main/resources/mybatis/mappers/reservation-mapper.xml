@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reservationMapper">
+ 
+	<!-- (상우) 예약 가능 여부 조회 -->
+	<select id="checkAvailability" resultType="String">
+		select STATUS
+			from T_RESERVATION
+		 where RESERVATION_DATE = #{date}
+	 	 <if test="classification == '비품'">
+			 and EQUIP_NO = #{number}
+		 </if>
+	   <if test="classification == '시설'">
+			 and FACILITY_NO = #{number}
+		 </if>
+	</select>
+	
+	<!-- (상우) 예약하기 -->
+	<insert id="reserve">
+		insert 
+			into T_RESERVATION
+			(
+				RESERVATION_NO 
+			, USER_NO
+			, USER_NAME
+			, RESERVATION_DATE 
+			, RESERVATION_REASON
+			, EQUIP_NO 
+			, FACILITY_NO 
+			, RESERVATION_REQUEST_DATE
+			, STATUS
+			)
+			VALUES
+			(
+			  LPAD(SEQ_RNO.NEXTVAL, 4, '0')
+			, #{userNo}
+			, #{userName}
+			, TO_DATE(#{date}, 'YYYY-MM-DD')
+			, #{reason}
+			, <choose>
+          <when test="classification == '비품'">
+            #{number}
+          </when>
+          <otherwise>
+            NULL
+          </otherwise>
+   		  </choose>
+			, <choose>
+          <when test="classification == '시설'">
+            #{number}
+          </when>
+          <otherwise>
+            NULL
+          </otherwise>
+        </choose>
+			, SYSDATE
+			, '예약신청중'
+			)
+	</insert> 
+ 
+</mapper>
