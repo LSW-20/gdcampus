@@ -178,9 +178,6 @@
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/student/student.do">학생 정보 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
 								</c:if>

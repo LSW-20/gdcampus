@@ -111,10 +111,9 @@
 							    </div>
 
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
-							        <div class="card-body">
-                </div>
+							        <div class="card-body" id="data-weather">
 							        
-							        
+                			</div>
 							    </div>
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
 							        <div class="card-body">
@@ -261,6 +260,101 @@
             });
         });
    		 </script>
+   		 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // 페이지 로딩 시 weather 함수 실행
+        jQuery.ajax({
+            url: "${contextPath}/api/weather",  // 실제 API URL
+            type: "GET",
+            timeout: 30000,  // 30초 타임아웃
+            contentType: "application/json",
+            dataType: "json",
+            success: function(data, status, xhr) {
+                let dataHeader = data.response.header.resultCode;
+
+                // 응답 결과 코드가 "00"이면 성공
+                if (dataHeader === "00") {
+                    console.log("success == >");
+                    console.log(data);
+
+                    // API에서 받은 날씨 데이터를 HTML로 출력
+                    let weatherHtml = '';
+                    let weatherItems = data.response.body.items.item;  // 여러 항목들이 있는 배열
+
+                    // 예시: 날씨 정보 출력 (필요한 데이터를 수정하여 출력)
+                    weatherHtml += '<h4>현재 날씨 정보</h4>';
+
+                    // 데이터 배열 순회
+                    weatherItems.forEach(function(item) {
+                        // 각 항목에서 원하는 값 추출
+                        let category = item.category;  // 예: TMP (온도), SKY (날씨 상태)
+                        let value = item.fcstValue;    // 예보 값
+
+                        // 원하는 형식으로 HTML 구성
+                        // weatherHtml += '<p>' + category + ': ' + value + '</p>';
+                        
+                         // category에 따라 출력할 내용 결정
+                        let displayText = '';
+                        switch (category) {
+                            case "TMP":
+                                displayText = "현재온도: " + value + "°C";
+                                break;
+                            case "UUU":
+                                displayText = "풍속(동서성분): " + value + " m/s";
+                                break;
+                            case "VVV":
+                                displayText = "풍속(남북성분): " + value + " m/s";
+                                break;
+                            case "SKY":
+                            		if(value == 1){
+                            			displayText = "하늘상태: 맑음";
+                            		}else if(value == 2){
+                            			displayText = "하늘상태: 구름조금";
+                            		}else if(value == 3){
+                            			displayText = "하늘상태: 구름많음";
+                            		}else{
+                            			displayText = "하늘상태: 흐림";
+                            		}
+                            	
+                                break;
+	                                
+                            case "POP":
+                                displayText = "강수확률: " + value + "%";
+                                break;
+                            case "REH":
+                                displayText = "습도: " + value + "%";
+                                break;
+                            case "TMX":
+                                displayText = "최고온도: " + value + "°C";
+                                break;
+                            case "TMN":
+                                displayText = "최저온도: " + value + "°C";
+                                break;
+                           
+                        }
+                        // 원하는 형식으로 HTML 구성
+                        weatherHtml += '<p>' + displayText + '</p>';
+                    });
+
+                    // 데이터를 div에 삽입
+                    $('#data-weather').html(weatherHtml);
+
+                } else {
+                    console.log("fail == >");
+                    console.log(data);
+                }
+            },
+            error: function(xhr, status, errorThrown) {
+                // 오류 발생 시
+                console.log("error == >");
+                console.log("Status: " + status);
+                console.log("Error Thrown: " + errorThrown);
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>
