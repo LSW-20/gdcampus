@@ -291,3 +291,19 @@
 		</div>
 </div>
 <!-- sidebar 끝 -->
+<script>
+$(document).ready(function() {
+    // 모든 서브메뉴 펼치기
+    $('.sub-menu').addClass('mm-show');
+    $('.has-arrow').addClass('mm-active');
+    $('.sub-menu').attr('aria-expanded', 'true');
+    
+    // metisMenu 초기화 (이미 사용 중인 경우)
+    $('#side-menu').metisMenu({
+        preventDefault: false,
+        triggerElement: '.has-arrow',
+        subMenu: '.sub-menu',
+        toggle: false // 클릭해도 접히지 않게 설정
+    });
+});
+</script>
