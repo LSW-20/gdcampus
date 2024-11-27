@@ -1,5 +1,7 @@
 package com.br.gdcampus.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +19,14 @@ import lombok.ToString;
 @ToString
 @Builder
 public class LessonPlanDto {
-
+	
+	private String classCode;
 	private int week; 
 	private String content;
 	private String tchngMthd;
 	private String material;
+	
+    private List<LessonPlanDto> planList;
+    private List<LessonPlanDto> deletePlanList;
+    private List<LessonPlanDto> updatePlanList;
 }
