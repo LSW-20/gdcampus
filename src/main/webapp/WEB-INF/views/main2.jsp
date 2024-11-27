@@ -203,7 +203,6 @@
                 </div>
                 <!-- End Page-content -->
 
-                
             </div>
             <!-- end main content-->
 
@@ -297,6 +296,18 @@
                          // category에 따라 출력할 내용 결정
                         let displayText = '';
                         switch (category) {
+		                        case "SKY":
+			                    		if(value == 1){
+			                    			displayText = "하늘상태: 맑음";
+			                    		}else if(value == 2){
+			                    			displayText = "하늘상태: 구름조금";
+			                    		}else if(value == 3){
+			                    			displayText = "하늘상태: 구름많음";
+			                    		}else{
+			                    			displayText = '<i class="uil-cloud-showers-heavy"></i>';
+			                    		}
+			                    	
+		                        break;
                             case "TMP":
                                 displayText = "현재온도: " + value + "°C";
                                 break;
@@ -306,19 +317,6 @@
                             case "VVV":
                                 displayText = "풍속(남북성분): " + value + " m/s";
                                 break;
-                            case "SKY":
-                            		if(value == 1){
-                            			displayText = "하늘상태: 맑음";
-                            		}else if(value == 2){
-                            			displayText = "하늘상태: 구름조금";
-                            		}else if(value == 3){
-                            			displayText = "하늘상태: 구름많음";
-                            		}else{
-                            			displayText = "하늘상태: 흐림";
-                            		}
-                            	
-                                break;
-	                                
                             case "POP":
                                 displayText = "강수확률: " + value + "%";
                                 break;
