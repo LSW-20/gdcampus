@@ -188,7 +188,7 @@
                     </tr>
                     <tr>
                         <th>소속</th>
-                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ deptNo == 1 ? "인사" : "교무" }</td>
+                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ loginUser.deptName }</td>
                     </tr>
                     <tr>
                         <th>기안일</th>
