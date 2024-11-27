@@ -64,7 +64,12 @@
             margin-left: 250px;
             padding: 20px;
         }
-
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 20px 0;
+        }
         .approval-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -163,6 +168,9 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    <span class="page-title">결재 HOME</span>
+ 										<button class="btn btn-secondary" style="float:right" onclick="showFormModal()">결재작성</button><br><br>
+                 
                     <!-- 결재 대기 문서 -->
                     <div class="todo-documents">
                         <div class="section-title">
@@ -181,6 +189,7 @@
                     <div class="approval-container">
                         <!-- 기안 진행 문서 -->
                         <div class="doc-section">
+                        
                             <div class="section-title">
                                 기안 진행 문서
                                 <a href="${contextPath}/approval/myDoc?status=1" class="more-link">more</a>
@@ -223,7 +232,38 @@
             </div>
         </div>
     </div>
-
+<div class="modal fade" id="formSelectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">결재 양식 선택</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h6 class="fw-bold">기본 양식</h6>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="selectForm('simpleDraft')">기안서</button>
+                        <button class="btn btn-outline-primary" onclick="selectForm('purchaseDraft')">품의서</button>
+                    </div>
+                </div>
+                
+                <c:if test="${not empty formList}">
+                    <div>
+                        <h6 class="fw-bold">관리자 정의 양식</h6>
+                        <div class="d-grid gap-2">
+                            <c:forEach items="${formList}" var="formType">
+                                <button class="btn btn-outline-secondary" onclick="selectForm('${formType.apprType}')">
+                                    ${formType.apprType}
+                                </button>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
         let currentPage = 1;
         let maxPage = 1;
@@ -285,6 +325,22 @@
             document.getElementById('prevBtn').disabled = currentPage === 1;
             document.getElementById('nextBtn').disabled = currentPage === maxPage;
         }
+     //결재작성모달
+        function showFormModal() {
+            $('#formSelectModal').modal('show');
+        }
+
+        function selectForm(formType) {
+            $('#formSelectModal').modal('hide');
+            location.href = '${contextPath}/approval/regist?formType=' + formType;
+        }
+
+        // 모달이 완전히 숨겨진 후 페이지 이동하기 위한 이벤트 처리
+        $('#formSelectModal').on('hidden.bs.modal', function (e) {
+            if(window.location.href.includes('formType=')) {
+                window.location.href = window.location.href;
+            }
+        });        
     </script>
 </body>
 </html>
