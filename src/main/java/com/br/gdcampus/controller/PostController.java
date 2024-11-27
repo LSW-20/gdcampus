@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.stream.events.Comment;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +24,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
-
 @Slf4j
 @RequestMapping("/board/post")
 @RequiredArgsConstructor
@@ -47,23 +43,19 @@ public class PostController {
 		
 	}
 	
-	
-
 	// 게시글 상세 페이지
-	@GetMapping("/detail") 
-	 public void selectPostDetail(String no, Model model) {
-		
-		PostDto postDto = postService.selectPostDetail(no);
-		
-		model.addAttribute("p", postDto);
-		
-	}	
-	
-	
+    @GetMapping("/detail")
+    public void selectPostDetail(String no, Model model) {
+        PostDto postDto = postService.selectPostDetail(no);
+        List<CommentDto> commentList = postService.selectCommentList(no);
+        model.addAttribute("p", postDto);
+        model.addAttribute("commentList", commentList);
+    }
+
 	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
 	public String increaseCount(int no) {
 		postService.updateIncreaseCount(no);
-		return "redirect:/board/post/detail?no=" + no; // 상세페이지로 
+		return "redirect:/post/detail?no=" + no; // 상세페이지로 
 	}
 	
 
@@ -81,10 +73,10 @@ public class PostController {
   		
   	// post테이블에 insert할 데이터 
   	post.setWriterName( String.valueOf( ((PostDto)session.getAttribute("loginUser")).getUserNo() ) );
-
-// 첨부파일 업로드 후에 
-// attachment테이블에 insert할 데이터
-  
+  	
+	// 첨부파일 업로드 후에 
+	// attachment테이블에 insert할 데이터
+ 
   	List<AttachDto> attachList = new ArrayList<>();
   	for(MultipartFile file : uploadFiles) {
   		if(file != null && !file.isEmpty()) {
@@ -95,44 +87,41 @@ public class PostController {
 									.filesystemName(map.get("filesystemName"))
 									.refType("B")
 									.build());
-	}
-}
-  	post.setAttachList(attachList); // 제목,내용,작성자회원번호,첨부파일들정보
-
-  	int result = postService.insertPost(post);
-
-if(attachList.isEmpty() && result == 1 
-		|| !attachList.isEmpty() && result == attachList.size()) {
-	rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 성공");
-}else {
-	rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
-}
-
-return "redirect:/board/post/list";
-
-}
-  	
-	
-	// 게시글 댓글목록조회
-	@ResponseBody
-	@GetMapping(value="/clist", produces="application/json")
-	public List<CommentDto> commentList(String no) {
-		/* log.debug("no??????? : {}",no); */
-		return postService.selectCommentList(no);
+			}
+		}
+		  	post.setAttachList(attachList); // 제목,내용,작성자회원번호,첨부파일들정보
 		
-	}
-	
-	
+		  	int result = postService.insertPost(post);
+		
+		if(attachList.isEmpty() && result == 1 
+				|| !attachList.isEmpty() && result == attachList.size()) {
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 성공");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
+		}
+		
+		return "redirect:/post/list";
+		
+		}
+  	
 
-	// 게시글 댓글 등록
-	@ResponseBody
+    // 게시글 댓글 목록 조회
+    @ResponseBody
+    @GetMapping(value = "/clist", produces = "application/json")
+    public List<CommentDto> commentList(String no) {
+        return postService.selectCommentList(no);
+    }
+
+
+    // 게시글 댓글 등록
+    @ResponseBody
     @PostMapping("/cinsert")
     public String CommentInsert(CommentDto c, HttpSession session) {
-    	c.setCommentWriter( String.valueOf( ((CommentDto)session.getAttribute("loginUser")).getUserNo() ) );
-		int result = postService.insertComment(c);
-		return result > 0 ? "SUCCESS" : "FAIL";
+        c.setCommentWriter(((PostDto)session.getAttribute("loginUser")).getUserNo());
+        int result = postService.insertComment(c);
+        return result > 0 ? "SUCCESS" : "FAIL";
     }
-    
-	
 }
+
+
 		
