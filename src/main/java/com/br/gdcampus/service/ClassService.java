@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
+import com.br.gdcampus.dto.LessonPlanDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
 public interface ClassService {
@@ -44,13 +45,17 @@ public interface ClassService {
 	ClassDto selectMyClassDetail(String userNo);
 	// 수강생 목록 조회
 	ClassDto selectLearnerList(String classCode);
+	// 수강생 수 조회(차트용)
+	List<Map<String, Object>> selectLearnerCount(String classCode);
 	
-	// 수업계획서 상세조회
+	// 수업계획서 상세조회(전체 강의계획서)
 	ClassDto selectPlanList(String classCode);
 	// 수업계획서 수정
 	int updatePlanList(ClassDto c);
 	// 학과 조회 
 	List<CategoryDto> selectCategory(String string);
+	// 주차별 수업계획서 상세조회
+	List<LessonPlanDto> selectLessonPlanList(String classCode);
 		
 //---------------------------------------내강의 끝---------------------------------------------
 	

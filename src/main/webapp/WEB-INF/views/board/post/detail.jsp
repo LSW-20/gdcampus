@@ -58,7 +58,7 @@
          <h2 class="m-4">게시글 상세</h2>
          <br>
 
-         <a class="btn btn-secondary" style="float:right" href="${ contextPath }/post/list.do">목록으로</a>
+         
          <br><br>
          <table align="center" class="table">
              <tr>
@@ -67,134 +67,101 @@
              </tr>
              <tr>
                  <th>작성자</th>
-                 <td width="400">${ p.postWriter }</td>
+                 <td width="400">${ p.writerName }</td> <!-- 작성자 사번에서 가지고 와야할때는 뭐라고 입력해야하는지?   -->
                  <th width="120">작성일</th>
                  <td>${ p.registDate }</td>
              </tr>
              <tr>
                  <th>첨부파일</th>
                  <td colspan="3">
-                 	 <c:forEach var="at" items="${ p.attachList }">
+                 	 <c:forEach var="at" items="${ a.attachList }">
                      <a href="${ contextPath }${ at.filePath }/${ at.filesystemName }" download="${ at.originalName }">${ at.originalName }</a> 
                      <br>
                    </c:forEach>
                  </td>
              </tr>
+            
              <tr>
-                 <th>내용</th>
-                 <td colspan="3"></td>
-             </tr>
-             <tr>
+          		 <th>내용</th>
                  <td colspan="4">
                  	 <p style="height:150px">${ p.postContent }</p>
                  </td>
-             </tr>
+              </tr>
          </table>
          <br>
-
-         <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
-         <c:if test="${ loginUser.userId eq p.user_no }">
+				 <br>
+				 
+					 <!-- 수정하기, 삭제하기 버튼은 이글이 본인글일 경우만 보여져야됨 -->
+         <c:if test="${ loginUser.userId eq b.boardWriter }">
 	         <div align="center">
 	         		<form id="frm" action="" method="post">
-	         			<input type="hidden" name="no" value="${ p.postNo }">
-	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/post/modify.do');">수정하기</button>
-	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/post/delete.do');">삭제하기</button>
+	         			<input type="hidden" name="no" value="${ b.boardNo }">
+	              <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/modify.do');">수정하기</button>
+	              <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/delete.do');">삭제하기</button>
 	            </form>
 	         </div>
          </c:if>
          <br><br>
-
-         <table id="comment_area" class="table" align="center">
-             <thead>
-                 <tr>
-                 
-                 	 <c:choose>
-                 	 	 <c:when test="${ empty loginUser }">
-	                     <th colspan="2" width="650">
-	                         <textarea class="form-control" rows="2" style="resize:none; width:100%" readonly>로그인 후 이용가능한 서비스 입니다.</textarea>
-	                     </th>
-	                     <th style="vertical-align: middle"><button class="btn btn-secondary disabled">등록하기</button></th>
-                 		 </c:when>
-                 		 <c:otherwise>
-	                 		 <th colspan="2" width="650">
-	                         <textarea class="form-control" id="comment_content" rows="2" style="resize:none; width:100%"></textarea>
-	                     </th>
-	                     <th style="vertical-align: middle"><button class="btn btn-secondary" onclick="fn_insertComment();">등록하기</button></th>
-                   	 </c:otherwise>
-                   </c:choose>
-                 </tr>
-                 <tr>
-                    <td colspan="3">댓글 (<span id="rcount">0</span>) </td> 
-                 </tr>
-             </thead>
-             <tbody>
-                 
-             </tbody>
-         </table>
-         
-         <script>
-         	 $(document).ready(function(){
-         		 fn_commentList();
-         	 })
-         
-         	 // 해당 게시글의 댓글 목록 조회용 (ajax) 함수
-         	 function fn_commentList(){
-         		 $.ajax({
-         			 url: '${contextPath}/board/post/clist.do',
-         			 data: "no=" + ${p.postNo},
-         			 success: function(resData){
-         				 console.log(resData); // [{}, {}, ..]
-         				 
-         				/* 
-         				 	<tr>
-                     <th>user02</th>
-                     <td>댓글입니다. <td>
-                     <td>2020-04-10</td>
-                  </tr>
-         				 */
-         				 
-         				 $("#rcount").text(resData.length); // 댓글수출력
-         				 let tr = "";
-         				 for(let i=0; i<resData.length; i++){
-         					 tr += "<tr>"
-         					 		 +		"<th>" + resData[i].commenterId  + "</th>"
-         					 		 +	  "<td>" + resData[i].comment + "</td>"
-         					 		 +    "<td>" + resData[i].registDate     + "</td>"
-         					 		 + "</tr>";
-         				 }
-         				 
-         				 $("#comment_area tbody").html(tr);        				 
-         				 
-         			 }
-         		 })
-         	 }
-         	 
-         	 // 댓글 등록용 (ajax) 함수
-         	 function fn_insertComment(){
-         		 $.ajax({
-         			 url: '${contextPath}/post/comment.do',
-         			 type: 'post',
-         			 data: {
-         				 postContent: $("#post_content").val(),
-         				 refpostdNo: ${p.postNo}
-         			 },
-         			 success: function(resData){
-         				 if(resData == "SUCCESS"){
-         					 fn_commentList();
-         					 $("#comment_content").val("");
-         				 }else{
-         					 alert("댓글 작성 실패");
-         				 }
-         			 }
-         		 })
-         	 }
-         </script>
-       </div>
-			</div>
-     <!-- Section end -->
-		</div>
- </div>
- 
+        
+				<textarea id="comment_content" class="form-control" rows="3"></textarea>
+				<button class="btn btn-primary" onclick="fn_insertComment();">댓글 작성</button>
+				         
+		  	<a class="btn btn-secondary" style="float:center" href="${ contextPath }board/post/list">목록으로</a>
+				<br>
+		         
+		         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		         <script>
+		      // 댓글 목록 조회 함수
+		         function fn_commentList(){
+		             $.ajax({
+		                 url: '${contextPath}/board/post/clist',
+		                 data: { no: '${p.postNo}' },
+		                 success: function(resData){
+		                     let tbody = $("#comment_area tbody");
+		                     tbody.empty();
+		                     $.each(resData, function(index, comment){
+		                         let tr = $("<tr></tr>");
+		                         tr.append($("<td></td>").text(c.commentWriter));
+		                         tr.append($("<td></td>").text(c.comment));
+		                         tr.append($("<td></td>").text(c.registDate));
+		                         tbody.append(tr);
+		                     });
+		                 }
+		             });
+		         }
+		
+		         // 댓글 등록 함수
+		         function fn_insertComment(){
+		             $.ajax({
+		                 url: '${contextPath}/board/post/cinsert',
+		                 type: 'post',
+		                 data: {
+		                     comment: $("#comment_content").val(),
+		                     postNo: '${p.postNo}'
+		                 },
+		                 success: function(resData){
+		                     if(resData === "SUCCESS"){
+		                         fn_commentList();
+		                         $("#comment_content").val("");
+		                     } else {
+		                         alert("댓글 작성 실패");
+		                     }
+		                 }
+		             });
+		         }
+		
+		         // 페이지 로드 시 댓글 목록 조회
+		         $(document).ready(function(){
+		             fn_commentList();
+		         });
+		
+		         </script>
+		       </div>
+					</div>
+		     <!-- Section end -->
+				</div>
+		 </div>
+		 
  
 
 </body>

@@ -48,25 +48,6 @@
 								
 								<!-- 공통 메뉴 시작 -->
 								<li class="menu-title">공통</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="user"></i>
-												<span class="menu-item">근태 관리</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/holiday/workstatus.do">나의 근태 현황</a></li>
-												<li><a href="#">휴가 신청</a></li>
-										</ul>
-								</li>
-
-								
-								<li>
-										<a href="#" class="waves-effect">
-												<i class="icon nav-icon" data-feather="calendar"></i>
-												<span class="menu-item">일정 관리</span>
-										</a>
-								</li>
 								
 								<li>
 										<a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -74,9 +55,10 @@
 												<span class="menu-item">게시판</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#">공지게시판</a></li>
-												<li><a href="#">자유게시판</a></li>
-												<li><a href="#">투표게시판</a></li>
+												<li><a href="${contextPath}/board/notice/list">공지게시판</a></li>
+												<li><a href="${contextPath}/board/post/list">자유게시판</a></li>
+												<li><a href="${contextPath}/board/vote/list" }>투표게시판</a></li>
+
 										</ul>
 								</li>
 								
@@ -177,9 +159,6 @@
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/student/student.do">학생 정보 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
 								</c:if>
@@ -213,17 +192,6 @@
 												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
 								</li>							
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="edit-3"></i>
-												<span class="menu-item">서명관리</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
 
 								<!-- 전자결재 메뉴 끝 -->												
 								
@@ -236,7 +204,7 @@
 								<li class="menu-title">관리자</li>
 
 								<li>
-										<a href="javascript: void(0);" class=" waves-effect">
+										<a href="${contextPath }/dept/list" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="briefcase"></i>
 												<span class="menu-item">부서 관리</span>
 										</a>
@@ -249,12 +217,6 @@
 										</a>
 								</li>
 								
-									<li>
-										<a href="javascript: void(0);" class=" waves-effect">
-												<i class="icon nav-icon" data-feather="briefcase"></i>
-												<span class="menu-item">게시판 관리</span>
-										</a>
-								</li>
 
 								<li>
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
@@ -277,27 +239,25 @@
 								<br>
 								
 
-								<li class="menu-title" c>Components</li>
-
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="share-2"></i>
-												<span class="menu-item" key="t-multi-level">Multi Level</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="true">
-												<li><a href="javascript: void(0);" key="t-level-1.1">Level 1.1</a></li>
-												<li><a href="javascript: void(0);" class="has-arrow" key="t-level-1.2">Level 1.2</a>
-														<ul class="sub-menu" aria-expanded="true">
-																<li><a href="javascript: void(0);" key="t-level-2.1">Level 2.1</a></li>
-																<li><a href="javascript: void(0);" key="t-level-2.2">Level 2.2</a></li>
-														</ul>
-												</li>
-										</ul>
-								</li>
-
 						</ul>
 				</div>
 				<!-- Sidebar -->
 		</div>
 </div>
 <!-- sidebar 끝 -->
+<script>
+$(document).ready(function() {
+    // 모든 서브메뉴 펼치기
+    $('.sub-menu').addClass('mm-show');
+    $('.has-arrow').addClass('mm-active');
+    $('.sub-menu').attr('aria-expanded', 'true');
+    
+    // metisMenu 초기화 (이미 사용 중인 경우)
+    $('#side-menu').metisMenu({
+        preventDefault: false,
+        triggerElement: '.has-arrow',
+        subMenu: '.sub-menu',
+        toggle: false // 클릭해도 접히지 않게 설정
+    });
+});
+</script>

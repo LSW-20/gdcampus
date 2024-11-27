@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.EvaMethodDto;
+import com.br.gdcampus.dto.LessonPlanDto;
 import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.ClassService;
@@ -339,8 +340,47 @@ public class ClassController {
 		return res;
 	}
 	
+	/**내 강의 상세페이지
+	 * @param classCode
+	 * @param model
+	 */
 	@GetMapping("/detail.do")
 	public void myClassDetail(String classCode, Model model) {
+		
+		 List<Map<String,Object>> chart = classService.selectLearnerCount(classCode);
+		 model.addAttribute("chart",chart);
 		 model.addAttribute("c", classService.selectMyClassDetail(classCode));
+	}
+	
+	/**수업계획서 상세페이지
+	 * @param classCode
+	 * @param model
+	 */
+	@GetMapping("/plan/detail.do")
+	public void classPlanDetail(String classCode, Model model, HttpSession session) {
+		ClassDto c = classService.selectPlanList(classCode);
+		if(c.getEvaList().isEmpty() == false) {
+			c.setPlanList(c.getEvaList().get(0).getPlanList());
+		}
+		
+		String email = ((UserDto)session.getAttribute("loginUser")).getEmail();
+		log.debug("c:{}",c);
+		
+		model.addAttribute("c",c);
+		model.addAttribute("email",email);
+	}
+	
+	@GetMapping("/plan/modifyForm.do")
+	public void planModifyForm(String classCode, Model model, HttpSession session) {
+		List<LessonPlanDto> originPlan = classService.selectLessonPlanList(classCode);
+		model.addAttribute("originPlan", originPlan);
+		session.setAttribute("originPlan", originPlan);
+		log.debug("originPlan:{}",originPlan);
+	}
+	
+	@PostMapping("/plan/update.do")
+	public void updatePlan(LessonPlanDto l) {
+		List<LessonPlanDto> planList = l.getPlanList();
+		log.debug("planList : {}",planList);
 	}
 }

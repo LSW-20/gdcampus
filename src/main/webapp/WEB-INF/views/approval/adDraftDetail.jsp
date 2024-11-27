@@ -36,7 +36,7 @@
                 <tr>
                     <td>
                         <div class="stamp approved">승인</div>
-                         ${loginUser.userName} ${loginUser.rankName}
+                         ${approval.userName} 
                     </td>
                 </tr>
                 <tr class="approvalDate">

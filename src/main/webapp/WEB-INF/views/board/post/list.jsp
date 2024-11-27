@@ -2,260 +2,215 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>게시글 목록</title>
-<style type="text/css">
-.main-content {
-	min-height: 900px;
-}
+<meta charset="utf-8" />
+        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-.page-content {
-	margin: auto;
-	width: 75%;
-}
+        <!-- bootstrap-datepicker css -->
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
-.card-body {
-	height: 500px;
-}
-</style>
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+
+        <!-- Bootstrap Css -->
+        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
 </head>
 
-<body data-topbar="dark" data-sidebar="dark">
-	<!-- body 태그에 data-topbar="dark"를 주면 헤더 다크모드. 없으면 라이트 모드. -->
-	<!-- body 태그에 data-sidebar="dark"를 주면 사이드바 다크모드. 없애면 라이트 모드. -->
-
-
-
-	<!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
+<body data-sidebar="dark">
 	<div id="layout-wrapper">
-
-
 		<!-- header 시작 -->
 		<jsp:include page="/WEB-INF/views/common/header.jsp" />
-		<!-- header 끝 -->
+    <!-- header 끝 -->
 
 
 		<!-- sidebar 시작 -->
-		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
-		<!-- sidebar 끝 -->
-
-
-
-		<!-- main-content 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
+		
 		<div class="main-content">
-			<div class="page-content">
-				<div class="container-fluid mt-5">
-					<div class="row mb-2">
-						<div class="col-md-6">
-							<h2>게시글 목록</h2>
-						</div>
-						<div class="col-md-6">
-							<div class="form-inline float-md-right mb-3">
-								<div class="search-box ml-2">
-									<div class="position-relative">
-										<a href="${contextPath}/board/post/list.do" class="btn btn-success waves-effect waves-light"><i
-											class="mdi mdi-plus mr-2"></i> 게시글 목록</a>
+	     <div class="page-content">
+	         <div class="container-fluid">
+               <div class="row">
+                   <div class="col-lg-12">
+                       <div class="table-responsive custom-table mb-4">
+                           <table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                               <thead>
+                                   <tr class="bg-transparent">
+                                       <th style="width: 24px;">
+                                           <div class="custom-control custom-checkbox">
+                                               <input type="checkbox" class="custom-control-input" id="checkAll">
+                                               <label class="custom-control-label" for="check"></label>
+                                           </div>
+                                       </th>
+		                                       <th>게시글 번호</th>
+		                                       <th>게시글 내용</th>
+		                                       <th>작성자</th>
+		                                       <th>작성일</th>
+		                                       <th>첨부파일 여부</th>
+		                                       <th>조회수</th>
+		                                       <th>${ p.boardTypeNo }</th>
+                                   </tr>
+                               </thead>
+                               
+                               <tbody>
+	                                <c:forEach var="p" items="${ postList }">
+	                    	           	<tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'>
+																    <td>
+																        <div class="custom-control custom-checkbox">
+																            <input type="checkbox" class="custom-control-input postCheckbox" id="invoicecheck${p.postNo}">
+																            <label class="custom-control-label" for="invoicecheck${p.postNo}"></label>
+																        </div>
+																    </td>
+																    
+																    <td>${ p.postNo }</td>
+																    <td>${ p.postTitle }</td>
+																    <td>${ p.writerName }</td>
+																    <td>${ p.registDate }</td>
+																    <td>${ p.fileStatus == 'Y' ? '★' : ''  }</td>
+																    <td>${ p.count }</td>
+															    <td>
+															    
+															       <%--   
+															        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
+													                <i class="uil uil-pen font-size-18"></i>
+													            </a>
+															        <a href="javascript:void(0);" class="px-3 text-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+															            <i class="uil uil-trash font-size-18"></i>
+															        </a>  
+															        --%>
+															    </td>
+																	</tr>
+										        	  </c:forEach>
+                              </tbody>
+                                	<div >
+																		<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
+														      </div> 
+                           </table>
+                       </div>
+                   </div>
+                
+               <!-- end row -->
+             </div> <!-- container-fluid -->
+         </div>
+         <!-- End Page-content -->
 
-									</div>
-								</div>
-								<!-- 체크박스가 눌렸을때만 보이게 -->
-								<div class="search-box ml-2">
-									<div class="position-relative">
-										<a href="#" class="btn btn-danger waves-effect waves-light">
-										<i class="uil-minus mr-2"></i> 수정</a>
-									</div>
-								</div>
+           
+           <footer class="footer">
+               <div class="container-fluid">
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <script>document.write(new Date().getFullYear())</script> © Drezon.
+                       </div>
+                     <div class="col-sm-6">
+                         <div class="text-sm-right d-none d-sm-block">
+                             Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </footer>
+     </div>
+     
+       <!-- end main content-->
 
-							</div>
-						</div>
-					</div>
+   </div>
+   <!-- END layout-wrapper -->
 
-					<div class="card-body mt-5">
-						<div class="row mb-4">
-							<div class="col-md-2">
-								<div class="mb-3">
-									<div class="select">
-										<select class="custom-select" name="dept" id="dept">
-											<option value="all">전체</option>
-												<c:forEach var="category" items="${deptList}">
-           								<option value="${category.deptNo}">
-               								${category.deptName}
-      										</option>	
-       									</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="mb-3">
-									<div class="select">
-										<select class="custom-select" name="rank" id="rank">
-											<option value="all">전체</option>
-												<c:forEach var="category" items="${rankList}">
-	         								<option value="${category.rankNo}">${category.rankName}
-	         								</option>
-	       								</c:forEach>
-										</select>
-									</div>
-								</div>
-							</div>
+   <!-- Right Sidebar -->
+   <div class="right-bar">
+       <div data-simplebar class="h-100">
+           <div class="rightbar-title px-3 py-4">
+               <a href="javascript:void(0);" class="right-bar-toggle float-right">
+                   <i class="mdi mdi-close noti-icon"></i>
+               </a>
+               <h5 class="m-0">Settings</h5>
+           </div>
 
-							<div class="col-md-8">
-								<div class="form-inline float-md-right mb-3">
-									<div class="search-box ml-2">
-										<div class="position-relative">
-											<input type="text" id="search"
-												class="form-control rounded bg-light border-0"
-												placeholder="제목별"> <i
-												class="mdi mdi-magnify search-icon"></i>
-										</div>
-									</div>
-								</div>
-							</div>
+           <!-- Settings -->
+           <hr class="mt-0" />
+           <h6 class="text-center mb-0">Choose Layouts</h6>
 
+           <div class="p-4">
+               <div class="mb-2">
+                   <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
+               </div>
+               <div class="custom-control custom-switch mb-3">
+                   <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked />
+                   <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
+               </div>
 
-						</div>
-						<!-- end row -->
-						<div class="table-responsive mb-4 ">
-							<table class="table table-centered table-nowrap table-check mb-0">
-								<thead>
-									<tr>
-										<th scope="col" style="width: 50px;">
-											<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input"
-													id="checkAll"> <label class="custom-control-label"
-													for="checkAll"></label>
-											</div>
-										</th>
-										<th scope="col">게시번호</th>
-										<th scope="col">제목</th>
-										<th scope="col">내용</th>
-										<th scope="col">작성자명</th>
-										<th scope="col">작성일</th>
-									</tr>
-								</thead>
-								<tbody id="output">
-									
+               <div class="mb-2">
+                   <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
+               </div>
+               <div class="custom-control custom-switch mb-3">
+                   <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css" />
+                   <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
+               </div>
 
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row mt-4">
-						<div class="col-sm-12">
+               <div class="mb-2">
+                   <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
+               </div>
+               <div class="custom-control custom-switch mb-5">
+                   <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
+                   <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
+               </div>
 
-							<div class="float-sm-center">
-								<ul id="paging_area" class="pagination d-flex justify-content-center">
-									
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
+       
+           </div>
 			</div>
-		</div>
-		<!-- main-content 끝 -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			
-		    listDo(1);
-		    
-		    $('#dept, #rank, #search').on('change keyup', function() {
-		        listDo(1); 
-		    });
+       </div> <!-- end slimscroll-menu-->
+   </div>
+   <!-- /Right-bar -->
 
-		    // 페이징바를 선택한 경우
-		    $(document).on('click', '#paging_area a', function(e) {
-		        e.preventDefault();  
-		        var page = $(this).data('page'); 
-		        listDo(page); 
-		    });
-		});
-	    
-	    function listDo(page){
-	        $.ajax({
-	            url: '${contextPath}/Board/post/list.do', 
-	            data: 
-	            {
-					dept: $("#dept").val(),
-					rank: $('#rank').val(),
-					keyword:$('#search').val(),
-					page: page
-					
-					},
-	            type: 'GET',
-	            dataType: 'json', // 응답 데이터 타입
-	            success: function(response) {
-	
-	                var pi = response.pi;          // Pi 객체
-	                var postList = response.postList; // List<UserDto>
-									var num=1;
-	                
-	                var tbody = '';
+   <!-- Right bar overlay-->
+   <div class="rightbar-overlay"></div>
 
-	                // 각 게시글 데이터를 테이블에 추가
-	                postList.forEach(function(post) {
-	                	
-	                	var status = p.postStatus === 'Y' ? '생성' : '삭제';	             
+   <!-- JAVASCRIPT -->
+   <script src="${contextPath}/libs/jquery/jquery.min.js"></script>
+   <script src="${contextPath}/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <script src="${contextPath}/libs/metismenu/metisMenu.min.js"></script>
+   <script src="${contextPath}/libs/simplebar/simplebar.min.js"></script>
+   <script src="${contextPath}/libs/node-waves/waves.min.js"></script>
+   <script src="${contextPath}/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+   <script src="${contextPath}/libs/jquery.counterup/jquery.counterup.min.js"></script>
+   <script src="${contextPath}/libs/feather-icons/feather.min.js"></script>
 
-	                	tbody += '<tr>'
-	                             +'<th scope="row">'
-	                             +   '<div class="custom-control custom-checkbox">'
-	                             +       '<input type="checkbox" class="custom-control-input" id="contacusercheck'+num+'">'
-	                             +       '<label class="custom-control-label" for="contacusercheck'+num+'"></label>'
-	                             +   '</div>'
-	                             +'</th>'
-	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/Board/post/list.do?postNo=' + post.postNo + '\';">'+ post.postNo+'</td>'
-	                             +'<td>'+post.postName+'</td>'
-	                             +'<td>'+post.postNo+'</td>'
-	                             +'<td>'+post.rankNo+'</td>'                          
-	                             +'<td>'+status+'</td>'
-	                             +'</tr>'
-	                    ;
-	                	num++;
-	                });
-	
-	                // 페이지 다시 그려줘야됨
-	                $('#output').html(tbody);
-	                
-	                // 페이징바도 처리	                
-	                var paging = '';
-					const previousDisabled = pi.currentPage == 1 ? 'disabled' : '';
-					paging += '<li class="page-item ' + previousDisabled + '">' 
-						   +    '<a class="page-link" href="#" data-page="' + (pi.currentPage - 1) + '"> Prev </a>'
-						   +  '</li>';
+   <!-- bootstrap datepicker -->
+   <script src="${contextPath}/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
-					for (let p = pi.startPage; p <= pi.endPage; p++) {
-						const active = p === pi.currentPage ? 'active' : '';
-						paging+= '<li class="page-item ' + active + '">' 
-						      +    '<a class="page-link" href="#" data-page="' + p + '">' + p + '</a>' 
-						      +  '</li>';
-					}
+   <!-- Required datatable js -->
+   <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+   <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+   
+   <!-- Responsive examples -->
+   <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+   <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-					const nextDisabled = pi.currentPage == pi.maxPage ? 'disabled' : '';
-					paging+= '<li class="page-item ' + nextDisabled + '">' 
-						  +    '<a class="page-link" href="#" data-page="' + (pi.currentPage + 1) + '"> Next </a>'
-						  +  '</li>';
-				
-	                $('#paging_area').html(paging);
-          
-	            },
-	            error: function(error) {
-	                alert('AJAX 요청 실패: ' + error);
-	            }
-	        });    	
-	    }
-	</script>
+   <!-- init js -->
+   <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
 
-
-
-	</div>
-	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
-</body>
+   <script src="${contextPath}/js/app.js"></script>
+   
+   <script>
+ 		 $('.postCheckbox').parent().on("click", function(evt){
+  			evt.stopPropagation();
+ 			})
+	 </script>
+     
+ </body>
 </html>

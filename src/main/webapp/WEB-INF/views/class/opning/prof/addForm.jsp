@@ -61,8 +61,6 @@
 							<c:set var="today" value="<%=new java.util.Date()%>" />
 							<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyy-MM-dd" /></c:set>
 							<p>신청일자 : ${date}</p>
-							<p>limit : ${limit}</p>
-							<p>classCode : ${classCode}</p>
 						</div>
 						<div class="mt-5 mb-3">
 							

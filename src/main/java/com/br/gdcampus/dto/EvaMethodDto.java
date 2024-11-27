@@ -1,5 +1,7 @@
 package com.br.gdcampus.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,5 +24,6 @@ public class EvaMethodDto {
 	private String evaItem;
 	private int allocation;
 	private String evaDetail;
-
+	 // 수업계획Dto
+	private List<LessonPlanDto> planList;
 }

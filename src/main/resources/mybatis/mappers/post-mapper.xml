@@ -1,16 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="postMapper">
+	    <!-- 결과 매핑 -->
+   <resultMap id="postResultMap" type="PostDto">
+			<result column="POST_NO" property="postNo" />
+			<result column="board_type_no" property="boardTypeNo" />
+			<result column="user_no" property="userNo" />
+			<result column="USER_NAME" property="writerName" />
+			<result column="POST_TITLE" property="postTitle" />
+			<result column="POST_CONTENT" property="postContent" />
+			<result column="REGIST_DATE" property="registDate" />
+			<result column="FILE_STATUS" property="fileStatus" />
+			<result column="COUNT" property="count" />
+			<result column="POST_TOP" property="postTop" />
+			<result column="modify_date" property="modifyDate" />
+			<result column="modify_user" property="modifyUser" />
+	</resultMap>
 	
-	<select id="selectPostListCount">
-		select
-					 count(*)
-			form post
-		 where status = 'Y'	
+
+	<resultMap id="attachResultMap" type="AttachDto">
+		<result column="file_no" property="fileNo"/>
+		<result column="equipNo" property="fileNo"/>
+		<result column="apprNo" property="fileNo"/>
+		<result column="file_no" property="fileNo"/>
+		<result column="file_path" property="filePath"/>
+		<result column="filesystem_name" property="filesystemName"/>
+		<result column="original_name" property="originalName"/>
+	</resultMap>
+
+	<!-- 혹시라도 has a 관계(1:1)일 경우 => collection 대신에 association 으로 사용 -->
+
+	<resultMap id="commentResultMap" type="commentDto">
+		<result column="USER_NO" property="userNo" />
+		<result column="POST_NO" property="postNo" />
+		<result column="USER_NAME" property="commentWriter" />
+		<result column="COMMENTER_ID" property="commenterId" />
+		<result column="REF_COMMENT_N0" property="refCommentNo" />
+		<result column="REGIST_DATE" property="registDate" />
+		<result column="COMMENT" property="comment" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="LEVEL" property="level" />
+	</resultMap>
+
+	
+	<!-- 게시글 목록 조회 -->
+	<select id="selectPostList" resultMap="postResultMap">
+		select 
+      POST_NO
+    , POST_TITLE 
+    , USER_NAME 
+    , REGIST_DATE
+    , FILE_STATUS
+    , "COUNT" as count 
+    , POST_TOP
+  from
+      T_POST P
+   JOIN 
+	    T_USER U 
+	ON 
+	    P.USER_NO = U.USER_NO    
+	ORDER BY 
+	    P.POST_NO ASC 
 	</select>
+	
+	<!-- 게시글 상세페이지 조회 -->
+	<select id="selectPostDetail" resultMap="postResultMap">
+	SELECT
+        POST_NO,
+        BOARD_TYPE_NO,
+        P.USER_NO,
+        POST_TITLE,
+        POST_CONTENT,
+        USER_NAME , 
+        USER_ID AS WRITER_ID,     
+        "COUNT",
+        TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
+        (
+            SELECT COUNT(*)
+            FROM T_ATTACHMENT A
+            WHERE A.REF_TYPE = 'B'  
+              AND A.APPR_NO = #{postNo}
+        ) AS ATTACH_COUNT,
+        (
+           SELECT
+           COUNT(*)
+           FROM T_LIKE 
+           WHERE 
+                LIKE_STATUS = 'Y' 
+            AND
+                POST_NO = #{postNo}
+        )AS LIKE_COUNT
+				FROM 
+				    T_POST P
+				JOIN 
+				    T_USER U 
+				ON 
+				    P.USER_NO = U.USER_NO     
+				WHERE 
+				    p.post_no = #{postNo}
+				    
+				ORDER BY 
+				    P.POST_NO DESC 
+				</select>	
+
+				<update id="updateIncreaseCount" >
+					update
+								t_post
+						set count = count + 1
+					where post_no = #{postNo}
+					  and status = 'Y'
+				</update>
+
+
+
+
+				<!-- 게시글 댓글 목록조회 -->
+				<select id="selectCommentList" resultMap="commentResultMap">
+					select
+								   comment_no
+								 , user_name as commentWriter
+								 , "COMMENT"
+								 , to_char(regist_date, 'YYYY-MM-DD') regist_date
+							from t_comment c
+							join t_user using (user_no)
+						 where post_no = #{postNo}
+						 order by comment_no desc
+					</select>
+					
+					
+				<!-- 게시글 댓글 등록 -->
+			    <insert id="insertComment">
+			        INSERT 
+			          INTO T_COMMENT 	
+			        	  (
+			            	COMMENT_NO
+			            , USER_NO
+			            , POST_NO
+			            , COMMENTER_ID
+			            , COMMENT_WRITER
+			            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
+			        )
+			        VALUES (
+			            #{commentNo}, #{userNo}, #{postNo}, #{commenterId}, #{commentWriter},
+			            #{refCommentNo}, SYSDATE, #{comment}, NULL, #{level}
+			        )
+			    </insert>
+				    
+				    
+    
+    
+</mapper>
+	
+	
+	
+	<!-- 
+  게시글 상세조회
+	<select id="selectPostDetail" resultMap="postResultMap">
+		SELECT
+			    POST_NO,
+			    BOARD_TYPE_NO,
+			    USER_NO,
+			    POST_TITLE,
+			    POST_CONTENT,
+			    USER_NAME AS WRITER_NAME,  작성자 이름 (USER_NAME 사용)
+			    USER_ID AS WRITER_ID,      작성자 ID (USER_ID 사용)
+			    "COUNT",
+			    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE, 작성일 형식 변환
+			    (
+			        SELECT COUNT(*)
+			        FROM ATTACHMENT A
+			        WHERE A.REF_TYPE = 'B'  
+			          AND A.FILE_NO = P.POST_NO
+			    ) AS ATTACH_COUNT
+FROM 
+    T_POST P
+JOIN 
+    T_USER U 
+ON 
+    P.USER_NO = U.USER_NO         USER_NO로 작성자와 JOIN 
+WHERE 
+    P_STATUS = 'Y'                게시글 상태가 'Y'인 데이터만 조회
+    user_no = #{userNo}
+ORDER BY 
+    P.POST_NO DESC;               게시글 번호 내림차순 정렬
+
+	</select> 
+	 -->
+	
+	<!-- 게시글 상세 페이지 조회 -->
+	
+	<!-- <select id="selectPostDetail" resultMap="postResultMap" >
+		  SELECT 
+            POST_NO as postNo,
+            POST_TITLE as postTitle,
+            POST_CONTENT as postContent,
+            POST_WRITER as postWriter,
+            REGIST_DT as registDate
+        FROM 
+            T_POST
+        WHERE 
+            POST_NO = #{postNo}
+	</select> -->
 	
 	
 
+    
 	
-</mapper>
+	
 

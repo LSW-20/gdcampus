@@ -62,51 +62,19 @@
 										<div class="px-lg-2">
 												<div class="row no-gutters">
 														<div class="col">
-																<a class="dropdown-icon-item" href="#">
+																<a class="dropdown-icon-item" href="https://github.com/LSW-20/gdcampus">
 																		<img src="${contextPath}/images/brands/github.png" alt="Github">
 																		<span key="t-gitHub">GitHub</span>
 																</a>
 														</div>
-														<div class="col">
-																<a class="dropdown-icon-item" href="#">
-																		<img src="${contextPath}/images/brands/bitbucket.png" alt="bitbucket">
-																		<span key="t-bitbucket">Bitbucket</span>
-																</a>
-														</div>
-														<div class="col">
-																<a class="dropdown-icon-item" href="${contextPath }/test.do">
-																		<img src="${contextPath}/images/brands/dribbble.png" alt="dribbble">
-																		<span key="t-dribbble">Dribbble</span>
-																</a>
-														</div>
-												</div>
-
-												<div class="row no-gutters">
-														<div class="col">
-																<a class="dropdown-icon-item" href="#">
-																		<img src="${contextPath}/images/brands/dropbox.png" alt="dropbox">
-																		<span key="t-dropbox">Dropbox</span>
-																</a>
-														</div>
-														<div class="col">
-																<a class="dropdown-icon-item" href="#">
-																		<img src="${contextPath}/images/brands/mail_chimp.png" alt="mail_chimp">
-																		<span key="t-mail-chimp">Mail Chimp</span>
-																</a>
-														</div>
-														<div class="col">
-																<a class="dropdown-icon-item" href="#">
-																		<img src="${contextPath}/images/brands/slack.png" alt="slack">
-																		<span key="t-slack">Slack</span>
-																</a>
-														</div>
+													
 												</div>
 										</div>
 								</div>
 						</div>
 
 
-						<!-- 두번째 알람 아이콘 -->
+						<!-- 두번째 알람 아이콘 
 						<div class="dropdown d-inline-block">
 								<button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -193,7 +161,7 @@
 										</div>
 								</div>
 						</div>
-
+						-->
 
 
 						<!-- 세번째 마이페이지 아이콘 -->
