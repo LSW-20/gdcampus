@@ -57,6 +57,7 @@
 		
 	<!-- 수업계획 매핑 -->
 	<resultMap id="planList" type="LessonPlanDto">
+		<result column="CLASS_CODE" property="classCode"/>
 	    <result column="WEEK" property="week"/>
 	    <result column="CONTENT" property="content"/>
 	    <result column="TCHNG_MTHD" property="tchngMthd"/>
@@ -429,7 +430,7 @@
 	         , ALLOCATION
 	         , EVA_DETAIL   
              , WEEK
-             , "CONTENT" as CONTENT
+             , CONTENT
              , TCHNG_MTHD
              , MATERIAL
 	      FROM T_CLASS C 
@@ -442,6 +443,16 @@
           JOIN T_WEEK_PLAN W 
             ON C.CLASS_CODE = W.CLASS_CODE
 	     WHERE C.CLASS_CODE = #{classCode}
+	</select>
+	<!-- 주차별 수업계획서 조회 -->
+	<select id="selectLessonPlanList" resultMap="planList">
+		SELECT CLASS_CODE
+     	 	 , WEEK
+     		 , CONTENT
+     		 , TCHNG_MTHD
+     		 , MATERIAL
+    	  FROM T_WEEK_PLAN 
+    	 WHERE CLASS_CODE = #{classCode}
 	</select>
 	<!-- 수업계획서 수정 -->
 	<!-- 수업계획서 삭제 -->

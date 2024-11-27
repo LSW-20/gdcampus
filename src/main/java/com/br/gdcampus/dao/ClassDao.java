@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.br.gdcampus.dto.CategoryDto;
 import com.br.gdcampus.dto.ClassDto;
 import com.br.gdcampus.dto.EvaMethodDto;
+import com.br.gdcampus.dto.LessonPlanDto;
 import com.br.gdcampus.dto.PageInfoDto;
 
 import lombok.RequiredArgsConstructor;
@@ -108,6 +109,9 @@ public class ClassDao {
 	}
 	public ClassDto selectPlanList(String classCode) {
 		return sqlSession.selectOne("classMapper.selectPlanList", classCode);
+	}
+	public List<LessonPlanDto> selectLessonPlanList(String classCode) {
+		return sqlSession.selectList("classMapper.selectLessonPlanList",classCode);
 	}
 	
 	

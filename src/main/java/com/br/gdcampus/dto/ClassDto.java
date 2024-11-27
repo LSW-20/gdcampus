@@ -56,6 +56,4 @@ public class ClassDto {
 	 
 	 // 수업계획Dto
 	 private List<LessonPlanDto> planList;
-	 private List<LessonPlanDto> deletePlanList;
-	 private List<LessonPlanDto> updatePlanList;
 }

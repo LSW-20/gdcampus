@@ -51,10 +51,11 @@ public interface EquipmentAndFacilityService {
 	// 복수의 비품 번호로 복수의 첨부파일 정보 조회 - 상우
 	List<AttachDto> selectAttachmentList(String[] equipNoList);
 
-	// 카테고리에 맞는 비품 정보 조회
+	// 카테고리에 맞는 비품 정보 조회 - 상우
 	List<EquipmentDto> selectAllEquipment(String category);
 	
-	// 카테고리에 맞는 시설 정보 조회
+	// 카테고리에 맞는 시설 정보 조회 - 상우
 	List<FacilityDto> selectAllFacility(String category);
+
 	
 }
