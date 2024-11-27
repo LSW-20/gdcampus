@@ -124,8 +124,11 @@ const ApprovalModal = {
 		li.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
                 <span>[${deptName}] ${userName} ${rankName}</span>
-                <button type="button" class="btn btn-sm btn-danger" 
-                    onclick="ApprovalModal.removeApprover('${userNo}')">삭제</button>
+								<a class="px-3 text-danger edit-btn" 
+								    onclick="ApprovalModal.removeApprover('${userNo}')">
+								    <i class="uil uil-trash font-size-18"></i>
+								</a>																		
+								
             </div>
         `;
 

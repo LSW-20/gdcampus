@@ -176,7 +176,7 @@
                         <div class="section-title">
                             결재 대기 문서
                             <span id="pageInfo">1/1</span>
-                            <a href="${contextPath}/approval/todo" class="more-link">more</a>
+                            <%-- <a href="${contextPath}/approval/todo" class="more-link">more</a> --%>
                         </div>
                         <div id="todoDocsList" class="doc-card-container">
                             <!-- 결재 대기 문서 목록이 동적으로 로드됨 -->
@@ -317,7 +317,7 @@
 
         // 페이지 정보 업데이트
         function updatePageInfo() {
-            document.getElementById('pageInfo').textContent = `${currentPage}/${maxPage}`;
+            document.getElementById('pageInfo').textContent = `\${currentPage}/\${maxPage}`;
         }
 
         // 페이지네이션 버튼 상태 업데이트
