@@ -285,55 +285,50 @@
                     weatherHtml += '<h4>현재 날씨 정보</h4>';
 
                     // 데이터 배열 순회
-                    weatherItems.forEach(function(item) {
-                        // 각 항목에서 원하는 값 추출
-                        let category = item.category;  // 예: TMP (온도), SKY (날씨 상태)
-                        let value = item.fcstValue;    // 예보 값
+                    weatherItems.sort(function(a, b) {
+										    // 'SKY' 항목을 가장 위로 올리기 위해 정렬
+										    if (a.category === 'SKY') return -1;  // 'SKY' 항목이 먼저 나오도록
+										    if (b.category === 'SKY') return 1;
+										    return 0;  // 그 외 항목은 그대로
+										});
 
-                        // 원하는 형식으로 HTML 구성
-                        // weatherHtml += '<p>' + category + ': ' + value + '</p>';
-                        
-                         // category에 따라 출력할 내용 결정
-                        let displayText = '';
-                        switch (category) {
-		                        case "SKY":
-			                    		if(value == 1){
-			                    			displayText = "하늘상태: 맑음";
-			                    		}else if(value == 2){
-			                    			displayText = "하늘상태: 구름조금";
-			                    		}else if(value == 3){
-			                    			displayText = "하늘상태: 구름많음";
-			                    		}else{
-			                    			displayText = '<i class="uil-cloud-showers-heavy"></i>';
-			                    		}
-			                    	
-		                        break;
-                            case "TMP":
-                                displayText = "현재온도: " + value + "°C";
-                                break;
-                            case "UUU":
-                                displayText = "풍속(동서성분): " + value + " m/s";
-                                break;
-                            case "VVV":
-                                displayText = "풍속(남북성분): " + value + " m/s";
-                                break;
-                            case "POP":
-                                displayText = "강수확률: " + value + "%";
-                                break;
-                            case "REH":
-                                displayText = "습도: " + value + "%";
-                                break;
-                            case "TMX":
-                                displayText = "최고온도: " + value + "°C";
-                                break;
-                            case "TMN":
-                                displayText = "최저온도: " + value + "°C";
-                                break;
-                           
-                        }
-                        // 원하는 형식으로 HTML 구성
-                        weatherHtml += '<p>' + displayText + '</p>';
-                    });
+										weatherItems.forEach(function(item) {
+										    let category = item.category;  // 예: TMP (온도), SKY (날씨 상태)
+										    let value = item.fcstValue;    // 예보 값
+										
+										    let displayText = '';
+										    switch (category) {
+										        case "SKY":
+										            if (value == 1) {
+										                displayText = '<i class="uil-sun icon-large" style="font-size:120px;"></i>';
+										            } else if (value == 2) {
+										                displayText = '<i class="uil-cloud-showers-heavy icon-large" style="font-size:120px;"></i>';
+										            } else if (value == 3) {
+										                displayText = '<i class="fas fa-cloud-sun icon-large" style="font-size:120px;"></i>';
+										            } else if (value == 4){
+										                displayText = "<i class='dripicons-cloud' style='font-size:120px;'></i>";
+										            }
+										            break;
+										        case "TMP":
+										            displayText = "현재온도: " + value + "°C";
+										            break;
+										        case "UUU":
+										            displayText = "풍속(동서성분): " + value + " m/s";
+										            break;
+										        case "VVV":
+										            displayText = "풍속(남북성분): " + value + " m/s";
+										            break;
+										        case "POP":
+										            displayText = "강수확률: " + value + "%";
+										            break;
+										        case "REH":
+										            displayText = "습도: " + value + "%";
+										            break;
+										        
+										    }
+											    weatherHtml += '<p>' + displayText + '</p>';
+											});
+
 
                     // 데이터를 div에 삽입
                     $('#data-weather').html(weatherHtml);

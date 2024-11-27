@@ -76,13 +76,13 @@
         
                                         <div class="form-group">
                                             <label for="userId">UserID</label>
-                                            <input type="text" class="form-control" id="userId" name="userId" placeholder="Enter userID">
+                                            <input type="text" class="form-control" id="userId" name="userId" placeholder="Enter userID" required>
                                         </div>
                 
                                         <div class="form-group">
                                             
                                             <label for="userPwd">Password</label>
-                                            <input type="password" class="form-control" id="userPwd"  name="userPwd" placeholder="Enter password">
+                                            <input type="password" class="form-control" id="userPwd"  name="userPwd" placeholder="Enter password" required>
                                         </div>
                 
                                         
