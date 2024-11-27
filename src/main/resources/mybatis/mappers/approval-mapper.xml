@@ -108,7 +108,8 @@
 		SELECT
 		       A.APPR_NO as APPR_NO
 		     , APPR_USER
-		     , DEPT_NO
+				 , U.USER_NAME as USER_NAME		     
+		     , A.DEPT_NO as DEPT_NO
 		     , APPR_TYPE
 		     , APPR_DATE
 		     , APPR_TITLE
@@ -117,16 +118,18 @@
 		     , LINE_ORDER
 		     , APPR_STATUS
 		     , LINE_NO
-		     , USER_NO 
+		     , L.USER_NO as USER_NO 
 		     , LINE_STATUS
 		     , LINE_DATE
 		     , LINE_REASON
 		  FROM T_APPROVAL A
 		  LEFT JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER		  
 		 WHERE APPR_STATUS IN(0,1)					<!-- 진행중 -->
 		   AND LINE_ORDER = CURR_ORDER  <!-- 현재결재순서 -->
-		   AND USER_NO = #{userNo}		  <!-- LOGINUSER -->
+		   AND L.USER_NO = #{userNo}		  <!-- LOGINUSER -->
 		 ORDER
 		    BY APPR_DATE DESC 
   </select>
@@ -267,6 +270,7 @@
 		     , APPR_USER
 		     , U.USER_NAME as USER_NAME
 		     , A.DEPT_NO as DEPT_NO
+		     , DEPT_NAME
 		     , APPR_TYPE
 		     , APPR_DATE
 		     , APPR_TITLE
@@ -283,7 +287,9 @@
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
       JOIN T_USER U
-        ON U.USER_NO = APPR_USER		    
+        ON U.USER_NO = APPR_USER		
+			JOIN T_DEPT D
+			  ON A.DEPT_NO = D.DEPT_NO            
 		 WHERE L.USER_NO = #{userNo}    <!-- LOGINUSER 가져오거나 INTERCEPTOR추가하거나-->
 		   AND LINE_ORDER = CURR_ORDER
 		   AND A.APPR_NO = #{apprNo}  <!-- 상세로 불러올 문서번호 요청 -->  

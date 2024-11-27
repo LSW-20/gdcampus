@@ -178,9 +178,6 @@
 												<i class="icon nav-icon" data-feather="feather"></i>
 												<span class="menu-item">학적 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath }/student/student.do">학생 정보 조회, 추가, 수정, 삭제</a></li>
-										</ul>
 								</li>								
 								<!-- 교무팀 메뉴 끝 -->				
 								</c:if>
@@ -214,17 +211,6 @@
 												<li><a href="${contextPath}/approval/myDoc">기안 문서함</a></li>
 										</ul>
 								</li>							
-								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
-												<i class="icon nav-icon" data-feather="edit-3"></i>
-												<span class="menu-item">서명관리</span>
-										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-												<li><a href="#"></a></li>
-										</ul>
-								</li>
 
 								<!-- 전자결재 메뉴 끝 -->												
 								
