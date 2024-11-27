@@ -216,7 +216,7 @@
 					</div>
 					<div class="mt-4 row d-flex justify-content-center">
 						<a class="btn btn-primary w-md mr-3" href="javascript:window.history.back();" >돌아가기</a>
-						<a class="btn btn-primary w-md mr-3" href="${ contextPath}/class/plan/modifyForm">수업계획 수정</a>
+						<a class="btn btn-primary w-md mr-3" href="${ contextPath}/class/plan/modifyForm.do?classCode=${c.classCode}">수업계획 수정</a>
 					</div>				
 							
 				</div>
