@@ -75,8 +75,8 @@
 							                		</c:when>
 							                    <c:otherwise>
 				                              <c:forEach var="n" items="${ noticeList }">
-				                    	           	<tr onclick='location.href = "${contextPath}/board/notice/${ loginUser.userId eq p.userName ? "detail?":"increase"}?no=${n.noticeNo}";'>
-																			   
+				                    	           	<tr onclick='location.href ="${contextPath}/board/notice/${ loginUser.userId eq p.userName ? "detail?":"increase"}?no=${n.noticeNo}";'>
+																			    <%--  <tr onclick='location.href = "${contextPath}/board/${ loginUser.userId eq b.boardWriter ? "detail.do" : "increase.do" }?no=${ b.boardNo }";'> --%>
 																			    <td>
 																			        <div class="custom-control custom-checkbox">
 																			            <input type="checkbox" class="custom-control-input" id="invoicecheck${n.noticeNo}">
@@ -95,110 +95,151 @@
 											        	 </c:choose>
                               </tbody>
                            </table>
-                       </div>
+                         <br>
+                       <br clear="both"><br>
+					            <form id="search_form" action="${ contextPath }/board/search.do" method="get" class="d-flex justify-content-center">
+					                <input type="hidden" name="page" value="1">
+					                <div class="select" >
+					                    <select class="custom-select" name="condition">
+					                        <option value="user_id">작성자</option>
+					                        <option value="post_title">제목</option>
+					                        <option value="post_content">내용</option>
+					                    </select>
+					                </div>
+					                <div class="text">
+					                    <input type="text" class="form-control" name="keyword" value="${ search.keyword }">
+					                </div>
+					                <button type="submit" class="search_btn btn btn-secondary">검색</button>
+					            </form>
+					            <c:if test="${ not empty search }">
+						            <script>
+						            	$(document).ready(function(){
+						            		$("#search_form select").val('${search.condition}');
+						            		
+						            		// 검색후의 페이징바 클릭시 검색 form 을 강제로 submit 
+						            		// (단, 페이지번호는 현재 클릭한 페이지번호로 바꿔서)
+						            		$("#paging_area a").on("click", function(){
+						            			
+						            			let page = $(this).text(); // Previous | Next | 페이지번호
+						            			if(page == 'Previous'){
+						            				page = ${pi.currentPage - 1};
+						            			}else if(page == 'Next'){
+						            				page = ${pi.currentPage + 1};
+						            			}
+						            			
+						            			$("#search_form input[name=page]").val(page);
+						            			$("#search_form").submit();
+						            			
+						            			return false; 
+						            			
+						            		})
+						            	})
+						            </script>
+					            </c:if>
                    </div>
-                </div><!-- 추가 -->
-               <!-- end row -->
-             </div> <!-- container-fluid -->
-         </div>
-         <!-- End Page-content -->
-           <footer class="footer">
-               <div class="container-fluid">
-                   <div class="row">
-                       <div class="col-sm-6">
-                           <script>document.write(new Date().getFullYear())</script> © Drezon.
-                       </div>
-                       <div class="col-sm-6">
-                           <div class="text-sm-right d-none d-sm-block">
-                               Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
-                           </div>
+               </div>
+            </div><!-- 추가 -->
+           <!-- end row -->
+         </div> <!-- container-fluid -->
+     </div>
+     <!-- End Page-content -->
+       <footer class="footer">
+           <div class="container-fluid">
+               <div class="row">
+                   <div class="col-sm-6">
+                       <script>document.write(new Date().getFullYear())</script> © Drezon.
+                   </div>
+                   <div class="col-sm-6">
+                       <div class="text-sm-right d-none d-sm-block">
+                           Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesbrand.com/" target="_blank" class="text-reset">Themesbrand</a>
                        </div>
                    </div>
                </div>
-           </footer>
-       </div>
-       <!-- end main content-->
-     </div>
-     <!-- END layout-wrapper -->
+           </div>
+       </footer>
+   </div>
+   <!-- end main content-->
+ </div>
+ <!-- END layout-wrapper -->
 
-     <!-- Right Sidebar -->
-     <div class="right-bar">
-         <div data-simplebar class="h-100">
-             <div class="rightbar-title px-3 py-4">
-                 <a href="javascript:void(0);" class="right-bar-toggle float-right">
-                     <i class="mdi mdi-close noti-icon"></i>
-                 </a>
-                 <h5 class="m-0">Settings</h5>
+ <!-- Right Sidebar -->
+ <div class="right-bar">
+     <div data-simplebar class="h-100">
+         <div class="rightbar-title px-3 py-4">
+             <a href="javascript:void(0);" class="right-bar-toggle float-right">
+                 <i class="mdi mdi-close noti-icon"></i>
+             </a>
+             <h5 class="m-0">Settings</h5>
+         </div>
+
+         <!-- Settings -->
+         <hr class="mt-0" />
+         <h6 class="text-center mb-0">Choose Layouts</h6>
+
+         <div class="p-4">
+             <div class="mb-2">
+                 <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
+             </div>
+             <div class="custom-control custom-switch mb-3">
+                 <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked />
+                 <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
              </div>
 
-             <!-- Settings -->
-             <hr class="mt-0" />
-             <h6 class="text-center mb-0">Choose Layouts</h6>
-
-             <div class="p-4">
-                 <div class="mb-2">
-                     <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
-                 </div>
-                 <div class="custom-control custom-switch mb-3">
-                     <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked />
-                     <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
-                 </div>
- 
-                 <div class="mb-2">
-                     <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
-                 </div>
-                 <div class="custom-control custom-switch mb-3">
-                     <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css" />
-                     <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
-                 </div>
- 
-                 <div class="mb-2">
-                     <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
-                 </div>
-                 <div class="custom-control custom-switch mb-5">
-                     <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
-                     <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
-                 </div>
-
+             <div class="mb-2">
+                 <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
+             </div>
+             <div class="custom-control custom-switch mb-3">
+                 <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css" />
+                 <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
              </div>
 
-         </div> <!-- end slimscroll-menu-->
-     </div>
-     <!-- /Right-bar -->
+             <div class="mb-2">
+                 <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
+             </div>
+             <div class="custom-control custom-switch mb-5">
+                 <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
+                 <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
+             </div>
 
-            
-     <!-- Right bar overlay-->
-     <div class="rightbar-overlay"></div>
+         </div>
 
-     <!-- JAVASCRIPT -->
-     <script src="${contextPath}/libs/jquery/jquery.min.js"></script>
-     <script src="${contextPath}/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-     <script src="${contextPath}/libs/metismenu/metisMenu.min.js"></script>
-     <script src="${contextPath}/libs/simplebar/simplebar.min.js"></script>
-     <script src="${contextPath}/libs/node-waves/waves.min.js"></script>
-     <script src="${contextPath}/libs/waypoints/lib/jquery.waypoints.min.js"></script>
-     <script src="${contextPath}/libs/jquery.counterup/jquery.counterup.min.js"></script>
-     <script src="${contextPath}/libs/feather-icons/feather.min.js"></script>
+     </div> <!-- end slimscroll-menu-->
+ </div>
+ <!-- /Right-bar -->
 
-     <!-- bootstrap datepicker -->
-     <script src="${contextPath}/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+        
+ <!-- Right bar overlay-->
+ <div class="rightbar-overlay"></div>
 
-     <!-- Required datatable js -->
-     <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-     <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-     
-     <!-- Responsive examples -->
-     <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-     <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+ <!-- JAVASCRIPT -->
+ <script src="${contextPath}/libs/jquery/jquery.min.js"></script>
+ <script src="${contextPath}/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+ <script src="${contextPath}/libs/metismenu/metisMenu.min.js"></script>
+ <script src="${contextPath}/libs/simplebar/simplebar.min.js"></script>
+ <script src="${contextPath}/libs/node-waves/waves.min.js"></script>
+ <script src="${contextPath}/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+ <script src="${contextPath}/libs/jquery.counterup/jquery.counterup.min.js"></script>
+ <script src="${contextPath}/libs/feather-icons/feather.min.js"></script>
 
-     <!-- init js -->
-     <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
+ <!-- bootstrap datepicker -->
+ <script src="${contextPath}/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
-     <script src="${contextPath}/js/app.js"></script>
-       <script>
-   		 $('.postCheckbox').parent().on("click", function(evt){
-    			evt.stopPropagation();
-   			})
- 		 </script>
+ <!-- Required datatable js -->
+ <script src="${contextPath}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+ <script src="${contextPath}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+ 
+ <!-- Responsive examples -->
+ <script src="${contextPath}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+ <script src="${contextPath}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+ <!-- init js -->
+ <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
+
+ <script src="${contextPath}/js/app.js"></script>
+   <script>
+	 $('.postCheckbox').parent().on("click", function(evt){
+			evt.stopPropagation();
+		})
+</script>
  </body>
 </html>
