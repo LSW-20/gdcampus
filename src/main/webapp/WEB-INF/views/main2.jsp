@@ -30,6 +30,7 @@
 .icon-table {
     width: 100%;
     text-align: center;
+    margin: 0 auto;
 }
 .icon-table td {
     padding: 10px;
@@ -71,6 +72,11 @@
 							        <div class="card-body">
 													<h4 class="card-title mb-4">근무체크</h4>
 											        <table class="icon-table">
+											        <tr>
+											        <td><br></td>
+											        <td></td>
+											        </tr>
+											        
 											            <tr>
 											                <td><i class="mdi mdi-account-arrow-left icon-large"></i></td>
 											                <td><i class="mdi mdi-account-arrow-right icon-large"></i></td>
@@ -86,24 +92,111 @@
 							        	
 							        	
 							        	
-							        	
-							        	
-                             <div class="col-xl-9">
-                                 <div class="card">
-                                     <div class="card-body">
-                                         <div id="calendar"></div>
-                                     </div>
-                                 </div>
-                             </div> <!-- end col -->
+							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
+							        <div class="card-body">
+							        	<h4 class="card-title mb-4">공지사항</h4>
+        									<table class="data-notice table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;" id="data-notice">
+                               <thead>
+                                   <tr>
+		                                     	<th>공지사항 번호</th>
+				                                  <th>공지사항 내용</th>
+				                                  <th>작성자</th>
+				                                 <%--  <th>${ noticeList[0].boardTypeNo }</th> --%>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                               </tbody>
+                         	</table>
+							        </div>
+							    </div>
 
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
+							        <div class="card-body">
+                </div>
+							        
+							        
+							    </div>
+							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
+							        <div class="card-body">
+							        <div class="container-fluid">
+
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-xl-1">
+                                                <div id="external-events" class="m-t-20">
+                                                </div>
+                                    </div> <!-- end col-->
+
+                                    <div class="col-xl-9">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div id="calendar"></div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div> 
+
+                                 
+                            </div>
+                        </div>
+                        
+                    </div> <!-- container-fluid -->
+                    <!-- Add New Event MODAL -->
+                                <div class="modal fade" id="event-modal" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header py-3 px-4 border-bottom-0 d-block">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                                <h5 class="modal-title" id="modal-title">Event</h5>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <form class="needs-validation" name="event-form" id="form-event" novalidate>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Event Name</label>
+                                                                <input class="form-control" placeholder="Insert Event Name"
+                                                                    type="text" name="title" id="event-title" required value="" />
+                                                                <div class="invalid-feedback">Please provide a valid event name</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Category</label>
+                                                                <select class="form-control custom-select" name="category"
+                                                                    id="event-category" required>
+                                                                    <option value="bg-danger" selected>Danger</option>
+                                                                    <option value="bg-success">Success</option>
+                                                                    <option value="bg-primary">Primary</option>
+                                                                    <option value="bg-info">Info</option>
+                                                                    <option value="bg-dark">Dark</option>
+                                                                    <option value="bg-warning">Warning</option>
+                                                                </select>
+                                                                <div class="invalid-feedback">Please select a valid event category</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-6">
+                                                            <button type="button" class="btn btn-danger" id="btn-delete-event">Delete</button>
+                                                        </div>
+                                                        <div class="col-6 text-right">
+                                                            <button type="button" class="btn btn-light mr-1" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-success" id="btn-save-event">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div> <!-- end modal-content-->
+                                    </div> <!-- end modal dialog-->
+                                </div>
                                 <!-- end modal-->
+							        </div>
+							    </div>
+                                    
                             </div>
                         </div>
                         
@@ -115,16 +208,7 @@
             </div>
             <!-- end main content-->
 
-        </div>
-        <!-- END layout-wrapper -->
 
-							        </div>
-							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
-							        <div class="card-body"></div>
-							    </div>
-							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
-							        <div class="card-body"></div>
-							    </div>
 						    
 				         
 		<!-- main-content 끝 -->
@@ -152,6 +236,31 @@
         <!-- Calendar init -->
         <script src="${contextPath }/js/pages/calendar.init.js"></script>
         <script src="${contextPath }/js/app.js"></script>
+        
+        <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '${contextPath}/board/notice/mainList', // 컨트롤러의 매핑 경로
+                type: 'GET',
+                success: function (noticeList) {
+                	console.log(noticeList);
+                    // 데이터를 테이블의 tbody에 추가
+                    let tbody = '';
+                    noticeList.forEach(function (n) {
+                        tbody +=  '<tr onclick="location.href=\'${contextPath}/board/notice/detail?no=' + n.noticeNo + '\';">'
+		                          +  '<td>'+ n.noticeNo +'</td>'
+		                          +  '<td>'+n.noticeTitle+'</td>'
+		                          +  '<td>'+n.userName+'</td>'
+		                          +  '</tr>';
+                    });
+                    $('.data-notice tbody').html(tbody); // 기존 tbody 내용 교체
+                },
+                error: function (xhr, status, error) {
+                    console.error("컨트롤러 호출 실패:", error);
+                }
+            });
+        });
+   		 </script>
 
 </body>
 </html>
