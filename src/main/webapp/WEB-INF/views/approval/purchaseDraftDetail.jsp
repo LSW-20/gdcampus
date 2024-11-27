@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <th>소속</th>
-                    <td>${approval.deptNo == 1 ? "인사" : "교무"}</td>
+                    <td>${approval.deptName}</td>
                 </tr>
                 <tr>
                     <th>기안일</th>
@@ -45,7 +45,7 @@
                 <tr>
                     <td>
                         <div class="stamp approved">승인</div>
-                        ${approval.apprUser}
+                        ${approval.userName}
                     </td>
                 </tr>
                 <tr class="approvalDate">
