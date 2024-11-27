@@ -75,7 +75,7 @@
 							                		</c:when>
 							                    <c:otherwise>
 				                              <c:forEach var="n" items="${ noticeList }">
-				                    	           	<tr onclick='location.href = "${contextPath}/board/notice/${ loginUser.userId eq p.userName ? "detail?":"increase"}?no=${n.noticeNo}";'>
+				                    	           	<tr onclick='location.href = "${contextPath}/board/notice/${ loginUser.userId eq p.userName ? "detail?":}?no=${n.noticeNo}";'>
 																			   
 																			    <td>
 																			        <div class="custom-control custom-checkbox">

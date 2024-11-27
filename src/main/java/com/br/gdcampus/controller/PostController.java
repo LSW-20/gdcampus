@@ -84,6 +84,7 @@ public class PostController {
 
 // 첨부파일 업로드 후에 
 // attachment테이블에 insert할 데이터
+  
   	List<AttachDto> attachList = new ArrayList<>();
   	for(MultipartFile file : uploadFiles) {
   		if(file != null && !file.isEmpty()) {
@@ -124,7 +125,7 @@ return "redirect:/board/post/list";
 	
 
 	// 게시글 댓글 등록
-	
+	@ResponseBody
     @PostMapping("/cinsert")
     public String CommentInsert(CommentDto c, HttpSession session) {
     	c.setCommentWriter( String.valueOf( ((CommentDto)session.getAttribute("loginUser")).getUserNo() ) );
@@ -132,14 +133,6 @@ return "redirect:/board/post/list";
 		return result > 0 ? "SUCCESS" : "FAIL";
     }
     
-	
-	
-//	@ResponseBody
-//	@PostMapping("/cinsert")
-//	public String commentInsert(CommentDto c, HttpSession session) {
-//		c.setCommentWriter( String.valueOf( ((PostDto)session.getAttribute("loginUser")).getUserNo() ) );
-//		int result = postService.insertComment(c);
-//		return result > 0 ? "SUCCESS" : "FAIL";
 	
 }
 		

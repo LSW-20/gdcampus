@@ -44,7 +44,7 @@
   
 	<h3>공지사항 등록 페이지</h3>
 	
-	<form action="${ contextPath }/notice/insert" method="post">
+	<form action="${ contextPath }/board/notice/insert" method="post">
 		제목 : <input type="text" name="title"> <br>
 		내용 : <textarea name="content"></textarea> <br><br>
 		
@@ -74,10 +74,10 @@
               <br>
               <div align="center">
 							    <!-- "등록하기" 버튼 클릭 시 regist.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-primary" onclick="location.href='${contextPath}/board/post/regist.jsp'">등록하기</button>
+							    <button type="button" class="btn btn-primary" onclick="location.href='${contextPath}/board/post/regist'">등록하기</button>
 							    
 							    <!-- "수정하기" 버튼 클릭 시 update.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-warning" onclick="location.href='${contextPath}/board/post/update.jsp'">수정하기</button>
+							    <button type="button" class="btn btn-warning" onclick="location.href='${contextPath}/board/post/update'">수정하기</button>
 							</div>
 
 

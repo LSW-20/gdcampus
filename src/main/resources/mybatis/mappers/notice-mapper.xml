@@ -73,4 +73,6 @@ ORDER BY
 		 where POST_NO = #{noticeNo}
 	</select>
 	
+	
+	
 </mapper>
