@@ -39,9 +39,8 @@ public class WeatherApiController {
         // 날짜 포맷팅 (yyyyMMdd)
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String baseDate = currentDate.format(dateFormatter);
-
         // 현재 시간에서 1시간 빼기
-        LocalTime baseTime = currentTime.minusHours(1); // 1시간 빼기
+        LocalTime baseTime = currentTime.minusHours(2); // 1시간 빼기
 
         // 시간 포맷팅 (HH00), 현재 시간을 정시로 맞추기 위해 '00'을 붙입니다
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH00");
