@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.EquipmentDto;
 import com.br.gdcampus.dto.FacilityDto;
+import com.br.gdcampus.dto.ReservationDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.EquipmentAndFacilityService;
 import com.br.gdcampus.service.ReservationService;
@@ -154,10 +156,10 @@ public class ReservationController {
 	public String reserve(String classification, String number, String date, String reason, HttpSession session, RedirectAttributes ra) {
     	
     	log.debug("=============== reserve 메소드 실행됨 =============== \n");
-    	log.debug("classification : {}", classification);
-    	log.debug("number : {}", number);
-    	log.debug("date : {}", date);
-    	log.debug("reason : {}", reason);
+    	// log.debug("classification : {}", classification);
+    	// log.debug("number : {}", number);
+    	// log.debug("date : {}", date);
+    	// log.debug("reason : {}", reason);
     	
     	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
     	String userName = ((UserDto)session.getAttribute("loginUser")).getUserName();
@@ -175,7 +177,7 @@ public class ReservationController {
     	
     	if(result > 0) {
     		ra.addFlashAttribute("alertMsg", "예약에 성공했습니다.");
-    		return "redirect:/reservation/myReservation";
+    		return "redirect:/reservation/main";
     	}else {
     		ra.addFlashAttribute("alertMsg", "예약에 실패했습니다.");
     		return "redirect:/reservation/main";	
@@ -185,13 +187,37 @@ public class ReservationController {
     
     
     @GetMapping("/myReservation")
-    public String myReservation() {
+    public String myReservation(HttpSession session, Model model) {
     	
     	log.debug("=============== myReservation 메소드 실행됨 =============== \n");
     	
+    	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+    	
+    	List<ReservationDto> reservationList = reservationService.selectReservationByUserNo(userNo);
+    	
+    	log.debug("reservationList : {}", reservationList);
+    	model.addAttribute("reservationList", reservationList); 	
     	
     	
     	
+    	if(reservationList == null || reservationList.isEmpty()) {
+    		
+    		log.debug("현재 로그인 유저의 예약 내역 없음.");
+    		
+    	}else {
+    		
+    		for(ReservationDto reservationDto : reservationList) {
+    			
+    			if(reservationDto.getEquipNo() == null) { // 시설 예약의 경우
+    				
+    				reservationDto.setClassification("시설");
+    				
+    			}else if(reservationDto.getFacilityNo() == null){ // 비품 예약의 경우
+    				
+    				reservationDto.setClassification("비품");
+    			}
+    		}
+    	}
     	
     	return "/equipmentAndFacility/myReservation";
     }
