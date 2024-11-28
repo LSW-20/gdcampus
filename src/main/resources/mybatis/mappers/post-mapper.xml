@@ -113,59 +113,6 @@
         )
     </insert>
 	
-<!-- 	<insert id="insertAttach">
-		insert
-		  into t_attachment
-		  (
-		    file_no
-		  , APPR_NO
-		  , filesystem_name
-		  , original_name
-		  , UPLOAD_DATE
-		  , REF_TYPE
-		  )
-		  values
-		  (
-		    seq_atno.nextval
-		  , #{filePath}
-		  , #{filesystemName}
-		  , #{originalName}
-		  , #{refType}
-		  <choose>
-		  	<when test="refNo == 0">
-		  		, seq_pno.currval
-		  	</when>
-		  	<otherwise>
-		  		, #{refNo}
-		  	</otherwise>
-		  </choose>
-		  
-		  )
-	</insert>
-	 -->
-<!-- 	 <insert id="insertPost">
-        INSERT INTO T_POST (POST_NO, POST_TITLE) VALUES (#{postNo}, #{postTitle});
-    </insert>
-
-<insert id="insertPost">
-    INSERT INTO T_POST (
-        POST_NO, BOARD_TYPE_NO, USER_NO, POST_TITLE, POST_CONTENT,
-        REGIST_DATE, FILE_STATUS, COUNT, POST_TOP, MODIFY_DATE, MODIFY_USER
-    ) VALUES (
-        #{postNo}, #{boardTypeNo}, #{userNo}, #{postTitle}, #{postContent},
-        SYSDATE, #{fileStatus}, #{count}, #{postTop}, #{modifyDate}, #{modifyUser}
-    )
-</insert>
- --> 
-<!-- 
-<insert id="insertAttach" parameterType="com.example.dto.AttachDto">
-    INSERT INTO T_ATTACH (
-        ATTACH_NO, POST_NO, FILE_PATH, FILE_NAME
-    ) VALUES (
-        #{attachNo}, #{postNo}, #{filePath}, #{fileName}
-    )
-</insert>
- -->
 
 	
 	
