@@ -45,7 +45,7 @@
 
 	<select id="selectPostListCount" resultType="_int">
 		select 
-					 count
+					 "count"
 			from t_post
 		 where file_status = 'Y'
 	</select>
@@ -71,15 +71,103 @@
 	    P.POST_NO ASC 
 	</select>
 	
-	<insert id="insertPost">
+<insert id="insertPost">
 		insert
-			into post
+			into t_post
 			(
 				post_no
+			, BOARD_TYPE_NO	
 			, post_title
-			, POST_CONTENT
+			, user_no
+			, post_content
+			
 			)
+			  values
+		  (
+		    seq_pno.nextval
+		  , '2'     
+		  , #{postTitle}
+		  , #{writerName}
+		  , #{postContent}
+		  )
+	</insert> 
+	 
+	 <insert id="insertAttach">
+	INSERT INTO t_attachment 
+	(
+            file_no,
+            appr_no,
+            filesystem_name,
+            original_name,
+            upload_date,
+            ref_type
+        )
+        VALUES (
+            seq_atno.NEXTVAL,
+            #{apprNo},
+            #{filesystemName},
+            #{originalName},
+            SYSDATE,
+            #{refType}
+    
+        )
+    </insert>
+	
+<!-- 	<insert id="insertAttach">
+		insert
+		  into t_attachment
+		  (
+		    file_no
+		  , APPR_NO
+		  , filesystem_name
+		  , original_name
+		  , UPLOAD_DATE
+		  , REF_TYPE
+		  )
+		  values
+		  (
+		    seq_atno.nextval
+		  , #{filePath}
+		  , #{filesystemName}
+		  , #{originalName}
+		  , #{refType}
+		  <choose>
+		  	<when test="refNo == 0">
+		  		, seq_pno.currval
+		  	</when>
+		  	<otherwise>
+		  		, #{refNo}
+		  	</otherwise>
+		  </choose>
+		  
+		  )
 	</insert>
+	 -->
+<!-- 	 <insert id="insertPost">
+        INSERT INTO T_POST (POST_NO, POST_TITLE) VALUES (#{postNo}, #{postTitle});
+    </insert>
+
+<insert id="insertPost">
+    INSERT INTO T_POST (
+        POST_NO, BOARD_TYPE_NO, USER_NO, POST_TITLE, POST_CONTENT,
+        REGIST_DATE, FILE_STATUS, COUNT, POST_TOP, MODIFY_DATE, MODIFY_USER
+    ) VALUES (
+        #{postNo}, #{boardTypeNo}, #{userNo}, #{postTitle}, #{postContent},
+        SYSDATE, #{fileStatus}, #{count}, #{postTop}, #{modifyDate}, #{modifyUser}
+    )
+</insert>
+ --> 
+<!-- 
+<insert id="insertAttach" parameterType="com.example.dto.AttachDto">
+    INSERT INTO T_ATTACH (
+        ATTACH_NO, POST_NO, FILE_PATH, FILE_NAME
+    ) VALUES (
+        #{attachNo}, #{postNo}, #{filePath}, #{fileName}
+    )
+</insert>
+ -->
+
+	
 	
 	
 	<!-- 게시글 상세페이지 조회 -->

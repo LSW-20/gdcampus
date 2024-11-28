@@ -27,6 +27,16 @@ public class PostDao {
 		return sqlSession.selectList("postMapper.selectPostList");
 	}
 	
+	// 게시글 등록
+	public int insertPost(PostDto p) {
+		return sqlSession.insert("postMapper.insertPost", p);
+	}
+
+	// 첨부파일 등록
+		public int insertAttach(AttachDto at) {
+			return sqlSession.insert("postMapper.insertAttach", at);
+		} 
+	
 	// 게시글 상세페이지
 	public PostDto selectPostDetail(String postNo) {
 		return sqlSession.selectOne("postMapper.selectPostDetail", postNo);
@@ -48,10 +58,7 @@ public class PostDao {
 	public int insertComment(CommentDto c) {
 		return sqlSession.insert("postMapper.insertComment",c);
 	}
-	// 첨부파일 등록
-	public int insertAttach(AttachDto at) {
-		return sqlSession.insert("postMapper.insertAttach", at);
-	} 
+	
 	
 	// 게시글 수정
 	public int updatePost(PostDto p) {
@@ -63,6 +70,7 @@ public class PostDao {
 		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
 	}
 
+	
 
 
 

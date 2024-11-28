@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
-import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
+import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.PostService;
 import com.br.gdcampus.util.FileUtil;
 import com.br.gdcampus.util.PagingUtil;
@@ -77,7 +75,7 @@ public class PostController {
 						, RedirectAttributes rdAttributes) {
   		
   	// post테이블에 insert할 데이터 
-  	post.setWriterName( String.valueOf( ((PostDto)session.getAttribute("loginUser")).getUserNo() ) );
+  	post.setWriterName( String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
   	
 	// 첨부파일 업로드 후에 
 	// attachment테이블에 insert할 데이터
@@ -105,7 +103,7 @@ public class PostController {
 			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
 		}
 		
-		return "redirect:/post/list";
+		return "redirect:/board/post/regist";
 		
 		}
   	

@@ -25,7 +25,7 @@ public interface PostService {
     // 게시글 등록
     int insertPost(PostDto p);
 
-
+    
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/
 

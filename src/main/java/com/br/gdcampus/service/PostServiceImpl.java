@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.br.gdcampus.dao.PostDao;
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
-import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -37,12 +36,21 @@ public class PostServiceImpl implements PostService {
 		return postDao.updateIncreaseCount(postNo);
 	}
 	
-
-
+	// 다중 첨부파일 등록 
+	@Transactional
 	@Override
 	public int insertPost(PostDto p) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = postDao.insertPost(p); 
+		
+		List<AttachDto> list = p.getAttachList();
+		if(result > 0 && !list.isEmpty()) {
+			result = 0;
+			for(AttachDto attach : list) {
+				result += postDao.insertAttach(attach);
+			}
+		}
+		
+		return result;
 	}
 	/*
 	 * public List<PostDto> selectSearchList(Map<String, String>search,PageInfoDto
