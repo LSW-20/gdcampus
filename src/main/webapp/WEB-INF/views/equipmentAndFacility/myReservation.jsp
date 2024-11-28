@@ -27,12 +27,26 @@
     margin-left: 30px;
 }
 
-#my-reservation-table th, #my-reservation-table td{
-    border: 1px solid black;
+
+
+#table-mother {
+    width: 80%; /* 테이블 너비 */
+    margin: 0 auto; /* 가로 가운데 정렬 */
+
+    display: flex; /* 플렉스 박스 활성화 */
+    justify-content: center; /* 가로 가운데 정렬 */
 }
-#my-reservation-table{
-    
+
+#my-reservation-table {
+    width: 100%; /* 부모 크기에 맞춤 */
 }
+
+#my-reservation-table th, #my-reservation-table td {
+    border: 1px solid black; /* 테두리 */
+    padding: 10px; /* 셀 내부 여백 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
 
 </style>
 
@@ -68,7 +82,6 @@
                     <div id="top-mother">
                         <!-- top-child1 시작 -->
                         <div id="top-child1">
-
                                 <br><br> 
 
                                 <div id="title">
@@ -82,7 +95,7 @@
 
                     <div style="margin-left: 80px; margin-right: 80px;">
 
-                        <div id="table-mother" style="width: 80%; margin: 0 auto;">
+                        <div id="table-mother">
                             <table id="my-reservation-table">
                                 <thead>
                                     <tr>
@@ -99,17 +112,49 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>비품</td>
+                                        <td>노트북</td>
+                                        <td>0010</td>
+                                        <td>어쩌구저쩌구요로쿵 노트북</td>
+                                        <td>2024-12-24</td>
+                                        <td>게임</td>
+                                        <td>2024-11-27</td>
+                                        <td>예약신청승인</td>
                                         <td></td>
                                     </tr>
+
+                                    <c:choose>
+                                        <c:when test="${ empty reservationList }">
+                                            <tr>
+                                                <td colspan="9">내 예약 내역이 없습니다.</td>
+                                            </tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                            
+                                            <c:forEach var="reservationDto" items="${ reservationList }">
+                                                <tr>
+                                                    <td>${ reservationDto.classification }</td>
+                                                    <c:if test="${reservationDto.classification == '비품'}">    
+                                                        <td>${ reservationDto.equipCategory }</td>
+                                                        <td>${ reservationDto.equipNo }</td>
+                                                        <td>${ reservationDto.equipName }</td>
+                                                    </c:if>
+                                                    <c:if test="${reservationDto.classification == '시설'}">
+                                                        <td>${ reservationDto.facilityCategory }</td>
+                                                        <td>${ reservationDto.facilityNo }</td>
+                                                        <td>${ reservationDto.facilityName }</td>
+                                                     </c:if>
+                                                    <td>${ reservationDto.reservationDate }</td>
+                                                    <td>${ reservationDto.reservationReason }</td>
+                                                    <td>${ reservationDto.reservationRequestDate }</td>
+                                                    <td>${ reservationDto.status }</td>
+                                                    <td>${ reservationDto.approvalRejectionReason }</td>
+                                                </tr>
+                                            </c:forEach>
+                                           
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </tbody>
                             </table>
                         </div>
