@@ -22,12 +22,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
 	private final ApprovalDao apprDao;
-	
-	//결재홈 페이징
-	@Override
-	public int selectApprHomeListCount(String userNo) {
-		return 0;
-	}
 
 	//결재대기문서 페이징
 	@Override
@@ -75,16 +69,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params) {
 		return apprDao.selectMyApprovedList(pi,params);
-	}
-
-	@Override
-	public int selectApprViewerListCount(String userNo) {
-		return 0;
-	}
-
-	@Override
-	public List<ApprRefDto> selectApprViewerList(PageInfoDto pi, String userNo) {
-		return null;
 	}
 
 	//결재대기문서상세
