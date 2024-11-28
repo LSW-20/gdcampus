@@ -50,7 +50,7 @@
                        <div class="p-3 px-4">
                            <div class="media">
                                <div class="align-self-center mr-3">
-                                   <img src="${contextPath}/images/users/avatar-4.jpg" class="avatar-sm rounded-circle" alt="">
+                                   <img src="${contextPath}<c:out value='${loginUser.profileURL}' default='${contextPath}/images/users/avatar-4.jpg' />" class="avatar-sm rounded-circle" alt="">
                                </div>
                                <div class="media-body">
                                    <h5 class="font-size-16 mt-0 mb-1">
