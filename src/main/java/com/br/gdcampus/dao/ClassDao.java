@@ -113,6 +113,12 @@ public class ClassDao {
 	public List<LessonPlanDto> selectLessonPlanList(String classCode) {
 		return sqlSession.selectList("classMapper.selectLessonPlanList",classCode);
 	}
+	public int deleteLesson(LessonPlanDto l) {
+		return sqlSession.delete("classMapper.deleteLesson",l);
+	}
+	public int insertLesson(LessonPlanDto l) {
+		return sqlSession.insert("classMapper.insertLesson",l);
+	}
 	
 	
 //--------------------------------------내강의 끝----------------------------------------------	

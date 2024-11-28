@@ -183,7 +183,7 @@
 									</tbody>
 								</table >
 								
-								<c:if test="${not empty c.planList }">
+								<c:if test="${not empty plan }">
 									<br>
 									<hr>
 									<br>
@@ -199,9 +199,9 @@
 												<td width="20%" colspan="2">진행방식</td>
 												<td width="23%" colspan="3">준비물/과제</td>
 											</tr>
-											<c:forEach var="c" items="${c.planList}">
+											<c:forEach var="c" items="${plan}">
 												<tr>
-													<td width="7%" colspan="1">${c.week}</td>
+													<td width="7%" colspan="1">${c.week}주차</td>
 													<td width="50%" colspan="6">${c.content}</td>
 													<td width="20%" colspan="2">${c.tchngMthd}</td>
 													<td width="23%" colspan="3">${c.material}</td>
