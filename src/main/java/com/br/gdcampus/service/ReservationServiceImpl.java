@@ -1,10 +1,12 @@
 package com.br.gdcampus.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.br.gdcampus.dao.ReservationDao;
+import com.br.gdcampus.dto.ReservationDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +38,16 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public int reserve(Map<String, String> map) {
 		return ReservationDao.reserve(map);
+	}
+
+	/**
+	 * userNo로 예약내역 조회
+	 * author : 상우
+	 * @param userNo 유저사번
+	 * return 예약내역
+	 */
+	@Override
+	public List<ReservationDto> selectReservationByUserNo(String userNo) {
+		return ReservationDao.selectReservationByUserNo(userNo);
 	}
 }
