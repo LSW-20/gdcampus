@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,33 +30,43 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping("/api")
 public class WeatherApiController {
-    
+	
+	//02시부터 3시간단위로 날씨 정보 제공
 	@GetMapping("/weather")
 	public JSONObject restApiGetWeather() throws Exception {
-		// 현재 날짜와 시간을 가져옵니다
-        LocalDate currentDate = LocalDate.now(); // 현재 날짜
-        LocalTime currentTime = LocalTime.now(); // 현재 시간
+		// 현재 시간 가져오기
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // "02시" 기준으로 가장 가까운 3의 배수로 시간 계산
+        int hour = currentDateTime.getHour();
+        int adjustedHour = 2 + (hour - 2) / 3 * 3;
+
+        // 만약 계산된 시간이 현재 시간보다 이전이라면, 3시간을 더해줍니다.
+        if (adjustedHour < hour) {
+            adjustedHour += 3;
+        }
+
+        // 시간을 정수로 00 분으로 설정하여 시간 포맷팅
+        LocalDateTime adjustedDateTime = currentDateTime.withHour(adjustedHour).withMinute(0).withSecond(0).withNano(0);
+
+        // 시간 포맷팅 (HH00)
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH00");
+        String formattedBaseTime = adjustedDateTime.toLocalTime().format(timeFormatter);
 
         // 날짜 포맷팅 (yyyyMMdd)
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String baseDate = currentDate.format(dateFormatter);
-        // 현재 시간에서 1시간 빼기
-        LocalTime baseTime = currentTime.minusHours(2); // 1시간 빼기
+        String formattedBaseDate = adjustedDateTime.toLocalDate().format(dateFormatter);
 
-        // 시간 포맷팅 (HH00), 현재 시간을 정시로 맞추기 위해 '00'을 붙입니다
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH00");
-        String formattedBaseTime = baseTime.format(timeFormatter); // 시간 포맷에 맞게 변환
-        
-	    String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
-	            + "?serviceKey=dCbOrM2k31aZBqqmhNxaH%2BfTkBEaBaKDJ4pCDS9M9BUxFkGc2ZZd7sTHBqli%2BfKXm3T7qaXiQ25cx4JuF92uyg%3D%3D"
-	            + "&dataType=JSON"
-	            + "&numOfRows=10"
-	            + "&pageNo=1"
-	            + "&base_date=" + baseDate
-	            + "&base_time=" + formattedBaseTime
-	            + "&nx=60"
-	            + "&ny=127";
-
+        // URL 생성
+        String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
+                + "?serviceKey=dCbOrM2k31aZBqqmhNxaH%2BfTkBEaBaKDJ4pCDS9M9BUxFkGc2ZZd7sTHBqli%2BfKXm3T7qaXiQ25cx4JuF92uyg%3D%3D"
+                + "&dataType=JSON"
+                + "&numOfRows=10"
+                + "&pageNo=1"
+                + "&base_date=" + formattedBaseDate
+                + "&base_time=" + formattedBaseTime
+                + "&nx=60"
+                + "&ny=127";
 	    // API 응답 파싱
 	    JSONObject result = new JSONObject(); 
 	    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
@@ -85,7 +96,6 @@ public class WeatherApiController {
 	    System.out.println("API 응답: " + result);
 	    return result;
 	}
-
     
     public HashMap<String, Object> getDataFromJson(String url, String encoding, String type, String jsonStr) throws Exception {
         boolean isPost = false;
