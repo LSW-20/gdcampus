@@ -69,7 +69,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath }/reservation/main">예약 신청</a></li>
-												<li><a href="#">예약 신청 내역 조회</a></li>
+												<li><a href="${contextPath }/reservation/myReservation">예약 신청 내역 조회</a></li>
 										</ul>
 								</li>
 

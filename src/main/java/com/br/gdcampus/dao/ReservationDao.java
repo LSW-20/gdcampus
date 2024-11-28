@@ -1,9 +1,12 @@
 package com.br.gdcampus.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.br.gdcampus.dto.ReservationDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,5 +34,15 @@ public class ReservationDao {
 	 */
 	public int reserve(Map<String, String> map) {
 		return sqlSession.insert("reservationMapper.reserve", map);
+	}
+
+	/**
+	 * userNo로 예약내역 조회
+	 * author : 상우
+	 * @param userNo 유저사번
+	 * return 예약내역
+	 */
+	public List<ReservationDto> selectReservationByUserNo(String userNo) {
+		return sqlSession.selectList("reservationMapper.selectReservationByUserNo", userNo);
 	}
 }
