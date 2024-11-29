@@ -406,6 +406,15 @@
 			 		 profile_url = #{profileURL}
 		 where user_id = #{userId}
 	</update>
+	<!-- 회원 프로필 초기화 -->
+	<update id="defaultProfile">
+		update
+					t_user
+			 set
+			 		profile_url = null
+		 where
+		 			user_no = #{userNo}
+	</update>
 
 	<!-- id찾기 이메일 -->	
 	<select id="idSearch" resultMap="userResultMap">
