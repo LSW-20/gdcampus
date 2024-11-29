@@ -8,7 +8,7 @@ import com.br.gdcampus.dto.UserDto;
 
 public interface TreeService {
     // 전체 조직도 트리 조회
-    List<Map<String, Object>> getOrgTree();
+    List<Map<String, Object>> getOrgTree(String loginUserNo);
     
     // 부서 목록 조회 (가발령 제외)
     List<DeptDto> selectDepartments();
