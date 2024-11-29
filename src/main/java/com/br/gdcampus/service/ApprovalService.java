@@ -15,8 +15,6 @@ import com.br.gdcampus.dto.PurchaseHistoryDto;
  * 보겸 - 결재 service
  */
 public interface ApprovalService {
-	//결재홈 목록 조회
-	int selectApprHomeListCount(String userNo);
 	
 	//결재대기문서함 목록 조회
 	int selectApprTodoListCount(String userNo);
@@ -39,10 +37,6 @@ public interface ApprovalService {
 	//결재문서함 조회   lineOrder.contain(나) && apprStatus 2 or 3 join
 	int selectMyApprovedListCount(String userNo);
 	List<ApprovalDto> selectMyApprovedList(PageInfoDto pi, Map<String, Object> params);
-	
-	//참조/열람대기문서 조회 T_APPR_REF userNo == loginUser
-	int selectApprViewerListCount(String userNo);
-	List<ApprRefDto> selectApprViewerList(PageInfoDto pi, String userNo);
 	
 	//결재대기문서상세
 	ApprovalDto selectApprTodoDetail(Map<String, Object> params);

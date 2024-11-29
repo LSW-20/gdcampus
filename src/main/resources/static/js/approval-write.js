@@ -96,52 +96,65 @@ const ApprovalModal = {
 
 	// 결재자 추가
 	addApprover: function(userNo, userName, rankName, deptName) {
-		console.log('approval-write 결재가추가:', { userNo, userName, rankName, deptName });
+	    console.log('approval-write 결재가추가:', { userNo, userName, rankName, deptName });
 
-		let isDuplicate = false;
+	    // 이미 추가된 결재자 체크
+	    const existingApprover = document.querySelector(`#approversList li[data-user-id='${userNo}']`);
+	    if (existingApprover) {
+	        alert('이미 추가된 결재자입니다.');
+	        return;
+	    }
 
-		// 이미 추가된 결재자 체크
-		const existingApprover = document.querySelector(`#approversList li[data-user-id='${userNo}']`);
-		if (existingApprover) {
-			alert('이미 추가된 결재자입니다.');
-			return;
-		} else {
+	    // 결재자 수 제한
+	    const currentApprovers = document.querySelectorAll('#approversList li');
+	    if (currentApprovers.length >= 3) {
+	        alert('결재선은 최대 3명까지만 지정할 수 있습니다.');
+	        return;
+	    }
 
-		}
+	    // 직급 체크
+	    // 직급별 순위 매핑 (숫자가 클수록 높은 직급)
+	    const rankOrder = {
+	        '사원': 1,
+	        '대리': 2,
+	        '과장': 3,
+	        '차장': 4,
+	        '부장': 5
+	    };
 
-		// 결재자 수 제한
-		if (document.querySelectorAll('#approversList li').length >= 3) {
-			alert('결재선은 최대 3명까지만 지정할 수 있습니다.');
-			return;
-		}
+	    // 이전 결재자들의 직급 체크
+	    const prevApprovers = Array.from(currentApprovers);
+	    if (prevApprovers.length > 0) {
+	        const lastApproverRank = prevApprovers[prevApprovers.length - 1].getAttribute('data-rank');
+	        if (rankOrder[rankName] < rankOrder[lastApproverRank]) {
+	            alert('이전 결재자보다 낮은 직급은 추가할 수 없습니다.');
+	            return;
+	        }
+	    }
 
-		// 결재자 HTML 생성
-		const li = document.createElement('li');
-		li.setAttribute('data-user-id', userNo);
-		li.setAttribute('data-rank', rankName);
-		li.setAttribute('data-dept', deptName);
+	    // 결재자 HTML 생성
+	    const li = document.createElement('li');
+	    li.setAttribute('data-user-id', userNo);
+	    li.setAttribute('data-rank', rankName);
+	    li.setAttribute('data-dept', deptName);
 
-		li.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
-                <span>[${deptName}] ${userName} ${rankName}</span>
-								<a class="px-3 text-danger edit-btn" 
-								    onclick="ApprovalModal.removeApprover('${userNo}')">
-								    <i class="uil uil-trash font-size-18"></i>
-								</a>																		
-								
-            </div>
-        `;
+	    li.innerHTML = `
+	        <div class="d-flex justify-content-between align-items-center">
+	            <span>[${deptName}] ${userName} ${rankName}</span>
+	            <a class="px-3 text-danger edit-btn" 
+	                onclick="ApprovalModal.removeApprover('${userNo}')">
+	                <i class="uil uil-trash font-size-18"></i>
+	            </a>
+	        </div>
+	    `;
 
-		// 결재선에 추가
-		document.querySelector('#approversList').appendChild(li);
+	    // 결재선에 추가
+	    document.querySelector('#approversList').appendChild(li);
 
-		// 결재자 수 업데이트
-		this.updateApproverCount();
+	    // 결재자 수 업데이트
+	    this.updateApproverCount();
 
-		//console
-		console.log('Trying to add:', { userNo, userName, rankName, deptName });
-
-
+	    console.log('Trying to add:', { userNo, userName, rankName, deptName });
 	},
 
 	// 결재자 제거

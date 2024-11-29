@@ -12,6 +12,7 @@ import com.br.gdcampus.dto.DeptDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.TreeService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController//@ResponseBody생략 가능
@@ -27,8 +28,9 @@ public class TreeController {
 	 * @return 부서 및 사용자 계층구조 데이터
 	 */
 	@GetMapping("/org")
-	public List<Map<String,Object>> getOrgTree(){
-		return treeService.getOrgTree();
+	public List<Map<String,Object>> getOrgTree(HttpSession session){
+	    UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+	    return treeService.getOrgTree(loginUser.getUserNo());
 	}
 	
 	/**
