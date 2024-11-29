@@ -46,7 +46,7 @@ public class ChatEchoHandler extends TextWebSocketHandler {
         // log.debug("session Attributes 목록: {}", session.getAttributes()); // {sessionId=xxxx, loginUser=MemberDto객체}
         
         session.getAttributes().put("roomNo", roomNo); // roomNo 저장
-        session.getAttributes().put("userId", userNo); // userId 저장       
+        session.getAttributes().put("userId", userNo); // userId 저장      
         
         log.debug("{} --> User {} has entered room {}", "ChatEchoHandler의 afterConnectionEstablished 실행됨", userNo, roomNo);
         
