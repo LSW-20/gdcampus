@@ -44,7 +44,6 @@ public class NoticeController {
 	@ResponseBody
 	@GetMapping("/mainList")
 	public List<NoticeDto> noticeMain() {
-		System.out.println("컨트롤러: " + noticeService.selectNoticeList());
 		return noticeService.selectNoticeList();
 	}
 	
