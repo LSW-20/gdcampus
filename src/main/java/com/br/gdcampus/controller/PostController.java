@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
+import com.br.gdcampus.dto.NoticeDto;
 import com.br.gdcampus.dto.PostDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.PostService;
@@ -124,6 +125,13 @@ public class PostController {
         int result = postService.insertComment(c);
         return result > 0 ? "SUCCESS" : "FAIL";
     }
+    
+    //메인페이지 게시글 목록
+    @ResponseBody
+	@GetMapping("/mainList")
+	public List<PostDto> noticeMain() {
+		return postService.selectPostList();
+	}
 }
 
 
