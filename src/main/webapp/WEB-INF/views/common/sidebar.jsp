@@ -5,7 +5,21 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<style>
+.sub-menu {
+    display: block !important;
+    height: auto !important;
+    transition: none !important;
+}
+.has-arrow:after {
+    transform: rotate(0deg) !important;
+    transition: none !important;
+}
 
+.mm-active > .has-arrow:after {
+    transform: rotate(0deg) !important;
+}
+</style>
 <!-- sidebar 시작 -->
 <div class="vertical-menu">
 
@@ -245,15 +259,23 @@
 <!-- sidebar 끝 -->
 <script>
 $(document).ready(function() {
-    // 메뉴 모두 펼치기
-    $('.sub-menu').addClass('mm-show');
-    $('.has-arrow').addClass('mm-active');
-    $('.sub-menu').attr('aria-expanded', 'true');
+    // metisMenu 초기화 방지
+    $.fn.metisMenu = function() {
+        return this;
+    };
+
+    // 모든 서브메뉴 펼치기
+    $('.sub-menu').addClass('mm-show').css('display', 'block');
+    $('.has-arrow').addClass('mm-active').attr('aria-expanded', 'true');
     
-    // 클릭 이벤트 방지
-    $('.has-arrow').off('click').on('click', function(e) {
+    // 모든 클릭 이벤트 방지
+    $('.has-arrow, .waves-effect').on('click', function(e) {
+        // a태그의 기본 링크 이동은 허용하되, 메뉴 토글은 방지
+        if ($(this).attr('href') !== 'javascript: void(0);') {
+            return true;
+        }
         e.preventDefault();
-        // 기존 클릭 이벤트를 완전히 중단
+        e.stopPropagation();
         return false;
     });
 });
