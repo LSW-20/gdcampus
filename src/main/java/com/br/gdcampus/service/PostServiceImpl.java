@@ -71,9 +71,9 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<AttachDto> selectAttachList(AttachDto a) {
+	public List<AttachDto> selectAttachList(String no) {
 		
-		return null;
+		return postDao.selectAttachList(no);
 	}
 
 

@@ -70,6 +70,10 @@ public class PostDao {
 		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
 	}
 
+	public List<AttachDto> selectAttachList(String no) {
+		return sqlSession.selectList("postMapper.selectAttachList", no);
+	}
+
 	
 
 

@@ -26,7 +26,7 @@ public interface PostService {
     int insertPost(PostDto p);
     
     // 첨부파일 등록 후 조회
-    List<AttachDto> selectAttachList(AttachDto a);
+    List<AttachDto> selectAttachList(String no);
 
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/

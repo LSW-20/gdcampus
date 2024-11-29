@@ -56,8 +56,8 @@ public class PostController {
         model.addAttribute("c", commentList);
         
         // 첨부파일 테이블에서 조회
-        //List<AttachDto> attachList = postService.selectAttachList(p);
-        //model.addAttribute("attachList", attachList);
+        List<AttachDto> attachList = postService.selectAttachList(no);
+        model.addAttribute("attachList", attachList);
         
         
     }
@@ -82,7 +82,7 @@ public class PostController {
 						, RedirectAttributes rdAttributes) {
   		
 	  	// post테이블에 insert할 데이터 
-	  	post.setWriterName( String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
+	  	post.setWriterName(String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
 	  	
 		// 첨부파일 업로드 후에 
 		// attachment테이블에 insert할 데이터
@@ -101,7 +101,8 @@ public class PostController {
 		}
 	  	
 		post.setAttachList(attachList); // 제목,내용,작성자회원번호,첨부파일들정보
-			
+		
+		
 		int result = postService.insertPost(post);
 		
 		if(attachList.isEmpty() && result == 1 
@@ -130,8 +131,6 @@ public class PostController {
     public String CommentInsert(CommentDto c, HttpSession session) {
     	c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
         c.setCommentWriter(((UserDto)session.getAttribute("loginUser")).getUserId());
-        
-        
         
         int result = postService.insertComment(c);
         return result > 0 ? "SUCCESS" : "FAIL";
