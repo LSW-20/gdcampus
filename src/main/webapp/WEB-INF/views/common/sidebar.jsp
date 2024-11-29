@@ -5,7 +5,21 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<style>
+.sub-menu {
+    display: block !important;
+    height: auto !important;
+    transition: none !important;
+}
+.has-arrow:after {
+    transform: rotate(0deg) !important;
+    transition: none !important;
+}
 
+.mm-active > .has-arrow:after {
+    transform: rotate(0deg) !important;
+}
+</style>
 <!-- sidebar 시작 -->
 <div class="vertical-menu">
 
@@ -69,7 +83,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath }/reservation/main">예약 신청</a></li>
-												<li><a href="#">예약 신청 내역 조회</a></li>
+												<li><a href="${contextPath }/reservation/myReservation">예약 신청 내역 조회</a></li>
 										</ul>
 								</li>
 
@@ -175,9 +189,9 @@
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="${contextPath}/approval/home">결재 홈</a></li> 
 												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
 												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
-												<li><a href="${contextPath}/approval/home"></a></li> 
 												
 										</ul>
 								</li>
@@ -216,7 +230,6 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 								</li>
-								
 
 								<li>
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
@@ -238,10 +251,32 @@
 
 								<br>
 								
-
 						</ul>
 				</div>
 				<!-- Sidebar -->
 		</div>
 </div>
 <!-- sidebar 끝 -->
+<script>
+$(document).ready(function() {
+    // metisMenu 초기화 방지
+    $.fn.metisMenu = function() {
+        return this;
+    };
+
+    // 모든 서브메뉴 펼치기
+    $('.sub-menu').addClass('mm-show').css('display', 'block');
+    $('.has-arrow').addClass('mm-active').attr('aria-expanded', 'true');
+    
+    // 모든 클릭 이벤트 방지
+    $('.has-arrow, .waves-effect').on('click', function(e) {
+        // a태그의 기본 링크 이동은 허용하되, 메뉴 토글은 방지
+        if ($(this).attr('href') !== 'javascript: void(0);') {
+            return true;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+});
+</script>

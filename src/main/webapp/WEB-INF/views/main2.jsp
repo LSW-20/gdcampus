@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <!doctype html>
@@ -66,27 +67,41 @@
 		<div class="main-content">
 				<div class="page-content">
 						<div class="container-fluid">
-
 							<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; height:100%; margin: 0 auto;">
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
 							        <div class="card-body">
-													<h4 class="card-title mb-4">근무체크</h4>
-											        <table class="icon-table">
-											        <tr>
-											        <td><br></td>
-											        <td></td>
-											        </tr>
-											        
-											            <tr>
-											                <td><i class="mdi mdi-account-arrow-left icon-large"></i></td>
-											                <td><i class="mdi mdi-account-arrow-right icon-large"></i></td>
-											            </tr>
-											            <tr>
-											            	<td>출근하기</td>
-											            	<td>퇴근하기</td>
-											            </tr>
-											            
-											        </table>	
+											        <div style="display: flex; align-items: center;">
+														    <!-- 왼쪽 영역 -->
+														    <div style="flex: 1; text-align: center; padding: 10px; margin-top: -20px;">
+														        <!-- 원형으로 표시할 이미지 -->
+														        <img id="profileImg" 
+														             src="${contextPath}<c:out value='${loginUser.profileURL}' default='${contextPath}/images/users/avatar-4.jpg' />"
+														             style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
+														        <h5 class="mt-4 mb-2">${loginUser.userName}님</h5>
+														        <p class="text-muted">
+														            <i class="icon-xs mr-1 icon" data-feather="monitor"></i>
+														            <c:choose>
+														                <c:when test="${not empty loginUser.deptNo}">
+														                    ${loginUser.deptList[0].deptName}${loginUser.rankList[0].rankName}
+														                </c:when>
+														                <c:when test="${fn:contains(loginUser.userNo, 'A')}">
+														                    관리자
+														                </c:when>
+														                <c:when test="${fn:contains(loginUser.userNo, 'C')}">
+														                    교수
+														                </c:when>
+														            </c:choose>
+														        </p>
+														    </div>
+														
+														    <!-- 오른쪽 영역 -->
+														    <div style="flex: 1; text-align: center; padding: 10px; margin-top: -50px;">
+														    
+																		<div id="loading" style="display:none;">Loading...</div> <!-- 로딩 인디케이터 -->
+														        <div id="data-weather2"></div>
+														        <div id="data-weather"></div>
+														    </div>
+														</div>
 											</div>
 							    </div>
 							        	
@@ -94,8 +109,9 @@
 							        	
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
 							        <div class="card-body">
+							        <br><br><br>
 							        	<h4 class="card-title mb-4">공지사항</h4>
-        									<table class="data-notice table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;" id="data-notice">
+        									<table class="data-notice table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;  margin: 0 auto;" id="data-notice">
                                <thead>
                                    <tr>
 		                                     	<th>공지사항 번호</th>
@@ -111,33 +127,42 @@
 							    </div>
 
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
-							        <div class="card-body" id="data-weather">
-							        
+							        <div class="card-body">
+								        <h4 class="card-title mb-4">게시판</h4>
+	        									<table class="data-post table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;  margin: 0 auto;" id="data-post">
+	                               <thead>
+	                                   <tr>
+			                                     	<th>게시글 번호</th>
+					                                  <th>게시글 내용</th>
+					                                  <th>작성자</th>
+					                                 <%--  <th>${ noticeList[0].boardTypeNo }</th> --%>
+	                                   </tr>
+	                               </thead>
+	                               <tbody>
+	                               </tbody>
+	                         	</table>
                 			</div>
 							    </div>
+							    
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
 							        <div class="card-body">
 							        <div class="container-fluid">
 
 
                         <div class="row">
-                            <div class="col-12">
-                                <div class="row">
+                            <div class="col-13">
                                     <div class="col-xl-1">
                                                 <div id="external-events" class="m-t-20">
                                                 </div>
                                     </div> <!-- end col-->
 
-                                    <div class="col-xl-9">
+                                    <div class="col-xl-12">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div id="calendar"></div>
                                             </div>
                                         </div>
                                     </div> <!-- end col -->
-                                </div> 
-
-                                 
                             </div>
                         </div>
                         
@@ -258,99 +283,142 @@
                 }
             });
         });
-   		 </script>
-   		 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // 페이지 로딩 시 weather 함수 실행
-        jQuery.ajax({
-            url: "${contextPath}/api/weather",  // 실제 API URL
-            type: "GET",
-            timeout: 30000,  // 30초 타임아웃
-            contentType: "application/json",
-            dataType: "json",
-            success: function(data, status, xhr) {
-                let dataHeader = data.response.header.resultCode;
-
-                // 응답 결과 코드가 "00"이면 성공
-                if (dataHeader === "00") {
-                    console.log("success == >");
-                    console.log(data);
-
-                    // API에서 받은 날씨 데이터를 HTML로 출력
-                    let weatherHtml = '';
-                    let weatherItems = data.response.body.items.item;  // 여러 항목들이 있는 배열
-
-                    // 예시: 날씨 정보 출력 (필요한 데이터를 수정하여 출력)
-                    weatherHtml += '<h4>현재 날씨 정보</h4>';
-
-                    // 데이터 배열 순회
-                    weatherItems.forEach(function(item) {
-                        // 각 항목에서 원하는 값 추출
-                        let category = item.category;  // 예: TMP (온도), SKY (날씨 상태)
-                        let value = item.fcstValue;    // 예보 값
-
-                        // 원하는 형식으로 HTML 구성
-                        // weatherHtml += '<p>' + category + ': ' + value + '</p>';
-                        
-                         // category에 따라 출력할 내용 결정
-                        let displayText = '';
-                        switch (category) {
-		                        case "SKY":
-			                    		if(value == 1){
-			                    			displayText = "하늘상태: 맑음";
-			                    		}else if(value == 2){
-			                    			displayText = "하늘상태: 구름조금";
-			                    		}else if(value == 3){
-			                    			displayText = "하늘상태: 구름많음";
-			                    		}else{
-			                    			displayText = '<i class="uil-cloud-showers-heavy"></i>';
-			                    		}
-			                    	
-		                        break;
-                            case "TMP":
-                                displayText = "현재온도: " + value + "°C";
-                                break;
-                            case "UUU":
-                                displayText = "풍속(동서성분): " + value + " m/s";
-                                break;
-                            case "VVV":
-                                displayText = "풍속(남북성분): " + value + " m/s";
-                                break;
-                            case "POP":
-                                displayText = "강수확률: " + value + "%";
-                                break;
-                            case "REH":
-                                displayText = "습도: " + value + "%";
-                                break;
-                            case "TMX":
-                                displayText = "최고온도: " + value + "°C";
-                                break;
-                            case "TMN":
-                                displayText = "최저온도: " + value + "°C";
-                                break;
-                           
-                        }
-                        // 원하는 형식으로 HTML 구성
-                        weatherHtml += '<p>' + displayText + '</p>';
-                    });
-
-                    // 데이터를 div에 삽입
-                    $('#data-weather').html(weatherHtml);
-
-                } else {
-                    console.log("fail == >");
-                    console.log(data);
+   		 </script>        
+   		 <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '${contextPath}/board/post/mainList', // 컨트롤러의 매핑 경로
+            type: 'GET',
+            success: function (noticeList) {
+                console.log(noticeList);
+                // 데이터를 테이블의 tbody에 추가
+                let tbody = '';
+                for (let i = 0; i < noticeList.length && i < 8; i++) { // 최대 8번만 반복
+                    let n = noticeList[i];
+                    tbody += '<tr onclick="location.href=\'${contextPath}/board/post/detail?no=' + n.postNo + '\';">'
+                           +  '<td>' + n.postNo + '</td>'
+                           +  '<td>' + n.postTitle + '</td>'
+                           +  '<td>' + n.writerName + '</td>'
+                           +  '</tr>';
                 }
+                $('.data-post tbody').html(tbody); // 기존 tbody 내용 교체
             },
-            error: function(xhr, status, errorThrown) {
-                // 오류 발생 시
-                console.log("error == >");
-                console.log("Status: " + status);
-                console.log("Error Thrown: " + errorThrown);
+            error: function (xhr, status, error) {
+                console.error("컨트롤러 호출 실패:", error);
             }
         });
     });
+</script>
+
+<script>
+$(document).ready(function() {
+    // 페이지 로딩 시 weather 함수 실행
+    $("#loading").show();  // 로딩 표시 시작
+
+    jQuery.ajax({
+        url: "${contextPath}/api/weather",  // 실제 API URL
+        type: "GET",
+        timeout: 30000,  // 30초 타임아웃
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data, status, xhr) {
+            let dataHeader = data.response.header.resultCode;
+
+            let popValue = 0;
+
+            // 응답 결과 코드가 "00"이면 성공
+            if (dataHeader === "00") {
+                console.log("success == >");
+                console.log(data);
+
+                // API에서 받은 날씨 데이터를 HTML로 출력
+                let weatherHtml = '';
+                let weatherHtml2 = '';
+                let weatherItems = data.response.body.items.item;  // 여러 항목들이 있는 배열
+
+                // 예시: 날씨 정보 출력 (필요한 데이터를 수정하여 출력)
+                weatherHtml += '<h4>현재 날씨 정보</h4><br>';
+
+                // 데이터 배열 순회
+                weatherItems.sort(function(a, b) {
+                    // 'POP' 항목을 가장 위로 올리기 위해 정렬
+                    if (a.category === 'POP') return -1;
+                    if (b.category === 'POP') return 1;
+                    return 0;
+                });
+
+                weatherItems.forEach(function(item) {
+                    let category = item.category;
+                    let value = item.fcstValue;
+
+                    let displayText = '';
+                    let displayText2 = '';
+                    switch (category) {
+                        case "TMP":
+                            displayText = "현재온도: " + value + "°C";
+                            break;
+                        case "UUU":
+                            displayText = "풍속(동서성분): " + value + " m/s";
+                            break;
+                        case "VVV":
+                            displayText = "풍속(남북성분): " + value + " m/s";
+                            break;
+                        case "POP":
+                            popValue = parseInt(value, 10); // 강수확률 값 저장
+                            displayText = "강수확률: " + value + "%";
+                            break;
+                        case "SKY":
+                            if (value == 1) {
+                                displayText2 = '<i class="uil-sun icon-large" style="font-size:120px;"></i>';
+                                displayText = '맑음';
+                            } else if (value == 2) {
+                                displayText2 = '<i class="uil-cloud-showers-heavy icon-large" style="font-size:120px;"></i>';
+                                displayText = '비';
+                            } else if (value == 3) {
+                                displayText2 = '<i class="fas fa-cloud-sun icon-large" style="font-size:120px;"></i>';
+                                displayText = '구름많음';
+                            } else if (value == 4) {
+                                displayText2 = "<i class='dripicons-cloud' style='font-size:120px;'></i>";
+                                displayText = '흐림';
+                            }
+                            // 강수확률이 60% 이상일 경우 SKY 텍스트를 수정
+                            if (popValue >= 60) {
+                                displayText2 = '<i class="uil-cloud-showers-heavy icon-large" style="font-size:120px;"></i>';
+                            }
+                            break;
+                        case "REH":
+                            displayText = "습도: " + value + "%";
+                            break;
+                    }
+
+                    weatherHtml += '<p>' + displayText + '</p>';
+                    weatherHtml2 += '<p>' + displayText2 + '</p>';
+                });
+
+                // 데이터를 div에 삽입
+                $('#data-weather').html(weatherHtml);
+                $('#data-weather2').html(weatherHtml2);
+
+            } else {
+                console.log("fail == >");
+                console.log(data);
+            }
+
+            // 로딩 표시 종료
+            $("#loading").hide();  // 로딩 숨기기
+        },
+        error: function(xhr, status, errorThrown) {
+            // 오류 발생 시
+            console.log("error == >");
+            console.log("Status: " + status);
+            console.log("Error Thrown: " + errorThrown);
+            
+            // 로딩 표시 종료
+            $("#loading").hide();  // 로딩 숨기기
+        }
+    });
+});
+
 </script>
 
 

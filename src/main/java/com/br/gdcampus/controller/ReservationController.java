@@ -8,13 +8,20 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.EquipmentDto;
 import com.br.gdcampus.dto.FacilityDto;
+import com.br.gdcampus.dto.ReservationDto;
+import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.EquipmentAndFacilityService;
+import com.br.gdcampus.service.ReservationService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReservationController {
 
 	private final EquipmentAndFacilityService equipmentAndFacilityService;
-	// private final ReservationService reservationService;
+	private final ReservationService reservationService;
 	
 	
 	/**
@@ -103,4 +110,115 @@ public class ReservationController {
 	}
 	
 	
+	/**
+	 * ajax 요청. 예약 가능 여부 조회 메소드
+	 * author : 상우
+	 * @param map classification("비품" | "시설"), date(예약희망일), number(비품번호 | 시설번호)
+	 */
+    @ResponseBody
+    @PostMapping("/checkAvailability")
+    public String checkAvailability(@RequestBody Map<String, Object> map) {
+    	
+    	log.debug("=============== selectDetailList 메소드 실행됨 =============== \n");
+        //log.debug("map : {}", map);
+        //log.debug("classification : {}", map.get("classification")); // "비품" | "시설"
+        //log.debug("date : {}", map.get("date")); // "YYYY-MM-DD"
+        //log.debug("number : {}", map.get("number")); 
+        
+        
+        String status = reservationService.checkAvailability(map);
+        
+        log.debug("status : {}", status); 
+        String result = "";
+        
+        if(status == null || status.equals("예약신청반려")) { 
+        	result = "예약 가능";
+        }else {
+        	result = "예약 불가능";
+        }
+        
+        log.debug("result : {}", result); 
+        return result;
+    }
+    
+    
+    /**
+     * 예약하기 메소드
+     * @param classification 구분("비품" | "시설")
+     * @param number 비품번호 | 시설번호
+     * @param date 예약희망일
+     * @param reason 예약사유
+     * @param session 현재 로그인한 사용자 세션
+     * @param ra 리다이렉트한 jsp로 응답 데이터를 전달하기 위한 객체
+     * @return
+     */
+    @PostMapping("/reserve")
+	public String reserve(String classification, String number, String date, String reason, HttpSession session, RedirectAttributes ra) {
+    	
+    	log.debug("=============== reserve 메소드 실행됨 =============== \n");
+    	// log.debug("classification : {}", classification);
+    	// log.debug("number : {}", number);
+    	// log.debug("date : {}", date);
+    	// log.debug("reason : {}", reason);
+    	
+    	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+    	String userName = ((UserDto)session.getAttribute("loginUser")).getUserName();
+    	
+    	
+    	Map<String, String> map = new HashMap<>();
+    	map.put("classification", classification);
+    	map.put("number", number);
+    	map.put("date", date);
+    	map.put("reason", reason);
+    	map.put("userNo", userNo);
+    	map.put("userName", userName);
+
+    	int result = reservationService.reserve(map);
+    	
+    	if(result > 0) {
+    		ra.addFlashAttribute("alertMsg", "예약에 성공했습니다.");
+    		return "redirect:/reservation/main";
+    	}else {
+    		ra.addFlashAttribute("alertMsg", "예약에 실패했습니다.");
+    		return "redirect:/reservation/main";	
+    	}
+    	
+    }
+    
+    
+    @GetMapping("/myReservation")
+    public String myReservation(HttpSession session, Model model) {
+    	
+    	log.debug("=============== myReservation 메소드 실행됨 =============== \n");
+    	
+    	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+    	
+    	List<ReservationDto> reservationList = reservationService.selectReservationByUserNo(userNo);
+    	
+    	log.debug("reservationList : {}", reservationList);
+    	model.addAttribute("reservationList", reservationList); 	
+    	
+    	
+    	
+    	if(reservationList == null || reservationList.isEmpty()) {
+    		
+    		log.debug("현재 로그인 유저의 예약 내역 없음.");
+    		
+    	}else {
+    		
+    		for(ReservationDto reservationDto : reservationList) {
+    			
+    			if(reservationDto.getEquipNo() == null) { // 시설 예약의 경우
+    				
+    				reservationDto.setClassification("시설");
+    				
+    			}else if(reservationDto.getFacilityNo() == null){ // 비품 예약의 경우
+    				
+    				reservationDto.setClassification("비품");
+    			}
+    		}
+    	}
+    	
+    	return "/equipmentAndFacility/myReservation";
+    }
 }

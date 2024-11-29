@@ -35,14 +35,15 @@ public class NoticeController {
 	@GetMapping("/detail")
 	public void noticeDetail(String no, Model model) {
 		NoticeDto n = noticeService.selectNotice(no);
-		model.addAttribute("n", n);
+		model.addAttribute("noticeDetail", n);
 		log.debug("notice????!?!??:{}",n);
 	}
+	
+	
 	
 	@ResponseBody
 	@GetMapping("/mainList")
 	public List<NoticeDto> noticeMain() {
-		System.out.println("컨트롤러: " + noticeService.selectNoticeList());
 		return noticeService.selectNoticeList();
 	}
 	

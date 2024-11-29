@@ -221,4 +221,6 @@ public class EquipmentAndFacilityDao {
 		return sqlSession.selectList("equipmentAndFacilityMapper.selectAllFacility", category);
 	}
 
+
+
 }

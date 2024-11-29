@@ -248,8 +248,8 @@
 																				<select> <%-- name 속성은 동적으로 부여&회수 --%>
 																						<option>시설 전체</option>
 																						<c:forEach var="category" items="${ facilityCategoryList }">
-																							<option>${ category }</option>
-																					</c:forEach>	
+																								<option>${ category }</option>
+																						</c:forEach>	
 																				</select>
 																		</span>
 																</span>
