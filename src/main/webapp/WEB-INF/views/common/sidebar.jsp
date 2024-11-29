@@ -69,7 +69,7 @@
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
 												<li><a href="${contextPath }/reservation/main">예약 신청</a></li>
-												<li><a href="#">예약 신청 내역 조회</a></li>
+												<li><a href="${contextPath }/reservation/myReservation">예약 신청 내역 조회</a></li>
 										</ul>
 								</li>
 
@@ -175,9 +175,9 @@
 												<span class="menu-item">결재하기</span>
 										</a>
 										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="${contextPath}/approval/home">결재 홈</a></li> 
 												<li><a href="${contextPath}/approval/todo">결재 대기 문서함</a></li>
 												<li><a href="${contextPath}/approval/upComing">결재 예정 문서함</a></li>
-												<li><a href="${contextPath}/approval/home"></a></li> 
 												
 										</ul>
 								</li>
@@ -216,7 +216,6 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 								</li>
-								
 
 								<li>
 										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
@@ -238,10 +237,24 @@
 
 								<br>
 								
-
 						</ul>
 				</div>
 				<!-- Sidebar -->
 		</div>
 </div>
 <!-- sidebar 끝 -->
+<script>
+$(document).ready(function() {
+    // 메뉴 모두 펼치기
+    $('.sub-menu').addClass('mm-show');
+    $('.has-arrow').addClass('mm-active');
+    $('.sub-menu').attr('aria-expanded', 'true');
+    
+    // 클릭 이벤트 방지
+    $('.has-arrow').off('click').on('click', function(e) {
+        e.preventDefault();
+        // 기존 클릭 이벤트를 완전히 중단
+        return false;
+    });
+});
+</script>

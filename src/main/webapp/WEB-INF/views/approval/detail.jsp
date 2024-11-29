@@ -256,6 +256,32 @@
 																<jsp:include page="adDraftDetail.jsp"/>
 										        </c:otherwise>                            
                         </c:choose>
+													<!-- 반려 상태일 때만 반려사유 표시 -->
+													<c:if test="${approval.apprStatus eq '3'}">
+													    <div style="margin-top: 30px; border: 2px solid #dc3545; padding: 20px; border-radius: 5px;">
+													        <h4 style="color: #dc3545; margin-bottom: 15px;">⚠️ 반려 사유</h4>
+													        <div style="background-color: #fff3f3; padding: 15px; border-radius: 3px;">
+													            <c:set var="firstRejecter" value="${null}" />
+													            
+													            <!-- 최초 반려자 찾기 -->
+													            <c:forEach items="${approval.approvers}" var="approver">
+													                <c:if test="${approver.lineStatus eq '2' && (firstRejecter eq null || approver.lineOrder < firstRejecter.lineOrder)}">
+													                    <c:set var="firstRejecter" value="${approver}" />
+													                </c:if>
+													            </c:forEach>
+													            
+													            <!-- 최초 반려자의 정보만 표시 -->
+													            <c:if test="${firstRejecter ne null}">
+													                <div style="margin-bottom: 10px;">
+													                    <strong style="color: #333;">반려 일자 : ${firstRejecter.lineDate}</strong>
+													                    <div style="margin-top: 5px; color: #dc3545;">
+													                        ${firstRejecter.lineReason}
+													                    </div>
+													                </div>
+													            </c:if>
+													        </div>
+													    </div>
+													</c:if>
                     </div>
                 </div>
             </div>

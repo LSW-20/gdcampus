@@ -249,4 +249,6 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	public List<FacilityDto> selectAllFacility(String category) {
 		return equipAndFacilityDao.selectAllFacility(category);
 	}
+
+
 }

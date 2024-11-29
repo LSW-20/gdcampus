@@ -317,7 +317,7 @@
 
         // 페이지 정보 업데이트
         function updatePageInfo() {
-            document.getElementById('pageInfo').textContent = `\${currentPage}/\${maxPage}`;
+            document.getElementById('pageInfo').textContent = `\${maxPage == 0 ? 0 : currentPage}/\${maxPage}`;
         }
 
         // 페이지네이션 버튼 상태 업데이트
