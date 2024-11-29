@@ -102,6 +102,13 @@ public class UserDao {
 		return sqlSession.update("userMapper.updateProfileImg",m);
 	}
 	
+	/**
+	 * 회원프로필디폴트
+	 */
+	public int defaultProfile(String userNo) {
+		System.out.println("dao: " + userNo);
+		return sqlSession.update("userMapper.defaultProfile",userNo);
+	}
 	
 	
 	/**

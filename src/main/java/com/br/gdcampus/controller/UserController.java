@@ -433,6 +433,29 @@ public class UserController {
 		
 	}//modifyProfile
 	
+	//프로필 초기화
+	@GetMapping("/defaultProfile.do")
+	@ResponseBody
+	public Map<String, String> defaultProfile(@RequestParam String userNo, HttpSession session) {
+	    
+	    
+	    UserDto loginUser = (UserDto)session.getAttribute("loginUser");
+	    String originalProfileURL = loginUser.getProfileURL();
+	    if(originalProfileURL != null) {
+			new File(originalProfileURL).delete();
+		}
+	    // Map을 반환하여 JSON 응답
+	    Map<String, String> response = new HashMap<>();
+	    response.put("status", "SUCCESS");
+	    
+	    userService.defaultProfile(userNo);  // 사용자 프로필 초기화
+	    // 세션의 로그인 사용자 정보 갱신
+        loginUser.setProfileURL(null);
+        session.setAttribute("loginUser", loginUser);  // 갱신된 loginUser 정보를 세션에 다시 저장
+    
+	    return response;
+	}
+	
 	//아이디찾기이동(이메일인증페이지)
 	@GetMapping("/login/idSearch.do")
 	public void idSearch() {
