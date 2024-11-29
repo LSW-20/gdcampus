@@ -43,6 +43,7 @@
 		<result column="LEVEL" property="level" />
 	</resultMap>
 
+  <!-- 게시글 목록 조회 -->
 	<select id="selectPostListCount" resultType="_int">
 		select 
 					 "count"
@@ -54,8 +55,8 @@
 	<!-- 게시글 목록 조회 -->
 	<select id="selectPostList" resultMap="postResultMap">
 		select 
-      POST_NO
-    , POST_TITLE 
+      P.POST_NO
+    , P.POST_TITLE 
     , USER_NAME 
     , REGIST_DATE
     , FILE_STATUS
@@ -71,6 +72,7 @@
 	    P.POST_NO ASC 
 	</select>
 	
+	<!-- 게시글 등록 -->
 <insert id="insertPost">
 		insert
 			into t_post
@@ -96,7 +98,8 @@
 	INSERT INTO t_attachment 
 	(
             file_no,
-            appr_no,
+            post_no,
+            file_path,
             filesystem_name,
             original_name,
             upload_date,
@@ -104,12 +107,12 @@
         )
         VALUES (
             seq_atno.NEXTVAL,
-            #{apprNo},
+            #{postNo},
+            #{filePath},
             #{filesystemName},
             #{originalName},
             SYSDATE,
             #{refType}
-    
         )
     </insert>
 	

@@ -20,6 +20,7 @@ public class AttachDto {
 	private String fileNo;
 	private String equipNo;
 	private String apprNo;
+	private String postNo;
 	private String filePath;
 	private String filesystemName;
 	private String originalName;
