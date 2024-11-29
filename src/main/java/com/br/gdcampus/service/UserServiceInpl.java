@@ -327,6 +327,14 @@ public class UserServiceInpl implements UserService {
 	public int resignUser(String userNo) {
 		return userDao.resignUser(userNo);
 	}
+
+	/**
+	 * 프로필 디폴트
+	 */
+	@Override
+	public int defaultProfile(String userNo) {
+		return userDao.defaultProfile(userNo);
+	}
 	
 	
 	

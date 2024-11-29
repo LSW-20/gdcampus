@@ -77,10 +77,8 @@
                                             </a>
                                           
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Remove</a>
-                                            </div>
+    <a class="dropdown-item" href="#" onclick="setDefaultProfile('${loginUser.userNo}')">default</a>
+</div>
                                         </div>
                                         <div class="text-center mt-3 mb-4">
                                             <div class="avatar-xl rounded-circle p-2 border border-soft-primary mx-auto">
@@ -363,7 +361,7 @@
     }
 		</script>
 		<script>
-       	$(document).ready(function(){
+		$(document).ready(function(){
        		$("#profileImgFile").on("change",function(evt){
        			const files = evt.target.files;//FileList{File,File}
        			
@@ -390,6 +388,24 @@
        		})
        	})
        </script>
+<script>
+    function setDefaultProfile(userNo) {
+        $.ajax({
+            url: '${contextPath}/user/defaultProfile.do',
+            type: 'GET',
+            data: { userNo: userNo },  // userNo를 서버에 전송
+            success: function(response) {
+                // 서버에서 프로필 이미지 초기화 성공 후
+                // 이미지 변경
+                $('#profileImg').attr('src', '${contextPath}/images/users/avatar-4.jpg');
+                location.reload();
+            },
+            error: function() {
+                alert('프로필 초기화 실패');
+            }
+        });
+    }
+</script>
 
 <script src="${ contextPath }/resources/js/fileValidate.js"></script>
     </body>
