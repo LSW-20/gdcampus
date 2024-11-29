@@ -53,6 +53,12 @@ public class PostController {
         List<CommentDto> commentList = postService.selectCommentList(no);
         model.addAttribute("p", postDto);
         model.addAttribute("c", commentList);
+        
+        // 첨부파일 테이블에서 조회
+        //List<AttachDto> attachList = postService.selectAttachList(p);
+        //model.addAttribute("attachList", attachList);
+        
+        
     }
 
 	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
@@ -61,7 +67,7 @@ public class PostController {
 		return "redirect:/post/detail?no=" + no; // 상세페이지로 
 	}
 	
-
+	
 	
 	// 게시글 추가
 	@GetMapping("/regist")
@@ -74,27 +80,28 @@ public class PostController {
   						, HttpSession session
 						, RedirectAttributes rdAttributes) {
   		
-  	// post테이블에 insert할 데이터 
-  	post.setWriterName( String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
-  	
-	// 첨부파일 업로드 후에 
-	// attachment테이블에 insert할 데이터
- 
-  	List<AttachDto> attachList = new ArrayList<>();
-  	for(MultipartFile file : uploadFiles) {
-  		if(file != null && !file.isEmpty()) {
-  			Map<String, String> map = fileUtil.fileupload(file, "post");
-  			attachList.add(AttachDto.builder()
-									.filePath(map.get("filePath"))
-									.originalName(map.get("originalName"))
-									.filesystemName(map.get("filesystemName"))
-									.refType("B")
-									.build());
-			}
+	  	// post테이블에 insert할 데이터 
+	  	post.setWriterName( String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
+	  	
+		// 첨부파일 업로드 후에 
+		// attachment테이블에 insert할 데이터
+	 
+	  	List<AttachDto> attachList = new ArrayList<>();
+	  	for(MultipartFile file : uploadFiles) {
+	  		if(file != null && !file.isEmpty()) {
+	  			Map<String, String> map = fileUtil.fileupload(file, "post");
+	  			attachList.add(AttachDto.builder()
+										.filePath(map.get("filePath"))
+										.originalName(map.get("originalName"))
+										.filesystemName(map.get("filesystemName"))
+										.refType("B")
+										.build());
+				}
 		}
-		  	post.setAttachList(attachList); // 제목,내용,작성자회원번호,첨부파일들정보
-		
-		  	int result = postService.insertPost(post);
+	  	
+		post.setAttachList(attachList); // 제목,내용,작성자회원번호,첨부파일들정보
+			
+		int result = postService.insertPost(post);
 		
 		if(attachList.isEmpty() && result == 1 
 				|| !attachList.isEmpty() && result == attachList.size()) {
@@ -102,10 +109,10 @@ public class PostController {
 		}else {
 			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
 		}
-		
+			
 		return "redirect:/board/post/regist";
-		
-		}
+			
+	}
   	
 
     // 게시글 댓글 목록 조회
@@ -120,7 +127,11 @@ public class PostController {
     @ResponseBody
     @PostMapping("/cinsert")
     public String CommentInsert(CommentDto c, HttpSession session) {
-        c.setCommentWriter(((PostDto)session.getAttribute("loginUser")).getUserNo());
+    	c.setUserNo(((UserDto)session.getAttribute("loginUser")).getUserNo());
+        c.setCommentWriter(((UserDto)session.getAttribute("loginUser")).getUserId());
+        
+        
+        
         int result = postService.insertComment(c);
         return result > 0 ? "SUCCESS" : "FAIL";
     }

@@ -20,8 +20,8 @@
 
 	<resultMap id="attachResultMap" type="AttachDto">
 		<result column="file_no" property="fileNo"/>
-		<result column="equipNo" property="fileNo"/>
-		<result column="apprNo" property="fileNo"/>
+		<result column="equipNo" property="equipNo"/>
+		<result column="apprNo" property="apprNo"/>
 		<result column="file_no" property="fileNo"/>
 		<result column="file_path" property="filePath"/>
 		<result column="filesystem_name" property="filesystemName"/>
@@ -188,15 +188,21 @@
 			          INTO T_COMMENT 	
 			        	  (
 			            	COMMENT_NO
-			            , user_name as "commentWriter"
-			            , "COMMENT"
+			            , USER_NO
+			            , POST_NO
 			            , COMMENTER_ID
-			            , COMMENT_WRITER
-			            , REF_COMMENT_NO, REGIST_DATE, COMMENT, MODIFY_DATE, LEVEL
+			            , "COMMENT"
+			            , REGIST_DATE
+			            , MODIFY_DATE
 			        )
 			        VALUES (
-			            #{commentNo}, #{userNo}, #{postNo}, #{commenterId}, #{commentWriter},
-			            #{refCommentNo}, SYSDATE, #{comment}, NULL, #{level}
+			           SEQ_CMNO.NEXTVAL
+			          , #{userNo}
+			          , #{postNo}
+			          , #{commentWriter}
+			          , #{comment}
+			          , SYSDATE
+			          , SYSDATE
 			        )
 			    </insert>
 				    
