@@ -66,8 +66,8 @@ public interface UserService {
 	int updateUser(UserDto m); 
 	//회원프로필수정
 	int updateProfileImg(UserDto m);
-
-
+	//회원프로필디폴트
+	int defaultProfile(String userNo);
 
 	
 	//아이디찾기
