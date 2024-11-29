@@ -127,8 +127,20 @@
 							    </div>
 
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
-							        <div class="card-body" id="d">
-							        
+							        <div class="card-body">
+								        <h4 class="card-title mb-4">게시판</h4>
+	        									<table class="data-post table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;  margin: 0 auto;" id="data-post">
+	                               <thead>
+	                                   <tr>
+			                                     	<th>게시글 번호</th>
+					                                  <th>게시글 내용</th>
+					                                  <th>작성자</th>
+					                                 <%--  <th>${ noticeList[0].boardTypeNo }</th> --%>
+	                                   </tr>
+	                               </thead>
+	                               <tbody>
+	                               </tbody>
+	                         	</table>
                 			</div>
 							    </div>
 							    
@@ -271,7 +283,33 @@
                 }
             });
         });
-   		 </script>
+   		 </script>        
+   		 <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '${contextPath}/board/post/mainList', // 컨트롤러의 매핑 경로
+            type: 'GET',
+            success: function (noticeList) {
+                console.log(noticeList);
+                // 데이터를 테이블의 tbody에 추가
+                let tbody = '';
+                for (let i = 0; i < noticeList.length && i < 8; i++) { // 최대 8번만 반복
+                    let n = noticeList[i];
+                    tbody += '<tr onclick="location.href=\'${contextPath}/board/post/detail?no=' + n.postNo + '\';">'
+                           +  '<td>' + n.postNo + '</td>'
+                           +  '<td>' + n.postTitle + '</td>'
+                           +  '<td>' + n.writerName + '</td>'
+                           +  '</tr>';
+                }
+                $('.data-post tbody').html(tbody); // 기존 tbody 내용 교체
+            },
+            error: function (xhr, status, error) {
+                console.error("컨트롤러 호출 실패:", error);
+            }
+        });
+    });
+</script>
+
 <script>
 $(document).ready(function() {
     // 페이지 로딩 시 weather 함수 실행
