@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
 import com.br.gdcampus.dto.PostDto;
+import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.PostService;
 import com.br.gdcampus.util.FileUtil;
+import com.br.gdcampus.util.PagingUtil;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class PostController {
 
-	@Autowired
 	private final PostService postService; 
+	private final PagingUtil pagingUtil;
 	private final FileUtil fileUtil;
+	
 	
 	// 게시글 목록 조회
 	@GetMapping("/list")
@@ -42,6 +44,7 @@ public class PostController {
 		model.addAttribute("postList", list);
 		
 	}
+
 	
 	// 게시글 상세 페이지
     @GetMapping("/detail")
@@ -65,14 +68,14 @@ public class PostController {
 	public void registPage() {}
 	
 	// 게시글 등록 
-  	@GetMapping("/insert") 
+  	@PostMapping("/insert") 
   	public String regist(PostDto post
   						, List<MultipartFile> uploadFiles
   						, HttpSession session
 						, RedirectAttributes rdAttributes) {
   		
   	// post테이블에 insert할 데이터 
-  	post.setWriterName( String.valueOf( ((PostDto)session.getAttribute("loginUser")).getUserNo() ) );
+  	post.setWriterName( String.valueOf( ((UserDto)session.getAttribute("loginUser")).getUserNo() ) );
   	
 	// 첨부파일 업로드 후에 
 	// attachment테이블에 insert할 데이터
@@ -100,7 +103,7 @@ public class PostController {
 			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
 		}
 		
-		return "redirect:/post/list";
+		return "redirect:/board/post/regist";
 		
 		}
   	

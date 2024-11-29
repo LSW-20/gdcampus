@@ -17,31 +17,40 @@ import lombok.RequiredArgsConstructor;
 public class PostServiceImpl implements PostService {
 	
 	private final PostDao postDao;
-
+	
 	// 게시판 목록조회
 	@Override
 	public List<PostDto>selectPostList() {
 		return postDao.selectPostList();
 	}
 	
-	// 게시판 상세조회
+	// 게시판 상세 / 게시글 조회
 	@Override
 	public PostDto selectPostDetail(String postNo) {
 		return postDao.selectPostDetail(postNo);
 	}
 	
-	// 게시판 상세조회 조회수
+	// 게시판 상세 /조회수증가
 	@Override
 	public int updateIncreaseCount(int postNo) {
 		return postDao.updateIncreaseCount(postNo);
 	}
 	
-
-
+	// 다중 첨부파일 등록 
+	@Transactional
 	@Override
 	public int insertPost(PostDto p) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = postDao.insertPost(p); 
+		
+		List<AttachDto> list = p.getAttachList();
+		if(result > 0 && !list.isEmpty()) {
+			result = 0;
+			for(AttachDto attach : list) {
+				result += postDao.insertAttach(attach);
+			}
+		}
+		
+		return result;
 	}
 	/*
 	 * public List<PostDto> selectSearchList(Map<String, String>search,PageInfoDto
@@ -118,6 +127,9 @@ public class PostServiceImpl implements PostService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	
 
 
 	

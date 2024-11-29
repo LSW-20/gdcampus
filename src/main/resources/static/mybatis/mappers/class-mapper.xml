@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="classMapper">
+
+	<resultMap id="classResultMap" type="ClassDto">
+	
+		<result column="CLASS_CODE" property="classCode"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		
+		<result column="DEPT_NAME" property="deptName"/>
+		<result column="COUNT" property="stuCount"/>
+		
+		<result column="CLASS_TITLE" property="classTitle"/>
+		<result column="CLASS_TYPE" property="classType"/>
+		<result column="PRG_METHOD" property="prgMethod"/>
+		<result column="TARGET_GRADE" property="targetGrade"/>
+		<result column="CLASS_HOURS" property="classHours"/>
+		<result column="CLASS_GOALS" property="classGoals"/>
+		<result column="OPERATION_PLAN" property="operationPlan"/>
+		<result column="MAIN_TEXTBOOK" property="mainTextBook"/>
+		<result column="REFN_BOOK" property="refnBook"/>
+		<result column="CONFIRM_YN" property="confirmYn"/>
+		
+		<result column="STATUS" property="status"/>
+		<result column="APPL_DATE" property="applDate"/>
+		<result column="REASON" property="reason"/>
+		<result column="DEL_YN" property="delYn"/>
+		
+		 <!-- 평가방식, 수강생, 수업계획 매핑 -->
+	    <collection ofType="EvaMethodDto" property="evaList" resultMap="evaList"/>
+	    <collection ofType="LearnerDto" property="learnerList" resultMap="learnerList"/>
+	</resultMap>
+
+	<!-- 평가방식 매핑 -->
+	<resultMap id="evaList" type="EvaMethodDto">
+	    <result column="EVA_ITEM" property="evaItem"/>
+	    <result column="ALLOCATION" property="allocation"/>
+	    <result column="EVA_DETAIL" property="evaDetail"/>
+	    
+	    <collection ofType="LessonPlanDto" property="planList" resultMap="planList"/>
+	</resultMap>
+	
+	<!-- 수강생 매핑 -->
+	<resultMap id="learnerList" type="LearnerDto">
+	    <result column="LEARNER_NO" property="learnerNo"/>
+	    <result column="DEPARTMENT" property="department"/>
+	    <result column="GRADE" property="grade"/>
+	    <result column="STU_NAME" property="stuName"/>
+	    <result column="MIDDLE_TEST" property="middleTest"/>
+	    <result column="FINAL_TESTL" property="finalTestL"/>
+	    <result column="PRACTICE" property="practice"/>
+	    <result column="ATTENDANCE" property="attendance"/>
+	    <result column="ETC" property="etc"/>
+	    <result column="FINAL_GRADE" property="finalGrade"/>
+	</resultMap>
+		
+	<!-- 수업계획 매핑 -->
+	<resultMap id="planList" type="LessonPlanDto">
+		<result column="CLASS_CODE" property="classCode"/>
+	    <result column="WEEK" property="week"/>
+	    <result column="CONTENT" property="content"/>
+	    <result column="TCHNG_MTHD" property="tchngMthd"/>
+	    <result column="MATERIAL" property="material"/>
+	</resultMap>
+	
+	<!-- 강의신청 목록/교무팀 -->
+	<select id="selectStaffOpningListCount" resultType="_int">
+		SELECT count(*) as count
+		  FROM T_OPEN_APPL
+		  JOIN T_CLASS C USING(CLASS_CODE)
+		  JOIN T_USER U ON C.USER_NO = U.USER_NO
+	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
+	    <if test="status != 'all'">
+	        AND STATUS = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectStaffOpningList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , USER_NAME as USER_NO
+		     , to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		     , to_char(O.MODIFY_DATE,'YY/MM/DD') as "MODIFY_DATE"
+		     , STATUS
+		 FROM T_OPEN_APPL O
+		 JOIN T_CLASS C USING(CLASS_CODE)
+		 JOIN T_USER U ON C.USER_NO = U.USER_NO
+		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
+		<if test="status != 'all'">
+		  AND STATUS = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+		  AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY APPL_DATE DESC
+	</select>
+	<!-- 강의신청 상세조회/교수 -->
+	<!-- 강의신청 상세조회/교무팀 -->
+	<select id="selectStaffOpningDetail" resultMap="classResultMap">
+		SELECT CLASS_CODE
+	          ,USER_NAME as USER_NO
+	          ,(SELECT DEPT_NAME
+	              FROM T_ST_DEPT
+		         WHERE ST_DEPT_NO = SUBSTR(#{classCode}, INSTR(#{classCode},'_') + 1, 2)
+		        ) AS DEPT_NAME
+		      ,CLASS_TITLE
+		      ,CLASS_TYPE
+		      ,PRG_METHOD
+		      ,TARGET_GRADE
+		      ,CLASS_HOURS
+		      ,CLASS_GOALS
+		      ,OPERATION_PLAN
+		      ,MAIN_TEXTBOOK
+		      ,REFN_BOOK
+		      ,STATUS
+		      ,to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		      ,REASON
+		      ,EVA_ITEM
+		      ,ALLOCATION
+		      ,EVA_DETAIL   
+		  FROM T_OPEN_APPL O
+		  JOIN T_CLASS C ON O.CLASS_CODE = C.CLASS_CODE
+		  JOIN T_USER U ON C.USER_NO = U.USER_NO
+		  LEFT JOIN T_EVA_METHOD E ON C.CLASS_CODE = E.CLASS_CODE
+		 WHERE CLASS_CODE = #{classCode}
+	</select>
+	
+	<!-- 강의신청 취소/교수 -->
+	<!-- 강의신청 승인/교무팀 -->
+	<!-- 강의신청 반려/교무팀 -->
+	<!-- 강의신청 보완요청/교무팀 -->
+	<update id="updateOpningStatus">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = #{status}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		     , USER_NO = #{userNo}
+		     , REASON = #{reason}
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
+	
+	<update id="updateClassStatus">
+		 UPDATE T_CLASS
+   			SET CONFIRM_YN = 'Y'
+ 		  WHERE CLASS_CODE = #{classCode}
+	</update>
+	
+	<!-- 강의신청 목록/교수 -->
+	<select id="selectProfOpningListCount" resultType="_int">
+		SELECT count(*) as count
+		  FROM T_OPEN_APPL O
+  		  JOIN T_CLASS C USING(CLASS_CODE)
+	     WHERE 1 = 1  
+	       AND DEL_YN = 'N'
+	       AND C.USER_NO = #{userNo}
+	    <if test="status != 'all'">
+	        AND STATUS = #{status}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectProfOpningList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , to_char(APPL_DATE,'YY/MM/DD') as "APPL_DATE"
+		     , to_char(O.MODIFY_DATE,'YY/MM/DD') as "MODIFY_DATE"
+		     , STATUS
+		 FROM T_OPEN_APPL O
+		 JOIN T_CLASS C USING(CLASS_CODE)
+		WHERE 1 = 1  
+		  AND DEL_YN = 'N'
+		  AND C.USER_NO = #{userNo}
+		<if test="status != 'all'">
+		  AND STATUS = #{status}
+		</if>
+		<if test="keyword != null and keyword != ''">
+		  AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY APPL_DATE DESC
+	</select>
+	<!-- 강의신청 신청/교수 -->
+	<!-- 개설신청한 수업이 총 몇시수인지 조회 -->
+	<select id="selectSumClassTime" resultType="_int">
+		SELECT 
+	    	   NVL(SUM(CASE 
+	           		   WHEN O.STATUS IN ('접수', '승인', '보완요청', '보완완료')
+	                    AND C.USER_NO = #{userNo}
+	                    AND SUBSTR(C.CLASS_CODE, 1, 2) = #{year}
+	                    AND SUBSTR(C.CLASS_CODE, 4, 1) = #{term}
+	               	   THEN C.CLASS_HOURS 
+	               	   ELSE 0 
+	           			END), 0) AS SUM
+		 FROM 
+	    	  T_CLASS C
+		 LEFT JOIN 
+	    	  T_OPEN_APPL O
+	       ON C.CLASS_CODE = O.CLASS_CODE
+	</select>
+	<insert id="insertClass">
+		INSERT 
+		  INTO T_CLASS 
+		     ( 
+		       CLASS_CODE
+		     , USER_NO
+		     , CLASS_TITLE
+		     , CLASS_TYPE
+		     , PRG_METHOD
+		     , TARGET_GRADE
+		     , CLASS_HOURS
+		     , CLASS_GOALS
+		     , OPERATION_PLAN
+		     , MAIN_TEXTBOOK
+		     , REFN_BOOK
+		     , CONFIRM_YN
+		     ) 
+		VALUES 
+		     (
+		       #{classCode} || '_' || LPAD(SEQ_CNO.NEXTVAL,3,0)
+		     , #{userNo}
+		     , #{classTitle}
+		     , #{classType}
+		     , #{prgMethod}
+		     , #{targetGrade}
+		     , #{classHours}
+		     , #{classGoals}
+		     , #{operationPlan}
+		     , #{mainTextBook}
+		     , #{refnBook}
+		     , 'N'
+		     )
+	</insert>
+	<insert id="insertOpning">
+		INSERT 
+		  INTO T_OPEN_APPL 
+		     ( 
+		       CLASS_CODE
+		     , STATUS
+		     , APPL_DATE
+		     , DEL_YN
+		     ) 
+		VALUES 
+		    (
+		      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+		    , '접수'
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    , 'N'
+		    )
+	</insert>
+	<insert id="insertEva">
+	INSERT 
+	  INTO T_EVA_METHOD 
+	     ( 
+	       CLASS_CODE
+	     , EVA_ITEM
+	     , ALLOCATION
+	     , EVA_DETAIL
+	     , CREATE_DATE
+	     ) 
+	VALUES 
+	    ( 
+	      #{classCode} || '_' || LPAD(SEQ_CNO.CURRVAL,3,0)
+	    , #{evaItem}
+	    , #{allocation}
+	    , #{evaDetail}
+	    , to_date(SYSDATE,'RR/MM/DD')
+	    )
+	</insert>
+	
+	<!-- 강의신청 수정(보완)/교수 -->
+	<insert id="insertEvaMethod">
+		INSERT 
+		  INTO T_EVA_METHOD 
+		     ( 
+		       CLASS_CODE
+		     , EVA_ITEM
+		     , ALLOCATION
+		     , EVA_DETAIL
+		     , CREATE_DATE
+		     ) 
+		VALUES 
+		    ( 
+		      #{classCode}
+		    , #{evaItem}
+		    , #{allocation}
+		    , #{evaDetail}
+		    , to_date(SYSDATE,'RR/MM/DD')
+		    )
+	</insert>
+	<update id="updateEva">
+		UPDATE T_EVA_METHOD
+		   SET ALLOCATION = #{allocation} 
+		     , EVA_DETAIL = #{evaDetail}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM = #{evaItem}
+	</update>
+	<delete id="deleteEva">
+		DELETE FROM T_EVA_METHOD
+		 WHERE CLASS_CODE = #{classCode}
+		   AND EVA_ITEM =  #{evaItem}
+	</delete>
+	<update id="updateOpenAppl">
+		UPDATE T_OPEN_APPL
+		   SET STATUS = '보완완료'
+		     , USER_NO = #{userNo}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{updateClassCode}
+	</update>
+	<update id="updateClass">
+		UPDATE T_CLASS
+		   SET CLASS_CODE = #{updateClassCode}
+		     , CLASS_TITLE = #{classTitle}
+		     , CLASS_TYPE= #{classType}
+		     , PRG_METHOD = #{prgMethod}
+		     , TARGET_GRADE = #{targetGrade}
+		     , CLASS_GOALS = #{classGoals}
+		     , OPERATION_PLAN = #{operationPlan}
+		     , MAIN_TEXTBOOK = #{mainTextBook}
+		     , REFN_BOOK = #{refnBook}
+		     , MODIFY_DATE = to_date(SYSDATE,'RR/MM/DD')
+		 WHERE CLASS_CODE = #{classCode}
+	</update>
+
+	<!-- 내강의 목록조회 -->
+	<select id="selectMyClassListCount" resultType="_int">
+	    SELECT count(*) as count
+		  FROM T_CLASS
+		 WHERE USER_NO = #{userNo}
+   		   AND CLASS_CODE LIKE #{year} || '%'
+  		   AND CONFIRM_YN = 'Y'
+	    <if test="keyword != null and keyword != ''">
+	        AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+	</select>
+	<select id="selectMyClassList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		 	 , CLASS_TITLE
+		 	 , CLASS_TYPE
+		 	 , TARGET_GRADE
+		 	 , CLASS_HOURS
+  		  FROM T_CLASS
+         WHERE USER_NO = #{userNo}
+   		   AND CLASS_CODE LIKE #{year} || '%'
+   	   	   AND CONFIRM_YN = 'Y'
+   	   	<if test="keyword != null and keyword != ''">
+	       AND CLASS_TITLE LIKE '%' || #{keyword} || '%'
+	    </if>
+		 ORDER 
+		    BY CLASS_CODE
+	</select>
+	<!-- 내강의 상세조회 -->
+	<select id="selectMyClassDetail" resultMap="classResultMap">
+		SELECT CLASS_CODE
+		     , CLASS_TITLE
+		     , CLASS_TYPE
+		     , TARGET_GRADE
+		     , CLASS_HOURS
+             , (SELECT DEPT_NAME 
+                  FROM T_ST_DEPT S
+                  JOIN T_CLASS C
+                    ON SUBSTR(C.CLASS_CODE,6,2) = S.ST_DEPT_NO
+                 WHERE CLASS_CODE = #{classCode}) AS DEPT_NAME
+		     , (SELECT COUNT(STU_NAME)
+		          FROM T_CLASS 
+		  		  LEFT 
+		  		  JOIN T_LEARNER_LIST 
+		  		 USING(CLASS_CODE)
+		  		  JOIN T_STUDENT 
+		  		 USING(STU_NO)
+		   		 WHERE CLASS_CODE = #{classCode}) AS COUNT 
+		   	 , PRG_METHOD
+		  FROM T_CLASS
+		 WHERE CLASS_CODE = #{classCode}
+		   AND CONFIRM_YN = 'Y'
+	</select>
+	<!-- 수강생 상세조회 -->
+	<select id="selectLearnerList" resultMap="classResultMap">
+		SELECT CLASS_CODE
+			 , LEARNER_NO
+			 , STU_NAME
+		 	 , DEPARTMENT
+             , GRADE
+		 	 , MIDDLE_TEST
+		 	 , FINAL_TESTL
+		 	 , PRACTICE
+		 	 , ATTENDANCE
+		 	 , ETC
+		 	 , FINAL_GRADE
+  		FROM T_CLASS 
+  		LEFT 
+  		JOIN T_LEARNER_LIST 
+  	   USING(CLASS_CODE)
+        JOIN T_STUDENT 
+       USING(STU_NO)
+ 	   WHERE CLASS_CODE=#{classCode}
+	</select>
+	<!-- 수강생 숫자 조회(차트용) -->
+	<select id="selectLearnerCount" resultType="map">
+		SELECT GRADE, COUNT(GRADE) as COUNT
+		  FROM T_LEARNER_LIST
+		  JOIN T_STUDENT
+		 USING (STU_NO)
+		 WHERE CLASS_CODE=#{classCode}
+		 GROUP BY GRADE
+	</select>
+	
+	<!-- 수업계획서 조회 -->
+	<select id="selectPlanList" resultMap="classResultMap">
+		SELECT C.CLASS_CODE
+             , USER_NAME as USER_NO
+             , ( SELECT DEPT_NAME
+              	   FROM T_ST_DEPT
+	         	  WHERE ST_DEPT_NO = SUBSTR(#{classCode}, INSTR(#{classCode},'_') + 1, 2)
+	           )AS DEPT_NAME
+	         , CLASS_TITLE
+	         , CLASS_TYPE
+	         , PRG_METHOD
+	         , TARGET_GRADE
+	         , CLASS_HOURS
+	         , CLASS_GOALS
+	         , OPERATION_PLAN
+	         , MAIN_TEXTBOOK
+	         , REFN_BOOK
+	         , EVA_ITEM
+	         , ALLOCATION
+	         , EVA_DETAIL   
+             , WEEK
+             , CONTENT
+             , TCHNG_MTHD
+             , MATERIAL
+	      FROM T_CLASS C 
+	      JOIN T_USER U 
+	        ON C.USER_NO = U.USER_NO
+	      LEFT 
+	      JOIN T_EVA_METHOD E 
+	        ON C.CLASS_CODE = E.CLASS_CODE
+          LEFT 
+          JOIN T_WEEK_PLAN W 
+            ON C.CLASS_CODE = W.CLASS_CODE
+	     WHERE C.CLASS_CODE = #{classCode}
+	</select>
+	<!-- 주차별 수업계획서 조회 -->
+	<select id="selectLessonPlanList" resultMap="planList">
+		SELECT CLASS_CODE
+     	 	 , WEEK
+     		 , CONTENT
+     		 , TCHNG_MTHD
+     		 , MATERIAL
+    	  FROM T_WEEK_PLAN 
+    	 WHERE CLASS_CODE = #{classCode}
+	</select>
+	<!-- 수업계획서 수정 -->
+	<!-- 수업계획서 삭제 -->
+	<!-- 수업계획서 추가 -->
+
+	
+</mapper>
