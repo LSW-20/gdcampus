@@ -57,26 +57,25 @@
             <h2 class="m-4">게시글 등록</h2>
             <br>
 
-            <form  id="enroll-form" method="post" action="${contextPath}/board/post/regist" method="post"
-							class="was-validated">
+            <form  id="enroll-form" method="post" action="${contextPath}/board/post/insert" method="post" enctype="multipart/form-data" class="was-validated">
                 <div class="form-group">
                     <label for="title">제목 </label>
-                    <input type="text" class="form-control" id="title" name="" required><br>
+                    <input type="text" class="form-control" id="title" name="postTitle" required><br>
                     
                     <label for="writer">작성자 </label>
-                    <input type="text" class="form-control" id="writer" name="" value="user01" readonly><br>
+                    <input type="text" class="form-control" id="writer" name="" value="${ loginUser.userId }" readonly><br>
                     
                     <label for="upfile">첨부파일 </label>
-                    <input type="file" class="form-control-file border" id="upfile" name=""><br>
+                    <input type="file" class="form-control-file post file" id="upfile" name="uploadFiles" multiple><br>
                     
                     <label for="content">내용 </label>
-                    <textarea class="form-control" required name="" id="content" rows="10" style="resize:none;"></textarea><br>
+                    <textarea class="form-control" required name="postContent" id="content" rows="10" style="resize:none;"></textarea><br>
                     
                 </div>
                 <br>
                 <div align="center">
-                    <button type="submit" class="btn btn-primary" >등록하기</button>
-                    <button type="reset" class="btn btn-danger">취소하기</button>
+                    <button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/insert">등록하기</button>
+                    <button type="reset" class="btn btn-danger" href="${contextPath }/board/post/list">취소하기</button>
                 </div>
 
             </form>
@@ -85,7 +84,7 @@
         </section>
 							<hr>
 							<div class="mt-4 row d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
+								<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/insert">추가</button>
 								<a class="btn btn-primary w-md mr-3" href="${contextPath }/board/post/list">취소</a>
 							</div>
 					</div>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
+import com.br.gdcampus.dto.PageInfoDto;
 import com.br.gdcampus.dto.PostDto;
 
 public interface PostService {
@@ -12,8 +13,7 @@ public interface PostService {
      * 게시글 기능 관련 작성
      * @author 박한나
      */
-
-    // 게시글 목록 조회
+	// 게시글 목록 조회
     List<PostDto>selectPostList();
     
     // 게시글 상세 - 게시글 조회
@@ -25,7 +25,7 @@ public interface PostService {
     // 게시글 등록
     int insertPost(PostDto p);
 
-
+    
     // 게시글 삭제
     int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/
 
