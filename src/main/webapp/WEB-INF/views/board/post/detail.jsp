@@ -49,9 +49,9 @@
                         <tr>
                             <th>첨부파일</th>
                             <td colspan="3">
-                                <c:forEach var="at" items="${a.attachList}">
-                                    <a href="${contextPath}${at.filePath}/${at.filesystemName}" download="${at.originalName}">
-                                        ${at.originalName}
+                                <c:forEach var="attachDto" items="${attachList}">
+                                    <a href="${contextPath}${attachDto.filePath}/${attachDto.filesystemName}" download="${attachDto.originalName}">
+                                        ${attachDto.originalName}
                                     </a>
                                     <br>
                                 </c:forEach>
@@ -102,7 +102,7 @@
                                 </c:choose>
                             </tr>
                             <tr>
-                                <td colspan="3">댓글 (<span id="comment">0</span>)</td>
+                                <td colspan="3">댓글 (<span id="rcount">0</span>)</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -144,7 +144,7 @@
                                 type: 'post',
                                 data: {
                                     comment: $("#post_content").val(),
-                                    commentNo: '${commentDto.postNo}'
+                                    postNo: '${p.postNo}'
                                 },
                                 success: function (resData) {
                                     if (resData === "SUCCESS") {

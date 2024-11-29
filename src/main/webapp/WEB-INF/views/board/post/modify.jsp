@@ -112,8 +112,8 @@
           <h2 class="m-4">게시글 수정</h2>
           <br>
 
-          <form id="modify-form" method="post" action="${ contextPath }/post/modify" enctype="multipart/form-data">
-              <input type="hidden" name="postNo" value="${ p.postNo }">
+          <form id="modify-form" method="post" action="${ contextPath }/board/post/modify" enctype="multipart/form-data">
+              <input type="hidden" name="postNo" value="${p.postNo }">
               <div class="form-group">
                   <label for="title">제목 </label>
                   <input type="text" class="form-control" id="title" name="postTitle" value="${ p.postTitle }" required><br>
@@ -124,9 +124,9 @@
                   <label for="upfile">첨부파일 </label>
                   <input type="file" class="form-control-file post" id="uploadFiles" name="uploadFiles" multiple>
                   
-                  <c:forEach var="at" items="${ p.attachList }">
+                  <c:forEach var="at" items="${p.attachList}">
                   	<div>
-	                  	<a href="${contextPath}${at.filePath}/${at.filesystemName}" download="${ at.originalName }">${ at.originalName }</a> 
+	                  	<a href="${contextPath}${at.filePath}/${at.filesystemName}" download="${ at.originalName }">${ at.originalName}</a> 
 	                  	<span class="origin_attach_del" data-fileno="${ at.fileNo }">x</span>
                   	</div>
                   </c:forEach>
@@ -148,11 +148,10 @@
           <script>
           	$(document).ready(function(){
           		$(".origin_attach_del").on("click", function(){
-          			
           			// 삭제할 첨부파일 번호를 submit시 넘기기위한 작업
           			// 수정하기 submit시 form요소내에 input type="hidden" 으로 첨부파일번호 숨기기
-          			let hiddenEl = "<input type='hidden' name='postNo' value='" + $(this).data("postNo") + "'>";
-          			$("#modify-form").append(hiddenEl);
+          			let hiddenEl = "<input type='hidden' name='postNo' value='" + $(this).data("fileno") + "'>";
+          			$("#modify-form").append(hiddenEl); // 자손요소로 추가
           			
           			// 화면으로부터 삭제된거 처럼 보여지게 해당 첨부파일 링크 삭제 처리
           			$(this).parent().remove();
@@ -171,9 +170,8 @@
 							    element.addEventListener('mouseout', function() {
 							      // 마우스를 벗어났을 때 커서를 기본값으로 변경
 							      this.style.cursor = 'default';
-							    });
-							  });
-
+							    })
+							  })
           </script>
           
           <!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
