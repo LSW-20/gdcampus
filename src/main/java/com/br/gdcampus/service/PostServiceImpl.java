@@ -32,11 +32,11 @@ public class PostServiceImpl implements PostService {
 	
 	// 게시판 상세 /조회수증가
 	@Override
-	public int updateIncreaseCount(int postNo) {
+	public int updateIncreaseCount(String postNo) {
 		return postDao.updateIncreaseCount(postNo);
 	}
 	
-	// 다중 첨부파일 등록 
+	//첨부파일 등록 
 	@Transactional
 	@Override
 	public int insertPost(PostDto p) {

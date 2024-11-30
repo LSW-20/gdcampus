@@ -20,7 +20,7 @@ public interface PostService {
     PostDto selectPostDetail(String postNo);
 
    // 게시글 상세 - 조회수 증가
- 	int updateIncreaseCount(int postNo);
+ 	int updateIncreaseCount(String postNo);
     
     // 게시글 등록
     int insertPost(PostDto p);

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.gdcampus.dto.AttachDto;
 import com.br.gdcampus.dto.CommentDto;
-import com.br.gdcampus.dto.NoticeDto;
 import com.br.gdcampus.dto.PostDto;
 import com.br.gdcampus.dto.UserDto;
 import com.br.gdcampus.service.PostService;
@@ -45,13 +44,20 @@ public class PostController {
 		model.addAttribute("postList", list);
 		
 	}
-
+	
+	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
+	public String increaseCount(String no) {
+		postService.updateIncreaseCount(no);
+		return "redirect:/board/post/detail?no=" + no; // 상세페이지로 
+	}
+	
 	
 	// 게시글 상세 페이지
     @GetMapping("/detail")
     public void selectPostDetail(String no, Model model) {
         PostDto postDto = postService.selectPostDetail(no);
         List<CommentDto> commentList = postService.selectCommentList(no);
+     
         model.addAttribute("p", postDto);
         model.addAttribute("c", commentList);
         
@@ -59,15 +65,9 @@ public class PostController {
         List<AttachDto> attachList = postService.selectAttachList(no);
         model.addAttribute("attachList", attachList);
         
-        
     }
 
-	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
-	public String increaseCount(int no) {
-		postService.updateIncreaseCount(no);
-		return "redirect:/post/detail?no=" + no; // 상세페이지로 
-	}
-	
+
 	
 	
 	// 게시글 추가

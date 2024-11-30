@@ -56,12 +56,11 @@ ORDER BY
 	
 	<!-- 공지사항 조회(첨부파일여부) -->
 	<select id="selectNotice" resultMap="noticeResultMap">
-    		select
-		       POST_NO
+    select
+           POST_NO
 		     , POST_TITLE
 		     , POST_CONTENT
 		     , USER_NAME
-		     , BOARD_TYPE_NO
 		     , to_char(REGIST_DATE,'YYYY-MM-DD') as "regist_date"
 		     , FILE_NO
 		     , FILE_PATH
@@ -69,8 +68,9 @@ ORDER BY
 		     , ORIGINAL_NAME
 		  from t_post n
 		  join t_user using (USER_NO)
-		  left join t_attachment on (ref_type = 'B' and APPR_NO = POST_NO)
-		 where POST_NO = #{noticeNo}
+		  left join t_attachment USING(POST_NO)
+		 where POST_NO = #{postNo}
+       and BOARD_TYPE_NO = 1
 	</select>
 	
 	

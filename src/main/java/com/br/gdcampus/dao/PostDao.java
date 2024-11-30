@@ -43,7 +43,7 @@ public class PostDao {
 	}
 
 	// 게시글 상세 페이지(조회수)
-	public int updateIncreaseCount(int postNo) {
+	public int updateIncreaseCount(String postNo) {
 		return sqlSession.update("postMapper.updateIncreaseCount",postNo);
 	}
 

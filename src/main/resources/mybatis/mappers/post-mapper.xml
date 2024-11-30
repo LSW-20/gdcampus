@@ -175,14 +175,12 @@
 				</select>
 				
 				
-				<update id="updateIncreaseCount" >
-					update
-								t_post
-						set count = count + 1
-					where post_no = #{postNo}
-					  and status = 'Y'
+				<!-- 게시판 조회수 추가 -->
+				<update id="updateIncreaseCount">
+				  UPDATE T_POST
+				  SET COUNT = COUNT + 1
+			 where post_no = #{postNo}
 				</update>
-
 
 
 
