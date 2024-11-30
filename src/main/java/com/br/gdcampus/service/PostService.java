@@ -29,7 +29,7 @@ public interface PostService {
     List<AttachDto> selectAttachList(String no);
 
     // 게시글 삭제
-    int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/
+    int deletePost(String postNo); /*삭제할 글 번호 넘겨 받을거임*/
 
     // 게시글 수정
     List<AttachDto> selectDelAttach(String[] delFileNo);

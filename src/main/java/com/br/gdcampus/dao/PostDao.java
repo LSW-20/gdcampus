@@ -18,9 +18,7 @@ public class PostDao {
 	
 	@Autowired
 	private final SqlSessionTemplate sqlSession;
-	
-
-	public int deleteCommentCompletely;
+	 
 	
 	// 게시글 목록
 	public List<PostDto>selectPostList(){
@@ -33,9 +31,9 @@ public class PostDao {
 	}
 
 	// 첨부파일 등록
-		public int insertAttach(AttachDto at) {
-			return sqlSession.insert("postMapper.insertAttach", at);
-		} 
+	public int insertAttach(AttachDto at) {
+		return sqlSession.insert("postMapper.insertAttach", at);
+	} 
 	
 	// 게시글 상세페이지
 	public PostDto selectPostDetail(String postNo) {
@@ -49,7 +47,6 @@ public class PostDao {
 
 
 	// 댓글 목록 조회
-	
 	public List<CommentDto> selectCommentList(String postNo) {
 		return sqlSession.selectList("postMapper.selectCommentList", postNo);
 	}
@@ -65,16 +62,23 @@ public class PostDao {
 		return sqlSession.update("postMapper.updateComment", p);
 	}
 
-	// 게시글 삭제
+	// 첨부파일 게시글 삭제
 	public int deleteAttach(String[] delFileNo) {
 		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
 	}
 
+	
 	public List<AttachDto> selectAttachList(String no) {
 		return sqlSession.selectList("postMapper.selectAttachList", no);
 	}
-
 	
+	// 게시글 삭제
+	public int deletepost(String postNo) {
+		return sqlSession.update("postMapper.deletePost", postNo);
+	}
+	public int deleteCommentCompletely() {
+		return 0;
+	}
 
 
 

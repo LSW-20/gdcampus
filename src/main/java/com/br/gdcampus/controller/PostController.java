@@ -42,15 +42,14 @@ public class PostController {
 		
 		List<PostDto> list = postService.selectPostList(); 
 		model.addAttribute("postList", list);
-		
 	}
 	
+	// 게시글 조회수 증가
 	@GetMapping("/increase") // 조회수 증가용 (타인의 글일 경우 호출) => /post/detail 재요청
 	public String increaseCount(String no) {
 		postService.updateIncreaseCount(no);
 		return "redirect:/board/post/detail?no=" + no; // 상세페이지로 
 	}
-	
 	
 	// 게시글 상세 페이지
     @GetMapping("/detail")
@@ -66,9 +65,6 @@ public class PostController {
         model.addAttribute("attachList", attachList);
         
     }
-
-
-	
 	
 	// 게시글 추가
 	@GetMapping("/regist")
@@ -116,7 +112,11 @@ public class PostController {
 			
 	}
   	
-
+  	
+  	
+  	
+  	// ---------------------------- 댓글 --------------------------------------------
+  	
     // 게시글 댓글 목록 조회
     @ResponseBody
     @GetMapping(value = "/clist", produces = "application/json")
@@ -142,6 +142,19 @@ public class PostController {
 	public List<PostDto> noticeMain() {
 		return postService.selectPostList();
 	}
+
+	@PostMapping("/delete")
+	public String remove(String no, RedirectAttributes rdAttributes) {
+		int result = postService.deletePost(no);
+		
+		if(result > 0) {
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 삭제되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 삭제에 실패하였습니다.");
+		}
+		
+		return "redirect:/board/post/list";
+	}		
 }
 
 

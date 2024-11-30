@@ -52,16 +52,11 @@ public class PostServiceImpl implements PostService {
 		
 		return result;
 	}
-	
-
 
 	@Override
-	public int deletePost(int postNo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deletePost(String postNo) {
+		return postDao.deletepost(postNo);
 	}
-	
-
 
 	
 	@Override
@@ -131,7 +126,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int deleteCommentCompletely() {
 		// TODO Auto-generated method stub
-		return postDao.deleteCommentCompletely;
+		return postDao.deleteCommentCompletely();
 	}
 
 

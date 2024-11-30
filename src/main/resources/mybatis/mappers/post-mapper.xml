@@ -222,7 +222,12 @@
 			        )
 			    </insert>
 				    
-				    
+				  	<delete id="deletePost">
+							delete
+							       t_post
+							 where post_no = #{postNo}
+ 						</delete>
+	 
     
     
 </mapper>
