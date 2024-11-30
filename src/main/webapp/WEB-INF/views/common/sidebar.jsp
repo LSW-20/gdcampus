@@ -106,25 +106,17 @@
 								<li class="menu-title">교수</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/class/opning/prof/list.do" class="waves-effect">
 												<i class="icon nav-icon" data-feather="book"></i>
-												<span class="menu-item">강의 개설 관리</span>
+												<span class="menu-item">강의 개설 신청</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath}/class/opning/prof/list.do">강의 개설 신청 현황</a></li>
-										</ul>
 								</li>
 								
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/class/list.do" class=" waves-effect">
 												<i class="icon nav-icon" data-feather="book-open"></i>
-												<span class="menu-item">강의 조회</span>
+												<span class="menu-item">내 강의 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath}/class/list.do">강의 목록 조회</a></li>
-												<li><a href="#">수업계획서 관리</a></li>
-												<li><a href="#"></a></li>
-										</ul>
 								</li>
 								<!-- 교수 메뉴 끝 -->			
 								</c:if>
@@ -159,13 +151,10 @@
 								<li class="menu-title">교무팀</li>
 
 								<li>
-										<a href="javascript: void(0);" class="has-arrow waves-effect">
+										<a href="${contextPath}/class/opning/staff/list.do" class="waves-effect">
 												<i class="icon nav-icon" data-feather="layers"></i>
 												<span class="menu-item">강의 관리</span>
 										</a>
-										<ul class="sub-menu" aria-expanded="false">
-												<li><a href="${contextPath}/class/opning/staff/list.do">강의 개설신청 조회</a></li>
-										</ul>
 								</li>
 								
 								<li>
