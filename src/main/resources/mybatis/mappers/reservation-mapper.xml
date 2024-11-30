@@ -35,6 +35,7 @@
 		 </if>
 	</select>
 	
+	
 	<!-- (상우) 예약하기 -->
 	<insert id="reserve">
 		insert 
@@ -78,8 +79,9 @@
 			)
 	</insert> 
 	
-	<!-- (상우) userNo로 예약내역 조회 -->
-	<select id="selectReservationByUserNo" resultMap="ReservationResultMap">
+	
+	<!-- (상우) 예약내역 조회 (userNo가 있으면 특정 사용자, 없으면 전체 조회) -->
+	<select id="selectReservation" resultMap="ReservationResultMap">
 		select 
 					 RESERVATION_NO
 				 , USER_NO
@@ -100,7 +102,27 @@
 		  from T_RESERVATION R
       left join T_EQUIPMENT USING (EQUIP_NO)
       left join T_FACILITY USING (FACILITY_NO)
-	   where USER_NO = #{userNo}
+	  <where>
+			<if test="userNo != null">
+				USER_NO = #{userNo}
+			</if>
+		</where>
 	</select>
+	
+	
+	<!-- (상우) 예약 신청에 대해 승인/반려하는 메소드 -->
+	<update id="updateReservation">
+		update T_RESERVATION
+			 set 
+			 		 APPROVAL_REJECTION_DATE = SYSDATE
+			 	 , APPROVAL_REJECTION_USER = #{userNo}
+			 	 , APPROVAL_REJECTION_REASON = #{reason}
+         , STATUS = CASE 
+                     WHEN #{choice} = '승인' THEN '예약신청승인'
+                     WHEN #{choice} = '반려' THEN '예약신청반려'
+                		END
+		 where RESERVATION_NO = #{reservationNo}	 
+	</update>
+	
  
 </mapper>

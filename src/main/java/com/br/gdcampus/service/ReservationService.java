@@ -15,5 +15,11 @@ public interface ReservationService {
 
 	// userNo로 예약내역 조회 - 상우
 	List<ReservationDto> selectReservationByUserNo(String userNo);
+
+	// 전체 예약내역 조회 - 상우
+	List<ReservationDto> selectReservationAll();
+
+	// 예약 신청에 대해 승인/반려하는 메소드 - 상우
+	int updateReservation(Map<String, String> map);
 	
 }
