@@ -107,6 +107,7 @@
 				USER_NO = #{userNo}
 			</if>
 		</where>
+		order by RESERVATION_NO
 	</select>
 	
 	
