@@ -22,17 +22,30 @@ import com.br.gdcampus.service.EquipmentAndFacilityService;
 import com.br.gdcampus.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Slf4j
 @RequestMapping("/reservation")
-@RequiredArgsConstructor
 @Controller
 public class ReservationController {
 
 	private final EquipmentAndFacilityService equipmentAndFacilityService;
 	private final ReservationService reservationService;
+	
+	
+	private final DefaultMessageService messageService;
+	
+    public ReservationController(EquipmentAndFacilityService equipmentAndFacilityService, ReservationService reservationService) {
+        this.equipmentAndFacilityService = equipmentAndFacilityService;
+        this.reservationService = reservationService;
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSHFTKCDQ10ANNZ", "2EIPIKNNJCGFYBBL0YXSQJTVDFAUWUDH", "https://api.coolsms.co.kr");
+    }
+	
 	
 	
 	/**
@@ -283,7 +296,8 @@ public class ReservationController {
      * @param ra 리다이렉트한 jsp로 응답 데이터를 전달하기 위한 객체
      */
     @PostMapping("/updateReservation")
-	public String updateReservation(String classification, String reservationNo, String reason, String choice, HttpSession session, RedirectAttributes ra) {
+	public String updateReservation(String classification, String reservationNo, String reason, String choice, String userName
+									, String equipName, String facilityName, String reservationDate, HttpSession session, RedirectAttributes ra) {
     	
     	log.debug("=============== updateReservation 메소드 실행됨 =============== \n");
     	log.debug("classification : {}", classification);
@@ -305,6 +319,17 @@ public class ReservationController {
     	
     	if(result > 0) {
     		ra.addFlashAttribute("alertMsg", "예약 처리에 성공했습니다.");
+    		
+    		String text = "";
+    		if(classification.equals("비품")) {
+    			text = userName +"님의 " + reservationDate + " 일자의 " + equipName + " 비품의 예약 신청이 " + choice + "되었습니다.";
+    		}else if(classification.equals("시설")) {
+    			text = userName +"님의 " + reservationDate + " 일자의 " + facilityName + " 시설의 예약 신청이 " + choice + "되었습니다.";
+    		}
+    		log.debug("text : {}", text);
+    		
+    		sendOne(text);
+    		
     		return "redirect:/reservation/approveReservation";
     	}else {
     		ra.addFlashAttribute("alertMsg", "예약 처리에 실패했습니다.");
@@ -315,7 +340,18 @@ public class ReservationController {
         
     
     
-    
+    public SingleMessageSentResponse sendOne(String text) {
+        Message message = new Message();
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01026783677");
+        message.setTo("01099120423");
+        message.setText(text); // 한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+
+        return response;
+    }
     
     
     

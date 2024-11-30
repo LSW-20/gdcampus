@@ -221,13 +221,20 @@
                                                     <td>${ reservationDto.approvalRejectionDate }</td>
                                                     <td>${ reservationDto.approvalRejectionReason }</td>
                                                     <td style="width: 100px;">
-                                                    
+                                                  
 																						            <!-- 예약 결과가 "예약신청중"인 경우 승인/반려 버튼 표시 -->
 																						            <c:choose>
 																						                <c:when test="${reservationDto.status == '예약신청중'}">
 																						                    <button type="button" id="choiceButton" data-toggle="modal" data-target="#reservation-approve-modal"
 																						                        data-reservation-no="${reservationDto.reservationNo}"
-																						                        data-classification="${reservationDto.classification}">
+																						                        data-classification="${reservationDto.classification}"
+																						                        data-user-name="${reservationDto.userName}"
+																						                        data-equip-name="${reservationDto.equipName}"
+																						                        data-facility-name="${reservationDto.facilityName}"
+																						                        data-reservation-date="${reservationDto.reservationDate}"
+																						                        
+																						                        
+																						                        >
 																						                        승인/반려
 																						                    </button>
 																						                </c:when>
@@ -267,6 +274,10 @@
 	                  
 	              		    <input type="hidden" name="reservationNo" id="modal-reservation-no">
 	              		    <input type="hidden" name="classification" id="modal-classification">
+	              		    <input type="hidden" name="userName" id="modal-user-name">
+	              		    <input type="hidden" name="equipName" id="modal-equip-name">
+	              		    <input type="hidden" name="facilityName" id="modal-facility-name">
+	              		    <input type="hidden" name="reservationDate" id="modal-reservation-date">
 	              		    
 	                      <div>
 	                          <table>
@@ -318,11 +329,21 @@
 		        // 모달 버튼 클릭 시 이벤트 처리
 		        $('#choiceButton').on('click', function () {
 		            
+		            // 버튼에 설정된 data-* 속성값 가져오기
 		            const reservationNo = $(this).data('reservation-no');
 		            const classification = $(this).data('classification');
-		
+		            const userName = $(this).data('user-name');
+		            const equipName = $(this).data('equip-name');
+		            const facilityName = $(this).data('facility-name');
+		            const reservationDate = $(this).data('reservation-date');
+
+		            // 숨겨진 필드에 값 설정
 		            $('#modal-reservation-no').val(reservationNo);
 		            $('#modal-classification').val(classification);
+		            $('#modal-user-name').val(userName);
+		            $('#modal-equip-name').val(equipName);
+		            $('#modal-facility-name').val(facilityName);
+		            $('#modal-reservation-date').val(reservationDate);
 		        });
 		        
 		    });

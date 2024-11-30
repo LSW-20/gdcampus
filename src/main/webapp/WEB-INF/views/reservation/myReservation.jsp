@@ -48,6 +48,24 @@
 }
 
 
+/* 예약 결과 셀 공통 스타일: 굵게 */
+.status-text {
+    font-weight: bold;
+}
+
+/* 예약 결과에 따른 글씨 색상 */
+.status-approved {
+    color: blue; /* 파란색 */
+}
+
+.status-rejected {
+    color: red; /* 빨간색 */
+}
+
+.status-pending {
+    color: black; /* 검정색 */
+}
+
 </style>
 
 </head>
@@ -138,7 +156,14 @@
                                                     <td>${ reservationDto.reservationDate }</td>
                                                     <td>${ reservationDto.reservationReason }</td>
                                                     <td>${ reservationDto.reservationRequestDate }</td>
-                                                    <td>${ reservationDto.status }</td>
+                                                    <td>
+                                                        <!-- 예약 결과에 따른 스타일 -->
+																						            <span 
+																						                class="status-text ${reservationDto.status == '예약신청승인' ? 'status-approved' : 
+																						                                   (reservationDto.status == '예약신청반려' ? 'status-rejected' : 'status-pending')}">
+																						                ${reservationDto.status}
+																						            </span>
+                                                    </td>
                                                     <td>${ reservationDto.approvalRejectionUser }</td>
                                                     <td>${ reservationDto.approvalRejectionDate }</td>
                                                     <td>${ reservationDto.approvalRejectionReason }</td>
