@@ -43,12 +43,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		// 로그인 체크 인터셉터
 		registry.addInterceptor(loginCheckInterceptor)
 				.addPathPatterns("/main2.do")
-				.addPathPatterns("/user/profile/*");			
+				.addPathPatterns("/user/profile/*")
+				.addPathPatterns("/approval/**");		
 		
 		// 관리자 체크 인터셉터(상우)
 	    registry.addInterceptor(adminCheckInterceptor)
 	    		.addPathPatterns("/equipmentAndFacility/list")
-	    		.addPathPatterns("/reservation/approveReservation");
+	    		.addPathPatterns("/reservation/approveReservation")
+	    		.addPathPatterns("/approval/admin/formList");
 		
 	}
 	
