@@ -20,20 +20,22 @@ public interface PostService {
     PostDto selectPostDetail(String postNo);
 
    // 게시글 상세 - 조회수 증가
- 	int updateIncreaseCount(int postNo);
+ 	int updateIncreaseCount(String postNo);
     
     // 게시글 등록
     int insertPost(PostDto p);
     
     // 첨부파일 등록 후 조회
-    List<AttachDto> selectAttachList(AttachDto a);
+    List<AttachDto> selectAttachList(String no);
 
     // 게시글 삭제
-    int deletePost(int postNo); /*삭제할 글 번호 넘겨 받을거임*/
+    int deletePost(String postNo); /*삭제할 글 번호 넘겨 받을거임*/
 
-    // 게시글 수정
+    // 첨부파일 게시글 삭제
     List<AttachDto> selectDelAttach(String[] delFileNo);
-    int updatePost(PostDto b, String[] delFileNo);
+    
+    //게시글 수정
+    int updatePost(PostDto post, String[] delFileNo);
 
 //=============== 댓글 기능======================
     // 댓글 목록 조회

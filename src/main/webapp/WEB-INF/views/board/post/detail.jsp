@@ -4,15 +4,30 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 상세</title>
-    <style type="text/css">
-        .main-content { min-height: 900px; }
-        .page-content { margin: auto; width: 75%; }
-        .card-body { height: 500px; }
-        #reply_area tbody>tr>th:nth-child(1) { width: 120px; }
-    </style>
+<meta charset="utf-8" />
+        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- bootstrap-datepicker css -->
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+
+        <!-- Bootstrap Css -->
+        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
 </head>
 <body data-topbar="dark" data-sidebar="dark">
     <!-- 전체 영역(헤더, 사이드바, 내용) 시작 -->
@@ -57,7 +72,8 @@
                                 </c:forEach>
                             </td>
                         </tr>
-                        <tr>
+                       
+                         <tr>
                             <th>내용</th>
                             <td colspan="4">
                                 <p style="height:150px">${p.postContent}</p>
@@ -67,7 +83,7 @@
                     <br>
 
                     <!-- 수정 및 삭제 버튼 -->
-                    <c:if test="${loginUser.userId eq p.userNo}">
+                    <c:if test="${loginUser.userName eq p.writerName}">
                         <div align="center">
                             <form id="frm" action="" method="post">
                                 <input type="hidden" name="no" value="${p.postNo}">

@@ -1,30 +1,40 @@
-
 package com.br.gdcampus.service;
+
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Service;
-
 import com.br.gdcampus.dto.VoteDto;
 
-@Service
-public interface VoteServiceImpl {
+public class VoteServiceImpl implements VoteService {
 
-    // 투표 게시글 목록 조회 (페이징 및 조건 검색)
-    List<VoteDto> selectVoteList(Map<String, Object> paramMap);
+	@Override
+	public List<VoteDto> selectVoteList(Map<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    // 특정 투표 게시글 조회
-    VoteDto selectVoteById(String voteId);
+	@Override
+	public VoteDto selectVoteById(String voteId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    // 투표 게시글 등록
-    int insertVote(VoteDto vote);
+	@Override
+	public int insertVote(VoteDto vote) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    // 투표 게시글 수정
-    int updateVote(VoteDto vote);
+	@Override
+	public int updateVote(VoteDto vote) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    // 투표 게시글 삭제
-    int deleteVote(String voteId);
+	@Override
+	public int deleteVote(String voteId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    // 투표 게시글 총 개수 조회 (페이징 처리용)
-    int countVoteList(Map<String, Object> paramMap);
 }

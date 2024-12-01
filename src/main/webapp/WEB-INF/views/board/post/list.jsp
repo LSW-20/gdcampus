@@ -69,7 +69,9 @@
                                
                                <tbody>
 	                                <c:forEach var="p" items="${ postList }">
-	                    	           	<tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'>
+	                    	           	<%-- <tr onclick='location.href = "${contextPath}/board/post/detail?no=${p.postNo}";'> --%>
+	                    	           	<tr onclick='location.href = "${contextPath}/board/post/${ loginUser.userName eq p.writerName ? "detail" : "increase" }?no=${p.postNo}";'>
+	                    	           	
 																    <td>
 																        <div class="custom-control custom-checkbox">
 																            <input type="checkbox" class="custom-control-input postCheckbox" id="invoicecheck${p.postNo}">
@@ -97,7 +99,7 @@
 																	</tr>
 										        	  </c:forEach>
                               </tbody>
-                                	<div >
+                                	<div>
 																		<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
 														      </div> 
                            </table>
