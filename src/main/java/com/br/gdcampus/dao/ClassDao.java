@@ -125,8 +125,7 @@ public class ClassDao {
 	public List<Map<String, Object>> selectDeptCount() {
 		return sqlSession.selectList("classMapper.selectDeptCount");
 	}
-	
-	
+
 //--------------------------------------내강의 끝----------------------------------------------	
 
 }

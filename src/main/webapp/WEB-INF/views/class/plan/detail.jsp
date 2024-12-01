@@ -69,10 +69,6 @@
 							      <div class="col ">이메일</div>
 							      <div class="col ">${ email }</div>
 							    </div>
-							    <div class="row m-3 border-bottom border-secondary">
-							      <div class="col ">연구실</div>
-							      <div class="col ">어칼까</div>
-							    </div>
 							</div>
 						</div>
 						
@@ -253,7 +249,6 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
 	        function downloadPDF() {
-
 	            
 	            html2canvas($('#pdfArea')[0]).then(function (canvas) {
 	    			var filename = '${c.classCode}'+'_수업계획서.pdf';

@@ -202,7 +202,7 @@
 					                <input type="hidden" name="evaList[${status.index }].evaItem"  value="${eva.evaItem }" class="items">
 					                <input type="hidden" name="evaList[${status.index }].allocation"  value="${eva.allocation }" class="allos">
 					             	<div>
-					             		<textarea required class="form-control" rows="5" style="height: 80px;" name="evaList[${status.index }].evaDetail">${eva.evaDetail}</textarea>
+					             		<textarea class="form-control" rows="5" style="height: 80px;" name="evaList[${status.index }].evaDetail">${eva.evaDetail}</textarea>
 					       			</div>
 				         		</div>
 							</c:forEach>
@@ -322,7 +322,7 @@
 		                   +	'</label>'
 		                   +	'<input type="hidden" name="evaList['+ no +'].evaItem" value="'+evaItem+'">'
 		             	   + 	'<div>'
-		             	   + 		'<textarea required class="form-control" rows="5" style="height: 80px;" id="'+$(this).attr('id')+'Dt" name="evaList['+ no++ +'].evaDetail"></textarea>'
+		             	   + 		'<textarea class="form-control" rows="5" style="height: 80px;" id="'+$(this).attr('id')+'Dt" name="evaList['+ no++ +'].evaDetail"></textarea>'
 		       			   +	'</div>'
 		         		   + '</div>';
 					console.log(detail);

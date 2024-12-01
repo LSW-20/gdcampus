@@ -56,9 +56,9 @@
 										<select class="custom-select" name="year" id="year">
 											<c:set var="today" value="<%=new java.util.Date()%>" />
 											<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyy" /></c:set>
-									        <option value="${date - 1 }">${date - 1 }년</option>
-									        <option value="${date }" selected>${date}년</option>
-									        <option value="${date + 1 }">${date + 1 }년</option>
+									        <option value="${date - 1 }">${date - 1 }</option>
+									        <option value="${date }" selected>${date}</option>
+									        <option value="${date + 1 }">${date + 1 }</option>
 										</select>
 									</div>
 								</div>
@@ -83,38 +83,32 @@
 
 						</div>
 						<!-- end row -->
-						<div class="row">
-							<div class="table-responsive custom-table  col-8">
-								<table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;table-layout: fixed">
-									<thead>
-										<tr class="bg-transparent">
-											<th width="20%" scope="col">강의명</th>
-											<th width="15%" scope="col">학기</th>
-											<th width="15%" scope="col">유형</th>
-											<th width="15%" scope="col">학년</th>
-											<th width="15%" scope="col">시수</th>
-										</tr>
-									</thead>
-									<tbody id="output">
-										
-	
-									</tbody>
-								</table>
-								<div class="float-sm-center">
-									<ul id="paging_area" class="pagination d-flex justify-content-center mt-5">
-										
-									</ul>
-								</div>
-							</div>
-							<div class="col-4 container border p-3 bg-white" style="height: 400px;">
-							</div>
+						<div class="table-responsive custom-table mb-4 ">
+							<table class="table table-centered datatable dt-responsive nowrap table-card-list table-check" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;table-layout: fixed">
+								<thead>
+									<tr class="bg-transparent">
+										<th width="20%" scope="col">강의명</th>
+										<th width="15%" scope="col">학기</th>
+										<th width="15%" scope="col">유형</th>
+										<th width="15%" scope="col">학년</th>
+										<th width="15%" scope="col">시수</th>
+									</tr>
+								</thead>
+								<tbody id="output">
+									
+
+								</tbody>
+							</table>
 						</div>
 					</div>
-					
 					<div class="row mt-4">
 						<div class="col-sm-12">
 
-							
+							<div class="float-sm-center">
+								<ul id="paging_area" class="pagination d-flex justify-content-center">
+									
+								</ul>
+							</div>
 						</div>
 					</div>
 
@@ -163,7 +157,7 @@
 	                  
 
 	                	tbody += '<tr>'
-	                             +'<td style="cursor: pointer" onclick="location.href = \'' + '${contextPath}' + '/class/detail.do?classCode=' + cla.classCode + '\';">'+cla.classTitle+'</td>'
+	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/class/detail.do?classCode=' + cla.classCode + '\';">'+cla.classTitle+'</td>'
 	                             +'<td>'+(cla.classCode).substr(3,1)+'학기</td>'
 	                             +'<td>'+cla.classType+'</td>'
 	                             +'<td>'+cla.targetGrade+'학년</td>'

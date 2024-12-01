@@ -494,4 +494,5 @@
 		 GROUP 
 		    BY U.DEPT_NO, S.DEPT_NAME
 	</select>
+
 </mapper>
