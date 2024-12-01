@@ -19,7 +19,7 @@
         }
         .approval-form {
             width: 1000px;
-            height: 845px;
+            /* height: 845px; */
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -225,7 +225,7 @@
     $(document).ready(function() {
         $('#summernote').summernote({
             width: 900,
-            height:300,      
+            height:500,      
             callbacks: {
                 onInit: function() {
                     // 에디터 영역의 기본 스타일 설정
