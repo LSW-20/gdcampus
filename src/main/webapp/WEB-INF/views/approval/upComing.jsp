@@ -144,7 +144,7 @@
                                                     ${appr.apprTitle}
                                                 </a>
                                             </td>
-                                            <td>${appr.apprUser}</td>
+                                            <td>${appr.userName}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>

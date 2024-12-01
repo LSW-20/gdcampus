@@ -44,7 +44,7 @@ public class EquipmentAndFacilityController {
 	
 	
 	/**
-	 * 비품, 시설 관리 페이지(list.jsp)로 이동시키는 메소드
+	 * 비품, 시설 관리 페이지(/equipmentAndFacility/list.jsp)로 이동시키는 메소드
 	 * author : 상우
 	 * @param equipment 비품 카테고리 : null | "비품 전체" | "노트북" | "키보드" | "마우스" | "의자"
 	 * @param facility 시설 카테고리 :  null | "시설 전체" | "회의실" | "강당" | "휴게실" | "연구실"	

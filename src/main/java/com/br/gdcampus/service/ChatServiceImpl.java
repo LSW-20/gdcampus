@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.gdcampus.dao.ChatDao;
 import com.br.gdcampus.dto.ChatRoomDto;
@@ -60,6 +61,7 @@ public class ChatServiceImpl implements ChatService {
 	 * @param map 방장, 방제목, 초대인원이 담겨있음
 	 * return 성공시 1 , 실패시 0
 	 */
+	@Transactional
 	@Override
 	public int makeGroupChat(Map<String, Object> map) {
 		
@@ -89,6 +91,7 @@ public class ChatServiceImpl implements ChatService {
 	 * @param map 방장, 방제목, 초대인원이 담겨있음
 	 * return 성공시 1 , 실패시 0
 	 */	
+	@Transactional
 	@Override
 	public int makeOneToOneChat(Map<String, Object> map) {
 		
@@ -128,6 +131,7 @@ public class ChatServiceImpl implements ChatService {
 	 * @param map 메세지 내용, 발신자 사번, 채팅방 번호, 발신시간이 들어있다.
 	 * return 성공시 1 , 실패시 0
 	 */
+	@Transactional
 	@Override
 	public int insertMessage(Map<String, String> map) {
 		

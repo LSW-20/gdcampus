@@ -9,7 +9,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>비품, 시설 예약 페이지</title>
+<title>내 비품, 시설 예약 내역 조회 페이지</title>
 
 <style>
 
@@ -47,6 +47,24 @@
     text-align: center; /* 텍스트 가운데 정렬 */
 }
 
+
+/* 예약 결과 셀 공통 스타일: 굵게 */
+.status-text {
+    font-weight: bold;
+}
+
+/* 예약 결과에 따른 글씨 색상 */
+.status-approved {
+    color: blue; /* 파란색 */
+}
+
+.status-rejected {
+    color: red; /* 빨간색 */
+}
+
+.status-pending {
+    color: black; /* 검정색 */
+}
 
 </style>
 
@@ -101,32 +119,23 @@
                                     <tr>
                                         <th>구분</th>
                                         <th>분류</th>
-                                        <th><span class="classification"></span>&nbsp;번호</th>
+                                        <th><span class="classification"></span>&nbsp;품목 번호</th>
                                         <th><span class="classification"></span>&nbsp;이름</th>
                                         <th>예약 희망일</th>
                                         <th>예약 사유</th>
                                         <th>예약 신청일</th>
                                         <th>예약 결과</th>
-                                        <th>비고</th>
+                                        <th>처리자</th>
+                                        <th>처리일</th>
+                                        <th>승인/반려 사유</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>비품</td>
-                                        <td>노트북</td>
-                                        <td>0010</td>
-                                        <td>어쩌구저쩌구요로쿵 노트북</td>
-                                        <td>2024-12-24</td>
-                                        <td>게임</td>
-                                        <td>2024-11-27</td>
-                                        <td>예약신청승인</td>
-                                        <td></td>
-                                    </tr>
-
+                                    
                                     <c:choose>
                                         <c:when test="${ empty reservationList }">
                                             <tr>
-                                                <td colspan="9">내 예약 내역이 없습니다.</td>
+                                                <td colspan="11">내 예약 내역이 없습니다.</td>
                                             </tr>
                                         </c:when>
                                         <c:otherwise>
@@ -147,7 +156,16 @@
                                                     <td>${ reservationDto.reservationDate }</td>
                                                     <td>${ reservationDto.reservationReason }</td>
                                                     <td>${ reservationDto.reservationRequestDate }</td>
-                                                    <td>${ reservationDto.status }</td>
+                                                    <td>
+                                                        <!-- 예약 결과에 따른 스타일 -->
+																						            <span 
+																						                class="status-text ${reservationDto.status == '예약신청승인' ? 'status-approved' : 
+																						                                   (reservationDto.status == '예약신청반려' ? 'status-rejected' : 'status-pending')}">
+																						                ${reservationDto.status}
+																						            </span>
+                                                    </td>
+                                                    <td>${ reservationDto.approvalRejectionUser }</td>
+                                                    <td>${ reservationDto.approvalRejectionDate }</td>
                                                     <td>${ reservationDto.approvalRejectionReason }</td>
                                                 </tr>
                                             </c:forEach>

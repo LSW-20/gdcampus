@@ -27,18 +27,33 @@ import com.br.gdcampus.service.ApprovalService;
 import com.br.gdcampus.util.PagingUtil;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Slf4j
 @RequestMapping("/approval")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Controller
 public class ApprovalController {
 	
 	private final ApprovalService apprService;
 	private final PagingUtil pagingUtil;
 	
+	//sms변수
+    private final DefaultMessageService messageService;
+	
+    //sms생성자
+    public ApprovalController(ApprovalService apprService, PagingUtil pagingUtil) {
+        // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
+        this.apprService = apprService;
+    	this.pagingUtil = pagingUtil;
+    	this.messageService = NurigoApp.INSTANCE.initialize("NCS6NRPI8OO7RRUP", "YHHI9WZ1DYFLBLLDVWJTTWLOHG5BASO1", "https://api.coolsms.co.kr");
+    }
+    
 	/**
 	 * 결재 대기함 list 페이지요청
 	 * @author 보겸
@@ -224,13 +239,16 @@ public class ApprovalController {
 	        }
 
 	        int result = apprService.insertApproval(approval);
-	        
+	        String text = "";
 	        if(result > 0) {
 	            ra.addFlashAttribute("alertMsg", "결재요청 완료");
+	            text = loginUser.getUserName() + "님의 결재 1건이 요청 되었습니다.";
 	        } else {
 	            ra.addFlashAttribute("alertMsg", "결재요청 실패");
+	            text = loginUser.getUserName() + "님의 결재 요청이 실패 되었습니다.";
 	        }
-	        
+	        log.debug("text : {}",text);
+//	        sendOne(text);
 	    } catch(Exception e) {
 	        log.error("결재 요청 중 오류 발생", e);
 	        ra.addFlashAttribute("alertMsg", "결재요청 처리 중 오류가 발생했습니다.");
@@ -238,6 +256,21 @@ public class ApprovalController {
 	    
 	    return "redirect:/approval/home";
 	}
+	
+	//메세지발송
+    public SingleMessageSentResponse sendOne(String text) {
+        Message message = new Message();
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01077253871");
+        message.setTo("01077253871");
+        message.setText(text);
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+
+        return response;
+    }
+	
 	
 	@PostMapping("/update")
 	@ResponseBody
@@ -442,5 +475,16 @@ public class ApprovalController {
 		return "redirect:/approval/admin/formList";
 	}
 	
-	
+	@PostMapping("/delete")
+	@ResponseBody
+	public Map<String, Object> deleteApproval(@RequestParam String apprNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        int result = apprService.deleteApproval(apprNo);
+	        response.put("success", result > 0);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    return response;
+	}
 }

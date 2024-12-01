@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.gdcampus.dao.EquipmentAndFacilityDao;
 import com.br.gdcampus.dto.AttachDto;
@@ -93,6 +94,7 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * @param deleteList 삭제할 비품 번호들
 	 * @return 성공시 1, 실패시 0
 	 */
+	@Transactional
 	@Override
 	public int deleteEquipment(String[] deleteList) {
 		
@@ -125,10 +127,17 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * @param attachDto 첨부파일 dto
 	 * @return 성공시 1, 실패시 0
 	 */
+	@Transactional
 	@Override
 	public int addEquipment(Map<String, String> map, AttachDto attachDto) {
 
 		int result = equipAndFacilityDao.addEquipment(map);
+		
+		/* 트랜잭션 처리가 잘 되는지 확인하기 위한 용도
+        if (true) {
+            throw new RuntimeException("두 번째 쿼리에서 의도적인 예외 발생");
+        }
+        */
 		
 		if(result > 0) {
 			result = equipAndFacilityDao.addAttachment(attachDto);
@@ -188,6 +197,7 @@ public class EquipmentAndFacilityServiceImpl implements EquipmentAndFacilityServ
 	 * @param map 유저사번, 비품 카테고리, 비품명, 비품번호 + 첨부파일dto
 	 * @return 성공시 1, 실패시 0
 	 */
+	@Transactional
 	@Override
 	public int modifyEquipmentWithFile(Map<String, Object> map) {
 		

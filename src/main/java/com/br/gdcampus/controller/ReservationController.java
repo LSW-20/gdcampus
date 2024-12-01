@@ -22,21 +22,34 @@ import com.br.gdcampus.service.EquipmentAndFacilityService;
 import com.br.gdcampus.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Slf4j
 @RequestMapping("/reservation")
-@RequiredArgsConstructor
 @Controller
 public class ReservationController {
 
 	private final EquipmentAndFacilityService equipmentAndFacilityService;
 	private final ReservationService reservationService;
 	
+	// coolsms로 문자 발송을 위한 필드
+	private final DefaultMessageService messageService;
+	
+    public ReservationController(EquipmentAndFacilityService equipmentAndFacilityService, ReservationService reservationService) {
+        this.equipmentAndFacilityService = equipmentAndFacilityService;
+        this.reservationService = reservationService;
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSHFTKCDQ10ANNZ", "2EIPIKNNJCGFYBBL0YXSQJTVDFAUWUDH", "https://api.coolsms.co.kr");  // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력.
+    }
+	
+	
 	
 	/**
-	 * 예약하기 페이지(reservation.jsp)로 이동시키는 메소드
+	 * 예약하기 페이지(/reservation/reservation.jsp)로 이동시키는 메소드
 	 * author : 상우
 	 * @param model 포워딩한 jsp로 응답 데이터를 전달하기 위한 객체
 	 */
@@ -44,7 +57,7 @@ public class ReservationController {
 	public String reservationMain() {
 		
 		log.debug("=============== reservationMain 메소드 실행됨 ===============\n");
-		return "/equipmentAndFacility/reservation";
+		return "/reservation/reservation";
 		
 	}
 	
@@ -186,6 +199,12 @@ public class ReservationController {
     }
     
     
+    /**
+     * 내 예약 내역 조회 페이지(/reservation/myReservaion.jsp)로 이동시키는 메소드
+     * author : 상우
+     * @param session 현재 로그인한 사용자 세션
+     * @param model 포워딩한 jsp로 응답 데이터를 전달하기 위한 객체
+     */
     @GetMapping("/myReservation")
     public String myReservation(HttpSession session, Model model) {
     	
@@ -193,7 +212,7 @@ public class ReservationController {
     	
     	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
     	
-    	List<ReservationDto> reservationList = reservationService.selectReservationByUserNo(userNo);
+    	List<ReservationDto> reservationList = reservationService.selectReservationByUserNo(userNo); 
     	
     	log.debug("reservationList : {}", reservationList);
     	model.addAttribute("reservationList", reservationList); 	
@@ -219,6 +238,129 @@ public class ReservationController {
     		}
     	}
     	
-    	return "/equipmentAndFacility/myReservation";
+    	return "/reservation/myReservation";
     }
+    
+    
+    
+    /**
+     * 비품, 시설 예약 관리 페이지(/reservation/approveReservation.jsp)로 이동시키는 메소드
+     * author : 상우
+     * @param session 현재 로그인한 사용자 세션
+     * @param model 포워딩한 jsp로 응답 데이터를 전달하기 위한 객체
+     */
+    @GetMapping("/approveReservation")
+    public String approveReservation(HttpSession session, Model model) {
+    	
+    	log.debug("=============== approveReservation 메소드 실행됨 =============== \n");
+    	
+    	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo();
+    	
+    	List<ReservationDto> reservationList = reservationService.selectReservationAll();
+    	
+    	log.debug("reservationList : {}", reservationList);
+    	model.addAttribute("reservationList", reservationList); 	
+    	
+    	
+    	
+    	if(reservationList == null || reservationList.isEmpty()) {
+    		
+    		log.debug("표시할 비품, 시설 예약 내역이 없음.");
+    		
+    	}else {
+    		
+    		for(ReservationDto reservationDto : reservationList) {
+    			
+    			if(reservationDto.getEquipNo() == null) { // 시설 예약의 경우
+    				
+    				reservationDto.setClassification("시설");
+    				
+    			}else if(reservationDto.getFacilityNo() == null){ // 비품 예약의 경우
+    				
+    				reservationDto.setClassification("비품");
+    			}
+    		}
+    	}
+    	
+    	return "/reservation/approveReservation";
+    }
+    
+    
+    /**
+     * 예약 신청에 대해 승인/반려하는 메소드
+     * @param classification "비품" | "시설"
+     * @param reservationNo 예약번호
+     * @param reason 승인/반려사유
+     * @param choice "승인" | "반려"
+     * @param session 현재 로그인한 사용자 세션
+     * @param ra 리다이렉트한 jsp로 응답 데이터를 전달하기 위한 객체
+     */
+    @PostMapping("/updateReservation")
+	public String updateReservation(String classification, String reservationNo, String reason, String choice, String userName
+									, String equipName, String facilityName, String reservationDate, HttpSession session, RedirectAttributes ra) {
+    	
+    	log.debug("=============== updateReservation 메소드 실행됨 =============== \n");
+    	log.debug("classification : {}", classification);
+    	log.debug("reservationNo : {}", reservationNo);
+    	log.debug("reason : {}", reason);
+    	log.debug("choice : {}", choice);
+    	
+    	String userNo = ((UserDto)session.getAttribute("loginUser")).getUserNo(); // 현재 로그인한 관리자 사번을 최근 수정자로.
+    	
+    	Map<String, String> map = new HashMap<>();
+    	map.put("classification", classification);
+    	map.put("reservationNo", reservationNo);
+    	map.put("reason", reason);
+    	map.put("choice", choice);
+    	map.put("userNo", userNo);
+
+
+    	int result = reservationService.updateReservation(map);
+    	
+    	if(result > 0) {
+    		ra.addFlashAttribute("alertMsg", "예약 처리에 성공했습니다.");
+    		
+    		String text = "";
+    		if(classification.equals("비품")) {
+    			text = userName +"님의 " + reservationDate + " 일자의 " + equipName + " 비품의 예약 신청이 " + choice + "되었습니다.";
+    		}else if(classification.equals("시설")) {
+    			text = userName +"님의 " + reservationDate + " 일자의 " + facilityName + " 시설의 예약 신청이 " + choice + "되었습니다.";
+    		}
+    		log.debug("text : {}", text);
+    		
+    		sendOne(text);
+    		
+    		return "redirect:/reservation/approveReservation";
+    	}else {
+    		ra.addFlashAttribute("alertMsg", "예약 처리에 실패했습니다.");
+    		return "redirect:/reservation/approveReservation";	
+    	}
+    	
+    }
+        
+    
+    /**
+     * coolsms로 문자 발송시키는 메소드
+     * author : 상우
+     * @param text 문자로 보낼 내용
+     */
+    public SingleMessageSentResponse sendOne(String text) {
+    	
+        Message message = new Message();
+        
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01026783677");
+        message.setTo("01026783677");
+        
+        message.setText(text); // 한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.
+
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
+
+        return response;
+    }
+    
+    
+    
+    
 }
