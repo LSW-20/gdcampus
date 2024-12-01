@@ -230,13 +230,18 @@
 												<span class="menu-item">직급 관리</span>
 										</a>
 								</li>
-
+								
 								<li>
-										<a href="${contextPath }/equipmentAndFacility/list" class="waves-effect">
-												<i class="icon nav-icon" data-feather="tool"></i>
+										<a href="javascript: void(0);" class="has-arrow waves-effect">
+												<i class="icon nav-icon" data-feather="inbox"></i>
 												<span class="menu-item">비품, 시설 관리</span>
 										</a>
-								</li>
+										<ul class="sub-menu" aria-expanded="false">
+												<li><a href="${contextPath}/equipmentAndFacility/list">비품, 시설 목록 관리</a></li>
+												<li><a href="${contextPath}/reservation/approveReservation"">비품, 시설 예약 관리</a></li>
+										</ul>
+								</li>			
+								
 								
 								<li>
 										<a href="${contextPath }/approval/admin/formList" class="waves-effect">
