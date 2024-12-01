@@ -875,6 +875,5 @@
 		DELETE 
 		  FROM T_APPROVAL
 		 WHERE APPR_NO = #{apprNo}	
-		    ON DELETE CASCADE
 	</delete>
 </mapper>

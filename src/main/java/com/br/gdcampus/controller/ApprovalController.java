@@ -476,20 +476,15 @@ public class ApprovalController {
 	}
 	
 	@PostMapping("/delete")
-	public String deleteApproval(String apprNo, RedirectAttributes ra) {
-		
-		try {
-			int result = apprService.deleteApproval(apprNo);
-			
-			if(result > 0) {
-				ra.addFlashAttribute("alertMsg","삭제되었습니다.");
-			} else {
-				ra.addFlashAttribute("alertMsg","삭제 실패.");
-			}
-		}catch(Exception e) {
-			ra.addFlashAttribute("alertMsg","삭제 중 오류 발생");
-		}
-		
-		return "redirect:/approval/home";
+	@ResponseBody
+	public Map<String, Object> deleteApproval(@RequestParam String apprNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        int result = apprService.deleteApproval(apprNo);
+	        response.put("success", result > 0);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    return response;
 	}
 }

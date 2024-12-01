@@ -488,10 +488,11 @@
                     url: '${contextPath}/approval/delete',
                     type: 'POST',
                     data: { apprNo: '${approval.apprNo}' },
+                    dataType: 'json',
                     success: function(result) {
                         if(result.success) {
                             alert('삭제되었습니다.');
-                            location.href = '${contextPath}/approval/myDoc';
+                            location.href = '${contextPath}/approval/home';
                         } else {
                             alert('삭제 실패');
                         }
