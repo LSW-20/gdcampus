@@ -35,7 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.addResourceLocations("file:///upload/"); 
 		
 	}
-	
+
 	
 	// 인터셉터 등록 메소드
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -44,12 +44,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addInterceptor(loginCheckInterceptor)
 				.addPathPatterns("/main2.do")
 				.addPathPatterns("/user/profile/*")
-				.addPathPatterns("/approval/**");		
+				.addPathPatterns("/chat/roomList") 					// 메신저 페이지(/chat/roomList.jsp)로 이동
+				.addPathPatterns("/equipmentAndFacility/list") 		// 비품, 시설 관리 페이지(/equipmentAndFacility/list.jsp)로 이동
+				.addPathPatterns("/reservation/main") 				// 예약하기 페이지(/reservation/reservation.jsp)로 이동
+				.addPathPatterns("/reservation/myReservation") 		// 내 예약 내역 조회 페이지(/reservation/myReservaion.jsp)로 이동
+				.addPathPatterns("/reservation/approveReservation") // 비품, 시설 예약 관리 페이지(/reservation/approveReservation.jsp)로 이동
+				.addPathPatterns("/approval/**");	
+		
 		
 		// 관리자 체크 인터셉터(상우)
 	    registry.addInterceptor(adminCheckInterceptor)
-	    		.addPathPatterns("/equipmentAndFacility/list")
-	    		.addPathPatterns("/reservation/approveReservation")
+	    		.addPathPatterns("/equipmentAndFacility/list")		// 비품, 시설 관리 페이지(/equipmentAndFacility/list.jsp)로 이동
+	    		.addPathPatterns("/reservation/approveReservation") // 비품, 시설 예약 관리 페이지(/reservation/approveReservation.jsp)로 이동
 	    		.addPathPatterns("/approval/admin/formList");
 		
 	}
