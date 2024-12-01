@@ -204,5 +204,10 @@ public class ClassServiceImpl implements ClassService {
 		return classDao.selectStDeptCount();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectDeptCount() {
+		return classDao.selectDeptCount();
+	}
+
 
 }

@@ -61,6 +61,7 @@ public interface ClassService {
 	
 	//메인용 차트
 	List<Map<String, Object>> selectStDeptCount();
+	List<Map<String, Object>> selectDeptCount();
 		
 //---------------------------------------내강의 끝---------------------------------------------
 	
