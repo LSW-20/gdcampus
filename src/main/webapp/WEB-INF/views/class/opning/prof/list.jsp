@@ -265,8 +265,11 @@
 	                // 각 사용자 데이터를 테이블에 추가
 	                classList.forEach(function(cla) {
 	                  
-
-	                	tbody += '<tr>';
+	                	if(cla.status == '취소' || cla.status == '승인' || cla.status == '반려'){
+	                		tbody += '<tr style="background-color: #F6F6F6">'
+	                	}else{
+	                		tbody += '<tr>'
+	                	};
 	                	
 	                	if(cla.status == '보완요청' ){
 	                		tbody +=	'<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/prof/modifyForm.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>';
@@ -281,10 +284,17 @@
 	                    	tbody +='<td>'+cla.modifyDate+'</td>'
 	                    }else{
 	                    	tbody +='<td></td>'   	
-	                    };                       
-	                    tbody    +='<td>'+cla.status+'</td>'
-	                             +'</tr>'
-	                    ;
+	                    }; 
+	                    if(cla.status == '보완요청'){
+		                    tbody    +='<td style="color:blue;">'+cla.status+'</td>'
+                            +'</tr>'
+	                    }else if(cla.status == '취소' || cla.status == '반려'){
+		                    tbody    +='<td style="color:red;">'+cla.status+'</td>'
+                            +'</tr>'
+	                    }else{
+		                    tbody    +='<td>'+cla.status+'</td>'
+                            +'</tr>'              	
+	                    };
 	                });
 	
 	                // 페이지 다시 그려줘야됨
