@@ -18,7 +18,7 @@
         }
         .purchase-form {
             width: 1000px;
-            height: 956px;
+            height: 1139px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -188,7 +188,7 @@
                     </tr>
                     <tr>
                         <th>소속</th>
-                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ loginUser.deptName }</td>
+                         <td><input type="hidden" name="deptNo" value="${loginUser.deptNo}">${ loginUser.deptNo == 1 ? "인사" : "교무" }</td>
                     </tr>
                     <tr>
                         <th>기안일</th>

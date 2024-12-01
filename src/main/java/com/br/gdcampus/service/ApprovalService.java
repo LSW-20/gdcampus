@@ -140,7 +140,8 @@ public interface ApprovalService {
 	//품의서>내역삭제
 	int deletePurchaseHistory(String apprNo);
 	
-	//글삭제
+	//오늘자결재 개수
+	int selectTodayApproval();
 	
 	
 	

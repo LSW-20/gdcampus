@@ -855,5 +855,13 @@
 	    DELETE FROM T_PURCH_HISTORY
 	     WHERE APPR_NO = #{apprNo}
 	</delete>	
+	
+	<!-- 스케줄러사용을 위한 오늘자 들어온 결재 개수 -->
+	<select id="selectTodayApproval" resultType="_int">
+		SELECT
+		       COUNT(*)
+		  FROM T_APPROVAL 
+		 WHERE TRUNC(CREATE_DATE) = TRUNC(SYSDATE)	
+	</select>	
 
 </mapper>

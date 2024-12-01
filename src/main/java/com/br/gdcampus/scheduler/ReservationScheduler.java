@@ -21,7 +21,7 @@ public class ReservationScheduler {
 	@Scheduled(cron="0 0/1 * * * *") // 1분마다 실행되는지 확인용 메소드.
 	public void execute1() {
 		
-		log.debug("1분마다 매번 실행됨");
+//		log.debug("1분마다 매번 실행됨");
 		
 	}
 	
