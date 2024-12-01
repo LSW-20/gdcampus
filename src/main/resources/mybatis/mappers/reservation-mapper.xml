@@ -111,7 +111,7 @@
 	</select>
 	
 	
-	<!-- (상우) 예약 신청에 대해 승인/반려하는 메소드 -->
+	<!-- (상우) 예약 신청에 대해 승인/반려 처리 -->
 	<update id="updateReservation">
 		update T_RESERVATION
 			 set 
@@ -123,6 +123,15 @@
                      WHEN #{choice} = '반려' THEN '예약신청반려'
                 		END
 		 where RESERVATION_NO = #{reservationNo}	 
+	</update>
+	
+	
+	<!-- (상우) [스케줄러] 일주일이 지났는데도 "예약신청중" 상태인 예약 신청은 자동으로 반려처리 -->
+	<update id="rejectReservationsOlderThan7Days">
+		update T_RESERVATION
+			 set STATUS = '예약신청반려'
+		 where STATUS = '예약신청중' 
+		   and TRUNC(SYSDATE) - TRUNC(RESERVATION_REQUEST_DATE) >= 7
 	</update>
 	
  

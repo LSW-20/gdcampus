@@ -50,7 +50,7 @@
                        <div class="p-3 px-4">
                            <div class="media">
                                <div class="align-self-center mr-3">
-                                   <img src="${contextPath}<c:out value='${loginUser.profileURL}' default='${contextPath}/images/users/avatar-4.jpg' />" class="avatar-sm rounded-circle" alt="">
+                                   <img src="${contextPath}<c:out value='${loginUser.profileURL}' default='/images/defaultProfile.png' />" class="avatar-sm rounded-circle" alt="">
                                </div>
                                <div class="media-body">
                                    <h5 class="font-size-16 mt-0 mb-1">
@@ -129,7 +129,7 @@
 			                                                   <div class="media">
 			                                                       
 			                                                       <div class="user-img online align-self-center mr-3">
-			                                                           <img src="${contextPath}/images/users/avatar-1.jpg" class="rounded-circle avatar-xs" alt="">
+			                                                           <img src="${contextPath}/images/defaultProfile.png" class="rounded-circle avatar-xs" alt="">
 			                                                       </div>
 			                                                       
 			                                                       <div class="media-body overflow-hidden">
@@ -144,7 +144,7 @@
 			                                                           
 			                                                           <c:forEach var="messageDto" items="${recentMessageList}"> <%-- 채팅방별 최근 메세지 1개 띄우기 --%>
                                           		                       <c:if test="${map['chatRoomDto'].roomNo eq messageDto.roomNo}">  
-                                          		                     		  <p class="text-truncate mb-0">${messageDto.msgContent}</p>
+                                          		                     		  <p id="recent-message" class="text-truncate mb-0">${messageDto.msgContent}</p>
                                           		                       </c:if>
                                           		                    </c:forEach>  
 			                                                       </div>
@@ -300,7 +300,7 @@
 			        	  		$chatDiv.addClass("odd") 
 			        	  	}else {
 			        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
-			        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
+			        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/defaultProfile.png"); 
 			        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
 
 			        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가
@@ -445,7 +445,7 @@
 									        	  		$chatDiv.addClass("odd") 
 									        	  	}else {
 									        	        // (1) media div의 자손이면서 media-body보다 앞에 img 태그 추가
-									        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/users/avatar-2.jpg"); 
+									        	        let imgTag = $("<img>").addClass("avatar-xs rounded-circle align-self-end").attr("src", "${contextPath}/images/defaultProfile.png"); 
 									        	        mediaDiv.prepend(imgTag); // media의 첫 번째 자손으로 추가
 					
 									        	        // (2) ctext-wrap의 자손이면서 p 태그보다 앞에 div 태그 추가

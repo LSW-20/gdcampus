@@ -70,4 +70,14 @@ public class ReservationServiceImpl implements ReservationService {
 	public int updateReservation(Map<String, String> map) {
 		return ReservationDao.updateReservation(map);
 	}
+
+	/**
+	 * [스케줄러] 일주일이 지났는데도 "예약신청중" 상태인 예약 신청은 자동으로 반려처리하는 메소드(매일 밤 12시 실행)
+	 * author : 상우
+	 * return 7일이 경과해 자동으로 반려처리 된 예약 신청 개수
+	 */
+	@Override
+	public int rejectReservationsOlderThan7Days() {
+		return ReservationDao.rejectReservationsOlderThan7Days();
+	}
 }
