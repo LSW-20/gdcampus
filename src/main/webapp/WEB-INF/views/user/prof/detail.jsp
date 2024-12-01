@@ -59,7 +59,7 @@
 						</h5>
 						
 						<div class="mt-4 row d-flex justify-content-end">
-							<button type="button" class="btn btn-primary w-md" onclick="fn_resetPwd()">비밀번호 초기화</button>
+							<button type="button" class="btn btn-primary w-md" onclick="fn_resetPwd()" ${not empty user.leaveDate ? 'style="display:none"': '' }>비밀번호 초기화</button>
 						</div>
 						
 						<form action="${contextPath}/user/prof/update.do" method="post">
@@ -93,13 +93,15 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="email">이메일</label> 
-										<input type="email" class="form-control" id="email" name="email" value="${user.email}">
+										<input type="email" class="form-control" id="email" name="email" value="${user.email}"
+										${not empty user.leaveDate ? 'readonly': '' }>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="userName">교수명</label> 
-										<input type="text" class="form-control" id="userName" name="userName" value="${user.userName }">
+										<input type="text" class="form-control" id="userName" name="userName" value="${user.userName }"
+										${not empty user.leaveDate ? 'readonly': '' }>
 									</div>
 								</div>
 							</div>
@@ -127,12 +129,14 @@
 									입사일 : ${user.hireDate}
 								</div>
 								<div class="col-md-6">
-									퇴사일 : ${user.leaveDate}
+								<c:if test="${not empty user.leaveDate}">
+									<p class="m-0 p-0" style="color: red;">퇴사일 : ${user.leaveDate}</p>
+								</c:if>
 								</div>
 							</div>
 							<hr><br>		
 							<div class="mt-4 row d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary w-md mr-3">저장</button>
+								<button type="submit" class="btn btn-primary w-md mr-3" ${not empty user.leaveDate ? 'style="display:none"': '' }>저장</button>
 								<a class="btn btn-primary w-md mr-3" href="${contextPath }/user/prof/list.do">목록</a>
 							</div>
 						</form>

@@ -262,7 +262,7 @@
 	        $('#delBtn').click(function (evt) {
 	        	 evt.preventDefault();
 	            const count = $(':checkbox:checked').length;
-	            if (confirm(count + '명의 회원을 탈퇴처리 하시겠습니까?')) {
+	            if (confirm(count + '명의 사원을 퇴사 처리 하시겠습니까?')) {
 	                let arr = [];
 	                $(":checkbox:checked").each(function () {
 	                    arr.push($(this).val());
@@ -274,10 +274,10 @@
 	                    data: { delUser: JSON.stringify(arr) },
 	                    success: function (res) {
 	                    	if(res == 'SUCCESS'){
-	                    		alert(count + "명의 회원이 성공적으로 탈퇴 처리되었습니다.");
+	                    		alert(count + "명의 사원이 성공적으로 퇴사 처리되었습니다.");
 	 	                        location.reload();
 	                    	}else{
-	                    		 alert("탈퇴처리에 실패하였습니다.");
+	                    		 alert("퇴사처리에 실패하였습니다.");
 	                    	}
 	                 
 	                    },
