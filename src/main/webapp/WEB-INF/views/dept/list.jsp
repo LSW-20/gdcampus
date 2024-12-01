@@ -61,7 +61,7 @@
 	                <th>생성자</th>
 	                <th>수정일</th>
 	                <th>수정자</th>
-	                <th></th>
+	                <th>삭제</th>
 	            </tr>
 	        </thead>
 	        <tbody>
