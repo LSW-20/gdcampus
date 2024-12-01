@@ -248,7 +248,7 @@ public class ApprovalController {
 	            text = loginUser.getUserName() + "님의 결재 요청이 실패 되었습니다.";
 	        }
 	        log.debug("text : {}",text);
-	        sendOne(text);
+//	        sendOne(text);
 	    } catch(Exception e) {
 	        log.error("결재 요청 중 오류 발생", e);
 	        ra.addFlashAttribute("alertMsg", "결재요청 처리 중 오류가 발생했습니다.");
