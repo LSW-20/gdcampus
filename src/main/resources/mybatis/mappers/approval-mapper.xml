@@ -150,7 +150,8 @@
   <select id="selectApprUpcomingList" resultMap="approvalResultMap">
 		SELECT A.APPR_NO as APPR_NO
 		     , APPR_USER
-		     , DEPT_NO
+		     , U.USER_NAME as USER_NAME		 
+		     , A.DEPT_NO as DEPT_NO
 		     , APPR_TYPE
 		     , APPR_DATE
 		     , APPR_TITLE
@@ -166,6 +167,8 @@
 		  FROM T_APPROVAL A
 		  JOIN T_APPR_LINE L
 		    ON A.APPR_NO = L.APPR_NO
+      JOIN T_USER U
+        ON U.USER_NO = APPR_USER		  
 		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
 		   AND L.USER_NO = #{userNo} 						 <!-- LOGINUSER   -->	
 		   AND CURR_ORDER &lt; LINE_ORDER      <!-- 현재결재순서 -->
