@@ -475,5 +475,16 @@ public class ApprovalController {
 		return "redirect:/approval/admin/formList";
 	}
 	
-	
+	@PostMapping("/delete")
+	@ResponseBody
+	public Map<String, Object> deleteApproval(@RequestParam String apprNo) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        int result = apprService.deleteApproval(apprNo);
+	        response.put("success", result > 0);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	    }
+	    return response;
+	}
 }

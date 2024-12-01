@@ -143,6 +143,9 @@ public interface ApprovalService {
 	//오늘자결재 개수
 	int selectTodayApproval();
 	
+	//문서삭제
+	int deleteApproval(String apprNo);
+	
 	
 	
 	
