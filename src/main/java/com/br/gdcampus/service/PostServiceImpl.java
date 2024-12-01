@@ -52,11 +52,7 @@ public class PostServiceImpl implements PostService {
 		
 		return result;
 	}
-	/*
-	 * public List<PostDto> selectSearchList(Map<String, String>search,PageInfoDto
-	 * pi) { }
-	 */
-	 
+	
 
 
 	@Override
@@ -64,6 +60,22 @@ public class PostServiceImpl implements PostService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+
+
+	
+	@Override
+	public List<AttachDto> selectDelAttach(String[] delFileNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<AttachDto> selectAttachList(AttachDto a) {
+		
+		return null;
+	}
+
 
 	
 //--------------------------------------------------------------
@@ -122,11 +134,7 @@ public class PostServiceImpl implements PostService {
 		return postDao.deleteCommentCompletely;
 	}
 
-	@Override
-	public List<AttachDto> selectDelAttach(String[] delFileNo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 
 	
