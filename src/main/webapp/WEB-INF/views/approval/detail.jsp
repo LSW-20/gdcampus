@@ -502,7 +502,7 @@
         
         // 결재 승인
         function approveDoc() {
-            if(confirm('결재하시겠습니까?-detail.jsp')) {
+            if(confirm('결재를 올리시겠습니까?')) {
                 $.ajax({
                     url: '${contextPath}/approval/approve',
                     type: 'POST',

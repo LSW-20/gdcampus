@@ -172,6 +172,8 @@
 		 WHERE APPR_STATUS IN(0,1)      <!-- 대기/진행중 -->
 		   AND L.USER_NO = #{userNo} 						 <!-- LOGINUSER   -->	
 		   AND CURR_ORDER &lt; LINE_ORDER      <!-- 현재결재순서 -->
+		 ORDER
+		    BY APPR_DATE DESC		   
   </select>
   
   <!-- 기안문서함페이징 -->
@@ -237,7 +239,8 @@
 		 			AND APPR_STATUS IN(2,3)
 		 		</when>
 		 </choose>		 
-		  
+		 ORDER
+		    BY APPR_DATE DESC		  
   </select>
   
   <select id="selectMyApprovedListCount" resultType="_int">
@@ -867,4 +870,11 @@
 		 WHERE TRUNC(CREATE_DATE) = TRUNC(SYSDATE)	
 	</select>	
 
+	<!-- 문서삭제 -->
+	<delete id="deleteApproval">
+		DELETE 
+		  FROM T_APPROVAL
+		 WHERE APPR_NO = #{apprNo}	
+		    ON DELETE CASCADE
+	</delete>
 </mapper>

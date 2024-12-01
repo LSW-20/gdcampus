@@ -498,5 +498,10 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public int selectTodayApproval() {
 		return apprDao.selectTodayApproval();
+	}
+
+	@Override
+	public int deleteApproval(String apprNo) {
+		return apprDao.deleteApproval(apprNo);
 	}	
 }

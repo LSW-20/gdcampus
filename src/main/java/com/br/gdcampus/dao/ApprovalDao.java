@@ -273,5 +273,9 @@ public class ApprovalDao {
 		return sqlSession.selectOne("approvalMapper.selectTodayApproval");
 	}
 
+	public int deleteApproval(String apprNo) {
+		return sqlSession.delete("approvalMapper.deleteApproval",apprNo);
+	}
+
 
 }
