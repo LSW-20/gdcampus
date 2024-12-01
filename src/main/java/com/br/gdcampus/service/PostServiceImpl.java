@@ -1,5 +1,6 @@
 package com.br.gdcampus.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -55,14 +56,14 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public int deletePost(String postNo) {
-		return postDao.deletepost(postNo);
+		return postDao.deletePost(postNo);
 	}
 
 	
 	@Override
 	public List<AttachDto> selectDelAttach(String[] delFileNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return delFileNo == null ? new ArrayList<>() 
+				 : postDao.selectDelAttach(delFileNo);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int updatePost(PostDto p, String[] delFileNo) {
 		
-		// 1) board테이블에 update
+		// 1) post테이블에 update
 		int result1 = postDao.updatePost(p);
 		
 		// 2) attachment테이블에 delete
@@ -125,7 +126,6 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public int deleteCommentCompletely() {
-		// TODO Auto-generated method stub
 		return postDao.deleteCommentCompletely();
 	}
 

@@ -46,6 +46,33 @@ public class PostDao {
 	}
 
 
+	
+
+	// 첨부파일 포함 게시글 삭제
+	public int deleteAttach(String[] delFileNo) {
+		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
+	}
+
+	// 첨부파일 목록 조회
+	public List<AttachDto> selectAttachList(String no) {
+		return sqlSession.selectList("postMapper.selectAttachList", no);
+	}
+	
+	// 게시글 수정
+		public int updatePost(PostDto postDto) {
+			return sqlSession.update("postMapper.updatePost", postDto);
+		}
+		
+	
+	// 게시글 삭제
+	public int deletePost(String postNo) {
+		return sqlSession.delete("postMapper.deletePost", postNo);
+	}
+	
+	
+
+	//----------------- 댓글 관련 Dao -------------------------
+	
 	// 댓글 목록 조회
 	public List<CommentDto> selectCommentList(String postNo) {
 		return sqlSession.selectList("postMapper.selectCommentList", postNo);
@@ -57,29 +84,20 @@ public class PostDao {
 	}
 	
 	
-	// 게시글 수정
-	public int updatePost(PostDto p) {
+	// 댓글 수정
+	public int updateCommentPost(PostDto p) {
 		return sqlSession.update("postMapper.updateComment", p);
 	}
-
-	// 첨부파일 게시글 삭제
-	public int deleteAttach(String[] delFileNo) {
-		return sqlSession.delete("postMapper.deleteAttach", delFileNo);
-	}
-
 	
-	public List<AttachDto> selectAttachList(String no) {
-		return sqlSession.selectList("postMapper.selectAttachList", no);
-	}
-	
-	// 게시글 삭제
-	public int deletepost(String postNo) {
-		return sqlSession.update("postMapper.deletePost", postNo);
-	}
+	// 댓글 삭제
 	public int deleteCommentCompletely() {
 		return 0;
 	}
 
+	public List<AttachDto> selectDelAttach(String[] delFileNo) {
+		return sqlSession.selectList("postMapper.selectDelAttach", delFileNo);
+	}
+	
 
 
 	

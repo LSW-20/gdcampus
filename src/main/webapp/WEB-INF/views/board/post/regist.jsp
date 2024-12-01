@@ -75,7 +75,7 @@
                 <br>
                 <div class="mt-4 row d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/insert">등록하기</button>
-                    <button type="reset" class="btn btn-danger" href="${contextPath }/board/post/list">취소하기</button>
+                    <button type="button" class="btn btn-danger" onclick="location.href='${contextPath }/board/post/list">취소하기</button>
                 </div>
 
             </form>

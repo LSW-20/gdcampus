@@ -33,7 +33,7 @@ public interface PostService {
 
     // 게시글 수정
     List<AttachDto> selectDelAttach(String[] delFileNo);
-    int updatePost(PostDto b, String[] delFileNo);
+    int updatePost(PostDto post, String[] delFileNo);
 
 //=============== 댓글 기능======================
     // 댓글 목록 조회

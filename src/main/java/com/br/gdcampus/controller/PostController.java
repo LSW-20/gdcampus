@@ -1,5 +1,6 @@
 package com.br.gdcampus.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,12 @@ public class PostController {
 	private final PagingUtil pagingUtil;
 	private final FileUtil fileUtil;
 	
+	  //메인페이지 게시글 목록
+    @ResponseBody
+	@GetMapping("/mainList")
+	public List<PostDto> noticeMain() {
+		return postService.selectPostList();
+	}
 	
 	// 게시글 목록 조회
 	@GetMapping("/list")
@@ -108,16 +115,78 @@ public class PostController {
 			rdAttributes.addFlashAttribute("alertMsg", "게시글 등록 실패");			
 		}
 			
-		return "redirect:/board/post/regist";
+		return "redirect:/board/post/list";
 			
 	}
   	
+	 // 게시글 삭제
+		
+		  @PostMapping("/delete") 
+		  public String remove(String no, RedirectAttributes rdAttributes) { 
+			  int result = postService.deletePost(no);
+		  
+		  if(result > 0) { rdAttributes.addFlashAttribute("alertMsg",
+		  "성공적으로 삭제되었습니다."); }else { rdAttributes.addFlashAttribute("alertMsg",
+		  "게시글 삭제에 실패하였습니다."); }
+		  
+		  return "redirect:/board/post/list"; }
+		 		
   	
+  
+  	// 게시글 수정하기
+	@PostMapping("/modify")
+	public void modifyPage(String no, Model model) {
+		model.addAttribute("post", postService.selectPostDetail(no));
+	}
+	
+	@PostMapping("/update")
+	public String modify(PostDto p 		// 번호,제목,내용
+					   , String[] delFileNo   // null | 삭제할첨부파일번호들
+					   , List<MultipartFile> uploadFiles // 새로넘어온첨부파일들
+					   , RedirectAttributes rdAttributes ) {
+		
+		/*
+		 * log.debug("수정할p : {}",p); 
+		 * log.debug("수정할delFileNo : {}",delFileNo);
+		 * log.debug("수정할uploadFiles : {}",uploadFiles);
+		 */
+		// 후에 db에 반영 성공시 삭제할 파일들 삭제 위해 미리 조회
+		List<AttachDto> delAttachList = postService.selectDelAttach(delFileNo);
+		
+		List<AttachDto> attachList = new ArrayList<>();
+		for(MultipartFile file : uploadFiles) {
+			if(file != null && !file.isEmpty()) {
+				Map<String, String> map = fileUtil.fileupload(file, "post");
+				attachList.add(AttachDto.builder()
+										.filePath(map.get("filePath"))
+										.originalName(map.get("originalName"))
+										.filesystemName(map.get("filesystemName"))
+										.refType("B")
+										.postNo(p.getPostNo())
+										.build());	
+			}
+		}
+		p.setAttachList(attachList);
+		
+		int result = postService.updatePost(p, delFileNo);
+		
+		if(result > 0) { // 성공
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 수정되었습니다.");
+			for(AttachDto a : delAttachList) {
+				new File(a.getFilePath() + "/" + a.getFilesystemName()).delete();
+			}
+		}else { // 실패
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 수정에 실패했습니다.");
+		}
+		
+		return "redirect:/board/post/detail?no=" + p.getPostNo();
+		
+	}
   	
   	
   	// ---------------------------- 댓글 --------------------------------------------
   	
-    // 게시글 댓글 목록 조회
+    // 게시글 댓글 목록
     @ResponseBody
     @GetMapping(value = "/clist", produces = "application/json")
     public List<CommentDto> commentList(String no) {
@@ -136,26 +205,9 @@ public class PostController {
         return result > 0 ? "SUCCESS" : "FAIL";
     }
     
-    //메인페이지 게시글 목록
-    @ResponseBody
-	@GetMapping("/mainList")
-	public List<PostDto> noticeMain() {
-		return postService.selectPostList();
-	}
-
-	@PostMapping("/delete")
-	public String remove(String no, RedirectAttributes rdAttributes) {
-		int result = postService.deletePost(no);
-		
-		if(result > 0) {
-			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 삭제되었습니다.");
-		}else {
-			rdAttributes.addFlashAttribute("alertMsg", "게시글 삭제에 실패하였습니다.");
-		}
-		
-		return "redirect:/board/post/list";
-	}		
-}
-
+  
+    
+    
+}    
 
 		

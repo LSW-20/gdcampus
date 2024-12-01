@@ -99,7 +99,7 @@
 																	</tr>
 										        	  </c:forEach>
                               </tbody>
-                                	<div >
+                                	<div>
 																		<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
 														      </div> 
                            </table>

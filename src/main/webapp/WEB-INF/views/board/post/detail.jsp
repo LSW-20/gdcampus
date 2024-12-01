@@ -72,11 +72,7 @@
                                 </c:forEach>
                             </td>
                         </tr>
-                        <tr>
-                            <th>내용</th>
-                            <td colspan="3">
-                            </td>
-                        </tr>
+                       
                          <tr>
                             <th>내용</th>
                             <td colspan="4">

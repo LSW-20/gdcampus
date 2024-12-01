@@ -15,6 +15,8 @@
 			<result column="POST_TOP" property="postTop" />
 			<result column="modify_date" property="modifyDate" />
 			<result column="modify_user" property="modifyUser" />
+			
+			<collection resultMap="attachResultMap" property="attachList" />
 	</resultMap>
 	
 
@@ -44,7 +46,7 @@
 		<result column="LEVEL" property="level" />
 	</resultMap>
 
-  <!-- 게시글 목록 조회 -->
+  <!-- 게시글 목록 조회수 증가시 -->
 	<select id="selectPostListCount" resultType="_int">
 		select 
 					 "count"
@@ -100,21 +102,29 @@
 	INSERT INTO T_ATTACHMENT 
 	(
               FILE_NO,
-					    POST_NO,
 					    FILE_PATH,
 					    FILESYSTEM_NAME,
 					    ORIGINAL_NAME,
 					    UPLOAD_DATE,
-					    REF_TYPE
+					    REF_TYPE,
+					    POST_NO
         )
         VALUES (
             SEQ_ATNO.NEXTVAL,
-            'P' || LPAD(SEQ_PNO.CURRVAL, 4, 0),  
             #{filePath},
             #{filesystemName},
             #{originalName},
             SYSDATE,
             #{refType}
+             <choose>
+			  	<when test="postNo == null">
+			  		, 'P' || LPAD(SEQ_PNO.CURRVAL, 4, 0) 
+			  	</when>
+			  	<otherwise>
+			  		, #{postNo}
+			  	</otherwise>
+		    </choose>
+            
         )
     </insert>
 	
@@ -122,44 +132,41 @@
 	
 	
 	
-	<!-- 게시글 상세페이지 조회 -->
-	<select id="selectPostDetail" resultMap="postResultMap">
-	SELECT
-        POST_NO,
-        BOARD_TYPE_NO,
-        P.USER_NO,
-        POST_TITLE,
-        POST_CONTENT,
-        USER_NAME , 
-        USER_ID AS WRITER_ID,     
-        "COUNT",
-        TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
-        (
-            SELECT COUNT(*)
-            FROM T_ATTACHMENT A
-            WHERE A.REF_TYPE = 'B'  
-              AND A.APPR_NO = #{postNo}
-        ) AS ATTACH_COUNT,
-        (
-           SELECT
-           COUNT(*)
-           FROM T_LIKE 
-           WHERE 
-                LIKE_STATUS = 'Y' 
-            AND
-                POST_NO = #{postNo}
-        )AS LIKE_COUNT
-				FROM 
-				    T_POST P
-				JOIN 
-				    T_USER U 
-				ON 
-				    P.USER_NO = U.USER_NO     
-				WHERE 
-				    p.post_no = #{postNo}
-				    
-				ORDER BY 
-				    P.POST_NO DESC 
+
+				
+				<!-- 게시글 상세페이지 조회 -->
+				<select id="selectPostDetail" resultMap="postResultMap">
+			 select
+           P.POST_NO,
+           P.BOARD_TYPE_NO,
+           P.USER_NO,
+           P.POST_TITLE,
+           P.POST_CONTENT,
+           U.USER_NAME, 
+           U.USER_ID AS WRITER_ID,     
+           P."COUNT",
+           TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
+           A.FILE_NO,
+           A.FILE_PATH,
+           A.FILESYSTEM_NAME,
+           A.ORIGINAL_NAME,
+           (
+               SELECT COUNT(*)
+               FROM T_ATTACHMENT A
+               WHERE A.REF_TYPE = 'B'  
+                 AND A.APPR_NO = #{p.postNo}
+           ) AS ATTACH_COUNT,
+           (
+               SELECT COUNT(*)
+               FROM T_LIKE L
+               WHERE L.LIKE_STATUS = 'Y' 
+                 AND L.POST_NO = #{p.postNo}
+           ) AS LIKE_COUNT
+      from T_POST P
+      join T_USER U on (P.USER_NO = U.USER_NO)
+      left join T_ATTACHMENT A on (A.REF_TYPE = 'B' and A.POST_NO = P.POST_NO)
+     where P.POST_NO =#{postNo}
+  order by P.POST_NO DESC
 				</select>	
 				
 				<!-- 첨부파일 조회 -->
@@ -183,6 +190,51 @@
 				</update>
 
 
+		   <!-- 게시글 삭제 -->
+		  	<delete id="deletePost">
+					delete
+					       t_post
+					 where post_no = #{postNo}
+				</delete>
+		
+		<!-- 게시글 수정 -->		
+	 	<update id="updatePost">
+		update 
+				   t_post
+			 set post_title = #{postTitle}
+			   , post_content = #{postContent}
+		 where post_no = #{postNo}
+	</update>
+	
+	<!-- 첨부파일 게시글 삭제 -->
+	<delete id="deleteAttach">
+		delete
+		  from t_attachment
+		 <where>
+		  <foreach item="no" collection="array"
+		  	open="file_no in (" separator="," close=")">
+		  	#{no}
+		  </foreach>
+		</where> 
+	</delete> 
+	 
+	<select id="selectDelAttach" resultMap="attachResultMap">
+		select
+					 file_path
+				 , filesystem_name
+		  from t_attachment 
+		<where>
+		  <foreach item="no" collection="array"
+		  	open="file_no in (" separator="," close=")">
+		  	#{no}
+		  </foreach>
+		</where>
+	</select>
+	 
+	 
+	 
+    
+		<!-- 댓글 영역 -->
 
 				<!-- 게시글 댓글 목록조회 -->
 				<select id="selectCommentList" resultMap="commentResultMap">
@@ -222,13 +274,7 @@
 			        )
 			    </insert>
 				    
-				  	<delete id="deletePost">
-							delete
-							       t_post
-							 where post_no = #{postNo}
- 						</delete>
-	 
-    
+				 
     
 </mapper>
 	
