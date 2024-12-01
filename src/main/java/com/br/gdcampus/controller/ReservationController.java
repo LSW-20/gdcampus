@@ -37,13 +37,13 @@ public class ReservationController {
 	private final EquipmentAndFacilityService equipmentAndFacilityService;
 	private final ReservationService reservationService;
 	
-	
+	// coolsms로 문자 발송을 위한 필드
 	private final DefaultMessageService messageService;
 	
     public ReservationController(EquipmentAndFacilityService equipmentAndFacilityService, ReservationService reservationService) {
         this.equipmentAndFacilityService = equipmentAndFacilityService;
         this.reservationService = reservationService;
-        this.messageService = NurigoApp.INSTANCE.initialize("NCSHFTKCDQ10ANNZ", "2EIPIKNNJCGFYBBL0YXSQJTVDFAUWUDH", "https://api.coolsms.co.kr");
+        this.messageService = NurigoApp.INSTANCE.initialize("NCSHFTKCDQ10ANNZ", "2EIPIKNNJCGFYBBL0YXSQJTVDFAUWUDH", "https://api.coolsms.co.kr");  // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력.
     }
 	
 	
@@ -341,10 +341,13 @@ public class ReservationController {
     
     
     public SingleMessageSentResponse sendOne(String text) {
+    	
         Message message = new Message();
+        
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01026783677");
         message.setTo("01026783677");
+        
         message.setText(text); // 한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
