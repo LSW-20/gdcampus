@@ -43,6 +43,35 @@ public class ReservationDao {
 	 * return 예약내역
 	 */
 	public List<ReservationDto> selectReservationByUserNo(String userNo) {
-		return sqlSession.selectList("reservationMapper.selectReservationByUserNo", userNo);
+		return sqlSession.selectList("reservationMapper.selectReservation", userNo);
 	}
+
+	/**
+	 * 전체 예약내역 조회
+	 * author : 상우
+	 * return 전체 예약내역 
+	 */
+	public List<ReservationDto> selectReservationAll() {
+		return sqlSession.selectList("reservationMapper.selectReservation");
+	}
+	
+	/**
+	 * 예약 신청에 대해 승인/반려하는 메소드
+	 * author : 상우
+	 * return 성공시 1, 실패시 0
+	 */
+	public int updateReservation(Map<String, String> map) {
+		return sqlSession.update("reservationMapper.updateReservation", map);
+	}
+
+	/**
+	 * [스케줄러] 일주일이 지났는데도 "예약신청중" 상태인 예약 신청은 자동으로 반려처리하는 메소드(매일 밤 12시 실행)
+	 * author : 상우
+	 * return 7일이 경과해 자동으로 반려처리 된 예약 신청 개수
+	 */
+	public int rejectReservationsOlderThan7Days() {
+		return sqlSession.update("reservationMapper.rejectReservationsOlderThan7Days");
+	}
+	
+	
 }

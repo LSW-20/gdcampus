@@ -117,7 +117,7 @@
                                             <td>
                                                 <fmt:formatDate value="${form.createDate}" pattern="yyyy-MM-dd HH:mm"/>
                                             </td>
-                                            <td>${form.createUser}</td>
+                                            <td>${form.userName}</td>
                                             <td class="action-btns">
                                                 <a class="px-3 text-primary edit-btn"
                                                         href="${contextPath}/approval/admin/detailForm/${form.apprNo}">

@@ -269,5 +269,13 @@ public class ApprovalDao {
 		return sqlSession.delete("approvalMapper.deletePurchaseHistory",apprNo);
 	}
 
+	public int selectTodayApproval() {
+		return sqlSession.selectOne("approvalMapper.selectTodayApproval");
+	}
+
+	public int deleteApproval(String apprNo) {
+		return sqlSession.delete("approvalMapper.deleteApproval",apprNo);
+	}
+
 
 }
