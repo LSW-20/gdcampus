@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -52,8 +53,7 @@
 										<tr class="bg-transparent">
 											<th style="width: 24px;">
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="checkAll">
-													<label class="custom-control-label" for="checkAll"></label>
+												
 												</div>
 											</th>
 											<th>공지사항 번호</th>
@@ -70,8 +70,7 @@
 											<tr onclick='location.href = "${contextPath}/board/notice/detail?no=${n.noticeNo}";'>
 												<td>
 													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="noticecheck${n.noticeNo}">
-														<label class="custom-control-label" for="noticecheck${n.noticeNo}"></label>
+														
 													</div>
 												</td>
 												<td>${n.noticeNo}</td>
@@ -83,11 +82,12 @@
 											</tr>
 										</c:forEach>
 									</tbody>
+									<div>
+											<c:if test="${fn:substring(loginUser.userNo, 0, 1) == 'A'}">
+											<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/notice/regist';">추가</button>
+											</c:if>
+									</div> 
 								</table>
-								<div class="mt-3">
-									<button type="button" class="btn btn-primary w-md"
-										onclick="location.href='${contextPath}/board/notice/regist';">공지사항 추가</button>
-								</div>
 							</div>
 						</div>
 					</div>

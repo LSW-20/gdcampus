@@ -1,5 +1,6 @@
 package com.br.gdcampus.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -32,11 +33,11 @@ public class PostServiceImpl implements PostService {
 	
 	// 게시판 상세 /조회수증가
 	@Override
-	public int updateIncreaseCount(int postNo) {
+	public int updateIncreaseCount(String postNo) {
 		return postDao.updateIncreaseCount(postNo);
 	}
 	
-	// 다중 첨부파일 등록 
+	//첨부파일 등록 
 	@Transactional
 	@Override
 	public int insertPost(PostDto p) {
@@ -52,28 +53,23 @@ public class PostServiceImpl implements PostService {
 		
 		return result;
 	}
-	
-
 
 	@Override
-	public int deletePost(int postNo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deletePost(String postNo) {
+		return postDao.deletePost(postNo);
 	}
-	
-
 
 	
 	@Override
 	public List<AttachDto> selectDelAttach(String[] delFileNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return delFileNo == null ? new ArrayList<>() 
+				 : postDao.selectDelAttach(delFileNo);
 	}
 
 	@Override
-	public List<AttachDto> selectAttachList(AttachDto a) {
+	public List<AttachDto> selectAttachList(String no) {
 		
-		return null;
+		return postDao.selectAttachList(no);
 	}
 
 
@@ -98,7 +94,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int updatePost(PostDto p, String[] delFileNo) {
 		
-		// 1) board테이블에 update
+		// 1) post테이블에 update
 		int result1 = postDao.updatePost(p);
 		
 		// 2) attachment테이블에 delete
@@ -130,8 +126,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public int deleteCommentCompletely() {
-		// TODO Auto-generated method stub
-		return postDao.deleteCommentCompletely;
+		return postDao.deleteCommentCompletely();
 	}
 
 

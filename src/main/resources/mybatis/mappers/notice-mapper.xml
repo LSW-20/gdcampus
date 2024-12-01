@@ -16,7 +16,7 @@
 			<result column="modify_date" property="modifyDate" />
 			<result column="modify_user" property="modifyUser" />
 			
-			  <collection ofType="AttachDto" property="attachList" resultMap="attachResultMap"/>
+			  <collection resultMap="attachResultMap" property="attachList" />
 	</resultMap>
 	
 	<resultMap id="attachResultMap" type="AttachDto">
@@ -30,16 +30,15 @@
 	</resultMap>
 	
 	<!-- 게시판 유형이 공지사항 -->
-	<select id="selectNoticeListCount" resultMap="noticeResultMap">
+	<select id="selectNoticeList" resultMap="noticeResultMap">
 	SELECT
-    P.POST_NO,
-    P.POST_TITLE,
-    P.POST_CONTENT,
-    USER_NAME,
-    BOARD_TYPE_NO,
-    TO_CHAR(P.REGIST_DATE, 'YYYY-MM-DD') AS REGIST_DATE,
-    FILE_STATUS
-    
+      P.POST_NO
+    , P.POST_TITLE 
+    , USER_NAME 
+    , REGIST_DATE
+    , FILE_STATUS
+    , "COUNT" as count 
+    , POST_TOP
 FROM 
     T_POST P
 JOIN 
@@ -56,12 +55,11 @@ ORDER BY
 	
 	<!-- 공지사항 조회(첨부파일여부) -->
 	<select id="selectNotice" resultMap="noticeResultMap">
-    		select
-		       POST_NO
+    select
+           POST_NO
 		     , POST_TITLE
 		     , POST_CONTENT
 		     , USER_NAME
-		     , BOARD_TYPE_NO
 		     , to_char(REGIST_DATE,'YYYY-MM-DD') as "regist_date"
 		     , FILE_NO
 		     , FILE_PATH
@@ -69,10 +67,30 @@ ORDER BY
 		     , ORIGINAL_NAME
 		  from t_post n
 		  join t_user using (USER_NO)
-		  left join t_attachment on (ref_type = 'B' and APPR_NO = POST_NO)
-		 where POST_NO = #{noticeNo}
+		  left join t_attachment USING(POST_NO)
+		 where POST_NO = #{postNo}
+       and BOARD_TYPE_NO = 1
 	</select>
 	
-	
+	<insert id="insertNotice">
+		insert
+			into t_post
+			(
+				post_no
+			, BOARD_TYPE_NO	
+			, post_title
+			, user_no
+			, post_content
+			
+			)
+			  values
+		  (
+		    'P'||LPAD(SEQ_PNO.NEXTVAL,4,0)
+		  , '1'     
+		  , #{noticeTitle}
+		  , #{userNo}
+		  , #{noticeContent}
+		  )
+	</insert> 
 	
 </mapper>

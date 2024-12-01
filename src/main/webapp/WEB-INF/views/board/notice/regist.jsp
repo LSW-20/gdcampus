@@ -5,88 +5,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+<meta charset="utf-8" />
+        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <!-- bootstrap-datepicker css -->
-    <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <!-- bootstrap-datepicker css -->
+        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
-    <!-- DataTables -->
-    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <!-- DataTables -->
+        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-    <!-- Responsive datatable examples -->
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+        <!-- Responsive datatable examples -->
+        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
 
-    <!-- Bootstrap Css -->
-    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        <!-- Bootstrap Css -->
+        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        
 </head>
 
-<body>
-	<div class="container p-3">
+<body data-sidebar="dark">
+	<div id="layout-wrapper">
+		<!-- header 시작 -->
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+    <!-- header 끝 -->
 
-      <!-- Header, Nav start -->
-      <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-      <!-- Header, Nav end -->
-  
-      <!-- Section start -->
-      <section class="row m-3" style="min-height: 500px">
-  <!-- main-content 시작 -->
+
+		<!-- sidebar 시작 -->
+		<jsp:include page="/WEB-INF/views/common/sidebar.jsp" />				
+		<!-- sidebar 끝 -->		
+
+	<!-- main-content 시작 -->
 		<div class="main-content">
 			<div class="page-content">
 				<div class="row justify-content-md-center">
 					<div class="mt-5">
-						<h3>공지사항 등록</h3>
+						<h3>게시글 등록</h3>
 					</div>
 				</div>
- 
-    <div class="container border p-5 m-4 rounded">
-      <h2 class="m-4">공지사항 등록 페이지</h2>
-          <br>
+			<!-- Section start -->
+        <section class="row m-3" style="min-height: 500px">
+    
+          <div class="container border p-5 m-4 rounded">
+            <h2 class="m-4">공지사항 등록</h2>
+            <br>
 
-          <form id="enroll-form" method="post" action="${ contextPath }/board/notice/insert" enctype="multipart/form-data">
-              <div class="form-group">
-                  <label for="title">제목 </label>
-                  <input type="text" class="form-control" id="title" name="Title" required><br>
-                  
-                  <label for="writer">작성자 </label>
-                  <input type="text" class="form-control" id="writer" value="${ loginUser.userId }" readonly><br>
-                  
-                  <label for="upfile">첨부파일 </label>
-                  <input type="file" class="form-control-file post file" id="upfile" name="uploadFiles" multiple><br>
-                  
-                  <label for="userName">내용 </label>
-                  <textarea class="form-control" required name="postContent" id="content" rows="10" style="resize:none;"></textarea><br>
-                  
-              </div>
-              <br>
-              <div align="center">
-							    <!-- "등록하기" 버튼 클릭 시 regist.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-primary" onclick="location.href='${contextPath}/board/post/regist'">등록하기</button>
-							    
-							    <!-- "수정하기" 버튼 클릭 시 update.jsp 페이지로 이동 -->
-							    <button type="button" class="btn btn-warning" onclick="location.href='${contextPath}/board/post/update'">수정하기</button>
-							</div>
+            <form  id="enroll-form" method="post" action="${contextPath}/board/notice/insert" method="post" enctype="multipart/form-data" class="was-validated">
+                <div class="form-group">
+                    <label for="title">제목 </label>
+                    <input type="text" class="form-control" id="title" name="noticeTitle" required><br>
+                    
+                    <label for="writer">작성자 </label>
+                    <input type="text" class="form-control" id="writer" name="userName" value="${ loginUser.userId }" readonly><br>
+                    
+                    <label for="upfile">첨부파일 </label>
+                    <input type="file" class="form-control-file post file" id="upfile" name="uploadFiles" multiple><br>
+                    
+                    <label for="content">내용 </label>
+                    <textarea class="form-control" required name="noticeContent" id="content" rows="10" style="resize:none;"></textarea><br>
+                    
+                </div>
+                <br>
+                <div class="mt-4 row d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/notice/insert">등록하기</button>
+                    <button type="button" class="btn btn-danger" onclick="location.href='${contextPath }/board/notice/list">취소하기</button>
+                </div>
 
+            </form>
+          </div>
+    
+        </section>
 
-          </form>
-        </div>
-  
-      </section>
-      <!-- Section end -->
-  
-  </div>
-  
-  
+					</div>
+				</div>
+
+			</div>
+		<!-- main-content 끝 -->
   <script src="${ contextPath }/resources/js/fileValidate.js"></script>
+
+	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->
+  
   
 </body>
 </html>
