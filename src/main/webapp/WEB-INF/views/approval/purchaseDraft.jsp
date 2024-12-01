@@ -18,7 +18,7 @@
         }
         .purchase-form {
             width: 1000px;
-            height: 956px;
+            height: 1139px;
             border: 1px solid #ddd;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
