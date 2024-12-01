@@ -403,7 +403,7 @@ public class ClassController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/chart.do")
+	@GetMapping("/mainChart")
 	public List<Map<String,Object>> stDeptCount(Model model) {
 		 return classService.selectStDeptCount();
 	}
