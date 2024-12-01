@@ -93,7 +93,8 @@ public class PostDao {
 	public int deleteCommentCompletely() {
 		return 0;
 	}
-
+	
+	// 첨부파일 게시글 수정
 	public List<AttachDto> selectDelAttach(String[] delFileNo) {
 		return sqlSession.selectList("postMapper.selectDelAttach", delFileNo);
 	}

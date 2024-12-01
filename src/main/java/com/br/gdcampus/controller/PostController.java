@@ -125,8 +125,8 @@ public class PostController {
 		  public String remove(String no, RedirectAttributes rdAttributes) { 
 			  int result = postService.deletePost(no);
 		  
-		  if(result > 0) { rdAttributes.addFlashAttribute("alertMsg",
-		  "성공적으로 삭제되었습니다."); }else { rdAttributes.addFlashAttribute("alertMsg",
+		  if(result > 0) { rdAttributes.addFlashAttribute("alertMsg", "성공적으로 삭제되었습니다."); }
+		  else { rdAttributes.addFlashAttribute("alertMsg",
 		  "게시글 삭제에 실패하였습니다."); }
 		  
 		  return "redirect:/board/post/list"; }
@@ -139,6 +139,7 @@ public class PostController {
 		model.addAttribute("post", postService.selectPostDetail(no));
 	}
 	
+	// 첨부파일 게시글 수정 하기
 	@PostMapping("/update")
 	public String modify(PostDto p 		// 번호,제목,내용
 					   , String[] delFileNo   // null | 삭제할첨부파일번호들
@@ -146,8 +147,7 @@ public class PostController {
 					   , RedirectAttributes rdAttributes ) {
 		
 		/*
-		 * log.debug("수정할p : {}",p); 
-		 * log.debug("수정할delFileNo : {}",delFileNo);
+		 * log.debug("수정할p : {}",p); log.debug("수정할delFileNo : {}",delFileNo);
 		 * log.debug("수정할uploadFiles : {}",uploadFiles);
 		 */
 		// 후에 db에 반영 성공시 삭제할 파일들 삭제 위해 미리 조회

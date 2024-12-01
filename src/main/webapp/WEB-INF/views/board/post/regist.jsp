@@ -82,11 +82,7 @@
           </div>
     
         </section>
-							<hr>
-							<div class="mt-4 row d-flex justify-content-center">
-								<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/insert">추가</button>
-								<a class="btn btn-primary w-md mr-3" href="${contextPath }/board/post/list">취소</a>
-							</div>
+
 					</div>
 				</div>
 
