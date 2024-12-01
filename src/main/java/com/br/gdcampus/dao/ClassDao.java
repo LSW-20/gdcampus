@@ -119,6 +119,9 @@ public class ClassDao {
 	public int insertLesson(LessonPlanDto l) {
 		return sqlSession.insert("classMapper.insertLesson",l);
 	}
+	public List<Map<String, Object>> selectStDeptCount() {
+		return sqlSession.selectList("classMapper.selectStDeptCount");
+	}
 	
 	
 //--------------------------------------내강의 끝----------------------------------------------	

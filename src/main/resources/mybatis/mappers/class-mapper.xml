@@ -475,5 +475,13 @@
 		     , to_date(SYSDATE,'RR/MM/DD')
 		     )
 	</insert>
-	
+	<!-- 메인에서 보일 차트 -->
+	<select id="selectStDeptCount" resultType="map">
+		SELECT COUNT(U.ST_DEPT_NO) AS COUNT, S.DEPT_NAME
+		  FROM T_USER U
+		  JOIN T_ST_DEPT S 
+		    ON (U.ST_DEPT_NO = S.ST_DEPT_NO)
+		 GROUP 
+		    BY U.ST_DEPT_NO, S.DEPT_NAME
+	</select>
 </mapper>

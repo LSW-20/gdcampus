@@ -401,4 +401,10 @@ public class ClassController {
 		}
 		return "redirect:/class/plan/detail.do?classCode="+l.getClassCode();
 	}
+	
+	@ResponseBody
+	@GetMapping("/chart.do")
+	public List<Map<String,Object>> stDeptCount(Model model) {
+		 return classService.selectStDeptCount();
+	}
 }

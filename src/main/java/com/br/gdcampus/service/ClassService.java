@@ -58,6 +58,9 @@ public interface ClassService {
 	List<LessonPlanDto> selectLessonPlanList(String classCode);
 	// 주차별 수업계획서 수정
 	int updatePlanList(LessonPlanDto lesson);
+	
+	//메인용 차트
+	List<Map<String, Object>> selectStDeptCount();
 		
 //---------------------------------------내강의 끝---------------------------------------------
 	
