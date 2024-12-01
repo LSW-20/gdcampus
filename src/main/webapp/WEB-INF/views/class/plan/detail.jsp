@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html>
@@ -234,9 +235,13 @@
 						</div>
 						
 					</div>
+					<c:set var="today" value="<%=new java.util.Date()%>" />
+					<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyy-MM-dd" /></c:set>
 					<div class="mt-4 row d-flex justify-content-center">
 						<a class="btn btn-primary w-md mr-3" href="javascript:window.history.back();" >돌아가기</a>
+						<c:if test="${year > fn:substring(date, 2, 4)}">
 						<a class="btn btn-primary w-md mr-3" href="${ contextPath}/class/plan/modifyForm.do?classCode=${c.classCode}">수업계획 수정</a>
+						</c:if>
 					</div>				
 							
 				</div>

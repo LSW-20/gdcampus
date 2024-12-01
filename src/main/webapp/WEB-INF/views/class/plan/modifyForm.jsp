@@ -22,6 +22,9 @@
 .card-body {
 	height: 500px;
 }
+input[type=text] {
+	width: 100%;
+}
 </style>
 </head>
 
