@@ -244,7 +244,7 @@ public class ReservationController {
     
     
     /**
-     * 비품, 시설 예약 관리 페이지(/reservation/approveReservation)로 이동시키는 메소드
+     * 비품, 시설 예약 관리 페이지(/reservation/approveReservation.jsp)로 이동시키는 메소드
      * author : 상우
      * @param session 현재 로그인한 사용자 세션
      * @param model 포워딩한 jsp로 응답 데이터를 전달하기 위한 객체
@@ -339,7 +339,11 @@ public class ReservationController {
     }
         
     
-    
+    /**
+     * coolsms로 문자 발송시키는 메소드
+     * author : 상우
+     * @param text 문자로 보낼 내용
+     */
     public SingleMessageSentResponse sendOne(String text) {
     	
         Message message = new Message();
