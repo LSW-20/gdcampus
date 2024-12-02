@@ -40,12 +40,12 @@ public class NoticeController {
 	private final PagingUtil pagingUtil;
 	private final FileUtil fileUtil;
 	
-//	  //메인페이지 게시글 목록
-//    @ResponseBody
-//	@GetMapping("/noticeMainList")
-//	public List<NoticeDto> noticeMain() {
-//		return noticeService.selectNoticeList();
-//	}
+	  //메인페이지 게시글 목록
+    @ResponseBody
+	@GetMapping("/mainList")
+	public List<NoticeDto> noticeMain() {
+		return noticeService.selectNoticeList();
+	}
     
     // 공지사항 목록 조회
 	@GetMapping("/list")
