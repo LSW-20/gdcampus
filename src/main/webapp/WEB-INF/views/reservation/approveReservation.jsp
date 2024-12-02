@@ -290,7 +290,7 @@
 	                              </tr>
 	                              
 	                              <tr>
-	                                  <td style="width: 120px;">승인/반려사유</td>
+	                                  <td style="width: 120px;">처리사유</td>
 	                                  <td style="width: 280px;"><input type="text" class="form-control" name="reason" maxlength="25"></td>
 	                              </tr>
 	                              
