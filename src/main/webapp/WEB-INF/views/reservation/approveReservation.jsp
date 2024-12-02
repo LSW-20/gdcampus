@@ -30,7 +30,7 @@
 
 
 #table-mother {
-    width: 80%; /* 테이블 너비 */
+    width: 95%; /* 테이블 너비 */
     margin: 0 auto; /* 가로 가운데 정렬 */
 
     display: flex; /* 플렉스 박스 활성화 */
@@ -290,7 +290,7 @@
 	                              </tr>
 	                              
 	                              <tr>
-	                                  <td style="width: 120px;">승인/반려사유</td>
+	                                  <td style="width: 120px;">처리사유</td>
 	                                  <td style="width: 280px;"><input type="text" class="form-control" name="reason" maxlength="25"></td>
 	                              </tr>
 	                              

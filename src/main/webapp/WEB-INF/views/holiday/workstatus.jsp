@@ -95,7 +95,7 @@
                                         </div>
                                         <div class="text-center mt-3 mb-4">
                                             <div class="avatar-xl rounded-circle p-2 border border-soft-primary mx-auto">
-                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="img-fluid rounded-circle">
+                                                <img src="assets/images/defaultProfile.png" alt="" class="img-fluid rounded-circle">
                                             </div>
                                             <h5 class="mt-4 mb-2">Marie Hensley</h5>
                                             <p class="text-muted"><i class="icon-xs mr-1 icon" data-feather="monitor"></i> Web Developer</p>
@@ -151,10 +151,10 @@
                                             <div class="col-6">
                                                 <ul class="list-inline text-right mb-0">
                                                     <li class="list-inline-item mr-1">
-                                                        <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-xs rounded">
+                                                        <img src="assets/images/defaultProfile.png" alt="" class="avatar-xs rounded">
                                                     </li>
                                                     <li class="list-inline-item mr-1">
-                                                        <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-xs rounded">
+                                                        <img src="assets/images/defaultProfile.png" alt="" class="avatar-xs rounded">
                                                     </li>
                                                     <li class="list-inline-item">
                                                         <a href="#">

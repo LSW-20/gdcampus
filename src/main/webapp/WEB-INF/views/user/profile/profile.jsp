@@ -83,7 +83,7 @@
                                         <div class="text-center mt-3 mb-4">
                                             <div class="avatar-xl rounded-circle p-2 border border-soft-primary mx-auto">
 																						    <!-- 원형으로 표시할 이미지 -->
-																						    <img id="profileImg" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/users/avatar-4.jpg' />"
+																						    <img id="profileImg" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/defaultProfile.png' />"
 																						         onclick="$('#profileImgFile').click();"
 																						         style="border-radius: 50%; width: 100%; height: 100%; object-fit: cover;">
 																						    <!-- 파일 업로드 input -->
@@ -397,7 +397,7 @@
             success: function(response) {
                 // 서버에서 프로필 이미지 초기화 성공 후
                 // 이미지 변경
-                $('#profileImg').attr('src', '${contextPath}/images/users/avatar-4.jpg');
+                $('#profileImg').attr('src', '${contextPath}/images/defaultProfile.png');
                 location.reload();
             },
             error: function() {
