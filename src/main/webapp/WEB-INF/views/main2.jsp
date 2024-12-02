@@ -75,7 +75,7 @@
 														    <div style="flex: 1; text-align: center; padding: 10px; margin-top: -20px;">
 														        <!-- 원형으로 표시할 이미지 -->
 														        <img id="profileImg" 
-														             src="${contextPath}<c:out value='${loginUser.profileURL}' default='${contextPath}/images/users/avatar-4.jpg' />"
+														             src="${contextPath}<c:out value='${loginUser.profileURL}' default='${contextPath}/images/defaultProfile.png' />"
 														             style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;">
 														        <h5 class="mt-4 mb-2">${loginUser.userName}님</h5>
 														        <p class="text-muted">
