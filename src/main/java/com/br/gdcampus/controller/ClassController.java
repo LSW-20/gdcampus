@@ -230,7 +230,7 @@ public class ClassController {
 		log.debug("{}",c);
 		model.addAttribute("c", c);
 		model.addAttribute("deptList", classService.selectCategory("T_ST_DEPT"));
-		session.setAttribute("c", c);
+		session.setAttribute("sC", c);
 	}
 	
 	/**교수측 보완완료 요청
@@ -246,7 +246,7 @@ public class ClassController {
 		classCodeArr[1] = c.getDeptName();
 		c.setUpdateClassCode(String.join("_", classCodeArr));
 		
-		ClassDto originC = ((ClassDto)session.getAttribute("c"));
+		ClassDto originC = ((ClassDto)session.getAttribute("sC"));
 		c.setUpdateEvaList(originC.getEvaList());
 		
 		List<EvaMethodDto> updateEvaList = c.getUpdateEvaList();
@@ -285,7 +285,7 @@ public class ClassController {
 		log.debug("최종c:{}",c);
 		
 		int result = classService.updateOpning(c);
-		
+		session.removeAttribute("sC");
 		if(result == 1) {
 			rdAttributes.addFlashAttribute("alertMsg","성공적으로 보완완료 처리되었습니다");
 			return "redirect:/class/opning/prof/detail.do?classCode="+c.getUpdateClassCode();
@@ -359,13 +359,11 @@ public class ClassController {
 	@GetMapping("/plan/detail.do")
 	public void classPlanDetail(String classCode, Model model, HttpSession session) {
 		ClassDto c = classService.selectPlanList(classCode);
-		if(c.getEvaList().isEmpty() == false) {
-			c.setPlanList(c.getEvaList().get(0).getPlanList());
-		}
 		
 		String email = ((UserDto)session.getAttribute("loginUser")).getEmail();
 		log.debug("c:{}",c);
 		
+		model.addAttribute("plan", classService.selectLessonPlanList(classCode));
 		model.addAttribute("c",c);
 		model.addAttribute("email",email);
 	}
@@ -373,14 +371,35 @@ public class ClassController {
 	@GetMapping("/plan/modifyForm.do")
 	public void planModifyForm(String classCode, Model model, HttpSession session) {
 		List<LessonPlanDto> originPlan = classService.selectLessonPlanList(classCode);
+		model.addAttribute("classCode",classCode);
 		model.addAttribute("originPlan", originPlan);
 		session.setAttribute("originPlan", originPlan);
 		log.debug("originPlan:{}",originPlan);
 	}
 	
 	@PostMapping("/plan/update.do")
-	public void updatePlan(LessonPlanDto l) {
+	public String updatePlan(LessonPlanDto l, HttpSession session, LessonPlanDto lesson
+			               , RedirectAttributes rdAttributes, String classCode) {
 		List<LessonPlanDto> planList = l.getPlanList();
-		log.debug("planList : {}",planList);
+		
+		@SuppressWarnings("unchecked")
+		List<LessonPlanDto> originPlan = (List<LessonPlanDto>)session.getAttribute("originPlan");
+		
+		planList.removeIf(cla -> cla.getContent() == null && cla.getMaterial() == null && cla.getTchngMthd() == null);
+		
+		log.debug("updatedPlan : {}",planList);
+		lesson.setUpdatePlanList(planList);
+		lesson.setDeletePlanList(originPlan);
+		lesson.setClassCode(classCode);
+		
+		int result = classService.updatePlanList(lesson);
+		log.debug("result : {}",result);
+		if(result == 2) {
+			rdAttributes.addFlashAttribute("alertMsg","성공적으로 수정되었습니다.");
+		}else{
+			rdAttributes.addFlashAttribute("alertMsg","수정사항 저장에 실패하였습니다.");
+		}
+		return "redirect:/class/plan/detail.do?classCode="+l.getClassCode();
 	}
+
 }

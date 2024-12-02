@@ -113,8 +113,19 @@ public class ClassDao {
 	public List<LessonPlanDto> selectLessonPlanList(String classCode) {
 		return sqlSession.selectList("classMapper.selectLessonPlanList",classCode);
 	}
-	
-	
+	public int deleteLesson(LessonPlanDto l) {
+		return sqlSession.delete("classMapper.deleteLesson",l);
+	}
+	public int insertLesson(LessonPlanDto l) {
+		return sqlSession.insert("classMapper.insertLesson",l);
+	}
+	public List<Map<String, Object>> selectStDeptCount() {
+		return sqlSession.selectList("classMapper.selectStDeptCount");
+	}
+	public List<Map<String, Object>> selectDeptCount() {
+		return sqlSession.selectList("classMapper.selectDeptCount");
+	}
+
 //--------------------------------------내강의 끝----------------------------------------------	
 
 }

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!doctype html>
 <html>
@@ -67,10 +68,6 @@
 							    <div class="row m-3 border-bottom border-secondary">
 							      <div class="col ">이메일</div>
 							      <div class="col ">${ email }</div>
-							    </div>
-							    <div class="row m-3 border-bottom border-secondary">
-							      <div class="col ">연구실</div>
-							      <div class="col ">어칼까</div>
 							    </div>
 							</div>
 						</div>
@@ -183,7 +180,7 @@
 									</tbody>
 								</table >
 								
-								<c:if test="${not empty c.planList }">
+								<c:if test="${not empty plan }">
 									<br>
 									<hr>
 									<br>
@@ -199,24 +196,48 @@
 												<td width="20%" colspan="2">진행방식</td>
 												<td width="23%" colspan="3">준비물/과제</td>
 											</tr>
-											<c:forEach var="c" items="${c.planList}">
-												<tr>
-													<td width="7%" colspan="1">${c.week}</td>
-													<td width="50%" colspan="6">${c.content}</td>
-													<td width="20%" colspan="2">${c.tchngMthd}</td>
-													<td width="23%" colspan="3">${c.material}</td>
-												</tr>
+											<c:forEach begin="1" end="16"  step="1" varStatus="num">
+												<c:set var="status" value="n"/>
+												<c:forEach var="c" items="${plan}" varStatus="p">
+													<c:if test="${c.week == num.count}">
+													<tr>
+														<td width="7%" colspan="1">${c.week}주차</td>
+														<td width="50%" colspan="6">${c.content}</td>
+														<td width="20%" colspan="2">${c.tchngMthd}</td>
+														<td width="23%" colspan="3">${c.material}</td>
+													</tr>
+													<c:set var="status" value="y"/>
+													</c:if>
+													<c:if test="${ p.last and status eq 'n' }">
+														<tr>
+														<td width="7%" colspan="1">${num.count}주차</td>
+														<td width="50%" colspan="6"></td>
+														<td width="20%" colspan="2"></td>
+														<td width="23%" colspan="3"></td>
+
+														</tr>
+													</c:if>
+												</c:forEach>
 											</c:forEach>
 										</tbody>
 									</table>
+								</c:if>
+								<c:if test="${empty plan}">
+									<div class="d-flex align-items-center justify-content-center mt-3">
+										<p class="text-primary">등록된 주차별 수업계획이 없습니다</p>
+									</div>
 								</c:if>
 							</div>	
 						</div>
 						
 					</div>
+					<c:set var="today" value="<%=new java.util.Date()%>" />
+					<c:set var="date"><fmt:formatDate value="${today}" pattern="yyyy-MM-dd" /></c:set>
 					<div class="mt-4 row d-flex justify-content-center">
 						<a class="btn btn-primary w-md mr-3" href="javascript:window.history.back();" >돌아가기</a>
+						<c:if test="${year > fn:substring(date, 2, 4)}">
 						<a class="btn btn-primary w-md mr-3" href="${ contextPath}/class/plan/modifyForm.do?classCode=${c.classCode}">수업계획 수정</a>
+						</c:if>
 					</div>				
 							
 				</div>
@@ -228,18 +249,27 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
 	        function downloadPDF() {
-	            const element =document.querySelector("#pdfArea");
-	  
-	            html2canvas(element).then((canvas) => {
-	                const imgData = canvas.toDataURL('image/png', 1.5);
-	                const pdf = new jspdf.jsPDF("p", "mm", "a4");
-	                const imgProps= pdf.getImageProperties(imgData);
-	                const pdfWidth = pdf.internal.pageSize.getWidth();
-	                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-	  
-	                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-	                pdf.save("download.pdf");
-	            });
+	            
+	            html2canvas($('#pdfArea')[0]).then(function (canvas) {
+	    			var filename = '${c.classCode}'+'_수업계획서.pdf';
+	    			var doc = new jspdf.jsPDF("p", "mm", "a4");
+	    			var imgData = canvas.toDataURL('image/png',1.5);
+	    			var imgWidth = 210;
+	    			var pageHeight = 295;
+	    			var imgHeight = canvas.height * imgWidth / canvas.width;
+	    			var heightLeft = imgHeight;
+	    			var position = 0;
+	    			doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight); 
+	    			heightLeft -= pageHeight;
+	    			while (heightLeft >= 0) {
+	    				position = heightLeft - imgHeight;
+	    				doc.addPage();
+	    				doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+	    				heightLeft -= pageHeight;
+	    			  }
+	    			doc.save(filename); 
+	    		});
+	            
 	        }
 		</script>
 	</div>

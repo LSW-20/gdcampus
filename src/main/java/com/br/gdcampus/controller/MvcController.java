@@ -1,16 +1,22 @@
 package com.br.gdcampus.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
+import com.br.gdcampus.service.ClassService;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
-import io.swagger.v3.oas.annotations.Operation;
-
+@RequiredArgsConstructor
 @Controller
 public class MvcController {
-
+	
+	private final ClassService classService;
 	/**
 	 * 루트 경로 요청시 메인페이지를 띄워주는 컨트롤러
 	 * author : 상우
@@ -27,7 +33,13 @@ public class MvcController {
 	 * @return 메인페이지2
 	 */
 	@GetMapping("/main2.do")
-	public void mainPage2() {
+	public void mainPage2(Model model) {
+			 
+		List<Map<String,Object>> chart = classService.selectStDeptCount();
+		model.addAttribute("chart",chart);
+		List<Map<String,Object>> chart2 = classService.selectDeptCount();
+		model.addAttribute("chart2",chart2); 
+		
 	}
 	
 	

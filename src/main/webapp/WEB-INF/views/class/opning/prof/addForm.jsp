@@ -231,7 +231,7 @@
 						</div>
 						<div class="row mt-5 d-flex justify-content-center">
 							<a class="btn btn-primary w-md mr-3 col-2" href="${contextPath }/class/opning/prof/list.do">목록</a>
-							<button class="btn btn-primary w-md mr-3 col-2" id="registBtn">신청</button>
+							<button type="button" class="btn btn-primary w-md mr-3 col-2" id="registBtn">신청</button>
 						</div>
 						<input type="hidden" value="${classCode }" name="classCode">
 						<input type="hidden" value="${user.userNo}" name="userNo">
@@ -252,7 +252,7 @@
 				return;
 			}
 			if(confirm('신청서를 제출하시겠습니까?')){
-				return true;
+				$('#addForm').submit();
 			}
 		})
 		

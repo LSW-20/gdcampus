@@ -171,5 +171,43 @@ public class ClassServiceImpl implements ClassService {
 		return classDao.selectLessonPlanList(classCode);
 	}
 
+	@Override
+	public int updatePlanList(LessonPlanDto lesson) {
+		int result = 0;
+		int count = 0;
+		count += classDao.deleteLesson(lesson);
+		for(LessonPlanDto l : lesson.getDeletePlanList()) {			
+			count += classDao.deleteLesson(l);
+		}
+		if(count == lesson.getDeletePlanList().size()) {
+			System.out.println("count:"+count);
+			System.out.println("size:"+lesson.getDeletePlanList().size());
+			result += 1;
+		}
+		
+		count = 0;
+		
+		for(LessonPlanDto l : lesson.getUpdatePlanList()) {
+			l.setClassCode(lesson.getClassCode());
+			
+			count += classDao.insertLesson(l);
+		}
+		if(count == lesson.getUpdatePlanList().size()) {
+			result += 1;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectStDeptCount() {
+		return classDao.selectStDeptCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectDeptCount() {
+		return classDao.selectDeptCount();
+	}
+
 
 }

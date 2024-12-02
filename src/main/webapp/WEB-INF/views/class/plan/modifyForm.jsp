@@ -22,6 +22,9 @@
 .card-body {
 	height: 500px;
 }
+input[type=text] {
+	width: 100%;
+}
 </style>
 </head>
 
@@ -51,7 +54,7 @@
 		<div class="main-content">
 			<div class="page-content">
 				<div class="container-fluid mt-5">	
-					<form action="${ contextPath}/class/plan/update.do" method="post">
+					<form action="${ contextPath}/class/plan/update.do" method="post" id="saveForm">
 						<table class="table table-bordered  mb-0" style="table-layout: fixed">
 							<thead>
 								<tr><td colspan="12" class="text-center"><h5> 주차별수업계획</h5></td></tr>
@@ -63,22 +66,22 @@
 									<td width="20%" colspan="2">진행방식</td>
 									<td width="23%" colspan="3">준비물/과제</td>
 								</tr>
-								<c:forEach begin="1" end="14"  step="1" varStatus="num">
+								<c:forEach begin="1" end="16"  step="1" varStatus="num">
 								<c:set var="status" value="n"/>
 									<c:forEach var="plan" items="${originPlan }" varStatus="p">
 										<c:if test="${plan.week == num.count}">
 											<tr>
 												<td width="7%" colspan="1">
-													<input type="hidden" value="${plan.week }" name="planList[${num.count}].week">${plan.week}
+													<input type="hidden" value="${plan.week }" name="planList[${num.index -1}].week">${plan.week}
 												</td>
 												<td width="50%" colspan="6">
-													<input type="text" value="${plan.content}"name="planList[${num.count}].content">
+													<input type="text" value="${plan.content}"name="planList[${num.index -1}].content">
 												</td>
 												<td width="20%" colspan="2">
-													<input type="text" value="${plan.tchngMthd}"name="planList[${num.count}].tchngMthd">
+													<input type="text" value="${plan.tchngMthd}"name="planList[${num.index -1}].tchngMthd">
 												</td>
 												<td width="23%" colspan="3">
-													<input type="text" value="${plan.material}"name="planList[${ num.count}].material">
+													<input type="text" value="${plan.material}"name="planList[${ num.index -1}].material">
 													<c:set var="status" value="y"/>
 												</td>
 											</tr>
@@ -87,16 +90,16 @@
 										<c:if test="${ p.last and status eq 'n' }">
 											<tr>
 												<td width="7%" colspan="1">
-													<input type="hidden" name="planList[${num.count}].week" value="${num.count}">${num.count}
+													<input type="hidden" name="planList[${num.index -1}].week" value="${num.count}">${num.count}
 												</td>
 												<td width="50%" colspan="6">
-													<input type="text" name="planList[${num.count}].content">
+													<input type="text" name="planList[${num.index -1}].content">
 												</td>
 												<td width="20%" colspan="2">
-													<input type="text" name="planList[${num.count}].tchngMthd">
+													<input type="text" name="planList[${num.index -1}].tchngMthd">
 												</td>
 												<td width="23%" colspan="3">
-													<input type="text" name="planList[${ num.count}].material">
+													<input type="text" name="planList[${ num.index -1}].material">
 												</td>
 											</tr>
 										</c:if>
@@ -107,16 +110,16 @@
 									<c:if test="${empty originPlan}">
 										<tr>
 											<td width="7%" colspan="1">
-												<input type="hidden" name="planList[${num.count}].week" value="${num.count}">${num.count}
+												<input type="hidden" name="planList[${num.index -1}].week" value="${num.count}">${num.count}
 											</td>
 											<td width="50%" colspan="6">
-												<input type="text" name="planList[${num.count}].content">
+												<input type="text" name="planList[${num.index -1}].content">
 											</td>
 											<td width="20%" colspan="2">
-												<input type="text" name="planList[${num.count}].tchngMthd">
+												<input type="text" name="planList[${num.index -1}].tchngMthd">
 											</td>
 											<td width="23%" colspan="3">
-												<input type="text" name="planList[${ num.count}].material">
+												<input type="text" name="planList[${ num.index -1}].material">
 											</td>
 										</tr>
 									</c:if>
@@ -126,8 +129,9 @@
 						</table>
 						<div class="mt-4 row d-flex justify-content-center">
 							<a class="btn btn-primary w-md mr-3" href="javascript:window.history.back();" >돌아가기</a>
-							<button type="button"class="btn btn-primary w-md mr-3" >저장</button>
-						</div>				
+							<button type="button"class="btn btn-primary w-md mr-3" id="saveButton">저장</button>
+						</div>	
+						<input type="hidden" value="${classCode}" name="classCode">			
 					</form>
 				</div>
 			</div>
@@ -136,7 +140,20 @@
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
-	   
+		  document.getElementById("saveButton").addEventListener("click", function() {
+
+			    const form = document.getElementById("saveForm");
+
+			    const inputs = form.querySelectorAll("input");
+
+			    inputs.forEach(input => {
+			      if (!input.value.trim()) {
+			        input.removeAttribute("name");
+			      }
+			    });
+
+			    form.submit();
+			  });
 		</script>
 	</div>
 	<!-- 전체 영역(헤더, 사이드바, 내용) 끝 -->

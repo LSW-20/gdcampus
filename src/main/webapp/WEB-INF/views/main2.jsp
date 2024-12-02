@@ -126,7 +126,7 @@
 							        </div>
 							    </div>
 
-							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
+							    <div class="card" style="border: 1px solid #ddd; text-align: center; display: none;">
 							        <div class="card-body">
 								        <h4 class="card-title mb-4">게시판</h4>
 	        									<table class="data-post table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;  margin: 0 auto;" id="data-post">
@@ -142,6 +142,13 @@
 	                               </tbody>
 	                         	</table>
                 			</div>
+							    </div>
+							    
+							    <div style="text-align: center;" class="pt-5">
+							    	<h2>재직자 비율</h2><br>
+							    	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+									<canvas id="proChart" height="100"></canvas><br>
+									<canvas id="stafChart" height="100"></canvas>
 							    </div>
 							    
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
@@ -421,6 +428,64 @@ $(document).ready(function() {
 
 </script>
 
+		<script>
+             
+                var statusData = [
+                    <c:forEach items="${chart}" var="c" varStatus="loop">
+                        {
+                            type: "${c.NAME}",
+                            cnt: ${c.COUNT}
+                        }<c:if test="${!loop.last}">,</c:if>
+                    </c:forEach>
+                ];
+
+
+                new Chart(document.getElementById("proChart"), {
+                    type: 'bar',
+                    data: {
+                      labels: statusData.map(item => item.type),
+                      datasets: [
+                        {
+                          label: "학과별 교수",
+                          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f",'#d37b97', '#58a6d8', '#5ac384'],
+                          data: statusData.map(item => item.cnt)
+                        }
+                      ]
+                    },
+                    options: {
+                        indexAxis:'y', //수평차트 만들기                    
+                    }
+                });
+                
+                var statusData2 = [
+                    <c:forEach items="${chart2}" var="c" varStatus="loop">
+                        {
+                            type: "${c.NAME}",
+                            cnt: ${c.COUNT}
+                        }<c:if test="${!loop.last}">,</c:if>
+                    </c:forEach>
+                ];
+
+
+                new Chart(document.getElementById("stafChart"), {
+                    type: 'bar',
+                    data: {
+                      labels: statusData2.map(item => item.type),
+                      datasets: [
+                        {
+                          label: "부서별 사원",
+                          backgroundColor: ['#d37b97', '#58a6d8', '#5ac384',"#3e95cd", "#8e5ea2","#3cba9f"],
+                          data: statusData2.map(item => item.cnt)
+                        }
+                      ]
+                    },
+                    options: {
+                        indexAxis:'y', //수평차트 만들기                    
+                    }
+                });
+                
+                
+		</script>
 
 </body>
 </html>

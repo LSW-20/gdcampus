@@ -156,9 +156,13 @@
 	                // 각 사용자 데이터를 테이블에 추가
 	                classList.forEach(function(cla) {
 	                  
-
-	                	tbody += '<tr>'
-	                             +'<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/staff/detail.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>'
+	                	if(cla.status == '취소' || cla.status == '승인' || cla.status == '반려'){
+	                		tbody += '<tr style="background-color: #F6F6F6">'
+	                	}else{
+	                		tbody += '<tr>'
+	                	};
+	                	
+	                	tbody += '<td onclick="location.href = \'' + '${contextPath}' + '/class/opning/staff/detail.do?classCode=' + cla.classCode + '\';">'+cla.classCode+'</td>'
 	                             +'<td>'+cla.classTitle+'</td>'
 	                             +'<td>'+cla.userNo+'</td>'
 	                             +'<td>'+cla.applDate+'</td>';
@@ -168,9 +172,16 @@
 	                    }else{
 	                    	tbody +='<td></td>'   	
 	                    };                       
-	                    tbody    +='<td>'+cla.status+'</td>'
-	                             +'</tr>'
-	                    ;
+	                    if(cla.status == '보완완료'){
+		                    tbody    +='<td style="color:blue;">'+cla.status+'</td>'
+                            +'</tr>'
+	                    }else if(cla.status == '취소' || cla.status == '반려'){
+		                    tbody    +='<td style="color:red;">'+cla.status+'</td>'
+                            +'</tr>'
+	                    }else{
+		                    tbody    +='<td>'+cla.status+'</td>'
+                            +'</tr>'              	
+	                    };
 	                });
 	
 	                // 페이지 다시 그려줘야됨

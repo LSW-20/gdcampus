@@ -24,6 +24,5 @@ public class EvaMethodDto {
 	private String evaItem;
 	private int allocation;
 	private String evaDetail;
-	 // 수업계획Dto
-	private List<LessonPlanDto> planList;
+
 }

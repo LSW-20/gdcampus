@@ -90,7 +90,7 @@
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
-	     ORDER BY U.RANK_NO DESC
+	     ORDER BY USER_STATUS DESC, U.RANK_NO DESC
 	</select>
 	
 	<!-- 행정직원 추가 -->
@@ -190,7 +190,7 @@
 	    <if test="keyword != null and keyword != ''">
 	        AND USER_NAME LIKE '%' || #{keyword} || '%'
 	    </if>
-	     ORDER BY U.RANK_NO DESC
+	     ORDER BY USER_STATUS DESC
 	</select>
 	
 	<!-- 교수 추가 -->
