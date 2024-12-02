@@ -95,7 +95,7 @@
 														    </div>
 														
 														    <!-- 오른쪽 영역 -->
-														    <div style="flex: 1; text-align: center; padding: 10px; margin-top: -50px;">
+														    <div style="flex: 1; text-align: center; padding: 10px; margin-top: 10px;">
 														    
 																		<div id="loading" style="display:none;">Loading...</div> <!-- 로딩 인디케이터 -->
 														        <div id="data-weather2"></div>
