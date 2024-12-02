@@ -82,18 +82,6 @@
                     </table>
                     <br>
 
-                    <!-- 수정 및 삭제 버튼 -->
-                    <c:if test="${loginUser.userName eq p.writerName}">
-                        <div align="center">
-                            <form id="frm" action="" method="post">
-                                <input type="hidden" name="no" value="${p.postNo}">
-                                <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/post/modify');">수정하기</button>
-                                <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
-                            </form>
-                        </div>
-                    </c:if>
-                    <br><br>
-
                     <!-- 댓글 영역 -->
                     <table id="comment_area" class="table" align="center">
                         <thead>
@@ -124,7 +112,19 @@
                         <tbody>
                         </tbody>
                     </table>
-
+										
+										  <!-- 수정 및 삭제 버튼 -->
+                    <c:if test="${loginUser.userName eq p.writerName}">
+                        <div align="center">
+                            <form id="frm" action="" method="post">
+                                <input type="hidden" name="no" value="${p.postNo}">
+                                <button type="submit" class="btn btn-primary" onclick="$('#frm').attr('action', '${contextPath}/board/post/modify');">수정하기</button>
+                                <button type="submit" class="btn btn-danger" onclick="$('#frm').attr('action', '${contextPath}/board/post/delete');">삭제하기</button>
+                            </form>
+                        </div>
+                    </c:if>
+                    <br><br>
+										
                     <!-- 댓글 관련 스크립트 -->
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>

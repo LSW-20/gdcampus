@@ -60,7 +60,7 @@
 											<th>제목</th>
 											<th>작성자</th>
 											<th>작성일</th>
-											<th>첨부파일 여부</th>
+											<!-- <th>첨부파일 여부</th> -->
 											<th>조회수</th>
 										</tr>
 									</thead>
@@ -77,12 +77,12 @@
 												<td>${n.noticeTitle}</td>
 												<td>${n.userName}</td>
 												<td>${n.registDate}</td>
-												<td>${n.fileStatus == 'Y' ? '★' : ''}</td>
+											<%-- 	<td>${n.fileStatus == 'Y' ? '★' : ''}</td> --%>
 												<td>${n.count}</td>
 											</tr>
 										</c:forEach>
 									</tbody>
-									<div>
+									<div class="d-flex justify-content-end">
 											<c:if test="${fn:substring(loginUser.userNo, 0, 1) == 'A'}">
 											<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/notice/regist';">추가</button>
 											</c:if>
