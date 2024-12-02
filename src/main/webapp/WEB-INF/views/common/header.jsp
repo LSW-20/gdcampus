@@ -112,7 +112,7 @@
 												</a>
 												<a href="" class="text-reset notification-item">
 														<div class="media">
-																<img src="${contextPath}/images/users/avatar-3.jpg"
+																<img src="${contextPath}/images/defaultProfile.png"
 																		class="mr-3 rounded-circle avatar-xs" alt="user-pic">
 																<div class="media-body">
 																		<h6 class="mt-0 mb-1" key="t-james-lemire">James Lemire</h6>
@@ -142,7 +142,7 @@
 
 												<a href="" class="text-reset notification-item">
 														<div class="media">
-																<img src="${contextPath}/images/users/avatar-4.jpg"
+																<img src="${contextPath}/images/defaultProfile.png"
 																		class="mr-3 rounded-circle avatar-xs" alt="user-pic">
 																<div class="media-body">
 																		<h6 class="mt-0 mb-1" key="t-salena-layfield">Salena Layfield</h6>
@@ -168,7 +168,7 @@
 						<div class="dropdown d-inline-block">
 								<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<img class="rounded-circle header-profile-user" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/users/avatar-4.jpg' />">
+										<img class="rounded-circle header-profile-user" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='${contextPath}/images/defaultProfile.png' />">
 								</button>
 								<div class="dropdown-menu dropdown-menu-right">
 										<!-- item-->
