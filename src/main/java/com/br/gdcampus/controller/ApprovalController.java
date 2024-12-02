@@ -456,7 +456,7 @@ public class ApprovalController {
 	        ra.addFlashAttribute("alertMsg", "양식 수정 중 오류가 발생했습니다.");
 	    }
 	    
-	    return "redirect:/approval/admin/detailForm/" + apprForm.getApprNo();		
+	    return "redirect:/approval/admin/formList";		
 	}
 	
 	@GetMapping("/admin/deleteForm")
