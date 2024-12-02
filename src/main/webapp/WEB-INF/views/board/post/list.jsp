@@ -61,7 +61,7 @@
 		                                       <th>게시글 내용</th>
 		                                       <th>작성자</th>
 		                                       <th>작성일</th>
-		                                       <th>첨부파일 여부</th>
+		                                    <!--    <th>첨부파일 여부</th> -->
 		                                       <th>조회수</th>
 		                                       <th>${ p.boardTypeNo }</th>
                                    </tr>
@@ -83,7 +83,7 @@
 																    <td>${ p.postTitle }</td>
 																    <td>${ p.writerName }</td>
 																    <td>${ p.registDate }</td>
-																    <td>${ p.fileStatus == 'Y' ? '★' : ''  }</td>
+																  <%--   <td>${ p.fileStatus == 'Y' ? '★' : ''  }</td> --%>
 																    <td>${ p.count }</td>
 															    <td>
 															    
@@ -99,7 +99,7 @@
 																	</tr>
 										        	  </c:forEach>
                               </tbody>
-                                	<div>
+                                	<div class="d-flex justify-content-end">
 																		<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
 														      </div> 
                            </table>

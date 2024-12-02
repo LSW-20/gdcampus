@@ -12,16 +12,70 @@
 <title>부서관리</title>
 <style type="text/css">
 .main-content {
-	min-height: 900px;
+	min-height: 100vh; /* 화면 전체 높이 */
+	display: flex;
+	justify-content: center; /* 가로 가운데 정렬 */
+	align-items: center; /* 세로 가운데 정렬 */
+	background-color: #f8f9fa; /* 배경색 */
 }
 
 .page-content {
-	margin: auto;
-	width: 75%;
+	width: 80%; /* 너비 */
+	height: 80%; /* 높이 */
+	background: #ffffff; /* 배경 흰색 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+	border-radius: 10px; /* 모서리 둥글게 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
 }
 
-.card-body {
-	height: 500px;
+h1 {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+table, th, td {
+	border: 1px solid #ddd;
+}
+
+th, td {
+	padding: 10px;
+}
+
+form {
+	margin: 20px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+form input[type="text"] {
+	margin-right: 10px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+form button {
+	padding: 5px 15px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+form button:hover {
+	background-color: #0056b3;
 }
 </style>
 </head>
