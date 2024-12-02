@@ -126,30 +126,15 @@
 							        </div>
 							    </div>
 
-							    <div class="card" style="border: 1px solid #ddd; text-align: center; display: none;">
+							    <div class="card" style="border: 1px solid #ddd; text-align: center; ">
 							        <div class="card-body">
-								        <h4 class="card-title mb-4">게시판</h4>
-	        									<table class="data-post table table-centered datatable dt-responsive nowrap table-card-list table-check" style="width: 100%;  margin: 0 auto;" id="data-post">
-	                               <thead>
-	                                   <tr>
-			                                     	<th>게시글 번호</th>
-					                                  <th>게시글 내용</th>
-					                                  <th>작성자</th>
-					                                 <%--  <th>${ noticeList[0].boardTypeNo }</th> --%>
-	                                   </tr>
-	                               </thead>
-	                               <tbody>
-	                               </tbody>
-	                         	</table>
+								        <h4 class="card-title mb-4">재직자 비율</h4>
+	        									<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+									<canvas id="proChart" height="100"></canvas><br>
+									<canvas id="stafChart" height="100"></canvas>
                 			</div>
 							    </div>
 							    
-							    <div style="text-align: center;" class="pt-5">
-							    	<h2>재직자 비율</h2><br>
-							    	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-									<canvas id="proChart" height="100"></canvas><br>
-									<canvas id="stafChart" height="100"></canvas>
-							    </div>
 							    
 							    <div class="card" style="border: 1px solid #ddd; text-align: center;">
 							        <div class="card-body">
@@ -276,13 +261,16 @@
                 	console.log(noticeList);
                     // 데이터를 테이블의 tbody에 추가
                     let tbody = '';
-                    noticeList.forEach(function (n) {
+                    //noticeList.forEach(function (n) {
+                    for (let i = 0; i < noticeList.length && i < 3; i++) {
+                    		let n = noticeList[i];
                         tbody +=  '<tr onclick="location.href=\'${contextPath}/board/notice/detail?no=' + n.noticeNo + '\';">'
 		                          +  '<td>'+ n.noticeNo +'</td>'
 		                          +  '<td>'+n.noticeTitle+'</td>'
 		                          +  '<td>'+n.userName+'</td>'
 		                          +  '</tr>';
-                    });
+                    }
+                    //});
                     $('.data-notice tbody').html(tbody); // 기존 tbody 내용 교체
                 },
                 error: function (xhr, status, error) {
