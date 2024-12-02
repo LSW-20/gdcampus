@@ -49,7 +49,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/reservation/main") 				// 예약하기 페이지(/reservation/reservation.jsp)로 이동
 				.addPathPatterns("/reservation/myReservation") 		// 내 예약 내역 조회 페이지(/reservation/myReservaion.jsp)로 이동
 				.addPathPatterns("/reservation/approveReservation") // 비품, 시설 예약 관리 페이지(/reservation/approveReservation.jsp)로 이동
-				.addPathPatterns("/approval/**");	
+				.addPathPatterns("/approval/**")
+				.addPathPatterns("/class/**");	
 		
 		
 		// 관리자 체크 인터셉터(상우)
