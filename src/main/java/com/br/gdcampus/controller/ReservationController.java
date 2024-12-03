@@ -328,7 +328,7 @@ public class ReservationController {
     		}
     		log.debug("text : {}", text);
     		
-    		sendOne(text);
+    		//sendOne(text);
     		
     		return "redirect:/reservation/approveReservation";
     	}else {
