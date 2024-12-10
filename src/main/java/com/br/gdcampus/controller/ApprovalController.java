@@ -73,14 +73,18 @@ public class ApprovalController {
 		
 		//관리자정의양식목록조회
 		List<String> formTypes = apprService.selectCustomFormTypes();
-//		System.out.println("양식이름 : "+formTypes);
 		
 		model.addAttribute("pi",pi);
 		model.addAttribute("apprList",apprList);
 		model.addAttribute("formList", formTypes);
 	}
 	
-	//결재예정문서페이지
+	/**
+	 * 결재예정문서페이지
+	 * @param currentPage 페이징처리 필요 변수
+	 * @param model 	변수->jsp
+	 * @param session 유저정보 가져올 session
+	 */
 	@GetMapping("/upComing")
 	public void upComingPage(@RequestParam(value="page",defaultValue="1") int currentPage, Model model, HttpSession session) {
 		//Session에서 userNo가져오기
@@ -108,7 +112,11 @@ public class ApprovalController {
 	@GetMapping("/purchaseDraft")
 	public void purchaseDraftPage() {}
 	
-	//작성페이지 요청
+	/**
+	 * 작성페이지 요청
+	 * @param formType 양식타입
+	 * @param model	   변수->jsp
+	 */
 	@GetMapping("/regist")
 	public void registPage(@RequestParam(required=false) String formType, Model model) {
 
@@ -179,6 +187,12 @@ public class ApprovalController {
 	    model.addAttribute("completedDocs", completedDocs);		
 	}
 	
+	/**
+	 * 결재홈 대시보드
+	 * @param currentPage
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/todo/list")
 	@ResponseBody
 	public Map<String, Object> getTodoDocs( @RequestParam(value="page", defaultValue="1") int currentPage,HttpSession session){
@@ -197,6 +211,20 @@ public class ApprovalController {
 	    return response;
 	}
 	
+	/**
+	 * 결재 요청시 insert처리
+	 * @param approval 		 결재 Dto
+	 * @param draft			 기안서 Dto
+	 * @param purchDraft 	 품의서 Dto
+	 * @param productNos	 품번
+	 * @param productNames	 품명
+	 * @param productUnits	 단위
+	 * @param productAmts	 수량
+	 * @param productPrices	 가격
+	 * @param session		 세션정보
+	 * @param ra			 redirectAttributes
+	 * @return				 결재홈 대시보드 redirect
+	 */
 	@PostMapping("/insert") 
 	public String insertApproval(@ModelAttribute ApprovalDto approval,
 	                           @ModelAttribute DraftDto draft,
@@ -257,7 +285,11 @@ public class ApprovalController {
 	    return "redirect:/approval/home";
 	}
 	
-	//메세지발송
+	/**
+	 * 메세지발송
+	 * @param text
+	 * @return
+	 */
     public SingleMessageSentResponse sendOne(String text) {
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
@@ -272,6 +304,12 @@ public class ApprovalController {
     }
 	
 	
+    /**
+     * 문서 수정
+     * @param approval approvalDto
+     * @param session 세션
+     * @return
+     */
 	@PostMapping("/update")
 	@ResponseBody
 	public Map<String, Object> updateApproval(@RequestBody ApprovalDto approval,
@@ -296,6 +334,14 @@ public class ApprovalController {
 	    return response;
 	}
 	
+	/**
+	 * 상세페이지요청
+	 * @param apprNo 결재번호
+	 * @param type 문서함
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/detail/{apprNo}")
 	public String detailPage(@PathVariable String apprNo, @RequestParam String type, Model model, HttpSession session) {
 		
@@ -336,6 +382,13 @@ public class ApprovalController {
 		return "/approval/detail";
 	}
 	
+	/**
+	 * 결재 승인
+	 * @param apprNo		결재번호
+	 * @param apprStatus	결재상태
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/approve")
 	@ResponseBody
 	public Map<String,Object> approveDocument(@RequestParam String apprNo,@RequestParam String apprStatus, HttpSession session){
@@ -353,6 +406,13 @@ public class ApprovalController {
 		return response;
 	}
 	
+	/**
+	 * 결재 반려처리
+	 * @param apprNo		결재번호
+	 * @param lineReason	반려사유
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/reject")
 	@ResponseBody
 	public Map<String, Object> rejectDocument(@RequestParam String apprNo, @RequestParam String lineReason, HttpSession session){
@@ -368,6 +428,14 @@ public class ApprovalController {
 	    return response;
 	}
 	
+
+	/**
+	 * 내 결재함
+	 * @param currentPage 페이징처리
+	 * @param status	  상태
+	 * @param model
+	 * @param session
+	 */
 	@GetMapping("/approved")
 	public void approvedByMePage(@RequestParam(value="page",defaultValue="1") int currentPage, @RequestParam(value="status", required=false) String status
 			, Model model, HttpSession session) {
@@ -392,18 +460,30 @@ public class ApprovalController {
 		model.addAttribute("currentStatus",status);
 
 	}
-	
+	/**
+	 * 관리자 폼생성페이지 요청
+	 */
 	@GetMapping("/admin/registForm")
 	public void adminRegistFormPage() {}
 	
-	
+	/**
+	 * 관리자 생성폼 리스트조회
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/admin/formList")
 	public String adminFormListPage(Model model) {
 	    List<ApprovalDto> formList = apprService.selectAdminFormList();
 	    model.addAttribute("formList", formList);
 	    return "approval/admin/formList";  		
 	}
-	
+	/**
+	 * 관리자 양식생성insert
+	 * @param apprForm	approvalDto
+	 * @param session
+	 * @param ra
+	 * @return
+	 */
 	@PostMapping("/admin/insertForm")
 	public String adminInsertForm(ApprovalDto apprForm, HttpSession session, RedirectAttributes ra) {
 		try {
@@ -429,6 +509,12 @@ public class ApprovalController {
 		return "redirect:/approval/admin/formList";
 	}
 	
+	/**
+	 * 관리자 양식 상세조회
+	 * @param apprNo	결재번호
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/admin/detailForm/{apprNo}")
 	public String adminFormDetailPage(@PathVariable String apprNo, Model model) {
 		
@@ -437,6 +523,13 @@ public class ApprovalController {
 		return"approval/admin/detailForm";
 	}
 	
+	/**
+	 * 관리자 양식 수정
+	 * @param apprForm approvalDto
+	 * @param session
+	 * @param ra
+	 * @return
+	 */
 	@PostMapping("/admin/updateForm")
 	public String adminFormUpdate(ApprovalDto apprForm, HttpSession session, RedirectAttributes ra) {
 	    try {
@@ -459,6 +552,12 @@ public class ApprovalController {
 	    return "redirect:/approval/admin/formList";		
 	}
 	
+	/**
+	 * 관리자 양식 삭제
+	 * @param apprNo
+	 * @param ra
+	 * @return
+	 */
 	@GetMapping("/admin/deleteForm")
 	public String deleteAdminForm(String apprNo, RedirectAttributes ra) {
 	    try {
@@ -475,6 +574,11 @@ public class ApprovalController {
 		return "redirect:/approval/admin/formList";
 	}
 	
+	/**
+	 * 사용자)대기 상태시 문서 삭제
+	 * @param apprNo
+	 * @return
+	 */
 	@PostMapping("/delete")
 	@ResponseBody
 	public Map<String, Object> deleteApproval(@RequestParam String apprNo) {
