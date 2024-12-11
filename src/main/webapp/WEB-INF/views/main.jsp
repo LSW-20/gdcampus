@@ -69,7 +69,7 @@
                             <div class="card-body p-4"> 
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Welcome Back !</h5>
-                                    <p class="text-muted">[구디아카데미 로그인]</p>
+                                    <p class="text-muted">★구디아카데미 로그인★</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                 <form action="${contextPath}/user/signin.do" method="post">
