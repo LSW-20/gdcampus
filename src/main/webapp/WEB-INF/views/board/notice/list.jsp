@@ -53,7 +53,7 @@
 										<tr class="bg-transparent">
 											<th style="width: 24px;">
 												<div class="custom-control custom-checkbox">
-												
+												 <!-- 체크 버튼  -->
 												</div>
 											</th>
 											<th>공지사항 번호</th>

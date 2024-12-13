@@ -17,6 +17,7 @@
 			<result column="modify_user" property="modifyUser" />
 			
 			  <collection resultMap="attachResultMap" property="attachList" />
+			  
 	</resultMap>
 	
 	<resultMap id="attachResultMap" type="AttachDto">
@@ -28,6 +29,18 @@
 			<result column="UPLOAD_DATE" property="uploadDate"/>
 			<result column="REF_TYPE" property="refType"/>
 	</resultMap>
+	
+	<!-- 공지사항 목록 조회수 증가시 -->
+	<select id="selectNoticeListCount" resultType="_int">
+		select
+					"count"
+			from
+					t_post
+		 where
+		 			file_status='Y'					
+	</select>
+	
+	
 	
 	<!-- 게시판 유형이 공지사항 -->
 	<select id="selectNoticeList" resultMap="noticeResultMap">
@@ -72,6 +85,7 @@ ORDER BY
        and BOARD_TYPE_NO = 1
 	</select>
 	
+	<!-- 공지사항 등록 -->
 	<insert id="insertNotice">
 		insert
 			into t_post

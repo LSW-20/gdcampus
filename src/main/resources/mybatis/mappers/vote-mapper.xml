@@ -15,6 +15,18 @@
     <result column="MODIFY_USER" property="modifyUser"/>
 </resultMap>
 
+	<select id="selectVoteListCount" resultType='_int'>
+		select
+					count(*)
+			form
+					t_vote
+		 where 
+		 			status = 'Y'		
+	</select>
 
+<select id="selectVoteList" resultMap="voteResultMap">
+	select
+				
+</select>
 
 </mapper>

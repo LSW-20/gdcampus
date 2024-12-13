@@ -102,27 +102,29 @@
 	 <!-- 첨부파일 등록 -->
 	 <insert id="insertAttach">
 	INSERT 
-	INTO T_ATTACHMENT 
-	(
-           FILE_NO,
-		    FILE_PATH,
-		    FILESYSTEM_NAME,
-		    ORIGINAL_NAME,
-		    UPLOAD_DATE,
-		    REF_TYPE,
-		    POST_NO
+		INTO 
+				T_ATTACHMENT 
+		(
+         FILE_NO
+       , FILE_PATH
+       , FILESYSTEM_NAME
+       , ORIGINAL_NAME
+       , UPLOAD_DATE
+       , REF_TYPE
+       , POST_NO
      )
-     VALUES (
-         SEQ_ATNO.NEXTVAL,
-         #{filePath},
-         #{filesystemName},
-         #{originalName},
-         SYSDATE,
-         #{refType}
-          <choose>
-  	<when test="postNo == null">
-  		, 'P' || LPAD(SEQ_PNO.CURRVAL, 4, 0) 
-  	</when>
+     VALUES
+     (
+        SEQ_ATNO.NEXTVAL
+      , #{filePath}
+      , #{filesystemName}
+      , #{originalName}
+      , SYSDATE
+      , #{refType}
+     <choose>
+	  	<when test="postNo == null">
+	  		, 'P' || LPAD(SEQ_PNO.CURRVAL, 4, 0) 
+	  	</when>
   	<otherwise>
   		, #{postNo}
   	</otherwise>

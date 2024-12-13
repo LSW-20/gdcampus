@@ -1,34 +1,32 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
-        <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesbrand" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <title>Invoice List | Drezon - Responsive Bootstrap 4 Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        <!-- bootstrap-datepicker css -->
-        <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <!-- bootstrap-datepicker css -->
+    <link href="assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
-        <!-- DataTables -->
-        <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- DataTables -->
+    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- Responsive datatable examples -->
-        <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+    <!-- Responsive datatable examples -->
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
 
-        <!-- Bootstrap Css -->
-        <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <!-- App Css-->
-        <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-        
+    <!-- Bootstrap Css -->
+    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-sidebar="dark">
@@ -79,15 +77,13 @@
 																        </div>
 																    </td>
 																    
-																    <td>${ .postNo }</td>
+																    <td>${ p.postNo }</td>
 																    <td>${ p.postTitle }</td>
 																    <td>${ p.writerName }</td>
 																    <td>${ p.registDate }</td>
 																    <td>${ p.fileStatus == 'Y' ? '★' : ''  }</td>
 																    <td>${ p.count }</td>
 															    <td>
-															    
-															         
 															        <a href="javascript:void(0);" class="px-3 text-primary edit-btn" data-toggle="modal" data-target="#editPostModal" data-post-no="${p.postNo}" data-dept="${p.dept}" data-name="${p.postName}" data-status="${p.filestatus}">
 													                <i class="uil uil-pen font-size-18"></i>
 													            </a>
@@ -99,7 +95,7 @@
 																	</tr>
 										        	  </c:forEach>
                               </tbody>
-                                	<div >
+                                	<div>
 																		<button type="submit" class="btn btn-primary w-md mr-3" onclick="location.href='${contextPath}/board/post/regist';">추가</button>
 														      </div> 
                            </table>
@@ -146,36 +142,34 @@
            <!-- Settings -->
            <hr class="mt-0" />
            <h6 class="text-center mb-0">Choose Layouts</h6>
-
-           <div class="p-4">
-               <div class="mb-2">
-                   <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
-               </div>
-               <div class="custom-control custom-switch mb-3">
-                   <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked />
-                   <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
-               </div>
-
-               <div class="mb-2">
-                   <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
-               </div>
-               <div class="custom-control custom-switch mb-3">
-                   <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css" />
-                   <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
-               </div>
-
-               <div class="mb-2">
-                   <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
-               </div>
-               <div class="custom-control custom-switch mb-5">
-                   <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
-                   <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
-               </div>
-
-       
-           </div>
+		
+		       <div class="p-4">
+	           <div class="mb-2">
+	               <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="">
+	           </div>
+	           <div class="custom-control custom-switch mb-3">
+	               <input type="checkbox" class="custom-control-input theme-choice" id="light-mode-switch" checked />
+	               <label class="custom-control-label" for="light-mode-switch">Light Mode</label>
+         		 </div>
+	
+	           <div class="mb-2">
+	               <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="">
+	           </div>
+	           <div class="custom-control custom-switch mb-3">
+	               <input type="checkbox" class="custom-control-input theme-choice" id="dark-mode-switch" data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css" />
+	               <label class="custom-control-label" for="dark-mode-switch">Dark Mode</label>
+	           </div>
+	
+	           <div class="mb-2">
+	               <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="">
+	           </div>
+	           <div class="custom-control custom-switch mb-5">
+	               <input type="checkbox" class="custom-control-input theme-choice" id="rtl-mode-switch" data-appStyle="assets/css/app-rtl.min.css" />
+	               <label class="custom-control-label" for="rtl-mode-switch">RTL Mode</label>
+		          </div>
+		       </div>
 			</div>
-       </div> <!-- end slimscroll-menu-->
+     </div> <!-- end slimscroll-menu-->
    </div>
    <!-- /Right-bar -->
 
@@ -205,7 +199,6 @@
 
    <!-- init js -->
    <script src="${contextPath}/js/pages/ecommerce-datatables.init.js"></script>
-
    <script src="${contextPath}/js/app.js"></script>
    
    <script>
@@ -216,7 +209,3 @@
      
  </body>
 </html>
-
-                      
-                                       
-                                --%>

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시판유형 목록</title>
+<title>부서관리</title>
 <!-- Summernote CSS -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 </head>
@@ -21,5 +21,6 @@
       <jsp:include page="/WEB-INF/views/common/sidebar.jsp" />
       <!-- sidebar 끝 -->
       <!-- main-content 시작 -->
+    </div>  
 </body>
 </html>
