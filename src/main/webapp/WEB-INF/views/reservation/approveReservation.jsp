@@ -206,7 +206,7 @@
                                                         <td>${ reservationDto.facilityName }</td>
                                                      </c:if>
                                                     <td>${ reservationDto.reservationDate }</td>
-                                                    <td>${ reservationDto.userName }
+                                                    <td>${ reservationDto.userName }</td>
                                                     <td>${ reservationDto.reservationReason }</td>
                                                     <td>${ reservationDto.reservationRequestDate }</td>
                                                     <td>
@@ -225,7 +225,7 @@
 																						            <!-- 예약 결과가 "예약신청중"인 경우 승인/반려 버튼 표시 -->
 																						            <c:choose>
 																						                <c:when test="${reservationDto.status == '예약신청중'}">
-																						                    <button type="button" id="choiceButton" data-toggle="modal" data-target="#reservation-approve-modal"
+																						                    <button type="button" class="choiceButton" data-toggle="modal" data-target="#reservation-approve-modal"
 																						                        data-reservation-no="${reservationDto.reservationNo}"
 																						                        data-classification="${reservationDto.classification}"
 																						                        data-user-name="${reservationDto.userName}"
@@ -327,7 +327,7 @@
 		    $(document).ready(function () {
 		    	
 		        // 모달 버튼 클릭 시 이벤트 처리
-		        $('#choiceButton').on('click', function () {
+		        $('.choiceButton').on('click', function () {
 		            
 		            // 버튼에 설정된 data-* 속성값 가져오기
 		            const reservationNo = $(this).data('reservation-no');
