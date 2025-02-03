@@ -349,8 +349,8 @@ public class ReservationController {
         Message message = new Message();
         
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01026783677");
-        message.setTo("01026783677");
+        message.setFrom("01000000000");
+        message.setTo("01000000000");
         
         message.setText(text); // 한글 45자, 영자 90자 이하 입력되면 자동으로 SMS타입의 메시지가 추가됩니다.
 
