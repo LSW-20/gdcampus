@@ -176,24 +176,6 @@ public class ChatEchoHandler extends TextWebSocketHandler {
     }
     
     
-
-    /**
-     * 사용자가 채팅방에서 완전히 나가는 메서드 <- 사용자가 '채팅방 나가기' 버튼 클릭시 실행.
-     * @param roomId - 사용자가 나가려는 채팅방 ID
-     * @param userId - 나가려는 사용자의 ID
-    
-    public void leaveChat(String roomNo, String userId) throws Exception {
-        if (userStatusMap.containsKey(roomNo) && userStatusMap.get(roomNo).containsKey(userId)) {
-            userStatusMap.get(roomNo).put(userId, false);
-
-            String msg = "exit|" + userId + "님이 " + roomNo + " 채팅방에서 퇴장하였습니다.";
-            for (WebSocketSession sss : chatRooms.get(roomNo).values()) {
-                sss.sendMessage(new TextMessage(msg));
-            }
-            log.debug("User {} has left chat room {} \n", userId, roomNo);
-        }
-    }
-    */
     
     
 }
